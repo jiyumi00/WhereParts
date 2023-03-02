@@ -14,10 +14,7 @@ import { color } from 'react-native-reanimated';
 export default class SalesDetails extends Component {
     constructor(props) {
         super(props);
-
-        this.userID = "";
         this.contents = [];
-    
         this.state = {
             userIDContents: [],
             soldoutContents: [],
@@ -29,12 +26,12 @@ export default class SalesDetails extends Component {
 
     componentDidMount() {
         this.setState({ salebarclicked: true })
-        this.getUserID().then(() => {
-            this.callGetSellsAPI().then((response) => {
+        this.getUserID().then((value) => {
+            this.callGetSellsAPI(value).then((response) => {
                 this.setState({ soldoutContents: response });
                 //console.log(this.state.soldoutContents)              
             })
-            this.callGetGoodsIdAPI().then((response) => {
+            this.callGetGoodsIdAPI(value).then((response) => {
                 this.contents = response;
                 this.setState({ userIDContents: response });
                 //console.log(this.state.userIDContents)
@@ -42,8 +39,16 @@ export default class SalesDetails extends Component {
         })
     }
 
-    async callGetGoodsIdAPI() { //로그인 된 id값으로 올린 상품 가져오는 API
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + this.userID);
+    goSellGoods = () => {
+        this.getUserID().then((value) => {
+            this.callGetSellsAPI(value).then((response) => {
+                this.setState({ soldoutContents: response });
+            })
+        });
+    }
+
+    async callGetGoodsIdAPI(userID) { //로그인 된 id값으로 올린 상품 가져오는 API
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -51,8 +56,8 @@ export default class SalesDetails extends Component {
             Promise.reject(response);
     }
 
-    async callGetSellsAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetSells?id=" + this.userID)
+    async callGetSellsAPI(userID) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetSells?id=" + userID)
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -64,7 +69,7 @@ export default class SalesDetails extends Component {
         let obj = await AsyncStorage.getItem('obj')
         let parsed = JSON.parse(obj);
         if (obj !== null) {
-            this.userID = parsed.id;
+            return parsed.id;
         }
         else {
             return false;
@@ -112,7 +117,12 @@ export default class SalesDetails extends Component {
                 />)}
                 {this.state.shippingbarclicked == true && (<FlatList
                     data={this.state.soldoutContents}
-                    renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} />}
+                    renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} goSellGoodsListener={this.goSellGoods} />}
+                    scrollEventThrottle={16}
+                />)}
+                {this.state.soldoutbarclicked == true && (<FlatList
+                    data={this.state.soldoutContents}
+                    renderItem={({ item, index }) => <SoldOutInfoList navigation={this.props.navigation} item={item} id={item.goodsID} />}
                     scrollEventThrottle={16}
                 />)}
             </View>
@@ -142,7 +152,7 @@ class ListItem extends PureComponent {
 
     handleDetailViewModal = () => {
         //this.setState({isDetailViewModal:!this.state.isDetailViewModal});
-        this.props.navigation.navigate('GoodsDetail', { id:this.props.item.id, userID:this.props.item.userID });
+        this.props.navigation.navigate('GoodsDetail', { id: this.props.item.id, userID: this.props.item.userID });
     }
 
 
@@ -157,10 +167,11 @@ class ListItem extends PureComponent {
         const item = this.props.item;
         return (
             <>
+
                 <TouchableOpacity onPress={this.handleDetailViewModal}>
                     <View style={styles.product}>
                         <View style={styles.productRegisterDate}>
-                        <Text style={styles.itemRegisterDateText}>등록일 {item.registerDate.slice(2, 10)}</Text>
+                            <Text style={styles.itemRegisterDateText}>등록일 {item.registerDate.slice(2, 10)}</Text>
                         </View>
                         {/*이미지 */}
                         <View style={styles.productImageView}>
@@ -179,8 +190,8 @@ class ListItem extends PureComponent {
                                     <Text style={styles.itemNumberText}>{item.number}</Text>
                                 </View>
                             </View>
-                            {item.valid==0 && <View style={{marginRight:'4%'}}>
-                                <Text style={{fontSize:14}}>숨김</Text>
+                            {item.valid == 0 && <View style={{ marginRight: '4%' }}>
+                                <Text style={{ fontSize: 14 }}>숨김</Text>
                             </View>}
                         </View>
                     </View>
@@ -222,10 +233,11 @@ class DeliveryInfoList extends PureComponent {
 
     render() {
         const item = this.props.item;
+
         return (
             <>
-                <TouchableOpacity onPress={this.handleDetailViewModal}>
-                    <View style={styles.product}>
+                {(item.status == 1 || item.status == 2) &&
+                    (<View style={styles.product}>
                         <View style={styles.productRegisterDate}>
                             <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>
                         </View>
@@ -247,11 +259,77 @@ class DeliveryInfoList extends PureComponent {
                                 </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery')}>
-                            <Text style={styles.itemDistanceText}>배송등록</Text>
-                        </TouchableOpacity>
+                        {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.goSellGoodsListener })}>
+                            <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
+                        </TouchableOpacity>}
+
+                        {item.status == 2 && <TouchableOpacity style={styles.productInfoRight}>
+                            <Text style={styles.itemDistanceText}>배송등록완료</Text>
+                        </TouchableOpacity>}
+
                     </View>
-                </TouchableOpacity>
+                    )}
+            </>
+        );
+    }
+}
+
+class SoldOutInfoList extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            imageURL: null,
+        };
+
+    }
+
+    componentDidMount() {
+        this.callGetGoodsImageAPI().then((response) => {
+            let reader = new FileReader();
+            reader.readAsDataURL(response);
+            reader.onloadend = () => {
+                this.setState({ imageURL: reader.result })
+            }
+        });
+    }
+
+    async callGetGoodsImageAPI() {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.props.id + "&position=1");
+        let response = await manager.start();
+        if (response.ok)
+            return response.blob();
+    }
+
+    render() {
+        const item = this.props.item;
+        return (
+            <>
+                {item.status == 3 &&
+                    (<View style={styles.product}>
+                        <View style={styles.productRegisterDate}>
+                            <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>
+                        </View>
+                        {/*이미지 */}
+                        <View style={styles.productImageView}>
+                            <Image
+                                source={{ uri: this.state.imageURL }}
+                                style={styles.productImage} />
+
+                            <View style={styles.productInfo}>
+                                <View style={styles.productInfoLeft}>
+                                    <Text style={styles.itemNameText}>{item.goodsName}</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
+                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
+                                        <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
+                                    </View>
+                                    <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    )}
             </>
         );
     }

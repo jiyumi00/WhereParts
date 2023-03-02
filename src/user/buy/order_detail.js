@@ -44,8 +44,8 @@ class OrderDetail extends Component {
         <View style={styles.total_container}>
             <ScrollView >
                 <View style={styles.dateInfo_view}>
-                        <Text>{orderingDate}</Text>
-                        <Text>주문번호: {id}</Text>
+                        <Text style={styles.text_info}>{orderingDate}</Text>
+                        <Text style={styles.text}>주문번호: {id}</Text>
                 </View>
                 <View style={styles.payInfo_view}>
                     <View style={styles.payInfoTitle_view}>
@@ -76,7 +76,7 @@ class OrderDetail extends Component {
                             <Text style={styles.text}>결제일시</Text>
                         </View>
                         <View style={styles.info_view}>
-                            <Text style={styles.text_info}>{payKind==1 && "신용카드"}</Text>
+                            <Text style={styles.text_info}>{payKind==1 && "신용카드"} ({payBank})</Text>
                             <Text style={styles.text_info}>{total}</Text>
                             <Text style={styles.text_info}>{this.state.days[0]}</Text>
                         </View>
