@@ -221,7 +221,6 @@ class AddGoods extends Component {
         else {
             this.setState({ hashTagError: false })
         }
-
         this.state.tagName = ""
         this.hashTagRef.clear();
     }
@@ -489,7 +488,6 @@ class AddGoods extends Component {
                                             </Text>
                                             <TextInput
                                                 ref={(c) => { this.hashTagRef = c; }}
-
                                                 returnKeyType="next"
                                                 onSubmitEditing={this.addTag}
                                                 onChangeText={(value) => this.setState({ tagName: value})}

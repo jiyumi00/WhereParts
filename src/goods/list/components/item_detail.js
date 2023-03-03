@@ -108,7 +108,7 @@ export default class DetailItemView extends Component {
 
     backPressed = () => {
         this.props.navigation.pop();
-        //this.refresh();
+        //this.props.route.params.pickRefreshListener();
         return true;
     }
 
@@ -366,7 +366,8 @@ export default class DetailItemView extends Component {
         } else {
             this.callRemoveWishAPI().then((response) => {
                 console.log("remove wish", response);
-                
+                //this.props.navigation.navigate('PickList')
+                //this.props.route.params.pickRefreshListener();
             })
 
             console.log("색칠안한하트");

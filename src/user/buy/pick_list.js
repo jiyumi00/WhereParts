@@ -21,13 +21,16 @@ class PickList extends Component {
         }
     }
     componentDidMount() {
+       this.goGetWish()
+        
+    }
+    goGetWish=()=>{
         this.getUserID().then(()=>{
             this.callGetWishAPI().then((response) => { 
                 this.setState({wishContent:response})
              });
              
         } )
-        
     }
     async getUserID(){
         let obj=await AsyncStorage.getItem('obj')
@@ -55,7 +58,7 @@ class PickList extends Component {
                 <FlatList
                     numColumns={2} 
                     data={this.state.wishContent}
-                    renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} />}
+                    renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} pickRefreshListener={this.goGetWish}/>}
                     scrollEventThrottle={16}
                 />
            </View>
@@ -111,7 +114,7 @@ class ListItem extends Component {
     handleDetailViewModal=()=> {
         //this.setState({isDetailViewModal:!this.state.isDetailViewModal});
         //this.props.navigation.navigate('GoodsDetail',{item:this.props.item});
-        this.props.navigation.navigate('GoodsDetail', { id:this.props.item.id, userID:this.props.item.userID });
+        this.props.navigation.navigate('GoodsDetail', { id:this.props.item.id, userID:this.props.item.userID, pickRefreshListener:this.props.pickRefreshListener });
     }
    
     dipsButtonClicked=()=>{
@@ -124,6 +127,7 @@ class ListItem extends Component {
         } else {
             this.callRemoveWishAPI().then((response)=>{
                 console.log(response);
+                this.props.pickRefreshListener();
             })
 
             console.log("색칠안한하트");
