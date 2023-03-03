@@ -131,7 +131,7 @@ class ListItem extends Component {
         this.props.navigation.navigate('GoodsDetail', { id:this.props.goodsID, userID:this.props.item.userID });
     }
     goodsStatusText = (value) => {
-        let goodsStatusText = ["결제완료", "배송시작", "구매확정"];
+        let goodsStatusText = ["배송준비중", "배송중", "배송완료"];
         return goodsStatusText[value - 1];
     }
     render() {

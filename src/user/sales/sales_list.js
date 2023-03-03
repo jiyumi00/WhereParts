@@ -211,7 +211,6 @@ class DeliveryInfoList extends PureComponent {
         this.state = {
             imageURL: null,
         };
-
     }
 
     componentDidMount() {

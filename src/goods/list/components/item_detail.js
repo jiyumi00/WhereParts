@@ -7,7 +7,6 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import IconDelete from 'react-native-vector-icons/Ionicons';
 import { styles } from "../../../styles/list/home_item_detil";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
@@ -109,6 +108,7 @@ export default class DetailItemView extends Component {
 
     backPressed = () => {
         this.props.navigation.pop();
+        //this.refresh();
         return true;
     }
 
@@ -199,14 +199,11 @@ export default class DetailItemView extends Component {
         return genuineText[value - 1];
     }
 
-    closeModal = () => {
-        //this.props.detailViewModalListener(false);
-        this.props.navigation.pop();
-    } 
+
 
     // 수정 버튼 클릭
     editButtonClicked = () => {
-        this.setState({ editGoodsViewVisible: true, quantity: this.state.item.quantity });
+        this.setState({ editGoodsViewVisible: true });
         this.onValueChange();
     }
     //수정 취소 버튼 클릭
@@ -369,6 +366,7 @@ export default class DetailItemView extends Component {
         } else {
             this.callRemoveWishAPI().then((response) => {
                 console.log("remove wish", response);
+                
             })
 
             console.log("색칠안한하트");
@@ -470,10 +468,7 @@ export default class DetailItemView extends Component {
                             </TouchableOpacity>}
                         </>}
 
-                    <TouchableOpacity
-                        onPress={this.closeModal}>
-                        <IconDelete name="close" color="black" size={35}></IconDelete>
-                    </TouchableOpacity>
+
                 </View>
 
                 <View style={styles.itemInfo_view}>

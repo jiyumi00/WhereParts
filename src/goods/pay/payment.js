@@ -16,6 +16,9 @@ class Payment extends Component {
         this.userID = this.props.route.params.userID;
 
         this.state={
+            zipNo:"",
+            roadAddr:"",
+            validForm:false,
             detailAddress:'',
 
             quantity:1,
@@ -51,6 +54,45 @@ class Payment extends Component {
         }
     }
 
+    getAddressInfo=(zipNo, roadAddr)=>{
+        //console.log("리스너순서 1");
+        this.addressInfoRender(zipNo,roadAddr).then(this.onValueChange);
+    }
+
+    async addressInfoRender(zipNo, roadAddr){
+        this.setState({zipNo:zipNo, roadAddr:roadAddr});
+    }
+
+    onValueChange=()=>{
+        let isValidForm = true;
+        //console.log("온밸챈지실행");
+        //console.log("리스너순서 2");
+        console.log("zipNo",this.state.zipNo.trim().length);
+        console.log("roadAddr",this.state.roadAddr.trim().length);
+        //주문자
+        if(this.state.buyerName.length == 0){
+            isValidForm=false;
+        }
+        //연락처
+        if(this.state.buyerTel.length==0){
+            isValidForm=false;
+        }
+        //우편번호
+        if(this.state.zipNo.trim().length==0){
+            isValidForm=false;
+        }
+        //도로명주소
+        if(this.state.roadAddr.trim().length==0){
+            isValidForm=false;
+        }
+        //상세주소
+        if(this.state.detailAddress.length==0){
+            isValidForm=false;
+        }
+
+        this.setState({ validForm: isValidForm });
+    }
+
     paymentButtonClicked = () => {
         const payload = { 
             buyerID:this.userID,
@@ -62,7 +104,7 @@ class Payment extends Component {
             total:(this.item.price*this.state.quantity),
             payKind:this.state.paymentMethod,
             payBank:"우리",
-            address:this.props.route.params.roadAddr + " " + this.state.detailAddress,
+            address:this.state.roadAddr + " " + this.state.detailAddress,
             bigo:this.state.bigo,
         };
 
@@ -142,30 +184,33 @@ class Payment extends Component {
                                 <TextInput style={styles.textInput}
                                     placeholder="주문자 이름을 입력하세요"
                                     onChangeText={(value) => this.setState({ buyerName: value })}
+                                    onEndEditing={(event)=> this.onValueChange()}
                                     value={this.state.buyerName} />
                                 <TextInput style={styles.textInput}
                                     placeholder="휴대폰 번호를 입력하세요"
                                     onChangeText={(value) => this.setState({ buyerTel: value })}
+                                    onEndEditing={(event)=> this.onValueChange()}
                                     value={this.state.buyerTel} />
                             </View>
                             <Text style={styles.title}>주소</Text>
                             <View style={styles.rowLayout}>
                                 <View style={styles.number_text}>
-                                    <Text style={styles.text}>{this.props.route.params.zipNo}</Text>
+                                    <Text style={styles.text}>{this.state.zipNo}</Text>
                                 </View>
 
-                                <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress")}>
+                                <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
                                     <Text style={styles.btn_text}>우편번호 찾기</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={styles.address_text}>
-                                <Text style={styles.text}>{this.props.route.params.roadAddr}</Text>
+                                <Text style={styles.text}>{this.state.roadAddr}</Text>
                             </View>
 
                             <TextInput style={styles.textInput}
                                 placeholder="상세 주소를 입력하세요"
                                 onChangeText={(value) => this.setState({ detailAddress: value })}
+                                onEndEditing={(event)=> this.onValueChange()}
                                 value={this.state.detailAddress} />
 
                             <TextInput style={styles.textInput}
@@ -176,7 +221,11 @@ class Payment extends Component {
                                              
                     </View>
                 </ScrollView>
-                <TouchableOpacity style={styles.paymentButton} onPress={this.paymentButtonClicked}/*onPress={this.callAndroidPaymentActivity}*/><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>
+                {
+                    this.state.validForm ? 
+                    (<TouchableOpacity style={styles.paymentButton} onPress={this.paymentButtonClicked}/*onPress={this.callAndroidPaymentActivity}*/><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                    :(<TouchableOpacity style={[styles.paymentButton,{backgroundColor: "#C9CCD1"}]} ><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                }
             </View>
         );
     }

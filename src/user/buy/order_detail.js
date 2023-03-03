@@ -55,7 +55,7 @@ class OrderDetail extends Component {
                         <View style={styles.title_view}>
                             <Text style={styles.text}>주문자 이름</Text>
                             <Text style={styles.text}>휴대폰 번호</Text>
-                            <Text style={styles.text}>주소</Text>
+                            <Text style={[styles.text,{marginBottom:'25%'}]}>배송주소</Text>
                         </View>
                         <View style={styles.info_view}>
                             <Text style={styles.text_info}>{buyerName}</Text>
@@ -77,7 +77,7 @@ class OrderDetail extends Component {
                         </View>
                         <View style={styles.info_view}>
                             <Text style={styles.text_info}>{payKind==1 && "신용카드"} ({payBank})</Text>
-                            <Text style={styles.text_info}>{total}</Text>
+                            <Text style={styles.text_info}>{total} 원</Text>
                             <Text style={styles.text_info}>{this.state.days[0]}</Text>
                         </View>
                     </View>
