@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     justifyContent: 'flex-end',
     paddingVertical:3,
     paddingHorizontal:5,
-    backgroundColor:'#E0F0FF'
+    backgroundColor:'white'
   },
   tabBar_button:{
     width:"20%",

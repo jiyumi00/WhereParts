@@ -447,25 +447,25 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible ?
                                 <>
                                     <TouchableOpacity onPress={this.editCancelButtonClicked} >
-                                        <Text style={styles.text}>수정취소  </Text>
+                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정취소  </Text>
                                     </TouchableOpacity >
                                 </> :
                                 <>
                                     <TouchableOpacity onPress={this.editButtonClicked} >
-                                        <Text style={styles.text}>수정    </Text>
+                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정    </Text>
                                     </TouchableOpacity >
                                 </>}
                             <TouchableOpacity onPress={this.removeButtonClicked}>
-                                <Text style={styles.text}>삭제    </Text>
+                                <Text style={[styles.text,{color:'#808e9b'}]}>삭제    </Text>
                             </TouchableOpacity>
 
                             {valid==1 && 
                                 <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
-                                <Text style={styles.text}>숨김    </Text>
+                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김    </Text>
                             </TouchableOpacity>}
                             {valid==0 && 
                             <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
-                                <Text style={styles.text}>숨김해제    </Text>
+                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김해제    </Text>
                             </TouchableOpacity>}
                         </>}
 
