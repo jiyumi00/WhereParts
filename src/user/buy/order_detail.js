@@ -37,7 +37,7 @@ class OrderDetail extends Component {
         Promise.reject(response);
     }
     render() {
-        const {id,goodsName,goodsNo,buyerName,buyerTel,quantity,price,total,orderingDate,payKind,payBank,address,status,days}=this.state.item;
+        const {id,goodsName,goodsNo,buyerName,buyerTel,quantity,price,total,orderingDate,payKind,payBank,address,status,days,invoiceName,invoiceNo }=this.state.item;
         
         return (
 
@@ -97,8 +97,8 @@ class OrderDetail extends Component {
                             <Text style={styles.text}>배송완료일시</Text>
                         </View>
                         <View style={styles.info_view}>
-                            <Text style={styles.text_info}>대한통운</Text>
-                            <Text style={styles.text_info}>49582723948</Text>
+                            <Text style={styles.text_info}>{invoiceName}</Text>
+                            <Text style={styles.text_info}>{invoiceNo}</Text>
                             <Text style={styles.text_info}>{this.state.days[1]}</Text>
                             <Text style={styles.text_info}>{this.state.days[2]}</Text>
                         </View>

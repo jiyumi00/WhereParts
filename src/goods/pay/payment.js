@@ -55,6 +55,7 @@ class Payment extends Component {
     }
 
     getAddressInfo=(zipNo, roadAddr)=>{
+        //console.log("리스너순서 1");
         this.addressInfoRender(zipNo,roadAddr).then(this.onValueChange);
     }
 
@@ -64,6 +65,10 @@ class Payment extends Component {
 
     onValueChange=()=>{
         let isValidForm = true;
+        //console.log("온밸챈지실행");
+        //console.log("리스너순서 2");
+        console.log("zipNo",this.state.zipNo.trim().length);
+        console.log("roadAddr",this.state.roadAddr.trim().length);
         //주문자
         if(this.state.buyerName.length == 0){
             isValidForm=false;
@@ -84,6 +89,7 @@ class Payment extends Component {
         if(this.state.detailAddress.length==0){
             isValidForm=false;
         }
+
         this.setState({ validForm: isValidForm });
     }
 

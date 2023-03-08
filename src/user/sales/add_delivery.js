@@ -16,6 +16,7 @@ class AddDelivery extends Component {
 
         this.state = {
             t_code: 1,
+            t_name:["CJ대한통운","우체국택배","편의점택배","로젠택배","한진택배"],
             t_invoice: null,
             imageURL: null,
             sellDetailInfo: { orderingDate: "", buyerTel: "", days: [""] },
@@ -82,11 +83,27 @@ class AddDelivery extends Component {
             return response.blob();
     }
 
+    /*
     async callSetDeliveryAPI(){
         let manager = new WebServiceManager(Constant.serviceURL + "/SetDelivery?id=" + this.props.route.params.id);
         let response = await manager.start();
         if (response.ok)
             return response.json();
+    }*/
+    async callSetDeliveryAPI(){
+        let manager=new WebServiceManager(Constant.serviceURL +"/SetDelivery","post");
+
+        manager.addFormData("data",{
+            orderID:this.props.route.params.id,
+            invoiceKind:this.state.t_code,
+            invoiceName:this.state.t_name[(this.state.t_code)-1],
+            invoiceNo:this.state.t_invoice,
+        })
+
+        let response = await manager.start();
+        if (response.ok) {
+            return response.json();
+        }
     }
 
     //사진으로부터 품번 인식 서비스 API
@@ -104,7 +121,9 @@ class AddDelivery extends Component {
     
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address } = this.state.sellDetailInfo;
-
+       console.log(this.props.route.params.id)
+       console.log(this.state.t_code);
+       console.log("t_name",this.state.t_name[this.state.t_code-1]);
         return (
 
             <View style={styles.total_container}>

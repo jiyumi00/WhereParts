@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Camera,useFrameProcessor } from "react-native-vision-camera";
-import { View,StyleSheet,TouchableOpacity,Button,Image, NativeModules, BackHandler } from 'react-native';
+import { View,StyleSheet,TouchableOpacity,Button,Image,ImageBackground, NativeModules, BackHandler, Text } from 'react-native';
 
-import IconCamera from 'react-native-vector-icons/Feather';
+//import IconCamera from 'react-native-vector-icons/Feather';
+import IconCamera from 'react-native-vector-icons/FontAwesome5';
 import IconCircle from "react-native-vector-icons/FontAwesome";
 import { styles } from "../styles/vision_camera_style";
 import { tapGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/TapGestureHandler';
@@ -112,14 +113,11 @@ class CameraX extends Component {
 
     render() {
         if (this.state.device == null) return (<></>);
-        return(
+        return (
             <View style={styles.container}>
-                <View style={styles.viewHeaderLayout}>
-                    <Image source={{uri:this.state.cutImage}} style={{flex:1, resizeMode:"contain"}}/>
-                </View>
                 <View style={styles.viewBodyLayout} onLayout={(event) => this.getViewSize(event)} ref={this.cameraView}>
                     <View style={{ width: "100%", height: "100%", position: 'absolute', zIndex: 1 }}>
-                        <Camera 
+                        <Camera
                             ref={this.camera}
                             //frameProcessor={this.frameProcessor}
                             //frameProcessorFps={5}
@@ -127,17 +125,27 @@ class CameraX extends Component {
                             device={this.state.device.back}
                             isActive={true}
                         />
-                        <View style={this.props.cutImageStyle} ref={this.capturedView}>
-                            
-                        </View>
-                    </View>
-                </View>      
+                        
+                        <Text style={this.props.viewStyle.textView}>사각형 안에 맞춰주세요</Text>
+                        <Image style={this.props.viewStyle.imageLeftTop} source={require('../images/icon/angle-icon/angle11.png')} />
+                        <Image style={this.props.viewStyle.imageRightTop} source={require('../images/icon/angle-icon/angle22.png')} />
+                        <Image style={this.props.viewStyle.imageLeftBottom} source={require('../images/icon/angle-icon/angle33.png')} />
+                        <Image style={this.props.viewStyle.imageRightBottom} source={require('../images/icon/angle-icon/angle44.png')} />
 
-                <View style={styles.viewBottomLayout}>
-                    <View style={styles.cameraLayout}>
-                        <TouchableOpacity style={styles.btn_camera} onPress={this.shutterButtonClicked}>
-                            <IconCircle name="circle-thin" size={65} color="#C0C0CE"></IconCircle>
-                        </TouchableOpacity>
+                        <View style={this.props.viewStyle.topBlur} />
+                        <View style={this.props.viewStyle.leftBlur} />
+                        <View style={this.props.cutImageStyle} ref={this.capturedView} />
+                        <View style={this.props.viewStyle.rightBlur} />
+                        <View style={this.props.viewStyle.bottomBlur} />
+                    </View>
+
+                    <View style={[styles.viewBottomLayout,this.props.viewStyle.cameraButtonView]}>
+                        <View style={styles.cameraLayout}>
+                            <TouchableOpacity style={styles.btn_camera} onPress={this.shutterButtonClicked}>
+                                <IconCamera name="camera" size={30} color="#0066FF" style={{position:'absolute'}} />
+                                <IconCircle name="circle-o" size={69} color="#0066FF" />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>

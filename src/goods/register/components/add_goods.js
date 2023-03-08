@@ -205,9 +205,9 @@ class AddGoods extends Component {
 
   //해시태그 추가버튼을 누를때
     addTag = () => {
-       
+        
         const tagNames=this.state.tagName.split(' ');
-       
+    
         if(tagNames.slice(-1)[0]==''){
             tagNames.splice(tagNames.length-1)
         }
@@ -221,6 +221,7 @@ class AddGoods extends Component {
         else {
             this.setState({ hashTagError: false })
         }
+
         this.state.tagName = ""
         this.hashTagRef.clear();
     }
@@ -488,9 +489,9 @@ class AddGoods extends Component {
                                             </Text>
                                             <TextInput
                                                 ref={(c) => { this.hashTagRef = c; }}
+
                                                 returnKeyType="next"
                                                 onSubmitEditing={this.addTag}
-                                                placeholder="띄어쓰기로 구분해주세요"
                                                 onChangeText={(value) => this.setState({ tagName: value})}
                                                 value={this.state.tagName}
                                             />
