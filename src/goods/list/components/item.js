@@ -53,9 +53,10 @@ export default class ListItem extends PureComponent {
                     </View>
                     <View style={styles.productInfo_view}>
                         <View style={styles.productInfoLeft_view}>
+                            <Text style={[styles.itemDetail_text,{color:'#4747FF'}]}>{item.number}</Text>
                             <Text style={styles.itemName_text}>{item.name}</Text>
                             <Text style={styles.itemName_text}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                            <Text style={styles.itemDetail_text}>{item.number}</Text>
+                           
                         </View>
                         <View style={styles.productInfoRight_view}>
                             <View style={{flex:1,justifyContent:'flex-start'}}>

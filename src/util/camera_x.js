@@ -85,9 +85,6 @@ class CameraX extends Component {
             this.props.navigation.pop();      
     }
 
-
-
-
     //render에 정의한 View 사이즈 가져오기
     getViewSize=(event) => {
         const layout = event.nativeEvent.layout;
@@ -107,7 +104,6 @@ class CameraX extends Component {
         });
 
         //console.log('source',this.source);
-        
 
     }
 
@@ -127,11 +123,12 @@ class CameraX extends Component {
                         />
                         
                         <Text style={this.props.viewStyle.textView}>사각형 안에 맞춰주세요</Text>
+                   
                         <Image style={this.props.viewStyle.imageLeftTop} source={require('../images/icon/angle-icon/angle11.png')} />
                         <Image style={this.props.viewStyle.imageRightTop} source={require('../images/icon/angle-icon/angle22.png')} />
                         <Image style={this.props.viewStyle.imageLeftBottom} source={require('../images/icon/angle-icon/angle33.png')} />
                         <Image style={this.props.viewStyle.imageRightBottom} source={require('../images/icon/angle-icon/angle44.png')} />
-
+                      
                         <View style={this.props.viewStyle.topBlur} />
                         <View style={this.props.viewStyle.leftBlur} />
                         <View style={this.props.cutImageStyle} ref={this.capturedView} />
