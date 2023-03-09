@@ -14,8 +14,7 @@ class OrderDetail extends Component {
         
         this.state={
             item:{},
-            days:[],
-            orderNumber:null
+            days:[]
         }
     }
     componentDidMount(){
@@ -25,11 +24,7 @@ class OrderDetail extends Component {
             console.log(response);
 
         })
-        this.callGetOrderNoAPI().then((response)=>{
-            if(response.success==1){
-                this.setState({orderNumber:response.orderNo});
-            }
-        })
+    
     }
      
     async callGetOrderDetailAPI() {
@@ -41,7 +36,6 @@ class OrderDetail extends Component {
         else
         Promise.reject(response);
     }
-   
     render() {
         const {id,goodsName,goodsNo,buyerName,buyerTel,quantity,price,total,orderingDate,payKind,payBank,address,status,days,invoiceName,invoiceNo }=this.state.item;
         

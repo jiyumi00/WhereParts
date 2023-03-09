@@ -15,8 +15,8 @@ class AddDelivery extends Component {
         super(props);
 
         this.state = {
-            t_code:1,
-            t_name:"",
+            t_code: 1,
+            t_name:["CJ대한통운","우체국택배","편의점택배","로젠택배","한진택배"],
             t_invoice: null,
             imageURL: null,
             sellDetailInfo: { orderingDate: "", buyerTel: "", days: [""] },
@@ -96,7 +96,7 @@ class AddDelivery extends Component {
         manager.addFormData("data",{
             orderID:this.props.route.params.id,
             invoiceKind:this.state.t_code,
-            invoiceName:this.state.t_name,
+            invoiceName:this.state.t_name[(this.state.t_code)-1],
             invoiceNo:this.state.t_invoice,
         })
 
@@ -121,11 +121,9 @@ class AddDelivery extends Component {
     
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address } = this.state.sellDetailInfo;
-      
-       console.log('택배사코드',this.state.t_code);
-       console.log('택배사명',this.state.t_name)
-       //console.log("t_name",this.state.t_name[this.state.t_code-1]);
-       console.log(this.state.t_invoice)
+       console.log(this.props.route.params.id)
+       console.log(this.state.t_code);
+       console.log("t_name",this.state.t_name[this.state.t_code-1]);
         return (
 
             <View style={styles.total_container}>
@@ -164,13 +162,13 @@ class AddDelivery extends Component {
                         <View style={styles.textInput}>
                             <Text>택배사 선택</Text>
                             <Picker
-                                selectedValue={this.state.t_name}
-                                onValueChange={(value, index,label) => { this.setState({ t_name: value, t_code:index+1}) }}>
-                                <Picker.Item label='CJ대한통운' value="CJ대한통운" />
-                                <Picker.Item label='우체국택배' value="우체국택배" />
-                                <Picker.Item label='편의점택배' value="편의점택배" />
-                                <Picker.Item label='롯데택배' value="롯데택배" />
-                                <Picker.Item label='한진택배' value="한진택배" />
+                                selectedValue={this.state.t_code}
+                                onValueChange={(value, index) => { this.setState({ t_code: value }) }}>
+                                <Picker.Item label='CJ대한통운' value="1" />
+                                <Picker.Item label='우체국택배' value="2" />
+                                <Picker.Item label='편의점택배' value="3" />
+                                <Picker.Item label='롯데택배' value="4" />
+                                <Picker.Item label='한진택배' value="5" />
                             </Picker>
                         </View>
                         <View style={styles.textInput}>

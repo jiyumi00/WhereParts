@@ -359,7 +359,7 @@ class AddGoods extends Component {
         this.cameraIcon.current.measure((fx, fy, width, height, px, py) => {
             this.cameraModalX = px + width - (width / 3);
             this.cameraModalY = py + height - (height / 2);
-           // console.log('location:', fx, fy, width, height, px, py)
+            //console.log('location:', fx, fy, width, height, px, py)
         })
     }
     //뒤로가기 했을 때 앱 종료

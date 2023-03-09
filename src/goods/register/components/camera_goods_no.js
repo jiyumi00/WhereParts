@@ -16,26 +16,13 @@ export default class PartsNoCamera extends Component {
 
         this.cutImageStyle={
             position:'absolute',
-            top:'30%', 
+            top:'33%', 
             left:'15%',
             right:'15%',
-            bottom:'58%', 
-            zIndex:2, 
+            bottom:'55%', 
+            zIndex:2,
             borderColor:'white',
         };
-
-        this.viewStyle={
-            textView:{color:'white', zIndex:11, top:"25%", left:"33%", postion:'absolute'},
-            topBlur:{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 10, width: "100%", height: "30%", position: 'absolute' },
-            leftBlur:{backgroundColor: "rgba(0,0,0,0.6)", zIndex: 10, width: "15%", height: "12%", top: "30%", position: 'absolute'},
-            rightBlur:{backgroundColor: "rgba(0,0,0,0.6)", zIndex: 10, width: "15%", height: "12%", top: "30%", left: '85%', position: 'absolute' },
-            bottomBlur:{backgroundColor: "rgba(0,0,0,0.6)", zIndex: 10, width: "100%", height: "58%", top: "42%", position: 'absolute'},
-            imageLeftTop:{zIndex: 11, height: 30, width: 30, top: "26%", left: "14%", postion: 'absolute'},
-            imageRightTop:{zIndex: 11, height: 30, width: 30, top: "21%", left: "79%", postion: 'absolute'},
-            imageLeftBottom:{zIndex: 11, height: 30, width: 30, top: "25%", left: "14%", postion: 'absolute'},
-            imageRightBottom:{zIndex: 11, height: 30, width: 30, top: "20%", left: "79%", postion: 'absolute'},
-            cameraButtonView:{height:"25%",top:"110%",}
-        }
     }
 
     onCapturedListener=(uri)=> {
@@ -51,7 +38,7 @@ export default class PartsNoCamera extends Component {
     render() {
         return(
             <View style={styles.background_view}>
-                <CameraX autoClose={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle} viewStyle={this.viewStyle} onCapturedListener={this.onCapturedListener} onCutImageListener={this.onCutImageListener} />
+                <CameraX autoClose={true} blur={true} cameraBorder={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle} onCapturedListener={this.onCapturedListener} onCutImageListener={this.onCutImageListener} />
             </View>
         );
     }
