@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, TextInput,Image } from 'react-native';
 
 import Address from "../../goods/pay/address";
 import { Picker } from '@react-native-picker/picker';
@@ -16,6 +16,7 @@ class Payment extends Component {
         this.userID = this.props.route.params.userID;
 
         this.state={
+            imageURL:null,
             zipNo:"",
             roadAddr:"",
             validForm:false,
@@ -29,7 +30,15 @@ class Payment extends Component {
             bigo:"",
         }
     }
-
+    componentDidMount(){
+       this.callGetGoodsImageAPI(this.item.id).then((response) => {
+            let reader = new FileReader();
+            reader.readAsDataURL(response);
+            reader.onloadend = () => {
+                this.setState({ imageURL: reader.result })
+            }
+        });
+    }
     callAndroidPaymentActivity = () => {
         const { ActivityStartModule } = NativeModules;
         ActivityStartModule.startPayment(JSON.stringify(this.payload), failedListener = (message) => {
@@ -140,18 +149,36 @@ class Payment extends Component {
             return response.json();
         }
     }
-
+    async callGetGoodsImageAPI(goodsID) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + goodsID + "&position=1");
+        let response = await manager.start();
+        if (response.ok)
+            return response.blob();
+    }
     render() {
+     
         return (
             <View style={template.total_container}>
                 <ScrollView style={template.ScrollView}>
                     <View style={template.container}>
                         <View style={styles.indexView}>
-                            <Text style={styles.indexText}>주문상품</Text>
-                            <Text> 상품명 : {this.item.name}</Text>
-                            <Text> 상품번호 : {this.item.number}{"\n"}</Text>
+                        <Text style={styles.indexText}>주문상품</Text>
                             <View style={{flexDirection:'row'}}>
-                                <Text style={styles.priceText}> {this.item.price*this.state.quantity}원</Text>
+                                <View style={{ width: 85, height: 75 }}>
+                                        <Image
+                                            source={{ uri: this.state.imageURL }}
+                                            style={styles.productImage} />
+                                </View>
+                                <View style={{flexDirection:'column'}}>
+                                    <Text> 상품명 : {this.item.name}</Text>
+                                    <Text> 상품번호 : {this.item.number}{"\n"}</Text>
+                                    <Text style={styles.priceText}> {this.item.price*this.state.quantity}원</Text>
+                                </View>
+                                
+                            </View>
+                           
+                            <View style={{flexDirection:'row',}}>
+                               
                                 <View style={styles.selectQuantityView}>
                                     <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
                                         <Text style={styles.quantityItemText}>-</Text>
@@ -168,15 +195,7 @@ class Payment extends Component {
                             </View>                                                
                         </View>
 
-                        <View style={[styles.indexView,{marginTop: 20}]}>
-                            <Text style={styles.indexText}>결제수단</Text>
-                            <Picker
-                                selectedValue={this.state.paymentMethod}
-                                onValueChange={(value, index) => { this.setState({ paymentMethod: value }) }}>
-                                <Picker.Item label='카드결제' value="1" />
-                                <Picker.Item label='계좌이체' value="2" />
-                            </Picker>
-                        </View>
+                       
                         {/* 주소 */}
                         <View style={styles.container}>
                             <View style={styles.deliverView}>

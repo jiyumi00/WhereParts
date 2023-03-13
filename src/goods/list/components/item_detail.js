@@ -108,7 +108,9 @@ export default class DetailItemView extends Component {
 
     backPressed = () => {
         this.props.navigation.pop();
-        //this.props.route.params.pickRefreshListener();
+        if(this.props.route.params.pickRefreshListener !=null){
+            this.props.route.params.pickRefreshListener();
+        }
         return true;
     }
 

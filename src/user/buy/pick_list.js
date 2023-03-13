@@ -110,7 +110,7 @@ class ListItem extends Component {
     }
     
     handleDetailViewModal=()=> {
-        this.props.navigation.navigate('GoodsDetail', { id:this.props.item.id, userID:this.props.item.userID });
+        this.props.navigation.navigate('GoodsDetail', { id:this.props.item.id, userID:this.props.item.userID,pickRefreshListener:this.props.pickRefreshListener });
     }
    
     dipsButtonClicked=()=>{
