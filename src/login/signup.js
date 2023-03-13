@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Image,Modal, Alert,
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Image,Modal, Alert,Keyboard,
 TouchableWithoutFeedback } from 'react-native';
 
 import { styles } from "../styles/login/signup";
@@ -41,6 +41,27 @@ class SignUp extends Component {
             
         }
     }
+
+    componentDidMount() {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
+
+    keyboardDidShow = () => {
+        console.log('Keyboard Shown');
+    }
+
+    keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+        this.onValueChange();
+    }
+
 
     makeBinaryData() {
         let imageData = []; 

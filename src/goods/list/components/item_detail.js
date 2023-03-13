@@ -1,7 +1,7 @@
 import React, { Component, PureComponent, useMemo } from 'react';
 import {
     ScrollView, Pressable, View, Text,
-    Image, FlatList, TouchableOpacity, Button, Alert, Dimensions, BackHandler, Modal
+    Image, FlatList, TouchableOpacity, Button, Alert, Dimensions, BackHandler, Modal, Keyboard
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
@@ -56,6 +56,9 @@ export default class DetailItemView extends Component {
     }
 
     componentDidMount() {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
         this.callimageLengthAPI().then((response) => {
             console.log('Image length', response);
             this.setState({ imageLength: response.length });
@@ -103,7 +106,18 @@ export default class DetailItemView extends Component {
         BackHandler.addEventListener("hardwareBackPress", this.backPressed);
     }
     componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
         BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
+    }
+
+    keyboardDidShow = () => {
+        console.log('Keyboard Shown');
+    }
+
+    keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+        this.onValueChange();
     }
 
     backPressed = () => {

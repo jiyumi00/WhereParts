@@ -117,7 +117,7 @@ class CameraX extends Component {
             // cameraButtonView width:100%, height:카메라화면의 20%, top:카메라화면의 80%
             this.setState({cameraButtonView: { width: "100%", height: this.source.height*0.2, top: this.source.height*0.8, position: "absolute" }});
             console.log('source',this.source);
-        });
+        })
 
         //console.log("sourceHeight", sourceHeight);// sourceHeight 0
 
