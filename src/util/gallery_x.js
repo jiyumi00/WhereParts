@@ -94,9 +94,11 @@ export default class GalleryX extends Component {
         return(
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerBar}>
-                    <View style={{flex:1,flexDirection:'row'}}>
-                        <Text> {this.state.imageLength} / {this.max}</Text>
-                    </View>
+                    {this.max!=null &&<View style={{flex:1,flexDirection:'row'}}>
+                        <Text style={[styles.text,{fontSize:15}]}> {this.state.imageLength} / </Text>
+                        <Text style={[styles.text,{fontSize:15,color:'black'}]}>{this.max}</Text>
+                    </View>}
+                   
                     <View style={{flex:1, alignItems:'flex-end'}}>
                         <TouchableOpacity onPress={this.onSelectComplete}>
                             <Text style={styles.text}>완료</Text>
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     },
     headerBar:{
         flexDirection:'row',
-        paddingHorizontal:'2%',
+        paddingHorizontal:'5%',
         paddingVertical:'2%',
     },
     image: {
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontFamily:"Cochin",
-        fontSize:15,
+        fontSize:18,
         color:"blue",
         //borderWidth:1,
         //alignItems: 'flex-end',
