@@ -143,13 +143,13 @@ class SignUp extends Component {
     //
     //갤러리로 이동
     goRegisterGalleryScreen = () => {
-        this.setState({registerPopupMenuVisiable:false});
+        this.setState({companyPopupMenuVisible:false});
         //this.props.navigation.navigate('Gallery', { companyImageInfoListener:this.companyImageInfo })
         this.props.navigation.navigate('RegisterGallery', { onResultListener:this.companyImageInfo });   
     }
     //카메라로 이동
     goRegisterCameraScreen=()=>{
-        this.setState({registerPopupMenuVisiable:false});
+        this.setState({companyPopupMenuVisible:false});
         this.props.navigation.navigate('CompanyCamera',{onResultListener:this.companyImageInfo});
     }
    
@@ -167,12 +167,12 @@ class SignUp extends Component {
     
     // 명함 카메라로 이동
     goPhotoCameraScreen=()=>{
-        this.setState({photoPopupMenuVisiable:false});
+        this.setState({cardPopupMenuVisible:false});
         this.props.navigation.navigate('BusinessCardCamera',{onResultListener: this.cardImageInfo});
     }
     // 명함 갤러리로 이동
     goPhotoGalleryScreen = () => { 
-        this.setState({photoPopupMenuVisiable:false}); 
+        this.setState({cardPopupMenuVisible:false}); 
        this.props.navigation.navigate('PhotoGallery', {onResultListener: this.cardImageInfo}) 
     }
 

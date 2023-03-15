@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { View, Text,  TextInput, TouchableOpacity, FlatList, ScrollView,Keyboard} from 'react-native';
 
 import { styles } from "../../styles/address_search";
@@ -103,7 +103,7 @@ class AddressView extends Component {
     }
 }
 
-class SearchView extends Component {
+class SearchView extends PureComponent {
     constructor(props) {
         super(props);
 

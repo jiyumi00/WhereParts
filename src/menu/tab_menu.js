@@ -64,26 +64,7 @@ class Tabs extends Component {
             },
           }}
         />
-        {/*}
-        <Tab.Screen
-          name="ShopHistory"
-          component={ShopHistory} // TODO 변경해줘야함
-          options={{
-            title: '쇼핑 내역',
-            //headerShown: false,
-            tabBarIcon: ({focused}) => {
-              return (
-                <Image
-                  source={
-                    focused
-                      ? require('../images/tab/shop-history-icon/shop-history-icon-active.png')
-                      : require('../images/tab/shop-history-icon/shop-history-icon.png')
-                  }
-                />
-              );
-            },
-          }}
-        />*/}
+      
         <Tab.Screen
           name="MyPage"
           component={MyPage}

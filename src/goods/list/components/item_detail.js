@@ -121,7 +121,19 @@ export default class DetailItemView extends Component {
     }
 
     backPressed = () => {
-        this.props.navigation.pop();
+        if(this.state.editGoodsViewVisible==true){
+            Alert.alert(
+                '',
+                '수정을 취소 하시겠어요?',
+                [
+                    { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                    { text: '확인', onPress: () => this.props.navigation.pop()},
+                ],);
+        }
+        else{
+            this.props.navigation.pop();
+        }
+      
         if(this.props.route.params.pickRefreshListener !=null){
             this.props.route.params.pickRefreshListener();
         }
@@ -443,7 +455,7 @@ export default class DetailItemView extends Component {
             Promise.reject(response);
     }
     render() {
-        console.log("renderItem_hashTag", this.state.hashTag);
+      
         const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
         // 값 변환
         const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
