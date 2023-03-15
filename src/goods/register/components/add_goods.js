@@ -213,7 +213,6 @@ class AddGoods extends Component {
             tagNames.splice(tagNames.length-1)
         }
         if (this.state.hashTag.length< 7 && tagNames.length<7 && this.state.hashTag.length+tagNames.length<8) {
-            
             this.addHashTag(tagNames).then(()=>{
                 this.onValueChange();
             });
@@ -227,6 +226,12 @@ class AddGoods extends Component {
         this.hashTagRef.clear();
     }
 
+    hashTagOnChangeText=(value)=>{
+        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
+        let newTagName=value.replace(reg,'')
+        this.setState({ tagName: newTagName})
+    }
+    
     async addHashTag(tagNames){
         this.setState({ hashTag: this.state.hashTag.concat(tagNames) })
     }
@@ -491,10 +496,9 @@ class AddGoods extends Component {
                                             </Text>
                                             <TextInput
                                                 ref={(c) => { this.hashTagRef = c; }}
-
                                                 returnKeyType="next"
                                                 onSubmitEditing={this.addTag}
-                                                onChangeText={(value) => this.setState({ tagName: value})}
+                                                onChangeText={(value) => this.hashTagOnChangeText(value)}
                                                 value={this.state.tagName}
                                             />
                                         </View>

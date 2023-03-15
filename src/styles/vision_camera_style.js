@@ -19,8 +19,8 @@ export const styles = StyleSheet.create({
     viewBottomLayout: {
         flexDirection: 'row',
         zIndex:11,
-        borderTopStartRadius: 40,
-        borderTopEndRadius: 40,
+        //borderTopStartRadius: 40,
+        //borderTopEndRadius: 40,
         backgroundColor: 'white',
     },
 

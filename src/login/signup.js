@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Image,Modal, Alert,Keyboard,
-TouchableWithoutFeedback } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Image,Modal, Alert,
+TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import { styles } from "../styles/login/signup";
 
@@ -83,8 +83,6 @@ class SignUp extends Component {
             imageData.push(cardData);
         return imageData;
     }
-
-    
 
     upload = () => { 
         if (this.state.passwd !== this.state.passwordok) {

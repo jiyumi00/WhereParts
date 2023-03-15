@@ -19,7 +19,7 @@ import Payment from "../goods/pay/payment";
 import PayComplete from "../goods/pay/pay_complete";
 import GoodsDetail from "../goods/list/components/item_detail";
 import OrderDetail from "../user/buy/order_detail";
-
+import EditProfile from "../user/buy/edit_profile";
 
 //로그인 경로
 import Login from "../login/member_register";
@@ -97,6 +97,9 @@ class Stack extends Component {
            
                 <NativeStack.Screen name="OrderDetail" component={OrderDetail}
                     options={{ title: "주문상세" }} />
+                
+                <NativeStack.Screen name="EditProfile" component={EditProfile}
+                    options={{ title: "" }} />
                
             </NativeStack.Navigator>
            

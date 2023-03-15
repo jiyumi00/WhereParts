@@ -114,8 +114,6 @@ class CameraX extends Component {
             this.source={width:width,height:height};
             sourceHeight=this.source.height;
 
-            // cameraButtonView width:100%, height:카메라화면의 20%, top:카메라화면의 80%
-            this.setState({cameraButtonView: { width: "100%", height: this.source.height*0.2, top: this.source.height*0.8, position: "absolute" }});
             console.log('source',this.source);
         })
 
@@ -129,6 +127,8 @@ class CameraX extends Component {
             this.setState({
                 //textView height:20, width:140 
                 textView: { top: (this.target.top - 20), left: (this.source.width - 140) / 2, color: "white", position: 'absolute', zIndex: 2 },
+                // cameraButtonView width:100%, height:카메라화면의 10%, top:카메라화면의 90%
+                cameraButtonView: { width: "100%", height: this.source.height*0.15, top: this.source.height*0.85, position: "absolute" },
             });
             
             // blur를 true로 받을 때
@@ -155,7 +155,9 @@ class CameraX extends Component {
         });
         
         
-        /*this.textView.current.measure((fx, fy, width, height, px, py) => {
+        /*
+        // height 측정은 o, width는 전체 너비로 결과가 나옴
+        this.textView.current.measure((fx, fy, width, height, px, py) => {
             this.text={width:width,height:height};
 
             this.setState({textView: {top:0,left:(this.source.width-this.text.width)/2,color:"white",borderWidth:1,position:'absolute',zIndex:2}})
@@ -194,14 +196,13 @@ class CameraX extends Component {
                         <View style={this.state.rightBlur} />
                         <View style={this.state.bottomBlur} />
                     </View>
-
-                    <View style={[styles.viewBottomLayout, this.state.cameraButtonView]}>
-                        <View style={styles.cameraLayout}>
-                            <TouchableOpacity style={styles.btn_camera} onPress={this.shutterButtonClicked}>
-                                <IconCamera name="camera" size={30} color="#0066FF" style={{ position: 'absolute' }} />
-                                <IconCircle name="circle-o" size={69} color="#0066FF" />
-                            </TouchableOpacity>
-                        </View>
+                </View>
+                <View style={[styles.viewBottomLayout, this.state.cameraButtonView]}>
+                    <View style={styles.cameraLayout}>
+                        <TouchableOpacity style={styles.btn_camera} onPress={this.shutterButtonClicked}>
+                            <IconCamera name="camera" size={30} color="#0066FF" style={{ position: 'absolute' }} />
+                            <IconCircle name="circle-o" size={69} color="#0066FF" />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

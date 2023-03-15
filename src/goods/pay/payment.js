@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, TextInput,Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, TextInput,Image,Keyboard } from 'react-native';
 
 import Address from "../../goods/pay/address";
 import { Picker } from '@react-native-picker/picker';
@@ -31,7 +31,10 @@ class Payment extends Component {
         }
     }
     componentDidMount(){
-       this.callGetGoodsImageAPI(this.item.id).then((response) => {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+        this.callGetGoodsImageAPI(this.item.id).then((response) => {
             let reader = new FileReader();
             reader.readAsDataURL(response);
             reader.onloadend = () => {
@@ -39,6 +42,22 @@ class Payment extends Component {
             }
         });
     }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
+
+    keyboardDidShow = () => {
+        console.log('Keyboard Shown');
+    }
+
+    keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+        this.onValueChange();
+    }
+
     callAndroidPaymentActivity = () => {
         const { ActivityStartModule } = NativeModules;
         ActivityStartModule.startPayment(JSON.stringify(this.payload), failedListener = (message) => {
