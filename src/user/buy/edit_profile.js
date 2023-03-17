@@ -50,7 +50,7 @@ class EditProfile extends Component {
             cardImageDetailVisible:false,
             companyImageDetailVisible:false,
 
-            compant: null,
+            companyImageURL: null,
             cardImageURL: null,
 
         }
@@ -61,13 +61,13 @@ class EditProfile extends Component {
             this.loginInfo.companyNo=value.companyNo;
             this.loginInfo.userID = value.id;
             this.loginInfo.passwd = value.passwd;
-            this.setState({ companyNo: value.companyNo})
+            this.setState({ companyNo: value.companyNo })
             console.log(this.state.companyNo)
             this.callGetCompanyImage(this.loginInfo).then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
                 reader.onloadend = () => {
-                    this.setState({ compant: reader.result });
+                    this.setState({ companyImageURL: reader.result });
                 }
             });
             this.callGetcardImage(this.loginInfo).then((response) => {
@@ -191,7 +191,6 @@ class EditProfile extends Component {
         this.setState({ validForm: isValidForm });
     }
 
-
     getViewSize = (event) => {
         this.photoCameraIcon.current.measure((fx, fy, width, height, px, py) => {
             this.modalPhotoCameraX = px + width - (width);
@@ -240,6 +239,7 @@ class EditProfile extends Component {
                 <Modal
                     transparent={false}
                     visible={this.state.modal}
+                    
                 >
                     <View style={styles.container}>
                         <View style={styles.header_textLayout_view}>
@@ -297,7 +297,7 @@ class EditProfile extends Component {
                                 <View style={styles.imageRegister_btn_view}>
                                     <Text style={[styles.default_text, styles.imageRegister_title_text]}>사업자 등록증</Text>
                                     <TouchableOpacity style={styles.imageRegister_btn} onPress={this.companyImageModal}>
-                                        <Image source={{ uri: this.state.compant }} style={styles.imageRegister_image_view} />
+                                        <Image source={{ uri: this.state.companyImageURL }} style={styles.imageRegister_image_view} />
                                     </TouchableOpacity>
                                 </View>
                                 {/*명함 사진*/}
@@ -339,7 +339,7 @@ class EditProfile extends Component {
                                     <TouchableOpacity onPress={this.companyImageModal} style={{ backgroundColor: '#fff', }}>
                                         <Text style={{fontSize:20}}>x</Text>
                                     </TouchableOpacity>
-                                        <Image source={{ uri: this.state.compant }} style={{ width: "80%", height: "80%" }} />
+                                        <Image source={{ uri: this.state.companyImageURL }} style={{ width: "80%", height: "80%" }} />
                                     
                                 </View>
                             </Modal>

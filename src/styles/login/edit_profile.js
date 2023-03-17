@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     container: {
-        flex:1,
+        flex: 4,
         marginTop: 20,
         marginLeft: 30,
         marginRight: 30,

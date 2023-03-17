@@ -73,39 +73,16 @@ class AddGoods extends Component {
     }
 
     componentDidMount() {
-
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
 
         this.getuserID().then((value) => {
             this.id=value;
         });
-       
     }
     componentWillUnmount() {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
-    }
-
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        this.onValueChange();
-    }
-
-    // userID값 가져오는 함수
-    async getuserID() {// getUserID 로 수정
-        let obj = await AsyncStorage.getItem('obj') // 접속 중인 세션, 로컬스토리지 세션 따로생각, 로그인확인방법check
-        let parsed = JSON.parse(obj);
-        if (obj !== null) {
-            return this.id=parsed.id;
-        }
-        else {
-            return false;
-        }
     }
 
     makeBinaryData() {
@@ -123,7 +100,7 @@ class AddGoods extends Component {
         return imageData; // 객체가 들어있는 배열을 리턴
     }
 
-    upload = () => { // 등록 버튼을 눌렀을 때 호출되는 함수
+    uploadButtonClicked = () => { // 등록 버튼을 눌렀을 때 호출되는 함수
         const imageData = this.makeBinaryData();
         this.callUploadAPI(imageData).then((response) => {
             console.log(response);
@@ -170,11 +147,6 @@ class AddGoods extends Component {
         //this.setState({ imageURLs: this.state.imageURLs.concat(imageURLs) });   
     }
 
-    // 품번카메라로 이동 goCameraButtonClicked
-    goCameraButtonClicked = () => {
-        this.props.navigation.push("PartsNoCamera", { onResultListener: this.goPartsNo });
-    }
-
     // 품번 가지고오는 함수 getGoodsNo
     goPartsNo = (imageURI) => {
         this.callPartsNoAPI(imageURI).then((response) => {
@@ -205,10 +177,13 @@ class AddGoods extends Component {
         this.setState({ cameraPopupMenuVisiable: false });
         this.props.navigation.navigate("Gallery", { onResultListener: this.getImageURL, imageLength: this.state.imageURLs.length });
     }
+    // 품번카메라로 이동 goCameraButtonClicked
+    goCameraButtonClicked = () => {
+        this.props.navigation.push("PartsNoCamera", { onResultListener: this.goPartsNo });
+    }
 
     //해시태그 추가버튼을 누를때
     addTag = () => {
-        
         const tagNames=this.state.tagName.split(' ');
     
         if(tagNames.slice(-1)[0]==''){
@@ -227,13 +202,25 @@ class AddGoods extends Component {
         this.state.tagName = ""
         this.hashTagRef.clear();
     }
-
+    //해시태그 특수문자 입력시 제거
     hashTagOnChangeText=(value)=>{
         const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
         let newTagName=value.replace(reg,'')
         this.setState({ tagName: newTagName})
     }
-    
+
+    // userID값 가져오는 함수
+    async getuserID() {// getUserID 로 수정
+        let obj = await AsyncStorage.getItem('obj') // 접속 중인 세션, 로컬스토리지 세션 따로생각, 로그인확인방법check
+        let parsed = JSON.parse(obj);
+        if (obj !== null) {
+            return this.id = parsed.id;
+        }
+        else {
+            return false;
+        }
+    }
+
     async addHashTag(tagNames){
         this.setState({ hashTag: this.state.hashTag.concat(tagNames) })
     }
@@ -243,11 +230,13 @@ class AddGoods extends Component {
             hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index),
         })
     }
+
     async removeImage(index) {
         this.setState({
             imageURLs: this.state.imageURLs.filter((value, indexNum) => indexNum !== index)
         });
     }
+
     //해시태그 삭제할 때
     hashTagRemove = (index) => {
         this.removeHashTag(index).then(()=>{
@@ -276,13 +265,11 @@ class AddGoods extends Component {
 
     //이미지 삭제 버튼
     imageRemove = (index) => {
-        
         this.removeImage(index).then(()=>{
             this.onValueChange();
         })
-       
-        
     };
+
     //상품등록하기 버튼활성화 조건
     onValueChange = () => {
         let isValidForm = true;
@@ -381,6 +368,15 @@ class AddGoods extends Component {
             ],
             { cancelable: false });
         return true;
+    }
+
+    keyboardDidShow = () => {
+        console.log('Keyboard Shown');
+    }
+
+    keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+        this.onValueChange();
     }
 
     render() {
@@ -608,7 +604,7 @@ class AddGoods extends Component {
                         </View>
                         {this.state.goodsDetailModal && (<GoodsDetailModal name={this.state.name} number={this.state.number} price={this.state.price} hashTag={this.state.hashTag}
                             quantity={this.state.quantity} quality={this.state.quality} genuine={this.state.genuine} spec={this.state.spec} statemodal={this.state.goodsDetailModal}
-                            setstatemodal={() => this.setState({ goodsDetailModal: !this.state.goodsDetailModal })} upload={this.upload} />)}
+                            setstatemodal={() => this.setState({ goodsDetailModal: !this.state.goodsDetailModal })} upload={this.uploadButtonClicked} />)}
 
                         {/* 상품 등록하기 버튼 부분*/}
                         {this.state.validForm ?
