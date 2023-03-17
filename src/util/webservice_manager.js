@@ -1,3 +1,4 @@
+
 class WebServiceManager{
     #url;
     #method;

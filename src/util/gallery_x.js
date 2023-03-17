@@ -94,8 +94,7 @@ export default class GalleryX extends Component {
         return(
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerBar}>
-                    {this.max!=null &&
-                    <View style={{flex:1,flexDirection:'row'}}>
+                    {this.max!=null &&<View style={{flex:1,flexDirection:'row'}}>
                         <Text style={[styles.text,{fontSize:15}]}> {this.state.imageLength} / </Text>
                         <Text style={[styles.text,{fontSize:15,color:'black'}]}>{this.max}</Text>
                     </View>}
