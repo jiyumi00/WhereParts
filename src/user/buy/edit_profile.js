@@ -50,7 +50,7 @@ class EditProfile extends Component {
             cardImageDetailVisible:false,
             companyImageDetailVisible:false,
 
-            companyImageURL: null,
+            compant: null,
             cardImageURL: null,
 
         }
@@ -61,13 +61,13 @@ class EditProfile extends Component {
             this.loginInfo.companyNo=value.companyNo;
             this.loginInfo.userID = value.id;
             this.loginInfo.passwd = value.passwd;
-            this.setState({ companyNo: value.companyNo })
+            this.setState({ companyNo: value.companyNo})
             console.log(this.state.companyNo)
             this.callGetCompanyImage(this.loginInfo).then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
                 reader.onloadend = () => {
-                    this.setState({ companyImageURL: reader.result });
+                    this.setState({ compant: reader.result });
                 }
             });
             this.callGetcardImage(this.loginInfo).then((response) => {
@@ -124,16 +124,23 @@ class EditProfile extends Component {
     goImageUpload=()=> {
         this.callModifyUserAPI().then((response)=> {
             console.log('response message =',response);
-            if(response.success== "1"){
-                const obj = {          
-                    companyNo: this.loginInfo.companyNo,
-                    id: this.loginInfo.userID,
-                    passwd: this.state.passwd, 
+            if(this.state.passwd!==this.state.passwordok)
+            {
+                this.setState({ passwderror: true })
+            }
+            if(this.state.passwd === this.state.passwordok){
+                this.setState({ passwderror: false })
+                if(response.success== "1"){
+                    const obj = {          
+                        companyNo: this.loginInfo.companyNo,
+                        id: this.loginInfo.userID,
+                        passwd: this.state.passwd, 
+                    }
+                    AsyncStorage.setItem('obj', JSON.stringify(obj));
+                    Alert.alert('정보 수정 완료', '', [
+                        { text: '확인', onPress: () => { this.props.navigation.navigate("Home") } },
+                    ]);
                 }
-                AsyncStorage.setItem('obj', JSON.stringify(obj));
-                Alert.alert('정보 수정 완료', '', [
-                    { text: '확인', onPress: () => { this.props.navigation.navigate("Home") } },
-                ]);
             }
             else{
                 Alert.alert('정보 수정을 실패하였습니다.');
@@ -184,12 +191,20 @@ class EditProfile extends Component {
         if (this.state.passwordok.trim().length == 0) {
             isValidForm = false;
         }
+        if (this.state.passwd!=this.state.passwordok) {
+            isValidForm = false;
+            this.setState({passwderror:true});
+        }
+        if (this.state.passwd==this.state.passwordok) {
+            this.setState({passwderror:false});
+        }
         if (this.imageLength == 0) {
             isValidForm = false;
         }
         console.log("imageLength", this.imageLength);
         this.setState({ validForm: isValidForm });
     }
+
 
     getViewSize = (event) => {
         this.photoCameraIcon.current.measure((fx, fy, width, height, px, py) => {
@@ -202,8 +217,9 @@ class EditProfile extends Component {
     //현재비밀번호 확인버튼 클릭 시
     passwdOkButtonClicked = () => {
         if (this.state.userpasswd === this.loginInfo.passwd && this.state.userpasswdok === this.loginInfo.passwd) {
+       
             this.setState({
-                modal: !this.state.modal
+                modal: !this.state.modal,passwderror: false
             });
         }
         else {
@@ -239,7 +255,6 @@ class EditProfile extends Component {
                 <Modal
                     transparent={false}
                     visible={this.state.modal}
-                    
                 >
                     <View style={styles.container}>
                         <View style={styles.header_textLayout_view}>
@@ -297,7 +312,7 @@ class EditProfile extends Component {
                                 <View style={styles.imageRegister_btn_view}>
                                     <Text style={[styles.default_text, styles.imageRegister_title_text]}>사업자 등록증</Text>
                                     <TouchableOpacity style={styles.imageRegister_btn} onPress={this.companyImageModal}>
-                                        <Image source={{ uri: this.state.companyImageURL }} style={styles.imageRegister_image_view} />
+                                        <Image source={{ uri: this.state.compant }} style={styles.imageRegister_image_view} />
                                     </TouchableOpacity>
                                 </View>
                                 {/*명함 사진*/}
@@ -339,7 +354,7 @@ class EditProfile extends Component {
                                     <TouchableOpacity onPress={this.companyImageModal} style={{ backgroundColor: '#fff', }}>
                                         <Text style={{fontSize:20}}>x</Text>
                                     </TouchableOpacity>
-                                        <Image source={{ uri: this.state.companyImageURL }} style={{ width: "80%", height: "80%" }} />
+                                        <Image source={{ uri: this.state.compant }} style={{ width: "80%", height: "80%" }} />
                                     
                                 </View>
                             </Modal>
@@ -383,6 +398,11 @@ class EditProfile extends Component {
                                         secureTextEntry={true}
                                     />
                                 </View>
+                                {this.state.passwderror == true ? (
+                                <Text style={styles.errorMessage_text}>
+                                    * 비밀번호를 정확하게 입력해주세요.
+                                </Text>
+                            ) : null}
                             </View>
                         </View>
                     </ScrollView>

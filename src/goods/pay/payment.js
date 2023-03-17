@@ -63,17 +63,6 @@ class Payment extends Component {
         //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
 
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        this.onValueChange();
-    }
-
-    
-
     countPlus=()=>{
         if( this.state.quantity>0 && this.state.quantity < this.item.quantity)
             this.setState({quantity:this.state.quantity+1});
@@ -99,7 +88,6 @@ class Payment extends Component {
 
     onValueChange=()=>{
         let isValidForm = true;
-        //console.log("온밸챈지실행");
         //console.log("리스너순서 2");
         console.log("zipNo",this.state.zipNo.trim().length);
         console.log("roadAddr",this.state.roadAddr.trim().length);
@@ -137,8 +125,6 @@ class Payment extends Component {
             quantity:this.state.quantity,
             price:price
         };   
-        
-
         console.log("결제정보",payload);
 
         this.callAndroidPaymentActivity(payload);
@@ -185,6 +171,15 @@ class Payment extends Component {
 
         };
         return payload;
+    }
+
+    keyboardDidShow = () => {
+        console.log('Keyboard Shown');
+    }
+
+    keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+        this.onValueChange();
     }
 
     async callAddOrderAPI(value){

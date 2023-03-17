@@ -57,7 +57,6 @@ class PayComplete extends Component {
                             <Text style={styles.indexText}>배송지</Text>
                             <Text> {buyerTel}</Text>
                             <Text> {address}  </Text>
-                            <Text> {buyerTel}  </Text>
                         </View>
                         <View style={styles.buttonView}>
                             <TouchableOpacity style={[styles.goListButton,{marginRight:10}]} onPress={this.goHomeScreen}><Text style={styles.buyButtonText}>홈으로</Text></TouchableOpacity>

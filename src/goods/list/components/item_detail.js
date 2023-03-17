@@ -30,15 +30,15 @@ export default class DetailItemView extends Component {
             imageLength: 0,
             images: [],
 
-            editGoodsViewVisible: false,
+            editGoodsViewVisible: false, //수정가능 View
 
             tagName: '',
             
             dipsbuttonclicked: false,//찜하기
             //togglebuttonclicked: false,
 
-            editVisible: false,//수정가능
-            buyVisible: false,//구매가능
+            editVisible: false,//수정가능 Bar
+            buyVisible: false,//구매가능 Bar
             imageVisible : false,//큰사진보기
 
             item: {}, //상품 상세정보
@@ -121,7 +121,20 @@ export default class DetailItemView extends Component {
     }
 
     backPressed = () => {
-        this.props.navigation.pop();
+
+        if(this.state.editGoodsViewVisible==true){
+            Alert.alert(
+                '',
+                '수정을 취소 하시겠어요?',
+                [
+                    { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                    { text: '확인', onPress: () => this.props.navigation.pop() },
+                ],);
+        }
+        else{
+            this.props.navigation.pop();
+        }
+        
         if(this.props.route.params.pickRefreshListener !=null){
             this.props.route.params.pickRefreshListener();
         }
