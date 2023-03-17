@@ -154,6 +154,7 @@ class AddDelivery extends Component {
        console.log(this.props.route.params.id)
        console.log(this.state.t_code);
        console.log("t_name",this.state.t_name[this.state.t_code-1]);
+       console.log('t_code',this.state.t_code)
         return (
 
             <View style={styles.total_container}>

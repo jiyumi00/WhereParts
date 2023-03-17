@@ -67,7 +67,7 @@ class Stack extends Component {
                      initialParams={{ companyNoImageURL: [],cardImageURL:[],companyNo:"" }} options={{ title: " " }} />
                 <NativeStack.Screen name="RegisterGallery" component={RegisterGallery}/>
                 <NativeStack.Screen name="BusinessCardCamera" component={BusinessCardCamera}
-                    options={{ title: "사업카메라" }} />
+                    options={{ title: "명함" }} />
                 <NativeStack.Screen name="PhotoGallery" component={PhotoGallery}/>
                 <NativeStack.Screen name="CompanyCamera" component={CompanyCamera}
                     options={{ title: "사업자 등록증" }} />

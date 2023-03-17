@@ -709,30 +709,48 @@ class GoodsDetailModal extends Component {
     constructor(props) {
         super(props);
     }
+    qulityValueText = (value) => {
+        let qulityText = ["새제품이에요", "깨끗해요", "쓸만해요"];
+        return qulityText[value - 1];
+    }
+
+    genuineValueText = (value) => {
+        let genuineText = ["정품", "비정품"];
+        return genuineText[value - 1];
+    }
     render() {
         return (
             <>
                 <Modal animationType='slide' transparent={true} visible={this.props.statemodal}>
                     <View style={[styles.center_view,{marginTop:22}]}>
                         <View style={styles.modal_search_view}>
-                            <TouchableOpacity onPress={this.props.setstatemodal}>
-                                <Text>X</Text>
-                            </TouchableOpacity>
-                            <Text style={styles.btn_text}>
-                                {"품명 : "}{this.props.name}{"\n"}
-                                {"부품번호 : "}{this.props.number}{"\n"}
-                                {"가격 : "}{this.props.price}{"\n"}
-                                {"해시태그 : "}{this.props.hashTag + " "}{"\n"}
-                                {"판매개수 : "}{this.props.quantity}{"\n"}
-                                {"상품상태 : "}{this.props.quality}{"\n"}
-                                {"정품/비정품 : "}{this.props.genuine}{"\n"}
-                                {"상품설명 : "}{this.props.spec}{"\n"}
-                                {" 등록 하시겠습니까? "}
-                            </Text>
-                            <TouchableOpacity onPress={this.props.upload}>
-                                <IconPopup name="check" size={35} color="black" />
+                            <Text style={{fontFamily: 'Pretendard-SemiBold',fontSize: 20,color:'black'}}>등 록 확 인{"\n"}</Text>
 
-                            </TouchableOpacity>
+                            <View style={{flexDirection:'row', marginBottom:'13%'}}>
+                                <View style={{flex:1}}>
+                                    <Text style={[styles.modal_text,]}>품        명</Text>
+                                    <Text style={[styles.modal_text,]}>부품번호</Text>
+                                    <Text style={[styles.modal_text,]}>가        격</Text>
+                                    <Text style={[styles.modal_text,]}>판매개수</Text>
+                                    <Text style={[styles.modal_text,]}>상품상태</Text>
+                                    <Text style={[styles.modal_text,]}>정품/비정품</Text>            
+                                </View>
+                                <View style={{flex:1}}>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.name.length>7 ? `${this.props.name.slice(0,7)}...`:this.props.name}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.number.length>9 ? `${this.props.number.slice(0,9)}...`:this.props.number}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.price}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.quantity}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.qulityValueText(this.props.quality)}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.genuineValueText(this.props.genuine)}</Text>
+                                </View>
+                            </View>
+
+
+                            <Text style={[styles.modal_text,{color:'black'}]}>{" 등록 하시겠습니까? "}</Text>
+                            <View style={{flexDirection:'row', marginVertical:'3%'}}>
+                                <TouchableOpacity  style={styles.modal_button} onPress={this.props.setstatemodal}><Text style={{color:'black'}}>취소</Text></TouchableOpacity>
+                                <TouchableOpacity style={[styles.modal_button,{backgroundColor:'#1E90FF'}]} onPress={this.props.upload}><Text style={{color:'white'}}>확인</Text></TouchableOpacity>
+                            </View>                      
                         </View>
                     </View>
                 </Modal>

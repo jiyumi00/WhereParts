@@ -121,7 +121,19 @@ export default class DetailItemView extends Component {
     }
 
     backPressed = () => {
-        this.props.navigation.pop();
+        if(this.state.editGoodsViewVisible==true){
+            Alert.alert(
+                '',
+                '수정을 취소 하시겠어요?',
+                [
+                    { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                    { text: '확인', onPress: () => this.props.navigation.pop() },
+                ],);
+        }
+        else{
+            this.props.navigation.pop();
+        }
+        
         if(this.props.route.params.pickRefreshListener !=null){
             this.props.route.params.pickRefreshListener();
         }
@@ -512,8 +524,8 @@ export default class DetailItemView extends Component {
                         </View>
                         
                         {/* 이미지 모달 */}
-                        <Modal visible={this.state.imageVisible}>
-                            <Button title="Back" onPress={this.handleModal} />
+                        <Modal visible={this.state.imageVisible} onRequestClose={()=>this.setState({imageVisible:!this.state.imageVisible})}>
+                            {/*<Button title="Back" onPress={this.handleModal} />*/}
                             <View style={styles.goods_modal_view}>
                                 <FlatList
                                     showsHorizontalScrollIndicator={false}
