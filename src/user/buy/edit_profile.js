@@ -256,6 +256,9 @@ class EditProfile extends Component {
                     transparent={false}
                     visible={this.state.modal}
                 >
+                    
+                    <ScrollView>
+                    
                     <View style={styles.container}>
                         <View style={styles.header_textLayout_view}>
                             <Text style={[styles.default_text, styles.main_title_text, { color: '#4B89DC' }]}>비밀번호 확인</Text>
@@ -293,7 +296,11 @@ class EditProfile extends Component {
 
                             </View>
                         </View>
-                    </View>
+                        <Text></Text>
+                        </View>
+                 
+                    </ScrollView>
+               
                 </Modal>
 
                 <View style={styles.total_container}>

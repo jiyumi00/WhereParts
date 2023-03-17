@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
 
         //내정보 수정
         editprofile_btn: {
-            height: "35%",
+            height: "50%",
             width:"49%",
             alignItems: 'center',
             justifyContent: 'center',
