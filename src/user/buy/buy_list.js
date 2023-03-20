@@ -170,16 +170,16 @@ class ListItem extends Component {
                     </View>
                     </TouchableOpacity>
                     <View style={styles.productButtonView}>
-                        <View style={styles.payInfoButtonView}>
-                            <TouchableOpacity onPress={this.goOrderDetailScreen}><Text>주문상세</Text></TouchableOpacity>
+                        <View style={[styles.payInfoButtonView,{borderColor:'blue'}]}>
+                            <TouchableOpacity onPress={this.goOrderDetailScreen}><Text style={{color:'blue'}}>주문상세</Text></TouchableOpacity>
                         </View>
                         {item.status!=1 && 
-                        <View style={styles.payInfoButtonView}>
-                            <TouchableOpacity  onPress={this.goDeliveryDetailScreen}><Text>배송조회</Text></TouchableOpacity>
+                        <View style={[styles.payInfoButtonView,{borderColor:'blue'}]}>
+                            <TouchableOpacity  onPress={this.goDeliveryDetailScreen}><Text style={{color:'blue'}}>배송조회</Text></TouchableOpacity>
                         </View>}
                         {item.status==1 && 
                         <View style={styles.payInfoButtonView}>
-                        <TouchableOpacity><Text>배송조회</Text></TouchableOpacity>
+                        <TouchableOpacity><Text >배송조회</Text></TouchableOpacity>
                         </View>}
                         {item.status==2 &&
                         <View style={[styles.payInfoButtonView,{borderColor:'blue'}]}>

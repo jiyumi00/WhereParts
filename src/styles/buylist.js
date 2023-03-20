@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         borderWidth:1,
         borderRadius:5,
-        borderColor: '#E9E9E9',
+        borderColor: '#ABABAB',
         marginHorizontal:'2%',
         paddingVertical:'2%'
       },
@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
       productImageView: {
         
         //borderWidth: 1,
-        borderColor: '#E9E9E9',
+        borderColor: '#ABABAB',
         borderStyle: 'solid',
         overflow: 'hidden',
       },
