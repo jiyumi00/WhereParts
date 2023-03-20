@@ -42,7 +42,7 @@ class PayComplete extends Component {
     }
 
     goReceiptWebView=()=> {
-        this.props.navigation.navigate('ReceiptWebView',{url:this.state.item.billURL});
+        this.props.navigation.navigate('GoogleWebView',{url:this.state.item.billURL});
     }
 
     async callGetOrderDetailAPI() {

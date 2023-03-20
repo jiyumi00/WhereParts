@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, TextInput,Image,Keyboard, Alert } from 'react-native';
 
-import Address from "../../goods/pay/address";
-import { Picker } from '@react-native-picker/picker';
-
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/payment";
+
 class Payment extends Component {
     constructor(props) {
         super(props);

@@ -227,6 +227,11 @@ export default class DetailItemView extends Component {
         return genuineText[value - 1];
     }
 
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView=()=> {
+        this.props.navigation.navigate('GoogleWebView',{url:'http://www.google.com/search?q='+this.state.item.number});
+    }
+
 
 
     // 수정 버튼 클릭
@@ -454,6 +459,8 @@ export default class DetailItemView extends Component {
         else
             Promise.reject(response);
     }
+
+
     render() {
         console.log("renderItem_hashTag", this.state.hashTag);
         const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
@@ -548,9 +555,11 @@ export default class DetailItemView extends Component {
                                 <Text style={[styles.text, { fontSize: 24, }]}>
                                     {name}
                                 </Text>
-                                <Text style={[styles.text, { paddingLeft: '5%', color: 'blue' }]}>
-                                    {number}
-                                </Text>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                    <Text style={[styles.text, { paddingLeft: '5%', color: 'blue' }]}>
+                                        {number}
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
 
                             {/* 금액 */}
