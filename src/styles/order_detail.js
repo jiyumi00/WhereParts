@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
         //borderWidth:1,
     },
     payInfoTitle_view:{
-        height:30,
+        
         borderBottomWidth:2,
     },
     payInfoDetail_view:{
@@ -42,12 +42,12 @@ export const styles = StyleSheet.create({
     },
     title_view:{
         flex:1,
-        //borderWidth:1,
+        borderWidth:1,
         justifyContent:'center',
     },
     info_view:{
         flex:3,
-       // borderWidth:1,
+       borderWidth:1,
         justifyContent:'center',
     },
     text:{

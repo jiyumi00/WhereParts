@@ -49,6 +49,7 @@ class OrderDetail extends Component {
                         <Text style={styles.text_info}>{orderingDate}</Text>
                         <Text style={styles.text}>주문번호: {id}</Text>
                     </View>
+<<<<<<< HEAD
                     <View style={styles.payInfo_view}>
                         <View style={styles.payInfoTitle_view}>
                             <Text style={[styles.text, { fontSize: 15, color: 'black' }]}>주문자 정보</Text>
@@ -167,6 +168,112 @@ class OrderDetail extends Component {
                 </ScrollView>
             </View>
 
+=======
+                    <View style={styles.payInfoDetail_view}>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>주문자 이름</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{buyerName}</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>휴대폰 번호</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{buyerTel}</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>배송주소</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{address}</Text>
+                            </View>
+                       </View>
+                    </View>
+                </View>
+                <View style={styles.payInfo_view}>
+                    <View style={styles.payInfoTitle_view}>
+                        <Text style={[styles.text,{fontSize:15,color:'black'}]}>결제 정보</Text>
+                    </View>
+                    <View style={styles.payInfoDetail_view}>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>결제수단</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{payKind==1 && "신용카드"}({payBank})</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>결제금액</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{total} 원</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>결제일시</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{this.state.days[0]}</Text>
+                            </View>
+                       </View>
+                    </View>
+                </View>
+
+                {status!=1 && 
+                <>
+                 <View style={styles.payInfo_view}>
+                    <View style={styles.payInfoTitle_view}>
+                        <Text style={[styles.text,{fontSize:15,color:'black'}]}>배송 정보</Text>
+                    </View>
+                    <View style={styles.payInfoDetail_view}>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>택배사</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{invoiceName}</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>송장번호</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{invoiceNo}</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>배송시작일시</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{this.state.days[1]}</Text>
+                            </View>
+                       </View>
+                       <View style={{flexDirection:'row'}}>
+                            <View style={{width:'30%'}}>
+                            <Text style={styles.text}>배송완료일시</Text>
+                            </View>
+                            <View style={{width:'70%'}}>
+                            <Text style={styles.text_info}>{this.state.days[2]}</Text>
+                            </View>
+                       </View>
+                    </View>
+                </View>
+                
+                </>}
+           </ScrollView>
+       </View>
+>>>>>>> 2b396fa5c9b487a4bb645decd7aa5a53b47b0c7d
         );
     }
 }
