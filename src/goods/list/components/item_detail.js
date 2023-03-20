@@ -269,7 +269,6 @@ export default class DetailItemView extends Component {
         this.props.navigation.navigate("Payment", { item: this.state.item, userID: this.storageUserID });
     }
 
-    // Home refresh
     refresh =()=>{
         this.props.route.params.refresh();
     }
@@ -285,7 +284,7 @@ export default class DetailItemView extends Component {
                     text: '확인', onPress: () => this.callSetDisableGoodsAPI().then((response) => {
                         console.log("숨김완료", response);
                         if(response.success==1){
-                            this.props.navigation.navigate("Home");
+                            this.props.navigation.pop();
                             this.refresh();
                         }
                     })
@@ -304,7 +303,7 @@ export default class DetailItemView extends Component {
                     text: '확인', onPress: () => this.callSetEnableGoodsAPI().then((response) => {
                         console.log("숨김해제완료", response);
                         if(response.success==1){
-                            this.props.navigation.navigate("Home");
+                            this.props.navigation.pop();
                         }
                     })
                 },
@@ -320,7 +319,7 @@ export default class DetailItemView extends Component {
                 {
                     text: '확인', onPress: () => this.callRemoveGoodsAPI().then((response) => {
                         console.log("삭제완료", response);
-                        this.props.navigation.navigate("Home");
+                        this.props.navigation.pop();
                         this.refresh();
                     })
                 },

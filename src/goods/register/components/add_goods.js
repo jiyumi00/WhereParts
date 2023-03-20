@@ -736,8 +736,8 @@ class GoodsDetailModal extends Component {
                                     <Text style={[styles.modal_text,]}>정품/비정품</Text>            
                                 </View>
                                 <View style={{flex:1}}>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.name.length>7 ? `${this.props.name.slice(0,7)}...`:this.props.name}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.number.length>9 ? `${this.props.number.slice(0,9)}...`:this.props.number}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.name.length>6 ? `${this.props.name.slice(0,6)}...`:this.props.name}</Text>
+                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.props.number.length>8 ? `${this.props.number.slice(0,8)}...`:this.props.number}</Text>
                                     <Text style={[styles.modal_text,{color:'black'}]}>{this.props.price}</Text>
                                     <Text style={[styles.modal_text,{color:'black'}]}>{this.props.quantity}</Text>
                                     <Text style={[styles.modal_text,{color:'black'}]}>{this.qulityValueText(this.props.quality)}</Text>

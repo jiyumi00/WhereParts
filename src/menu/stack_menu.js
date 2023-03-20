@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, FlatList, StyleSheet, Text,Button } from 'react-native';
 //Stack
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -80,7 +80,7 @@ class Stack extends Component {
                 <NativeStack.Screen name="EditProfile" component={EditProfile}
                     options={{ title: "" }}/>
                 <NativeStack.Screen name="SalesList" component={SalesList}
-                    options={{ title: "판매 내역" }}/>
+                    options={{ title: "판매 내역" ,}}/>
                 <NativeStack.Screen name="BuyList" component={BuyList}
                     options={{ title: "구매 내역" }} />
                 <NativeStack.Screen name="PickList" component={PickList}
@@ -94,7 +94,7 @@ class Stack extends Component {
                 <NativeStack.Screen name="Payment" component={Payment}
                     options={{ title: "결제" }} />
                 <NativeStack.Screen name="PayComplete" component={PayComplete}
-                     options={{ title: "결제완료" }} />
+                     options={{ title: "결제완료",headerBackVisible:false, }} />
                 <NativeStack.Screen name="GoodsDetail" component={GoodsDetail}
                     options={{ headerShown: false }}  />
                 <NativeStack.Screen name="Address" component={Address}
