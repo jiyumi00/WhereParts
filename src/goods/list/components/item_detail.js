@@ -585,9 +585,9 @@ export default class DetailItemView extends Component {
                                 <View style={{ marginLeft: 'auto', }}>
                                     {/* 남은 수량 */}
                                     <View style={styles.remaining_view}>
-                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>
-                                            {this.state.quantity}개 남음
-                                        </Text>
+                                        {this.state.quantity==0 ?
+                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text>:
+                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
                                     </View>
 
                                     {/* 남은수량 수정 */}
@@ -782,14 +782,14 @@ export default class DetailItemView extends Component {
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {this.state.buyVisible &&
+                        {(this.state.buyVisible&&this.state.quantity!=0)  &&
                             <View style={styles.pick_view}>
                                 <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
                                     <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
                                 </TouchableOpacity>
                             </View>}
                         <View style={styles.buy_view}>
-                            {this.state.buyVisible &&
+                            {(this.state.buyVisible&&this.state.quantity!=0)  &&
                                 <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked}>
                                     <Text style={styles.buyButton_text}>구매하기</Text>
                                 </TouchableOpacity>}
