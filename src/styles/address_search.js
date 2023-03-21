@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet,Dimensions } from 'react-native';
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({
   total_container:{
     flex:1,
@@ -38,12 +39,17 @@ export const styles = StyleSheet.create({
     },
     viewBody:{
       //borderWidth:1,
-      flex: 8,
-      marginTop:25,
+      position:'absolute',
+      
+      width:'100%',
+      marginTop:'20%',
     },
     viewBottom:{
-      flex:1,
-      paddingTop:15,
+      position:'absolute',
+      alignContent:'center',
+      justifyContent:'center',
+      marginTop:ScreenHeight/1.3,
+      width:'100%',
       //borderWidth:1,
     },
     inputStyle:{

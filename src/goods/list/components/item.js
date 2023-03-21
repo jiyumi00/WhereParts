@@ -40,7 +40,7 @@ export default class ListItem extends PureComponent {
         const item = this.props.item;
         return (
             <>
-            <TouchableOpacity onPress={this.goGoodsDetailScreen}>
+            <TouchableOpacity onPress={this.goGoodsDetailScreen} activeOpacity={0.8}>
                 <View style={styles.listItem_view}>
                     <View style={styles.productImage_view}>
                         <Image

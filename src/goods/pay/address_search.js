@@ -17,13 +17,6 @@ class SearchAddress extends Component {
             value:"",
         }
     }
-
-    componentDidMount(){
-       
-    }
-    componentWillUnmount(){
-      
-    }
     //검색 버튼을 눌렀을 때
     searchAddress = () => {
         if(this.state.searchText == "")
@@ -89,7 +82,7 @@ class AddressView extends Component {
         return (
             <>
        
-              <View style={styles.viewBody}>
+              <View style={[styles.viewBody,{position:'absolute', marginTop:'20%'}]}>
                 <Text style={styles.title}>TIP</Text>
                 <Text style={styles.text}>도로명, 건물명, 지번 중 선택하여</Text>
                 <Text style={styles.text2}>입력하세요 </Text>
@@ -106,9 +99,10 @@ class AddressView extends Component {
 class SearchView extends PureComponent {
     constructor(props) {
         super(props);
+        
 
         this.state = {
-            totalCount: 0,
+            totalCount:0,
             addressList: [],
             commonList: [],
             page: 1, 
@@ -116,8 +110,9 @@ class SearchView extends PureComponent {
     }
     componentDidMount() {
         this.callGetAddressAPI().then((response) => {
-            this.setState({ addressList: response.results.juso });
-            this.setState({ commonList: response.results.common });
+            this.setState({ addressList: response.results.juso,commonList: response.results.common,
+             totalCount:response.results.common.totalCount });
+           
         });
     }
     componentDidUpdate(prevProps, prevState) {
@@ -125,16 +120,14 @@ class SearchView extends PureComponent {
         if((prevState.page != this.state.page))
         {
             this.callGetAddressAPI().then((response) => {
-                this.setState({ addressList: response.results.juso });
-                this.setState({ commonList: response.results.common });
+                this.setState({ addressList: response.results.juso,commonList: response.results.common });
             });
         }
         else if(prevProps.searchText != this.props.searchText)
         {
             this.callGetAddressAPI().then((response) => {
                 this.setState({page:1});
-                this.setState({ addressList: response.results.juso });
-                this.setState({ commonList: response.results.common });
+                this.setState({ addressList: response.results.juso,commonList: response.results.common});
             });
         }
     }
@@ -155,7 +148,7 @@ class SearchView extends PureComponent {
     }
     //페이지 증가 
     pageUp = () => {
-        if (this.state.page < (this.state.commonList.totalCount / 5))
+        if (this.state.page < (this.state.commonList.totalCount / 4))
             this.setState({ page: this.state.page + 1 })
     }
     //페이지 감소 
@@ -164,45 +157,55 @@ class SearchView extends PureComponent {
             this.setState({ page: this.state.page - 1 })
     }
     render() {
+        console.log('totalCount',this.state.totalCount)
+        console.log('commonList',this.state.commonList)
+        console.log('addressList',this.state.addressList)
+        console.log('page',this.state.page)
         return (
+            
             <>
+        
             <View style={styles.viewBody}>
-
+               
+                <FlatList
+                    data={this.state.addressList}
+                    renderItem={( {item} ) =><TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressListClicked(item.zipNo,item.roadAddr)}>
+                        <View style={styles.outputStyle}>
+                        <View style={styles.rowLayout}>
+                            <View style={styles.titleLayout}>
+                                
+                                <View style={styles.flex1}><Text>도로명</Text></View >
+                                <View style={styles.flex1}><Text>지번</Text></View >
+                            </View>
+                            <View style={styles.addressLayout}>
+                                <View style={styles.flex1}><Text style={{ color: "black" }}>{item.roadAddr} </Text></View >
+                                <View style={styles.flex1}><Text style={{ color: "black" }}>{item.jibunAddr}</Text></View >
+                            </View>
+                            <View style={styles.numberLayout}>
+                                <Text style={[styles.text,{fontWeight:'600'}]}>{item.zipNo}</Text>
+                            </View>
+                        </View>
+                    </View></TouchableOpacity>}
+                />
+               
+               
+            </View>
+           
+               <View style={styles.viewBottom}>
+               <View style={styles.rowLayout}>
+                   <TouchableOpacity onPress={this.pageDown} activeOpacity={0.8}>
+                      <PageIcon name="leftsquareo" size={30} color="light grey" />
+                   </TouchableOpacity>
+                  
+                    <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}> {this.state.page}</Text> / {this.state.totalCount/4}  </Text>
+                   <TouchableOpacity onPress={this.pageUp} activeOpacity={0.8}>
+                       <PageIcon name="rightsquareo" size={30} color="light grey" />
+                   </TouchableOpacity>
+               </View>
+           </View>
+            
           
-            <FlatList
-                data={this.state.addressList}
-                renderItem={( {item} ) =><TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressListClicked(item.zipNo,item.roadAddr)}>
-                    <View style={styles.outputStyle}>
-                    <View style={styles.rowLayout}>
-                        <View style={styles.titleLayout}>
-                            
-                            <View style={styles.flex1}><Text>도로명</Text></View >
-                            <View style={styles.flex1}><Text>지번</Text></View >
-                        </View>
-                        <View style={styles.addressLayout}>
-                            <View style={styles.flex1}><Text style={{ color: "black" }}>{item.roadAddr} </Text></View >
-                            <View style={styles.flex1}><Text style={{ color: "black" }}>{item.jibunAddr}</Text></View >
-                        </View>
-                        <View style={styles.numberLayout}>
-                            <Text style={[styles.text,{fontWeight:'600'}]}>{item.zipNo}</Text>
-                        </View>
-                    </View>
-                </View></TouchableOpacity>}
-            />
-            </View>
-            <View style={styles.viewBottom}>
-                <View style={styles.rowLayout}>
-                    <TouchableOpacity onPress={this.pageDown} >
-                       <PageIcon name="leftsquareo" size={30} color="light grey" />
-                    </TouchableOpacity>
-                   
-                     <Text  style={styles.text}>    {this.state.page}    </Text>
-                    <TouchableOpacity onPress={this.pageUp} >
-                        <PageIcon name="rightsquareo" size={30} color="light grey" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-            {console.log("hi")}
+           {/*  {console.log("hi")} */}
             </>
         );
     }

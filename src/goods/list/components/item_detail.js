@@ -517,7 +517,8 @@ export default class DetailItemView extends Component {
                             <View style={styles.slideImage_view}>
                                 <SwiperFlatList
                                     data={this.state.images}
-                                    showPagination
+                                    showPagination={true}
+                                    onPaginationSelectedIndex={true}
                                     paginationActiveColor='blue'
                                     paginationStyleItem={{ width: 10, height: 10 }}
                                     paginationStyleItemActive={{ width: 15, height: 10 }}
@@ -526,6 +527,7 @@ export default class DetailItemView extends Component {
                                     )}
                                     horizontal={true}
                                 />
+                                
                             </View>
                         </View>
                         
@@ -790,7 +792,7 @@ export default class DetailItemView extends Component {
                             </View>}
                         <View style={styles.buy_view}>
                             {(this.state.buyVisible&&this.state.quantity!=0)  &&
-                                <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked}>
+                                <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                     <Text style={styles.buyButton_text}>구매하기</Text>
                                 </TouchableOpacity>}
                             {/* 수정완료 버튼 */}
