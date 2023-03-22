@@ -258,7 +258,15 @@ export default class DetailItemView extends Component {
         console.log("수정완료버튼클릭");
         this.callUpdateGoodsAPI(value).then((response)=>{
             console.log('수정완료', response)
-
+            if(response.success==1){
+                Alert.alert(
+                    '',
+                    '수정이 완료되었습니다',
+                    [
+                        { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                        { text: '확인', onPress: () => console.log('수정완료') },
+                    ],);
+            }
             if (this.state.editGoodsViewVisible == true) {
                 this.setState({ editGoodsViewVisible: false });
             }
@@ -517,7 +525,8 @@ export default class DetailItemView extends Component {
                             <View style={styles.slideImage_view}>
                                 <SwiperFlatList
                                     data={this.state.images}
-                                    showPagination
+                                    showPagination={true}
+                                    onPaginationSelectedIndex={true}
                                     paginationActiveColor='blue'
                                     paginationStyleItem={{ width: 10, height: 10 }}
                                     paginationStyleItemActive={{ width: 15, height: 10 }}
@@ -526,6 +535,7 @@ export default class DetailItemView extends Component {
                                     )}
                                     horizontal={true}
                                 />
+                                
                             </View>
                         </View>
                         
@@ -585,9 +595,9 @@ export default class DetailItemView extends Component {
                                 <View style={{ marginLeft: 'auto', }}>
                                     {/* 남은 수량 */}
                                     <View style={styles.remaining_view}>
-                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>
-                                            {this.state.quantity}개 남음
-                                        </Text>
+                                        {this.state.quantity==0 ?
+                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text>:
+                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
                                     </View>
 
                                     {/* 남은수량 수정 */}
@@ -782,15 +792,15 @@ export default class DetailItemView extends Component {
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {this.state.buyVisible &&
+                        {(this.state.buyVisible&&this.state.quantity!=0)  &&
                             <View style={styles.pick_view}>
                                 <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
                                     <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
                                 </TouchableOpacity>
                             </View>}
                         <View style={styles.buy_view}>
-                            {this.state.buyVisible &&
-                                <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked}>
+                            {(this.state.buyVisible&&this.state.quantity!=0)  &&
+                                <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                     <Text style={styles.buyButton_text}>구매하기</Text>
                                 </TouchableOpacity>}
                             {/* 수정완료 버튼 */}

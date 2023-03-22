@@ -63,6 +63,7 @@ class PayComplete extends Component {
             <View style={template.total_container}>
                 <ScrollView>
                     <View style={template.container}>
+                        <Text>결제가 완료되었습니다</Text>
                         <View style={[styles.indexView,{marginBottom: 20 }]}>
                             <Text style={styles.indexText}>주문상품</Text>
                             <Text> 주문번호 : {orderNo}</Text>
@@ -80,7 +81,7 @@ class PayComplete extends Component {
                             <Text> 할부기간 : 일시불</Text>
                             <Text> 결제금액 : {total}원</Text>
                             <TouchableOpacity onPress={this.goReceiptWebView}>
-                                <Text style={{color:'blue'}}> 영수증 보기</Text>
+                                <Text> 영수증 보기</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={[styles.indexView,{marginBottom: 20 }]}>

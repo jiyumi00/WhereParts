@@ -89,7 +89,7 @@ class AddressView extends Component {
         return (
             <>
        
-              <View style={styles.viewBody}>
+              <View style={[styles.viewBody,{position:'absolute',marginTop:'20%'}]}>
                 <Text style={styles.title}>TIP</Text>
                 <Text style={styles.text}>도로명, 건물명, 지번 중 선택하여</Text>
                 <Text style={styles.text2}>입력하세요 </Text>
@@ -116,8 +116,7 @@ class SearchView extends PureComponent {
     }
     componentDidMount() {
         this.callGetAddressAPI().then((response) => {
-            this.setState({ addressList: response.results.juso });
-            this.setState({ commonList: response.results.common });
+            this.setState({ addressList: response.results.juso,commonList: response.results.common, });
         });
     }
     componentDidUpdate(prevProps, prevState) {
@@ -125,16 +124,13 @@ class SearchView extends PureComponent {
         if((prevState.page != this.state.page))
         {
             this.callGetAddressAPI().then((response) => {
-                this.setState({ addressList: response.results.juso });
-                this.setState({ commonList: response.results.common });
+                this.setState({ addressList: response.results.juso,commonList: response.results.common });
             });
         }
         else if(prevProps.searchText != this.props.searchText)
         {
             this.callGetAddressAPI().then((response) => {
-                this.setState({page:1});
-                this.setState({ addressList: response.results.juso });
-                this.setState({ commonList: response.results.common });
+                this.setState({page:1, addressList: response.results.juso,commonList: response.results.common});
             });
         }
     }
@@ -146,7 +142,7 @@ class SearchView extends PureComponent {
     }
 
     async callGetAddressAPI() {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=4&keyword=" + this.props.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=5&keyword=" + this.props.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -164,6 +160,7 @@ class SearchView extends PureComponent {
             this.setState({ page: this.state.page - 1 })
     }
     render() {
+        
         return (
             <>
             <View style={styles.viewBody}>
@@ -196,7 +193,7 @@ class SearchView extends PureComponent {
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
                     </TouchableOpacity>
                    
-                     <Text  style={styles.text}>    {this.state.page}    </Text>
+                     <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {(Math.ceil(this.state.commonList.totalCount/5))}   </Text>
                     <TouchableOpacity onPress={this.pageUp} >
                         <PageIcon name="rightsquareo" size={30} color="light grey" />
                     </TouchableOpacity>

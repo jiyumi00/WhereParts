@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Keyboard } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
@@ -20,14 +20,11 @@ class AddDelivery extends Component {
             t_invoice: "",
             imageURL: null,
             sellDetailInfo: { orderingDate: "", buyerTel: "", days: [""] },
-
-            validForm: false,
         }
     }
 
     componentDidMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
 
         this.callGetSellDetailAPI().then((response) => {
             this.setState({ sellDetailInfo: response })
@@ -41,20 +38,6 @@ class AddDelivery extends Component {
             });
         })
 
-    }
-
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-    }
-
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        this.onValueChange();
     }
 
     goCameraButtonClicked = () => {
@@ -87,16 +70,6 @@ class AddDelivery extends Component {
                 console.log("delete success", imageURI);
             });
         });
-    }
-
-    onValueChange = () => {
-        let isValidForm = true;
-        
-        if (this.state.t_invoice.trim().length == 0) {
-            isValidForm = false;
-        }
-
-        this.setState({ validForm: isValidForm });
     }
 
     async callGetSellDetailAPI() {
@@ -208,7 +181,7 @@ class AddDelivery extends Component {
                                     <Text>송장번호 </Text>
                                     <TextInput
                                         onChangeText={(value) => this.setState({ t_invoice: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        
                                         value={this.state.t_invoice} // 띄워지는값
                                     />
                                 </View>
@@ -222,7 +195,7 @@ class AddDelivery extends Component {
                     </View>
                 </ScrollView>
                 <View style={styles.bottomContainer}>
-                    {this.state.validForm ?
+                    {this.state.t_invoice.trim()!=0 ?
                         (<TouchableOpacity onPress={this.deliveryCompleteButtonClicked} activeOpacity={0.8} style={styles.okbtn} >
                             <Text style={styles.btn_text}>배송완료신청</Text>
                         </TouchableOpacity>)

@@ -20,7 +20,8 @@ export default class SalesDetails extends Component {
             soldoutContents: [],
             salebarclicked: false,//판매중
             shippingbarclicked: false,//배송정보입력
-            soldoutbarclicked: false//판매완료
+            soldoutbarclicked: false,//판매완료
+            listRefresh:false,
         };
     }
 
@@ -40,9 +41,20 @@ export default class SalesDetails extends Component {
     }
 
     goSellGoods = () => {
+        //console.log("refresh sell");
         this.getUserID().then((value) => {
             this.callGetSellsAPI(value).then((response) => {
                 this.setState({ soldoutContents: response });
+            })
+        });
+    }
+
+    goSellingGoods = () => {
+        //console.log("refresh selling");
+        this.getUserID().then((value)=> {
+            this.callGetGoodsIdAPI(value).then((response) => {
+                this.contents = response;
+                this.setState({userIDContents:response});
             })
         });
     }
@@ -112,17 +124,23 @@ export default class SalesDetails extends Component {
 
                 {this.state.salebarclicked == true && (<FlatList
                     data={this.state.userIDContents}
-                    renderItem={({ item, index }) => <ListItem navigation={this.props.navigation} item={item} id={item.id} />}
+                    renderItem={({ item, index }) => <ListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goSellingGoods} />}
+                    refreshing={this.state.listRefresh}
+                    onRefresh={this.goSellingGoods}
                     scrollEventThrottle={16}
                 />)}
                 {this.state.shippingbarclicked == true && (<FlatList
                     data={this.state.soldoutContents}
-                    renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} goSellGoodsListener={this.goSellGoods} />}
+                    renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goSellGoods} />}
+                    refreshing={this.state.listRefresh}
+                    onRefresh={this.goSellGoods}
                     scrollEventThrottle={16}
                 />)}
                 {this.state.soldoutbarclicked == true && (<FlatList
                     data={this.state.soldoutContents}
                     renderItem={({ item, index }) => <SoldOutInfoList navigation={this.props.navigation} item={item} id={item.goodsID} />}
+                    refreshing={this.state.listRefresh}
+                    onRefresh={this.goSellGoods}
                     scrollEventThrottle={16}
                 />)}
             </View>
@@ -152,7 +170,7 @@ class ListItem extends PureComponent {
 
     handleDetailViewModal = () => {
         //this.setState({isDetailViewModal:!this.state.isDetailViewModal});
-        this.props.navigation.navigate('GoodsDetail', { id: this.props.item.id, userID: this.props.item.userID });
+        this.props.navigation.navigate('GoodsDetail', { id: this.props.item.id, userID: this.props.item.userID, refresh:this.props.refreshListener});
     }
 
     async callGetGoodsImageAPI() {
@@ -256,7 +274,7 @@ class DeliveryInfoList extends PureComponent {
                                 </View>
                             </View>
                         </View>
-                        {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.goSellGoodsListener })}>
+                        {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.refreshListener })}>
                             <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
                         </TouchableOpacity>}
 

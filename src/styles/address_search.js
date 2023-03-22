@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     },
     viewBody:{
       //borderWidth:1,
-      flex: 8,
+      flex: 9,
       marginTop:25,
     },
     viewBottom:{
