@@ -140,8 +140,9 @@ class AddGoods extends Component {
                 console.log('image error', message);
             }, (uri) => {
                 console.log('image success', uri);
-                this.setState({ imageURLs: this.state.imageURLs.concat(uri) });
-                this.onValueChange();
+                this.onValueChange({ imageURLs: this.state.imageURLs.concat(uri) });
+                /*this.setState({ imageURLs: this.state.imageURLs.concat(uri) });
+                this.onValueChange();*/
             })
         }
         //this.setState({ imageURLs: this.state.imageURLs.concat(imageURLs) });   
@@ -190,10 +191,10 @@ class AddGoods extends Component {
             tagNames.splice(tagNames.length-1)
         }
         if (this.state.hashTag.length< 7 && tagNames.length<7 && this.state.hashTag.length+tagNames.length<8) {
-            this.addHashTag(tagNames).then(()=>{
+            /*this.addHashTag(tagNames).then(()=>{
                 this.onValueChange();
-            });
-            
+            });*/
+            this.onValueChange({hashTag: this.state.hashTag.concat(tagNames)});
         }
         else {
             this.setState({ hashTagError: false })
@@ -221,7 +222,7 @@ class AddGoods extends Component {
         }
     }
 
-    async addHashTag(tagNames){
+    /*async addHashTag(tagNames){
         this.setState({ hashTag: this.state.hashTag.concat(tagNames) })
     }
 
@@ -235,13 +236,14 @@ class AddGoods extends Component {
         this.setState({
             imageURLs: this.state.imageURLs.filter((value, indexNum) => indexNum !== index)
         });
-    }
+    }*/
 
     //해시태그 삭제할 때
     hashTagRemove = (index) => {
-        this.removeHashTag(index).then(()=>{
+        /*this.removeHashTag(index).then(()=>{
             this.onValueChange();
-        });
+        });*/
+        this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
     }
 
     // -버튼 클릭
@@ -265,16 +267,17 @@ class AddGoods extends Component {
 
     //이미지 삭제 버튼
     imageRemove = (index) => {
-        this.removeImage(index).then(()=>{
+        /*this.removeImage(index).then(()=>{
             this.onValueChange();
-        })
+        })*/
+        this.onValueChange({imageURLs: this.state.imageURLs.filter((value, indexNum) => indexNum !== index)});
     };
 
     //상품등록하기 버튼활성화 조건
-    onValueChange = () => {
+    onValueChange = (value) => {
+        this.setState(value,()=>{
         let isValidForm = true;
         
-        console.log("해시태그 길이", this.state.hashTag.length)
         if (this.state.number.trim().length == 0) { // 조건 필요시 추가
             isValidForm = false;
         }
@@ -296,8 +299,11 @@ class AddGoods extends Component {
         /*if (this.state.spec.trim().length == 0) {
             isValidForm = false;
         }*/
-
+        
+        console.log("해시태그 길이", this.state.hashTag.length)
         this.setState({ validForm: isValidForm });
+    });
+        
     }
 
     //Web Service 시작
@@ -454,8 +460,8 @@ class AddGoods extends Component {
                                                 ref={(c) => { this.numberRef = c; }}
                                                 returnKeyType="next"
                                                 onSubmitEditing={() => { this.nameRef.focus(); }}
-                                                onChangeText={(value) => this.setState({ number: value })}
-                                                onEndEditing={(event) => this.onValueChange()}
+                                                onChangeText={(value) => this.onValueChange({ number: value })}
+                                                //onEndEditing={(event) => this.onValueChange()}
                                                 value={this.state.number} // 띄워지는값
                                             />
                                         </View>
@@ -475,8 +481,8 @@ class AddGoods extends Component {
                                         ref={(c) => { this.nameRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={() => { this.hashTagRef.focus(); }}
-                                        onChangeText={(value) => this.setState({ name: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        onChangeText={(value) => this.onValueChange({ name: value })}
+                                        //onEndEditing={(event) => this.onValueChange()}
                                     />
                                 </View>
 
@@ -529,8 +535,8 @@ class AddGoods extends Component {
                                     <TextInput
                                         ref={(c) => { this.priceRef = c; }}
                                         keyboardType="number-pad"
-                                        onChangeText={(value) => this.setState({ price: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        onChangeText={(value) => this.onValueChange({ price: value })}
+                                        //onEndEditing={(event) => this.onValueChange()}
                                     />
                                 </View>
 
@@ -597,7 +603,7 @@ class AddGoods extends Component {
                                     <TextInput
                                         multiline={true}
                                         onChangeText={(value) => this.setState({ spec: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        //onEndEditing={(event) => this.onValueChange()}
                                     />
                                 </View>
                             </View>

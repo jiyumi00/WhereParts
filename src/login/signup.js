@@ -145,10 +145,9 @@ class SignUp extends Component {
     // 명함 이미지 선택을 위한 갤러리로 이동
     goNamecardGalleryScreen = () => { 
         this.setState({cardPopupMenuVisible:false}); 
-        this.props.navigation.navigate('PhotoGallery', {onResultListener: this.cardImageInfo}) 
+        this.props.navigation.navigate('PhotoGallery', {onResultListener: this.cardImageInfo});
     }
 
-    
     //사업자 등록증 이미지 선택 후 (카메라로부터 인식된 사업자등록번호와 imageURI 받음)
     companyImageInfo=(companyNo,imageURI)=>{
         if(companyNo==="0") {
@@ -161,7 +160,6 @@ class SignUp extends Component {
         this.imageLength++;
         this.onValueChange();
     }
-
     
     //카메라 또는 갤러리에서 선택된 명함 이미지 URI
     cardImageInfo=(imageURI)=>{
@@ -184,26 +182,27 @@ class SignUp extends Component {
         this.onValueChange();
     }
 
-    onValueChange=()=>{
-        let isValidForm=true;
+    onValueChange=(value)=>{
+        this.setState(value,()=>{
+            let isValidForm=true;
       
-        if(this.state.companyNo.trim().length == 0){ // 조건 필요시 추가
-            isValidForm=false;
-        }
-        if(this.state.passwd.trim().length == 0){
-            isValidForm=false;
-        }      
-        if(this.state.passwordok.trim().length == 0){
-            isValidForm=false;
-        }
-        if(this.imageLength < 2 ){
-            isValidForm = false;
-        }
-        console.log("imageLength", this.imageLength);
-        console.log("isValidForm", isValidForm);
-        this.setState({validForm:isValidForm});
+            if(this.state.companyNo.trim().length < 10){ // 조건 필요시 추가
+                isValidForm=false;
+            }
+            if(this.state.passwd.trim().length == 0){
+                isValidForm=false;
+            }      
+            if(this.state.passwordok.trim().length == 0){
+                isValidForm=false;
+            }
+            if(this.imageLength < 2 ){
+                isValidForm = false;
+            }
+            console.log("imageLength", this.imageLength);
+            console.log("isValidForm", isValidForm);
+            this.setState({validForm:isValidForm});
+        });
     }
-
     
     getViewSize=(event)=>{
         this.registerCameraIcon.current.measure((fx,fy,width,height,px,py)=>{
@@ -256,7 +255,6 @@ class SignUp extends Component {
                                         </TouchableOpacity>)
                                         }
                                     </View>
-
                                 </View>
                                 <View style={styles.imageRegister_btn_view}>
                                     <Text style={[styles.default_text,styles.imageRegister_title_text]}>명함</Text>
@@ -308,8 +306,7 @@ class SignUp extends Component {
                                         ref={(c) => { this.regnumRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={()=>{this.passwordRef.focus();}}
-                                        onChangeText={(value) => this.setState({companyNo: value})}
-                                        onEndEditing={(event)=>this.onValueChange()}
+                                        onChangeText={(value) => this.onValueChange({companyNo: value})}
                                         value={this.state.companyNo.replaceAll('-','')}
                                     />
                                 </View>
@@ -320,9 +317,9 @@ class SignUp extends Component {
                                     ref={(c) => { this.passwordRef = c; }}
                                     returnKeyType="next"
                                     onSubmitEditing={()=>{this.passwordokRef.focus();}}
-                                    onChangeText={(value)=>this.setState({passwd:value})}
-                                    onEndEditing={(event)=>this.onValueChange()}
+                                    onChangeText={(value)=>this.onValueChange({passwd:value})}
                                     secureTextEntry={true}
+                                    value={this.state.passwd}
                                 />
                                 </View>
 
@@ -330,9 +327,10 @@ class SignUp extends Component {
                                 <Text>비밀번호 확인</Text>
                                 <TextInput 
                                     ref={(c) => { this.passwordokRef = c; }}
-                                    onChangeText={(value)=>this.setState({passwordok:value})}
-                                    onEndEditing={(event)=>this.onValueChange()}
+                                    returnKeyType="next"
+                                    onChangeText={(value)=>this.onValueChange({passwordok:value})}
                                     secureTextEntry={true}
+                                    value={this.state.passwordok}
                                 />
                                 </View>
                             </View>

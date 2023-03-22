@@ -65,10 +65,9 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontSize: 14,
   },
   cameraSearch_button: { //공통사용
-
     marginLeft: 10,
     width: 54,
-    height: 54,
+    height: 50,
     backgroundColor: '#0066FF',
     justifyContent: 'center',
     alignItems: 'center',

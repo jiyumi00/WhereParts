@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image,Alert } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
@@ -20,12 +20,11 @@ class AddDelivery extends Component {
             t_invoice: "",
             imageURL: null,
             sellDetailInfo: { orderingDate: "", buyerTel: "", days: [""] },
+            validForm:false,
         }
     }
 
     componentDidMount() {
-
-
         this.callGetSellDetailAPI().then((response) => {
             this.setState({ sellDetailInfo: response })
             console.log("days : ", this.state.sellDetailInfo.days[0]);
@@ -44,11 +43,20 @@ class AddDelivery extends Component {
         this.props.navigation.push("PartsNoCamera", { onResultListener: this.goInvoiceNo });
     }
 
-    deliveryCompleteButtonClicked =() =>{
-        this.callSetDeliveryAPI().then((response)=>{
-            console.log("배송신청완료", response);
-            this.props.route.params.navigation.navigate("SalesList");
-            this.props.route.params.refresh();
+    deliveryCompleteButtonClicked = () => {
+        this.callSetDeliveryAPI().then((response) => {
+            console.log(response.success)
+            if (response.success == 1) {
+                console.log("배송신청완료", response);
+                Alert.alert('배송신청완료', '배송등록이 완료되었습니다', [
+                    { text: '확인', onPress: () => { this.props.route.params.navigation.navigate("SalesList") } }
+                ]);
+                this.props.route.params.refresh();
+            }
+            else {
+                Alert.alert('배송신청실패', '배송등록이 실패되었습니다', [
+                    { text: '확인', onPress: () => { return false; } }]);
+            }
         })
     }
 
@@ -69,6 +77,18 @@ class AddDelivery extends Component {
             }, (imageURI) => {
                 console.log("delete success", imageURI);
             });
+        });
+    }
+
+    onValueChange=(value)=>{
+        this.setState(value,()=>{
+            let isValidForm = true;
+            if (this.state.t_invoice.trim().length == 0) {
+                isValidForm = false;
+            }
+    
+            console.log("isValidForm", isValidForm);
+            this.setState({ validForm: isValidForm });
         });
     }
 
@@ -180,8 +200,7 @@ class AddDelivery extends Component {
                                 <View style={styles.textLayout}>
                                     <Text>송장번호 </Text>
                                     <TextInput
-                                        onChangeText={(value) => this.setState({ t_invoice: value })}
-                                        
+                                        onChangeText={(value) => this.onValueChange({ t_invoice: value })}
                                         value={this.state.t_invoice} // 띄워지는값
                                     />
                                 </View>
@@ -195,7 +214,7 @@ class AddDelivery extends Component {
                     </View>
                 </ScrollView>
                 <View style={styles.bottomContainer}>
-                    {this.state.t_invoice.trim()!=0 ?
+                    {this.state.validForm ?
                         (<TouchableOpacity onPress={this.deliveryCompleteButtonClicked} activeOpacity={0.8} style={styles.okbtn} >
                             <Text style={styles.btn_text}>배송완료신청</Text>
                         </TouchableOpacity>)

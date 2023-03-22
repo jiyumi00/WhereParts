@@ -1,8 +1,11 @@
-import React, { Component , PureComponent } from 'react';
-import { ScrollView, Pressable, TextInput, ImageBackground, View, Text, 
-    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules } from 'react-native';
+import React, { Component, PureComponent } from 'react';
+import {
+    ScrollView, Pressable, TextInput, ImageBackground, View, Text,
+    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules
+} from 'react-native';
 
 
+import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../../util/indicator';
 import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
@@ -22,18 +25,19 @@ class Home extends Component {
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
 
         //안드로이드에서 정의한 모듈 가져옴
-        const {ImageModule} = NativeModules;
+        const { ImageModule } = NativeModules;
         this.imageModule = ImageModule;
 
         this.state = {
             refreshing: false,
             goodsContent: [],
-            indicator : false,
-            recentRadioButtonChecked:true,
-            abcRadioButtonChecked:false,
+            indicator: false,
+            recentRadioButtonChecked: true,
+            abcRadioButtonChecked: false,
 
-            goodsQuantity:null,
-            
+            goodsQuantity: null,
+            quality: 1,
+
         };
     }
 
@@ -44,7 +48,7 @@ class Home extends Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-    }    
+    }
 
 
     //부품 검색
@@ -60,12 +64,12 @@ class Home extends Component {
     dataFiltering = (value) => {
         let goodsContent = this.contents;
         goodsContent = goodsContent.filter((content) => {
-            if(value==='')
+            if (value === '')
                 return true;
             else {
-                if(content.number===value)
+                if (content.number === value)
                     return true;
-                if(content.name.includes(value))
+                if (content.name.includes(value))
                     return true;
                 /*if(content.hashTag.includes(value))
                     return true;*/
@@ -82,36 +86,36 @@ class Home extends Component {
 
     // 품번 가지고오는 함수
     goPartsNo = (imageURI) => {
-        this.callPartsNoAPI(imageURI).then((response)=> {
-            if(response.success==="1") {
-                const partsNo = response.texts[0].replaceAll(" ","");
-                
+        this.callPartsNoAPI(imageURI).then((response) => {
+            if (response.success === "1") {
+                const partsNo = response.texts[0].replaceAll(" ", "");
+
                 this.search(partsNo);
             }
-            else {                
+            else {
                 Alert.alert('부품번호 인식', '부품번호를 인식하지 못했습니다. 직접 입력하세요', [
-                    { text: '확인', onPress: () => {this.setState({ number:""})}}]);
+                    { text: '확인', onPress: () => { this.setState({ number: "" }) } }]);
             }
-                
-            this.imageModule.deleteImage(imageURI,(imageURI)=> {
+
+            this.imageModule.deleteImage(imageURI, (imageURI) => {
                 console.log(imageURI);
-            },(imageURI)=> {
-                console.log("delete success",imageURI);
-            });            
+            }, (imageURI) => {
+                console.log("delete success", imageURI);
+            });
         });
-    } 
+    }
 
 
     //부품 목록 호출 메서드
     goGetGoods = () => {
-        
+
         console.log('refresh_home');
-        this.setState({indicator : true});
+        this.setState({ indicator: true });
         this.callGetGoodsAPI().then((response) => {
             this.contents = response;
             const goodsQuantity = Object.keys(response).length;
-            console.log("상품 총 갯수 :" ,goodsQuantity);//response는 json자체
-            this.setState({indicator:false,goodsContent:response,goodsQuantity:goodsQuantity});
+            console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
+            this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity });
         });
         console.log('refresh success')
         this.setState({ refreshing: false })
@@ -120,43 +124,43 @@ class Home extends Component {
 
     //새로고침
     handleRefresh = () => {
-        this.setState({refreshing: true});
+        this.setState({ refreshing: true });
         this.goGetGoods();
     }
 
     dateSort = () => { //최신순
-        this.setState({indicator:true});
-        this.setState({recentRadioButtonChecked: true, abcRadioButtonChecked: false });
-        const sortedData = this.state.goodsContent.sort((a,b)=>{
-            return new Date(b.registerDate)-new Date(a.registerDate);
+        this.setState({ indicator: true });
+        this.setState({ recentRadioButtonChecked: true, abcRadioButtonChecked: false });
+        const sortedData = this.state.goodsContent.sort((a, b) => {
+            return new Date(b.registerDate) - new Date(a.registerDate);
         });
         this.setState({ goodsContent: sortedData });
-        this.setState({indicator:false});
+        this.setState({ indicator: false });
     }
 
-    abcSort=()=> { //가나다순
-        this.setState({indicator:true});
-        this.setState({recentRadioButtonChecked: false, abcRadioButtonChecked: true });
-        
+    abcSort = () => { //가나다순
+        this.setState({ indicator: true });
+        this.setState({ recentRadioButtonChecked: false, abcRadioButtonChecked: true });
+
         const sortedData = this.state.goodsContent.sort((a, b) => {
             return a.name.localeCompare(b.name);
         })
-        this.setState({goodsContent:sortedData });  
-        this.setState({indicator:false});   
+        this.setState({ goodsContent: sortedData });
+        this.setState({ indicator: false });
     }
 
 
     //Web Service 시작
-     //사진으로부터 품번 인식 서비스 API
-     async callPartsNoAPI(imageURI) {
-        let manager = new WebServiceManager(Constant.externalServiceURL+"/api/paper/DetectTexts", "post");
-        manager.addBinaryData("file",{
-            uri:imageURI,
-            type:"image/jpeg",
-            name:"file"
+    //사진으로부터 품번 인식 서비스 API
+    async callPartsNoAPI(imageURI) {
+        let manager = new WebServiceManager(Constant.externalServiceURL + "/api/paper/DetectTexts", "post");
+        manager.addBinaryData("file", {
+            uri: imageURI,
+            type: "image/jpeg",
+            name: "file"
         });
         let response = await manager.start();
-        if(response.ok)
+        if (response.ok)
             return response.json();
     }
 
@@ -207,13 +211,13 @@ class Home extends Component {
         return (
             <>
                 <Modal transparent={true} visible={this.state.indicator}>
-                    <Indicator/>
+                    <Indicator />
                 </Modal>
-                <View style={{ flex:1, backgroundColor:'#FFFF' }}>  
+                <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
                     <FlatList
-                    
+
                         data={this.state.goodsContent}
-                        renderItem={({ item , index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
+                        renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
                         refreshing={this.state.refreshing} //새로고침
                         onRefresh={this.handleRefresh}
                         scrollEventThrottle={16}
@@ -226,7 +230,7 @@ class Home extends Component {
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={{ width: "100%", height: "100%" }}>
                             <View style={styles.title_view}>
-                               
+
                                 <View style={styles.row_view}>
                                     <Text style={[styles.title_text, styles.titleBold_text]}>
                                         손쉽게 검색
@@ -252,9 +256,9 @@ class Home extends Component {
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', marginTop: '1%' }}>
                             <View style={styles.searchSection}>
-                                <Icon style={{padding:10}} name="search" size={20} color="#000" />
+                                <Icon style={{ padding: 10 }} name="search" size={20} color="#000" />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요."
@@ -265,19 +269,21 @@ class Home extends Component {
                                 {/* 카메라로 검색 */}
 
                             </View>
-                            <View style={{marginBottom:'1%'}}>
-                            <TouchableOpacity
-                                style={styles.cameraSearch_button}
-                                onPress={this.goCameraButtonClicked}>
-                                <Image
-                                    source={require('../../../images/icon/camera-icon/camera-icon.png')}
-                                />
-                            </TouchableOpacity>
+                            <View style={{ marginBottom: '1%' }}>
+                                <TouchableOpacity
+                                    style={styles.cameraSearch_button}
+                                    onPress={this.goCameraButtonClicked}>
+                                    <Image
+                                        source={require('../../../images/icon/camera-icon/camera-icon.png')}
+                                    />
+                                </TouchableOpacity>
                             </View>
+
                         </View>
                         <View style={styles.sortBar_view}>
-                            <View style={{flex:1,marginLeft:'5%'}}>
-                                <Text>총 상품 갯수 : {this.state.goodsQuantity} 개</Text>
+                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
+                                <Text style={{color:'black'}}>총 상품개수 : </Text>
+                                <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
                             </View>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
                                     <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
@@ -289,6 +295,7 @@ class Home extends Component {
                                 </TouchableOpacity>   
                         </View>
                     </Animated.View>
+                    
                 </View>
             </>
         );

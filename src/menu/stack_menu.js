@@ -93,8 +93,8 @@ class Stack extends Component {
 
                 <NativeStack.Screen name="Payment" component={Payment}
                     options={{ title: "결제" }} />
-                <NativeStack.Screen name="PayComplete" component={PayComplete}
-                     options={{ title: "결제완료" }} />
+                <NativeStack.Screen name="PayComplete" component={PayComplete} 
+                     options={{ title: "결제완료", headerBackVisible:false}} />
                 <NativeStack.Screen name="GoodsDetail" component={GoodsDetail}
                     options={{ headerShown: false }}  />
                 <NativeStack.Screen name="Address" component={Address}

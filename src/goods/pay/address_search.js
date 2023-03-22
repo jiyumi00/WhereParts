@@ -18,12 +18,6 @@ class SearchAddress extends Component {
         }
     }
 
-    componentDidMount(){
-       
-    }
-    componentWillUnmount(){
-      
-    }
     //검색 버튼을 눌렀을 때
     searchAddress = () => {
         if(this.state.searchText == "")
@@ -49,7 +43,6 @@ class SearchAddress extends Component {
         else{
             this.setState({value: this.state.searchText,modal:true})
         }
-        
     }
 
     render() {
@@ -106,17 +99,17 @@ class AddressView extends Component {
 class SearchView extends PureComponent {
     constructor(props) {
         super(props);
-
+        
         this.state = {
-            totalCount: 0,
             addressList: [],
             commonList: [],
             page: 1, 
+            totalCount:0,
         }
     }
     componentDidMount() {
         this.callGetAddressAPI().then((response) => {
-            this.setState({ addressList: response.results.juso,commonList: response.results.common, });
+            this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
         });
     }
     componentDidUpdate(prevProps, prevState) {
@@ -124,14 +117,16 @@ class SearchView extends PureComponent {
         if((prevState.page != this.state.page))
         {
             this.callGetAddressAPI().then((response) => {
-                this.setState({ addressList: response.results.juso,commonList: response.results.common });
+                this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
             });
         }
         else if(prevProps.searchText != this.props.searchText)
         {
             this.callGetAddressAPI().then((response) => {
-                this.setState({page:1, addressList: response.results.juso,commonList: response.results.common});
+                this.setState({page:1, addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
+
             });
+           
         }
     }
 
@@ -142,7 +137,7 @@ class SearchView extends PureComponent {
     }
 
     async callGetAddressAPI() {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=5&keyword=" + this.props.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=4&keyword=" + this.props.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -151,7 +146,7 @@ class SearchView extends PureComponent {
     }
     //페이지 증가 
     pageUp = () => {
-        if (this.state.page < (this.state.commonList.totalCount / 5))
+        if (this.state.page < (this.state.commonList.totalCount / 4))
             this.setState({ page: this.state.page + 1 })
     }
     //페이지 감소 
@@ -160,7 +155,6 @@ class SearchView extends PureComponent {
             this.setState({ page: this.state.page - 1 })
     }
     render() {
-        
         return (
             <>
             <View style={styles.viewBody}>
@@ -193,7 +187,7 @@ class SearchView extends PureComponent {
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
                     </TouchableOpacity>
                    
-                     <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {(Math.ceil(this.state.commonList.totalCount/5))}   </Text>
+                     <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/4)}  </Text>
                     <TouchableOpacity onPress={this.pageUp} >
                         <PageIcon name="rightsquareo" size={30} color="light grey" />
                     </TouchableOpacity>

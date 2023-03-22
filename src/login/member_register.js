@@ -15,6 +15,7 @@ class Login extends Component {
         super(props);
         this.idRef = React.createRef(); //다음을 눌렀을 경우 포커싱 이동을 위함
         this.passwordRef = React.createRef();
+        this.loginButtonRef = React.createRef();
         this.loginInfo = { companyNo: null, passwd: null };
 
         this.parsed = null;
@@ -106,19 +107,20 @@ class Login extends Component {
     }
 
     //입력값 유효성 검사
-    onValueChange = () => {
-        let isValidForm = true;
-        if (this.state.companyNo.trim().length == 0) { // 조건 필요시 추가
-            isValidForm = false;
-        }
-        if (this.state.passwd.trim().length == 0) {
-            isValidForm = false;
-        }
-        console.log("isValidForm", isValidForm);
-        this.setState({ validForm: isValidForm });
+    onValueChange = (value) => {
+        this.setState(value,()=>{
+            let isValidForm = true;
+            if (this.state.companyNo.trim().length < 10) { // 조건 필요시 추가
+                isValidForm = false;
+            }
+            if (this.state.passwd.trim().length == 0) {
+                isValidForm = false;
+            }
+    
+            console.log("isValidForm", isValidForm);
+            this.setState({ validForm: isValidForm });
+        });
     }
-
-
 
     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
         this.loginInfo.companyNo = this.state.companyNo;
@@ -145,8 +147,6 @@ class Login extends Component {
             }
         })
     }
-
-
 
     async callLoginAPI(loginInfo) { //사업자번호와 비밀번호를 서버로 보내주는 API
         let manager = new WebServiceManager(Constant.serviceURL + "/Login", "post");
@@ -189,8 +189,7 @@ class Login extends Component {
                                         ref={(c) => { this.idRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={() => { this.passwordRef.focus(); }}
-                                        onChangeText={(value) => this.setState({ companyNo: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        onChangeText={(value) => {this.onValueChange({ companyNo: value });}}
                                         value={this.state.companyNo}
                                     />
                                 </View>
@@ -198,8 +197,8 @@ class Login extends Component {
                                     <Text>비밀번호</Text>
                                     <TextInput
                                         ref={(c) => { this.passwordRef = c; }}
-                                        onChangeText={(value) => this.setState({ passwd: value })}
-                                        onEndEditing={(event) => this.onValueChange()}
+                                        returnKeyType="next"
+                                        onChangeText={(value) => this.onValueChange({passwd:value})}
                                         secureTextEntry={true}
                                         value={this.state.passwd}
                                     />

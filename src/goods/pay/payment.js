@@ -10,6 +10,9 @@ class Payment extends Component {
     constructor(props) {
         super(props);
 
+        this.buyerName = React.createRef();
+        this.buyerTel = React.createRef();
+
         this.item = this.props.route.params.item;
         this.userID = this.props.route.params.userID;
 
@@ -87,42 +90,43 @@ class Payment extends Component {
     }
 
     getAddressInfo=(zipNo, roadAddr)=>{
-        //console.log("리스너순서 1");
-        this.addressInfoRender(zipNo,roadAddr).then(this.onValueChange);
+        /*this.addressInfoRender(zipNo,roadAddr).then(this.onValueChange);*/
+        this.onValueChange({zipNo:zipNo, roadAddr:roadAddr});
     }
 
-    async addressInfoRender(zipNo, roadAddr){
+    /*async addressInfoRender(zipNo, roadAddr){
         this.setState({zipNo:zipNo, roadAddr:roadAddr});
-    }
+    }*/
 
-    onValueChange=()=>{
-        let isValidForm = true;
-        //console.log("온밸챈지실행");
-        //console.log("리스너순서 2");
-        console.log("zipNo",this.state.zipNo.trim().length);
-        console.log("roadAddr",this.state.roadAddr.trim().length);
-        //주문자
-        if(this.state.buyerName.length == 0){
-            isValidForm=false;
-        }
-        //연락처
-        if(this.state.buyerTel.length==0){
-            isValidForm=false;
-        }
-        //우편번호
-        if(this.state.zipNo.trim().length==0){
-            isValidForm=false;
-        }
-        //도로명주소
-        if(this.state.roadAddr.trim().length==0){
-            isValidForm=false;
-        }
-        //상세주소
-        if(this.state.detailAddress.length==0){
-            isValidForm=false;
-        }
+    onValueChange=(value)=>{
+        this.setState(value,()=>{
+            let isValidForm = true;
 
-        this.setState({ validForm: isValidForm });
+            console.log("zipNo",this.state.zipNo.trim().length);
+            console.log("roadAddr",this.state.roadAddr.trim().length);
+            //주문자
+            if(this.state.buyerName.length == 0){
+                isValidForm=false;
+            }
+            //연락처
+            if(this.state.buyerTel.length==0){
+                isValidForm=false;
+            }
+            //우편번호
+            if(this.state.zipNo.trim().length==0){
+                isValidForm=false;
+            }
+            //도로명주소
+            if(this.state.roadAddr.trim().length==0){
+                isValidForm=false;
+            }
+            //상세주소
+            if(this.state.detailAddress.length==0){
+                isValidForm=false;
+            }
+    
+            this.setState({ validForm: isValidForm });
+        });
     }
 
     //결제하기 버튼 클릭시
@@ -255,14 +259,19 @@ class Payment extends Component {
                             <View style={styles.deliverView}>
                                 <Text style={styles.title}>배송지 정보</Text>
                                 <TextInput style={styles.textInput}
+                                    ref={(c) => { this.buyerName = c; }}
+                                    returnKeyType = "next"
+                                    onSubmitEditing={() => { this.buyerTel.focus(); }}
                                     placeholder="주문자 이름을 입력하세요"
-                                    onChangeText={(value) => this.setState({ buyerName: value })}
-                                    onEndEditing={(event)=> this.onValueChange()}
+                                    onChangeText={(value) => this.onValueChange({ buyerName: value })}
+                                    //onEndEditing={(event)=> this.onValueChange()}
                                     value={this.state.buyerName} />
                                 <TextInput style={styles.textInput}
+                                    ref={(c) => { this.buyerTel = c; }}
+                                    returnKeyType = "next"
                                     placeholder="휴대폰 번호를 입력하세요"
-                                    onChangeText={(value) => this.setState({ buyerTel: value })}
-                                    onEndEditing={(event)=> this.onValueChange()}
+                                    onChangeText={(value) => this.onValueChange({ buyerTel: value })}
+                                    //onEndEditing={(event)=> this.onValueChange()}
                                     value={this.state.buyerTel} />
                             </View>
                             <Text style={styles.title}>주소</Text>
@@ -282,8 +291,8 @@ class Payment extends Component {
 
                             <TextInput style={styles.textInput}
                                 placeholder="상세 주소를 입력하세요"
-                                onChangeText={(value) => this.setState({ detailAddress: value })}
-                                onEndEditing={(event)=> this.onValueChange()}
+                                onChangeText={(value) => this.onValueChange({ detailAddress: value })}
+                                //onEndEditing={(event)=> this.onValueChange()}
                                 value={this.state.detailAddress} />
 
                             <TextInput style={styles.textInput}

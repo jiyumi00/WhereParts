@@ -264,7 +264,7 @@ export default class DetailItemView extends Component {
                     '수정이 완료되었습니다',
                     [
                         { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                        { text: '확인', onPress: () => console.log('수정완료') },
+                        { text: '확인', onPress: () => {console.log('수정완료'); this.refresh();} },
                     ],);
             }
             if (this.state.editGoodsViewVisible == true) {
@@ -312,6 +312,7 @@ export default class DetailItemView extends Component {
                         console.log("숨김해제완료", response);
                         if(response.success==1){
                             this.props.navigation.pop();
+                            this.refresh();
                         }
                     })
                 },
@@ -334,7 +335,7 @@ export default class DetailItemView extends Component {
             ],);
     }
 
-    async addHashTag(tagNames) {
+   /* async addHashTag(tagNames) {
         this.setState({ hashTag: this.state.hashTag.concat(tagNames) })
     }
 
@@ -342,7 +343,7 @@ export default class DetailItemView extends Component {
         this.setState({
             hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index),
         })
-    }
+    }*/
     //해시태그 추가버튼을 누를때
     addTag = () => {
         const tagNames = this.state.tagName.split(' ');
@@ -351,11 +352,10 @@ export default class DetailItemView extends Component {
             tagNames.splice(tagNames.length - 1)
         }
         if (this.state.hashTag.length < 7 && tagNames.length < 7 && this.state.hashTag.length + tagNames.length < 8) {
-
-            this.addHashTag(tagNames).then(() => {
+            this.onValueChange({ hashTag: this.state.hashTag.concat(tagNames) });
+            /*this.addHashTag(tagNames).then(() => {
                 this.onValueChange();
-            });
-
+            });*/
         }
         else {
             this.setState({ hashTagError: false })
@@ -367,9 +367,10 @@ export default class DetailItemView extends Component {
 
     //해시태그 삭제할 때
     hashTagRemove = (index) => {
-        this.removeHashTag(index).then(() => {
+        this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
+        /*this.removeHashTag(index).then(() => {
             this.onValueChange();
-        });
+        });*/
     }
 
     // 판매수량 수정 버튼 클릭
@@ -415,27 +416,30 @@ export default class DetailItemView extends Component {
         }
     }
 
-    onValueChange = () => {
-        let isValidForm = true;
-        console.log("hashTag_length", this.state.hashTag.length);
-
-        if (this.state.price.length == 0) {
-            isValidForm = false;
-        }
-        if(this.state.price <= 0){
-            isValidForm = false;
-        }
-        if (this.state.hashTag.length <= 0) {
-            isValidForm = false;
-        }
-
-        console.log("isValidForm", isValidForm);
-        this.setState({ validForm: isValidForm });
+    onValueChange = (value) => {
+        this.setState(value,()=>{
+            let isValidForm = true;
+            console.log("hashTag_length", this.state.hashTag.length);
+    
+            if (this.state.price.length == 0) {
+                isValidForm = false;
+            }
+            if(this.state.price <= 0){
+                isValidForm = false;
+            }
+            if (this.state.hashTag.length <= 0) {
+                isValidForm = false;
+            }
+    
+            console.log("isValidForm", isValidForm);
+            this.setState({ validForm: isValidForm });
+        });
     }
+
     hashTagOnChangeText=(value)=>{
         const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
         let newTagName=value.replace(reg,'')
-        this.setState({ tagName: newTagName})
+        this.setState({ tagName: newTagName })
     }
     handleModal = (index) => {
         this.setState({
@@ -580,10 +584,8 @@ export default class DetailItemView extends Component {
                                 {/* 금액 수정 */}
                                 {this.state.editGoodsViewVisible && <View style={styles.editGoodsPrice_input}>
                                     <TextInput style={[styles.text, { fontSize: 22, }]}
-                                        onChangeText={(value) => this.setState({ price: value })}
-                                        onEndEditing={(event)=> this.onValueChange()}>
-                                        {this.state.price}
-                                    </TextInput>
+                                        onChangeText={(value) => this.onValueChange({ price: value })}>
+                                            {this.state.price}</TextInput>
                                 </View>}
 
                                 {/* 단위 */}
@@ -780,10 +782,11 @@ export default class DetailItemView extends Component {
                                     </Text>
                                 </View>
                                 <View style={styles.editGoodsExplainInput_view}>
-                                    <TextInput 
+                                    <TextInput
                                         multiline={true}
-                                        onChangeText={(value) => this.setState({ editSpec: value })}
-                                        onEndEditing={(event)=> this.onValueChange()}>{this.state.editSpec}</TextInput>
+                                        onChangeText={(value) => this.setState({ editSpec: value })}>
+                                        {this.state.editSpec}
+                                    </TextInput>
                                 </View>
                             </View>}
                         </View>
