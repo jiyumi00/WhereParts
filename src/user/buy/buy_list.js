@@ -132,7 +132,7 @@ class ListItem extends Component {
             Promise.reject(response);
     }
     handleDetailViewModal = () => {
-        this.props.navigation.push('GoodsDetail', { id: this.props.goodsID, userID: this.props.item.userID });
+        this.props.navigation.navigate('GoodsDetail', { id: this.props.goodsID, userID: this.props.item.userID });
     }
     goodsStatusText = (value) => {
         let goodsStatusText = ["배송준비중", "배송중", "배송완료"];

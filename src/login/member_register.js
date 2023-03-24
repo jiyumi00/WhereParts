@@ -9,27 +9,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SplashScreen from 'react-native-splash-screen';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 
+import messaging from '@react-native-firebase/messaging';
+
 class Login extends Component {
 
     constructor(props) {
         super(props);
-
         this.idRef = React.createRef(); //다음을 눌렀을 경우 포커싱 이동을 위함
         this.passwordRef = React.createRef();
         this.loginButtonRef = React.createRef();
-        this.loginInfo = { companyNo: null, passwd: null };
-
-        this.parsed = null;
-
+        this.deviceToken='';
+        
         this.state = {
             companyNo: '', //사업자번호
             passwd: '', //비밀번호
             id: '', //userID
             validForm: false, //유효성 검사
 
-            detailLogin: 0,
+            detailLogin: 0, //0->자동로그인X, 아이디기억 X, 1->자동로그인, 2->아이디 기억
             autoLoginChecked: false,
-            rememberIdChecked: false,
+            rememberIdChecked: false
         }
     }
 
@@ -40,8 +39,20 @@ class Login extends Component {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
 
+        //퍼미션 설정되었는지 확인
         this.requestPermission();
-        this.availableLogIn().then(() => {
+        //알림메시지 처리
+        this.handleFCMMessage();
+        //자동 로그인 처리되는지 확인
+        this.availableLogin().then((response) => {
+            if(response==true) {
+                //this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
+                //this.autoLoginRadioButtonChecked();
+                this.callLoginAPI(true).then((response) => {
+                    console.log("자동 로그인 성공", response);
+                    this.props.navigation.navigate('TabHome');
+                });
+            }
         });
     }
 
@@ -57,52 +68,69 @@ class Login extends Component {
 
     keyboardDidHide = () => {
         console.log('Keyboard Hide');
-        this.onValueChange();
+        //this.onValueChange();
     }
 
     async requestPermission() {
         try {
             const granted = await PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.CAMERA,
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, 
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, 
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
             ]).then((result) => {
-                if (result['android.permission.CAMERA'] && result['android.permission.ACCESS_FINE_LOCATION'] && result['android.permission.READ_EXTERNAL_STORAGE'] && result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
+                if (result['android.permission.CAMERA'] && 
+                    result['android.permission.ACCESS_FINE_LOCATION'] && 
+                    result['android.permission.READ_EXTERNAL_STORAGE'] && 
+                    result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
                     console.log('모든 권한 획득')
                 }
                 else {
                     console.log('거절된 권한있음')
                 }
-            })
-        } catch (err) {
+            });
+
+            //push notification 퍼미션이 허용되어 있으면 토큰을 가져옴 (안드로이드 12까지는 알림이 무조건 허용되어 있음 13부터는 퍼미션 물어봄)
+            const authStatus = await messaging().requestPermission();        
+            const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+                    
+            //알림 권한이 설정되어 있으면...
+            if (enabled) {        
+                const token = await messaging().getToken();
+            //푸시 토큰 표시         
+                console.log('fcm token:', token);            
+                console.log('Authorization status:', authStatus);    
+                this.deviceToken=token;        
+            
+            } else {        
+                console.log('fcm auth fail');        
+            }
+        } catch(err) {
             console.warn(err);
         }
     }
 
     //로그인 정보가 앱에 저장되어 있다면...(자동로그인,id기억 관리)
-    async availableLogIn() {
+    async availableLogin() {
         const obj = await AsyncStorage.getItem('obj');
-        if (obj !== null) {
-            const loginInfo = JSON.parse(obj);
-            this.parsed = loginInfo;
-            this.loginInfo.companyNo = loginInfo.companyNo;
-            this.loginInfo.passwd = loginInfo.passwd;
-            if (this.parsed.detailLogin == 0) {
+        if(obj !== null) {
+            const {companyNo,passwd,detailLogin} = JSON.parse(obj);  
+            console.log(companyNo,passwd,detailLogin);        
+            if (detailLogin == 0) {         //로그인 방법을 아무것도 선택하지 않았을 경우
                 return false;
             }
-            if (this.parsed.detailLogin == 1) {
-                this.callLoginAPI(this.loginInfo).then((response) => {
-                    console.log("재로그인 성공", response);
-                    this.props.navigation.navigate('TabHome');
-                })
+            else if (detailLogin == 1) {    //자동 로그인일 경우
+                this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
+                this.autoLoginRadioButtonChecked();
+                return true;
             }
-            if (this.parsed.detailLogin == 2) {
-                this.setState({ companyNo: loginInfo.companyNo });
-            }
-            else {
+            else {                          //id 기억일 경우
+                this.setState({ companyNo: companyNo, detailLogin:detailLogin });
+                this.rememberIdRadioButtonChecked();
                 return false;
             }
         }
         else {
-            return false; //null 값일 경우 false
+            return false; //null 값일 경우 false (저장되어 있는 로그인 정보가 없다면)
         }
     }
 
@@ -123,10 +151,10 @@ class Login extends Component {
     }
 
     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
-        this.loginInfo.companyNo = this.state.companyNo;
-        this.loginInfo.passwd = this.state.passwd;
+        //this.loginInfo.companyNo = this.state.companyNo;
+        //this.loginInfo.passwd = this.state.passwd;
         
-        this.callLoginAPI(this.loginInfo).then((response) => {
+        this.callLoginAPI(false).then((response) => {
             if (response.id == "0") { //회원정보가 없을 경우 
                 //this.passwordRef.clear();
                 Alert.alert('아이디 비밀번호를 확인해주세요', '',);
@@ -139,20 +167,25 @@ class Login extends Component {
                     passwd: this.state.passwd, //비밀번호
                     detailLogin: this.state.detailLogin
                 }
-                console.log("자동로그인 성공");
+                console.log("로그인 성공");
                 AsyncStorage.setItem('obj', JSON.stringify(obj));
+                console.log('storage=',obj);
                 console.log(response);
                 this.props.navigation.navigate('TabHome');
-                this.setState({passwd:'',companyNo:''});
             }
         })
     }
 
-    async callLoginAPI(loginInfo) { //사업자번호와 비밀번호를 서버로 보내주는 API
+    async callLoginAPI(autoLogined) { //사업자번호와 비밀번호를 서버로 보내주는 API
+        const {companyNo,passwd} = this.state;
         let manager = new WebServiceManager(Constant.serviceURL + "/Login", "post");
-        manager.addFormData("data", {
-            companyNo: loginInfo.companyNo, passwd: loginInfo.passwd
-        });
+        
+        //자동 로그인으로 할 경우에는 deviceToken을 빈문자열로 넘겨준다(디바이스가 같은것이므로 굳이 token을 변경할 필요가 없다)
+        if(autoLogined)
+            manager.addFormData("data", {companyNo: companyNo, passwd: passwd,deviceToken:""});
+        else
+            manager.addFormData("data", {companyNo: companyNo, passwd: passwd,deviceToken:this.deviceToken});
+            
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -172,7 +205,41 @@ class Login extends Component {
 
     }
 
+    //알림이 올 경우 
+    handleFCMMessage=()=> {
+        //Foreground 상태에서 알림이 오면 Alert 창 보여줌
+        const unsubscribe = messaging().onMessage(async remoteMessage => {   
+            if(remoteMessage.data.kind=="buy") {  
+                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
+                    { text: '취소', onPress: () => {}},
+                    { text: '확인', onPress: () => this.props.navigation.navigate('BuyList')}],
+                    { cancelable: false });
+                return false;
+            }
+            else if(remoteMessage.data.kind=="sell") {
+                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
+                    { text: '취소', onPress: () => {}},
+                    { text: '확인', onPress: () => this.props.navigation.navigate('SalesList')}],
+                    { cancelable: false });
+                return false;
+            }
+            console.log(JSON.stringify(remoteMessage));            
+        });
+              
+        //Background 상태에서 알림창을 클릭한 경우 해당 페이지로 이동         
+        messaging().onNotificationOpenedApp(remoteMessage => {        
+            console.log('Notification caused app to open from background state:',remoteMessage.notification);
+            if(remoteMessage.data.kind=="buy") {
+                this.props.navigation.navigate('BuyList')
+            }
+            else if(remoteMessage.data.kind=="sell") {
+                this.props.navigation.navigate('SalesList')
+            }
+        });
+    }
+
     render() {
+        const isLogout = this.state.isLogout;
         return (
             <>
                 <View style={styles.total_container}>

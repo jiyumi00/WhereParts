@@ -198,26 +198,29 @@ class EditProfile extends Component {
     }
 
     //유효성 검사
-    onValueChange = () => {
-        let isValidForm = true;
-        if (this.state.passwd.trim().length == 0) {
-            isValidForm = false;
-        }
-        if (this.state.passwordok.trim().length == 0) {
-            isValidForm = false;
-        }
-        if (this.state.passwd != this.state.passwordok) {
-            isValidForm = false;
-            this.setState({ passwderror: true });
-        }
-        if (this.state.passwd == this.state.passwordok) {
-            this.setState({ passwderror: false });
-        }
-        if (this.imageLength == 0) {
-            isValidForm = false;
-        }
-        console.log("imageLength", this.imageLength);
-        this.setState({ validForm: isValidForm });
+    onValueChange = (value) => {
+        this.setState(value,()=>{
+            let isValidForm = true;
+            if (this.state.passwd.trim().length == 0) {
+                isValidForm = false;
+            }
+            if (this.state.passwordok.trim().length == 0) {
+                isValidForm = false;
+            }
+            if (this.state.passwd != this.state.passwordok) {
+                isValidForm = false;
+                this.setState({ passwderror: true });
+            }
+            if (this.state.passwd == this.state.passwordok) {
+                this.setState({ passwderror: false });
+            }
+            if (this.imageLength == 0) {
+                isValidForm = false;
+            }
+            console.log("imageLength", this.imageLength);
+            this.setState({ validForm: isValidForm });
+        })
+
     }
 
 
@@ -259,6 +262,7 @@ class EditProfile extends Component {
                 <Modal
                     transparent={false}
                     visible={this.state.modal}
+                    onRequestClose={()=>this.props.navigation.pop()}
                 >
 
                     <ScrollView>
@@ -381,8 +385,8 @@ class EditProfile extends Component {
                                             ref={(c) => { this.passwordRef = c; }}
                                             returnKeyType="next"
                                             onSubmitEditing={() => { this.passwordokRef.focus(); }}
-                                            onChangeText={(value) => this.setState({ passwd: value })}
-                                            onEndEditing={(event) => this.onValueChange()}
+                                            onChangeText={(value) => this.onValueChange({ passwd: value })}
+                                            //onEndEditing={(event) => this.onValueChange()}
                                             secureTextEntry={true}
                                         />
                                     </View>
@@ -391,8 +395,8 @@ class EditProfile extends Component {
                                         <Text>비밀번호 확인</Text>
                                         <TextInput
                                             ref={(c) => { this.passwordokRef = c; }}
-                                            onChangeText={(value) => this.setState({ passwordok: value })}
-                                            onEndEditing={(event) => this.onValueChange()}
+                                            onChangeText={(value) => this.onValueChange({ passwordok: value })}
+                                            //onEndEditing={(event) => this.onValueChange()}
                                             secureTextEntry={true}
                                         />
                                     </View>

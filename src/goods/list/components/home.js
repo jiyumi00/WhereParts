@@ -214,7 +214,7 @@ class Home extends Component {
                     <Indicator />
                 </Modal>
                 <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
-                    <FlatList
+                    <Animated.FlatList
 
                         data={this.state.goodsContent}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
@@ -224,7 +224,7 @@ class Home extends Component {
                         contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 30 }}
                         onScroll={Animated.event(
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
-                            { useNativeDriver: false })}
+                            { useNativeDriver: true })}
                     />
 
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>

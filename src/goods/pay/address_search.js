@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text,  TextInput, TouchableOpacity, FlatList, ScrollView,Keyboard} from 'react-native';
+import { View, Text,  TextInput, TouchableOpacity, FlatList, ScrollView,Keyboard,Dimensions,Modal} from 'react-native';
 
 import { styles } from "../../styles/address_search";
 
@@ -7,6 +7,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
 
+import Indicator from '../../util/indicator';
+const ScreenHeight=Dimensions.get('window').height;
+const ScreenWidth=Dimensions.get('window').width;
 class SearchAddress extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +18,7 @@ class SearchAddress extends Component {
             addressName: "",
             searchText: "",
             value:"",
+            
         }
     }
 
@@ -25,7 +29,7 @@ class SearchAddress extends Component {
             alert("주소를 입력해주세요");
         }
         else{
-            this.setState({modal:true});
+            this.setState({value: this.state.searchText,modal:true});
             Keyboard.dismiss();
         }
     }
@@ -105,25 +109,34 @@ class SearchView extends PureComponent {
             commonList: [],
             page: 1, 
             totalCount:0,
+            indicator: false,
         }
     }
     componentDidMount() {
+        console.log('componentDidMount 실행')
+        this.setState({indicator:true})
         this.callGetAddressAPI().then((response) => {
-            this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
+            
+            this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount, indicator:false });
+            console.log('componentResponse',response)
         });
     }
     componentDidUpdate(prevProps, prevState) {
+        console.log('[prevProps]',prevProps)
+        console.log('[PrevState]',prevState)
         
         if((prevState.page != this.state.page))
         {
+            //this.setState({indicator:true})
             this.callGetAddressAPI().then((response) => {
                 this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
             });
         }
-        else if(prevProps.searchText != this.props.searchText)
+        if(prevProps.searchText != this.props.searchText)
         {
+            this.setState({indicator:true})
             this.callGetAddressAPI().then((response) => {
-                this.setState({page:1, addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount });
+                this.setState({page:1, addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount,indicator:false });
 
             });
            
@@ -157,9 +170,10 @@ class SearchView extends PureComponent {
     render() {
         return (
             <>
-            <View style={styles.viewBody}>
-
-          
+            <Modal transparent={true} visible={this.state.indicator}>
+                    <Indicator />
+                </Modal>
+            <View style={[styles.viewBody,{position:'absolute',marginTop:'20%',width:'100%'}]}>
             <FlatList
                 data={this.state.addressList}
                 renderItem={( {item} ) =><TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressListClicked(item.zipNo,item.roadAddr)}>
@@ -181,14 +195,14 @@ class SearchView extends PureComponent {
                 </View></TouchableOpacity>}
             />
             </View>
-            <View style={styles.viewBottom}>
+            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:'140%' }]}>
                 <View style={styles.rowLayout}>
-                    <TouchableOpacity onPress={this.pageDown} >
+                    <TouchableOpacity onPress={this.pageDown} activeOpacity={0.8} >
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
                     </TouchableOpacity>
                    
                      <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/4)}  </Text>
-                    <TouchableOpacity onPress={this.pageUp} >
+                    <TouchableOpacity onPress={this.pageUp} activeOpacity={0.8}>
                         <PageIcon name="rightsquareo" size={30} color="light grey" />
                     </TouchableOpacity>
                 </View>

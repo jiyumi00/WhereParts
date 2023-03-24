@@ -15,7 +15,6 @@ class SignUp extends Component {
 
     constructor(props) {
         super(props);
-
         this.passwordRef = React.createRef();
         this.passwordokRef = React.createRef();
         this.registerCameraIcon=React.createRef();
@@ -39,6 +38,7 @@ class SignUp extends Component {
             
             companyImageURI: '', 
             nameCardImageURI:'',
+            
         }
     }
 
@@ -90,6 +90,7 @@ class SignUp extends Component {
                         { text: '확인', onPress: () => { this.props.navigation.navigate("Login") } },
                     ]);
                     //this.setState({ modal: this.state.modal ? false : true }); //신청대기 모달
+
                 }
             })
         }
@@ -272,6 +273,7 @@ class SignUp extends Component {
                                     </View>
                                 </View>
                             </View>
+                          
                            
                             {/*사업자등록증 모달*/}
                             <Modal 
