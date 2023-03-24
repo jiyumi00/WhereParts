@@ -13,6 +13,7 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
+
         this.idRef = React.createRef(); //다음을 눌렀을 경우 포커싱 이동을 위함
         this.passwordRef = React.createRef();
         this.loginButtonRef = React.createRef();
@@ -40,7 +41,6 @@ class Login extends Component {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
 
         this.requestPermission();
-
         this.availableLogIn().then(() => {
         });
     }
