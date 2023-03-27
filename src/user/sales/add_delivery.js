@@ -119,7 +119,7 @@ class AddDelivery extends Component {
         manager.addFormData("data",{
             orderID:this.props.route.params.id,
             invoiceKind:this.state.t_code,
-            invoiceName:this.state.t_name[(this.state.t_code)-1],
+            invoiceName:this.state.t_name[this.state.t_code-1],
             invoiceNo:this.state.t_invoice,
         })
 

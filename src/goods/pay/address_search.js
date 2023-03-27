@@ -195,7 +195,7 @@ class SearchView extends PureComponent {
                 </View></TouchableOpacity>}
             />
             </View>
-            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:'140%' }]}>
+            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:ScreenHeight*0.8 }]}>
                 <View style={styles.rowLayout}>
                     <TouchableOpacity onPress={this.pageDown} activeOpacity={0.8} >
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
