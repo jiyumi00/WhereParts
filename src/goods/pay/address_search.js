@@ -113,10 +113,10 @@ class SearchView extends PureComponent {
         }
     }
     componentDidMount() {
-        console.log('componentDidMount 실행')
+        
         this.setState({indicator:true})
         this.callGetAddressAPI().then((response) => {
-            
+           
             this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount, indicator:false });
             console.log('componentResponse',response)
         });
@@ -168,12 +168,19 @@ class SearchView extends PureComponent {
             this.setState({ page: this.state.page - 1 })
     }
     render() {
+        console.log('addressList',this.state.addressList)
         return (
             <>
             <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
             <View style={[styles.viewBody,{position:'absolute',marginTop:'20%',width:'100%'}]}>
+            
+            {this.state.addressList.length==0 && <>
+            <View>
+                <Text>검색결과가 없습니다</Text>
+            </View>
+            </>}
             <FlatList
                 data={this.state.addressList}
                 renderItem={( {item} ) =><TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressListClicked(item.zipNo,item.roadAddr)}>
@@ -195,7 +202,8 @@ class SearchView extends PureComponent {
                 </View></TouchableOpacity>}
             />
             </View>
-            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:ScreenHeight*0.8 }]}>
+              
+                <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:ScreenHeight*0.8 }]}>
                 <View style={styles.rowLayout}>
                     <TouchableOpacity onPress={this.pageDown} activeOpacity={0.8} >
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
@@ -207,6 +215,8 @@ class SearchView extends PureComponent {
                     </TouchableOpacity>
                 </View>
             </View>
+                   
+            
             {console.log("hi")}
             </>
         );
