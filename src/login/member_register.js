@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid, Keyboard } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid } from 'react-native';
 
 import { styles } from "../styles/login/login";
 
@@ -36,9 +36,6 @@ class Login extends Component {
     componentDidMount() {
         SplashScreen.hide();
 
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
-
         //퍼미션 설정되었는지 확인
         this.requestPermission();
         //알림메시지 처리
@@ -47,28 +44,13 @@ class Login extends Component {
         this.availableLogin().then((response) => {
             if(response==true) {
                 //this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
-                //this.autoLoginRadioButtonChecked();
+                //this.autiLoginCheckButtonClicked();
                 this.callLoginAPI(true).then((response) => {
                     console.log("자동 로그인 성공", response);
                     this.props.navigation.navigate('TabHome');
                 });
             }
         });
-    }
-
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-    }
-
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        //this.onValueChange();
     }
 
     async requestPermission() {
@@ -120,12 +102,12 @@ class Login extends Component {
             }
             else if (detailLogin == 1) {    //자동 로그인일 경우
                 this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
-                this.autoLoginRadioButtonChecked();
+                this.autoLoginCheckButtonChecked();
                 return true;
             }
             else {                          //id 기억일 경우
                 this.setState({ companyNo: companyNo, detailLogin:detailLogin });
-                this.rememberIdRadioButtonChecked();
+                this.rememberIdCheckButtonChecked();
                 return false;
             }
         }
@@ -169,7 +151,7 @@ class Login extends Component {
                 }
                 console.log("로그인 성공");
                 AsyncStorage.setItem('obj', JSON.stringify(obj));
-                console.log('storage=',obj);
+                console.log('storage=',obj );
                 console.log(response);
                 this.props.navigation.navigate('TabHome');
             }
@@ -196,13 +178,28 @@ class Login extends Component {
         this.props.navigation.navigate('SignUp'); //회원가입 버튼 눌렀을 경우
     }
 
-    autoLoginRadioButtonChecked = () => {
-        this.setState({ autoLoginChecked: true, rememberIdChecked: false, detailLogin: 1 });
+
+    //아무것도 체크안한 상태 --0, 자동로그인 체크 --1, id기억 체크 --2
+    autoLoginCheckButtonChecked = () => {
+        if(this.state.autoLoginChecked==true){
+            this.setState({autoLoginChecked:false,detailLogin:0});
+        }else{
+            this.setState({autoLoginChecked:true, detailLogin:1})     
+        }
+        if(this.state.rememberIdChecked==true){
+            this.setState({autoLoginChecked:true,rememberIdChecked:false,detailLogin:1})
+        }  
     }
 
-    rememberIdRadioButtonChecked = () => {
-        this.setState({ autoLoginChecked: false, rememberIdChecked: true, detailLogin: 2 });
-
+    rememberIdCheckButtonChecked = () => {
+        if(this.state.rememberIdChecked==true){
+            this.setState({rememberIdChecked:false,detailLogin:0}); //아무것도 체크안한 상태
+        }else{
+            this.setState({rememberIdChecked:true, detailLogin:2}) //id 기억 체크    
+        }  
+        if(this.state.autoLoginChecked==true){
+            this.setState({rememberIdChecked:true,autoLoginChecked:false,detailLogin:2})
+        }  
     }
 
     //알림이 올 경우 
@@ -271,11 +268,11 @@ class Login extends Component {
                                     />
                                 </View>
                                 <View style={{ flexDirection: 'row', marginTop: "-5%" }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginRadioButtonChecked}>
+                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
                                         <IconRadio name={this.state.autoLoginChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> 자동로그인  </Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdRadioButtonChecked}>
+                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
                                         <IconRadio name={this.state.rememberIdChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> id기억  </Text>
                                     </TouchableOpacity>

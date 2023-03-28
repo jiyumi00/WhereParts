@@ -19,11 +19,7 @@ class BuyList extends Component {
         }
     }
     componentDidMount() {
-        this.getUserID().then((value) => {
-            this.callGetGoodsAPI(value).then((response) => {
-                this.setState({ buyContents: response })
-            });
-        })
+       this.goGetGoods();
     }
     goGetGoods = () => {
         this.getUserID().then((value) => {
