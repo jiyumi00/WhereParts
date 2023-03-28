@@ -49,9 +49,14 @@ class AddDelivery extends Component {
             if (response.success == 1) {
                 console.log("배송신청완료", response);
                 Alert.alert('배송신청완료', '배송등록이 완료되었습니다', [
-                    { text: '확인', onPress: () => { this.props.route.params.navigation.navigate("SalesList") } }
+                    { text: '확인', onPress: () => {
+                        this.props.navigation.pop();
+                        this.props.route.params.navigation.navigate("SalesList");
+                        if(this.props.route.params.hasOwnProperty("refresh")){
+                            this.props.route.params.refresh();
+                        }
+                 } }
                 ]);
-                this.props.route.params.refresh();
             }
             else {
                 Alert.alert('배송신청실패', '배송등록이 실패되었습니다', [
@@ -119,7 +124,7 @@ class AddDelivery extends Component {
         manager.addFormData("data",{
             orderID:this.props.route.params.id,
             invoiceKind:this.state.t_code,
-            invoiceName:this.state.t_name[this.state.t_code-1],
+            invoiceName:this.state.t_name[(this.state.t_code)-1],
             invoiceNo:this.state.t_invoice,
         })
 

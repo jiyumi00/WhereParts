@@ -97,7 +97,7 @@ export const styles = StyleSheet.create({
     outputStyle:{
       borderColor:'#909098',
       borderWidth:1,
-      height: 110,
+      height: 105,
       paddingHorizontal:'2%'
     },
     titleLayout:{

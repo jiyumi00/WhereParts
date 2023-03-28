@@ -107,21 +107,24 @@ class SearchView extends PureComponent {
         this.state = {
             addressList: [],
             commonList: [],
-            searchStatus:false,
             page: 1, 
             totalCount:0,
             indicator: false,
         }
     }
     componentDidMount() {
-        
+        console.log('componentDidMount 실행')
         this.setState({indicator:true})
         this.callGetAddressAPI().then((response) => {
             
             this.setState({ addressList: response.results.juso,commonList: response.results.common,totalCount:response.results.common.totalCount, indicator:false });
+            console.log('componentResponse',response)
         });
     }
     componentDidUpdate(prevProps, prevState) {
+        console.log('[prevProps]',prevProps)
+        console.log('[PrevState]',prevState)
+        
         if((prevState.page != this.state.page))
         {
             //this.setState({indicator:true})
@@ -165,16 +168,13 @@ class SearchView extends PureComponent {
             this.setState({ page: this.state.page - 1 })
     }
     render() {
-        console.log('addressList',this.state.addressList)
         return (
             <>
             <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
-            </Modal>
-            
+                </Modal>
             <View style={[styles.viewBody,{position:'absolute',marginTop:'20%',width:'100%'}]}>
-            
-                <FlatList
+            <FlatList
                 data={this.state.addressList}
                 renderItem={( {item} ) =><TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressListClicked(item.zipNo,item.roadAddr)}>
                     <View style={styles.outputStyle}>
@@ -193,9 +193,9 @@ class SearchView extends PureComponent {
                         </View>
                     </View>
                 </View></TouchableOpacity>}
-                    />
-              </View>
-            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:ScreenHeight*0.8 }]}>
+            />
+            </View>
+            <View style={[styles.viewBody,{position:'absolute', width:'100%', marginTop:'140%' }]}>
                 <View style={styles.rowLayout}>
                     <TouchableOpacity onPress={this.pageDown} activeOpacity={0.8} >
                        <PageIcon name="leftsquareo" size={30} color="light grey" />
@@ -207,10 +207,6 @@ class SearchView extends PureComponent {
                     </TouchableOpacity>
                 </View>
             </View>
-           
-           
-                   
-            
             {console.log("hi")}
             </>
         );

@@ -4,7 +4,6 @@ export const template= StyleSheet.create({
     total_container:{
      flex:1,
      backgroundColor:'white',
-     
     },
     container:{
         flex:1,

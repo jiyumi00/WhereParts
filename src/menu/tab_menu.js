@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform, Pressable, StyleSheet,Text,View} from 'react-native';
+import {Dimensions, Image, Platform, Pressable, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Constant from '../util/constatnt_variables';
-import WebServiceManager from '../util/webservice_manager';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // 경로를 위한 import
 import Home from '../goods/list/components/home';
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';
 import ShopHistory from '../user/shophistory'; //
-import CS from '../user/cs';
+import Notice from '../user/notice';
 
 const Tab = createBottomTabNavigator(); // Tab 일 경우
 
@@ -23,17 +20,7 @@ const styles = StyleSheet.create({
 });
 
 class Tabs extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-        notiesContents: null,
-
-    }
-}
- 
   render() {
-    console.log('notiesGoods',this.state.notiesContents)
     return (
       <Tab.Navigator
         screenOptions={{
@@ -118,13 +105,10 @@ class Tabs extends Component {
         />
        
         <Tab.Screen
-          name="CS"
-          component={CS} // 변경해야됨
+          name="Notice"
+          component={Notice} // 변경해야됨
           options={{
-            tabBarBadgeStyle:{},
-          
-            tabBarBadge:this.state.notiesContents,
-            title: 'CS',
+            title: '알림',
             tabBarIcon: ({focused}) => {
               return (
                 <Image
