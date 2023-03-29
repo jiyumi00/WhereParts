@@ -11,13 +11,12 @@ export const styles = StyleSheet.create({
 
       product: {
         flex: 1,
-        //flexDirection: 'row',
+        height:75,
         alignItems: 'center',
+        justifyContent:'center',
         borderWidth:2,
         borderColor:'#E9E9E9',
         marginTop:"2%",
-        marginLeft:"2%",
-        marginRight:"2%",
         paddingBottom:"2%",
         borderRadius:10,
         backgroundColor: '#FFF',

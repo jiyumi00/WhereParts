@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 
-
 import Constant from '../util/constatnt_variables';
 import WebServiceManager from '../util/webservice_manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,34 +13,29 @@ import { styles } from '../styles/notice';
 export default class Notice extends Component {
     constructor(props) {
         super(props);
+        this.contents=[];
 
         this.state = {
-            allNotiesInfo: [],
-            //unNotiesInfo: [],
-            allNotiesBarClicked: true, // 전체알림
-            unNotiesBarClicked: false, // 미확인알림
+            notiContents: [],
+            allNotiesButton: true, // 전체알림선택 여부
+            unReadNotiesButton: false, // 미확인알림 선택 여부
 
-            listRefresh:false,
-
+            isRefresh:false,
         }
     }
 
     componentDidMount(){
-        this.getUserID().then((value) => {
-            this.callGetNotiesAPI(value).then((response) => {
-                this.setState({ allNotiesInfo: response });
-                //console.log(this.state.allNotiesInfo);
-            })
-        })
+        this.goGetNoties();
     }
 
-    async callGetNotiesAPI(userID) { //로그인 된 id값으로 알림정보 가져오는 API
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + userID);
-        let response = await manager.start();
-        if (response.ok)
-            return response.json();
-        else
-            Promise.reject(response);
+    goGetNoties=()=>{
+        this.getUserID().then((value) => {
+            this.callGetNotiesAPI(value).then((response) => {
+                console.log('noti data',response);
+                this.contents=response;
+                this.setState({notiContents:this.dataFiltering()});
+            });
+        })
     }
 
     async getUserID() {
@@ -55,152 +49,117 @@ export default class Notice extends Component {
         }
     }
 
-    goAllNotiesListRefresh=()=>{
-        this.getUserID().then((value) => {
-            this.callGetNotiesAPI(value).then((response) => {
-                this.setState({ allNotiesInfo: response },console.log("refreshCompolete"));
-            })
-        })
-    }
-    goUnNotiesListRefresh=()=>{
-        this.getUserID().then((value) => {
-            this.callGetNotiesAPI(value).then((response) => {
-                this.setState({ allNotiesInfo: response },console.log("refreshCompolete1"));
-            })
-        })
+    //사용자 id값에 해당하는 모든 알림 받아오기
+    async callGetNotiesAPI(userID) { //로그인 된 id값으로 모든알림정보 가져오는 API
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + userID);
+        let response = await manager.start();
+        if (response.ok)
+            return response.json();
+        else
+            Promise.reject(response);
+    }    
+
+    //전체 알림
+    allNotiesClicked = () => {
+        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()})});
     }
 
-    allNotiesBarClicked = () => {
-        this.setState({ allNotiesBarClicked: true, unNotiesBarClicked: false });
+    //읽지 않은 알림
+    unReadNotiesClicked = () => {
+        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()})});
     }
 
-    unNotiesBarClicked = () => {
-        this.setState({ allNotiesBarClicked: false, unNotiesBarClicked: true });
+    //필터링(reading=0 or reading=1, 읽지 않은 알람과 읽은 알람)
+    dataFiltering() {
+        console.log('data filtering start');
+        let filteredContents = this.contents;
+        if(this.state.unReadNotiesButton==true) {
+            filteredContents = filteredContents.filter((content) => {
+                if(content.reading==0)
+                    return true;
+            });
+        }          
+        console.log('filtered contents',filteredContents); 
+        return filteredContents;
     }
 
     render() {
         return (
             <View style={template.total_container}>
-                <View style={[template.container,{marginTop:15}]}>
+                <View style={[template.container,{marginTop:15,marginLeft:10,marginRight:10}]}>
                     <View style={{ flexDirection: 'row', width: "100%", marginBottom:10 }}>
-                        <View style={{ borderBottomWidth: this.state.allNotiesBarClicked ? 1 : 0, width: "50%", alignItems: 'center'}}>
-                            <TouchableOpacity onPress={this.allNotiesBarClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesBarClicked ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>
+                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.unNotiesBarClicked ? 1 : 0, width: "50%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.unNotiesBarClicked}><Text style={[styles.slidertext, { color: this.state.unNotiesBarClicked ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.unReadNotiesButton ? 1 : 0, width: "50%", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    {this.state.allNotiesBarClicked == true && (<FlatList
-                        data={this.state.allNotiesInfo}
-                        renderItem={({ item, index }) => <AllNotiesList navigation={this.props.navigation} item={item} id={item.orderID} />}
-                        refreshing={this.state.listRefresh}
-                        onRefresh={this.goAllNotiesListRefresh}
+                    <FlatList
+                        data={this.state.notiContents}
+                        renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} />}
+                        refreshing={this.state.isRefresh}
+                        onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
-                    />)}
-                    {this.state.unNotiesBarClicked == true && (<FlatList
-                        data={this.state.allNotiesInfo}
-                        renderItem={({ item, index }) => <UnNotiesList navigation={this.props.navigation} item={item} id={item.orderID} />}
-                        refreshing={this.state.listRefresh}
-                        onRefresh={this.goUnNotiesListRefresh}
-                        scrollEventThrottle={16}
-                    />)}
+                    />
                 </View>
             </View>
         );
     }
 }
 
-class AllNotiesList extends PureComponent {
+class ItemList extends PureComponent {
     constructor(props) {
         super(props);
     }
 
-    goListClicked=(value)=>{
-        if(value.kind=='buy'){
-            this.props.navigation.navigate('BuyList');
-        }
-        if(value.kind=='sell'){
-            this.props.navigation.navigate('AddDelivery', {id:value.orderID,navigation:this.props.navigation});
-        }
+    async callSetReadNotiAPI(id) {
+        let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
+        let response = await manager.start();
+        if(response.ok)
+            return response.json();
     }
 
-    iconNameValue=(kind)=>{
-        let icon='';
+    goListClicked=()=>{
+        const {id, orderID, kind, reading} = this.props.item;
+        
+        if(reading==0){
+            this.callSetReadNotiAPI(id).then((response)=>{
+                console.log('success',response);
+            })
+        }
+
         if(kind=='buy'){
-            icon="shopping-bag";
+            this.props.refreshListener();
+            this.props.navigation.navigate('BuyList');
         }
-        if(kind=='sell'){
-            icon="file-text";
+        else if(kind=='sell'){
+            this.props.refreshListener();
+            this.props.navigation.navigate('AddDelivery', {id:orderID,navigation:this.props.navigation});
         }
-        return icon
     }
 
     render() {
-        const item = this.props.item;
+        const { body, todate, kind, reading } = this.props.item;
+       
         return (
             <>
-                <TouchableOpacity onPress={()=>this.goListClicked(item)}>
+                <TouchableOpacity onPress={()=>this.goListClicked()}>
                     <View style={styles.product}>
                         <View style={{flexDirection:'row',width:"100%"}}>
                             <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
-                                <SellIcon name={this.iconNameValue(item.kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />
+                                {/*<SellIcon name={this.iconNameValue(kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />*/}                              
+                                <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{position:'absolute',paddingTop:10}} />
+                                {/* buy, sell 판별하여 text 표시 */}
+                                <Text style={{ color: "#0066FF", paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
                             </View>
-                            <View style={{flex:8,paddingTop:10,paddingLeft:10}}>
-                                <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>{item.title}<Text style={{color:'red'}}>{"   new"}</Text></Text>
-                                <Text style={{color:'black'}}>{item.body}</Text>
-                                <View style={{alignItems:'flex-end'}}>
-                                    <Text style={{paddingRight:10,fontSize:12}}>{item.todate}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </>
-        );
-    }
-}
-
-class UnNotiesList extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
-    goListClicked=(value)=>{
-        if(value.kind=='buy'){
-            this.props.navigation.navigate('BuyList');
-        }
-        if(value.kind=='sell'){
-            this.props.navigation.navigate('AddDelivery', {id:value.orderID,navigation:this.props.navigation});
-        }
-    }
-
-    iconNameValue=(kind)=>{
-        let icon='';
-        if(kind=='buy'){
-            icon="shopping-bag";
-        }
-        if(kind=='sell'){
-            icon="file-text";
-        }
-        return icon
-    }
-
-    render() {
-        const item = this.props.item;
-        return (
-            <>
-                <TouchableOpacity onPress={()=>this.goListClicked(item)}>
-                    <View style={styles.product}>
-                        <View style={{flexDirection:'row',width:"100%"}}>
-                            <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
-                                <SellIcon name={this.iconNameValue(item.kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />
-                            </View>
-                            <View style={{flex:8,paddingTop:10,paddingLeft:10}}>
-                                <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>{item.title}<Text style={{color:'red'}}>{"   new"}</Text></Text>
-                                <Text style={{color:'black'}}>{item.body}</Text>
-                                <View style={{alignItems:'flex-end'}}>
-                                    <Text style={{paddingRight:10,fontSize:12}}>{item.todate}</Text>
-                                </View>
+                            <View style={{flex:8,paddingTop:5,paddingLeft:10}}>
+                                <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>
+                                    <Text style={{fontSize:12}}>{todate}</Text>
+                                    {/* 읽었는지 읽지 않았는지 판별하여 text 표시 */}
+                                    <Text style={{color:'red'}}>{reading==0 ? '  new':''}</Text>
+                                </Text>
+                                <Text style={{color:'black'}}>{body}</Text>
                             </View>
                         </View>
                     </View>

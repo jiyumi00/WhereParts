@@ -120,12 +120,12 @@ class Login extends Component {
             }
             else if (detailLogin == 1) {    //자동 로그인일 경우
                 this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
-                this.autoLoginRadioButtonChecked();
+                this.autoLoginCheckButtonChecked();
                 return true;
             }
             else {                          //id 기억일 경우
                 this.setState({ companyNo: companyNo, detailLogin:detailLogin });
-                this.rememberIdRadioButtonChecked();
+                this.rememberIdCheckButtonChecked();
                 return false;
             }
         }
@@ -192,48 +192,72 @@ class Login extends Component {
         }
     }
 
+    async callSetReadNotiAPI(id) {
+        let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
+        let response = await manager.start();
+        if(response.ok)
+            return response.json();
+    }
+
     registerUserButtonClicked = () => {
         this.props.navigation.navigate('SignUp'); //회원가입 버튼 눌렀을 경우
     }
 
-    autoLoginRadioButtonChecked = () => {
-        this.setState({ autoLoginChecked: true, rememberIdChecked: false, detailLogin: 1 });
+    //아무것도 체크안한 상태 --0, 자동로그인 체크 --1, id기억 체크 --2
+    autoLoginCheckButtonChecked = () => {
+        if (this.state.autoLoginChecked == true) {
+            this.setState({ autoLoginChecked: false, detailLogin: 0 });
+        } 
+        else if (this.state.rememberIdChecked == true) {
+            this.setState({ autoLoginChecked: true, rememberIdChecked: false, detailLogin: 1 })
+        }
+        else {
+            this.setState({ autoLoginChecked: true, detailLogin: 1 })
+        }
+        
     }
 
-    rememberIdRadioButtonChecked = () => {
-        this.setState({ autoLoginChecked: false, rememberIdChecked: true, detailLogin: 2 });
+    rememberIdCheckButtonChecked = () => {
+        if (this.state.rememberIdChecked == true) {
+            this.setState({ rememberIdChecked: false, detailLogin: 0 }); //아무것도 체크안한 상태
+        } 
+        else if (this.state.autoLoginChecked == true) {
+            this.setState({ rememberIdChecked: true, autoLoginChecked: false, detailLogin: 2 })
+        }
+        else {
+            this.setState({ rememberIdChecked: true, detailLogin: 2 }) //id 기억 체크    
+        }
+    }
+
+
+    //추가된부분
+    notiOkButtonClicked=(message)=> {
+        this.callSetReadNotiAPI(message.data.id).then((response)=> {
+            console.log(response);
+        })
+        if(message.data.kind=="buy")
+            this.props.navigation.navigate("BuyList");
+        else if(message.data.kind=="sell") 
+            this.props.navigation.navigate("SalesList");
+
     }
 
     //알림이 올 경우 
     handleFCMMessage=()=> {
         //Foreground 상태에서 알림이 오면 Alert 창 보여줌
-        const unsubscribe = messaging().onMessage(async remoteMessage => {   
-            if(remoteMessage.data.kind=="buy") {  
-                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
-                    { text: '취소', onPress: () => {}},
-                    { text: '확인', onPress: () => this.props.navigation.navigate('BuyList')}],
-                    { cancelable: false });
-                return false;
-            }
-            else if(remoteMessage.data.kind=="sell") {
-                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
-                    { text: '취소', onPress: () => {}},
-                    { text: '확인', onPress: () => this.props.navigation.navigate('SalesList')}],
-                    { cancelable: false });
-                return false;
-            }
+        const unsubscribe = messaging().onMessage(async remoteMessage => {             
+            Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
+                { text: '취소', onPress: () => { } },
+                { text: '확인', onPress: () => this.notiOkButtonClicked(remoteMessage)}],
+                { cancelable: false });
+            return false;
             console.log(JSON.stringify(remoteMessage));            
         });
               
         //Background 상태에서 알림창을 클릭한 경우 해당 페이지로 이동         
         messaging().onNotificationOpenedApp(remoteMessage => {        
             console.log('Notification caused app to open from background state:',remoteMessage.notification);
-            if(remoteMessage.data.kind=="buy") {
-                this.props.navigation.navigate('BuyList')
-            }
-            else if(remoteMessage.data.kind=="sell") {
-                this.props.navigation.navigate('SalesList')
-            }
+            this.notiOkButtonClicked(remoteMessage);
         });
     }
 
@@ -270,11 +294,11 @@ class Login extends Component {
                                     />
                                 </View>
                                 <View style={{ flexDirection: 'row', marginTop: "-5%" }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginRadioButtonChecked}>
+                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
                                         <IconRadio name={this.state.autoLoginChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> 자동로그인  </Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdRadioButtonChecked}>
+                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
                                         <IconRadio name={this.state.rememberIdChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> id기억  </Text>
                                     </TouchableOpacity>

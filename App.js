@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Stack from './src/menu/stack_menu';
 
 class App extends Component {
+ 
   render() {
     return (
       <NavigationContainer>

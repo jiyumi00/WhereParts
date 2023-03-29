@@ -5,6 +5,7 @@ import { styles } from "../../../styles/list/home";
 
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
+import FunctionUtil from '../../../util/libraries_function';
 
 export default class ListItem extends PureComponent {
     constructor(props) {
@@ -50,7 +51,7 @@ export default class ListItem extends PureComponent {
                     <View style={styles.productInfo_view}>
                         <View style={styles.productInfoLeft_view}>
                             <Text style={styles.itemName_text}>{item.name}</Text>
-                            <Text style={styles.itemName_text}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
+                            <Text style={styles.itemName_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                             <Text style={styles.itemDetail_text}>{item.number}</Text>
                         </View>
                         <View style={styles.productInfoRight_view}>
@@ -60,7 +61,7 @@ export default class ListItem extends PureComponent {
                             <View style={{flex:1,justifyContent:'flex-end'}}>
                                {/*  <Text style={styles.itemDetail_text}>{item.registerDate.slice(2,10)}</Text> */}
                             </View>
-                        </View>                 
+                        </View>
                     </View>
 
                 </View>

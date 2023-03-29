@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, NativeModules } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
@@ -14,10 +14,12 @@ class AddDelivery extends Component {
     constructor(props) {
         super(props);
 
+        //Constant에서 미리 정의한 택배사 리스트 가져오기
+        this.invoiceName=Constant.getInvoiceNames();
+
         this.state = {
-            t_code: 1,
-            t_name:["CJ대한통운","우체국택배","편의점택배","로젠택배","한진택배"],
-            t_invoice: "",
+            invoiceKind: 0,
+            invoiceNo: "",
             imageURL: null,
             sellDetailInfo: { orderingDate: "", buyerTel: "", days: [""] },
             validForm:false,
@@ -52,10 +54,10 @@ class AddDelivery extends Component {
                     { text: '확인', onPress: () => {
                         this.props.navigation.pop();
                         this.props.route.params.navigation.navigate("SalesList");
-                        if(this.props.route.params.hasOwnProperty("refresh")){
+                        if (this.props.route.params.hasOwnProperty("refresh")) {
                             this.props.route.params.refresh();
                         }
-                 } }
+                    } }
                 ]);
             }
             else {
@@ -67,17 +69,17 @@ class AddDelivery extends Component {
 
     // 품번 가지고오는 함수 getGoodsNo
     goInvoiceNo = (imageURI) => {
-        this.callInvoiceNoAPI(imageURI).then((response) => {
+        this.callDetectInvoiceNoAPI(imageURI).then((response) => {
             if (response.success === "1") {
                 const invoiceNo = response.texts[0].replaceAll(" ", "");
-                this.setState({ t_invoice: invoiceNo });
+                this.setState({ invoiceNo: invoiceNo });
             }
             else {
                 Alert.alert('송장번호 인식', '송장번호를 인식하지 못했습니다. 직접 입력하세요', [
-                    { text: '확인', onPress: () => { this.setState({ t_invoice: "" }) } }]);
+                    { text: '확인', onPress: () => { this.setState({ invoiceNo: "" }) } }]);
             }
-
-            this.imageModule.deleteImage(imageURI, (imageURI) => {
+            const { ImageModule } = NativeModules;
+            ImageModule.deleteImage(imageURI, (imageURI) => {
                 console.log(imageURI);
             }, (imageURI) => {
                 console.log("delete success", imageURI);
@@ -88,7 +90,7 @@ class AddDelivery extends Component {
     onValueChange=(value)=>{
         this.setState(value,()=>{
             let isValidForm = true;
-            if (this.state.t_invoice.trim().length == 0) {
+            if (this.state.invoiceNo.trim().length == 0) {
                 isValidForm = false;
             }
     
@@ -111,21 +113,15 @@ class AddDelivery extends Component {
             return response.blob();
     }
 
-    /*
-    async callSetDeliveryAPI(){
-        let manager = new WebServiceManager(Constant.serviceURL + "/SetDelivery?id=" + this.props.route.params.id);
-        let response = await manager.start();
-        if (response.ok)
-            return response.json();
-    }*/
+    
     async callSetDeliveryAPI(){
         let manager=new WebServiceManager(Constant.serviceURL +"/SetDelivery","post");
 
         manager.addFormData("data",{
             orderID:this.props.route.params.id,
-            invoiceKind:this.state.t_code,
-            invoiceName:this.state.t_name[(this.state.t_code)-1],
-            invoiceNo:this.state.t_invoice,
+            invoiceKind:this.state.invoiceKind,
+            invoiceName:this.invoiceName[(this.state.invoiceKind)],
+            invoiceNo:this.state.invoiceNo,
         })
 
         let response = await manager.start();
@@ -135,7 +131,7 @@ class AddDelivery extends Component {
     }
 
     //사진으로부터 품번 인식 서비스 API
-    async callInvoiceNoAPI(imageURI) {
+    async callDetectInvoiceNoAPI(imageURI) {
         let manager = new WebServiceManager(Constant.externalServiceURL + "/api/paper/DetectTexts", "post");
         manager.addBinaryData("file", {
             uri: imageURI,
@@ -149,10 +145,7 @@ class AddDelivery extends Component {
     
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address } = this.state.sellDetailInfo;
-       console.log(this.props.route.params.id)
-       console.log(this.state.t_code);
-       console.log("t_name",this.state.t_name[this.state.t_code-1]);
-       console.log('t_code',this.state.t_code)
+        console.log(this.props.route.params.id)
         return (
 
             <View style={styles.total_container}>
@@ -191,13 +184,9 @@ class AddDelivery extends Component {
                         <View style={styles.textInput}>
                             <Text>택배사 선택</Text>
                             <Picker
-                                selectedValue={this.state.t_code}
-                                onValueChange={(value, index) => { this.setState({ t_code: value }) }}>
-                                <Picker.Item label='CJ대한통운' value="1" />
-                                <Picker.Item label='우체국택배' value="2" />
-                                <Picker.Item label='편의점택배' value="3" />
-                                <Picker.Item label='롯데택배' value="4" />
-                                <Picker.Item label='한진택배' value="5" />
+                                selectedValue={this.state.invoiceKind}
+                                onValueChange={(value, index) => { this.setState({ invoiceKind: value }) }}>
+                                {this.invoiceName.map((item,i)=> <Picker.Item label={item} key={i} value={i}/>)}
                             </Picker>
                         </View>
                         <View style={styles.textInput}>
@@ -205,8 +194,8 @@ class AddDelivery extends Component {
                                 <View style={styles.textLayout}>
                                     <Text>송장번호 </Text>
                                     <TextInput
-                                        onChangeText={(value) => this.onValueChange({ t_invoice: value })}
-                                        value={this.state.t_invoice} // 띄워지는값
+                                        onChangeText={(value) => this.onValueChange({ invoiceNo: value })}
+                                        value={this.state.invoiceNo} // 띄워지는값
                                     />
                                 </View>
                                 <View style={styles.btnLayout}>

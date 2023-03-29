@@ -18,7 +18,7 @@ export default class PartsNoCamera extends Component {
             position:'absolute',
             top:'35%', 
             left:'15%',
-            right:'15%',
+            right:'15%', 
             bottom:'53%',
             zIndex:2,
             borderColor:'white',
