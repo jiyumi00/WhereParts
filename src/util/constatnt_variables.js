@@ -5,4 +5,7 @@ export default class Constant {
     static getInvoiceNames() {
         return ["CJ대한통운","우체국택배","편의점택배","로젠택배","한진택배"];
     }
+    static getGoodsQuality() {
+        return ["새제품이에요 📦","깨끗해요 🙂","쓸만해요 👍"];
+    }
 }                                                            

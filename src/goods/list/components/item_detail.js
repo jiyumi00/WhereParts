@@ -21,6 +21,7 @@ export default class DetailItemView extends Component {
     constructor(props) {
         super(props);
         this.hashTagRef = React.createRef();
+        this.goodsQuality=Constant.getGoodsQuality();
 
         this.goodsID = this.props.route.params.id;
         this.serverUserID = this.props.route.params.userID;
@@ -218,8 +219,7 @@ export default class DetailItemView extends Component {
     }
 
     qulityValueText = (value) => {
-        let qulityText = ["새제품이에요 📦", "깨끗해요 🙂", "쓸만해요 👍"];
-        return qulityText[value - 1];
+        return this.goodsQuality[value - 1];
     }
 
     genuineValueText = (value) => {
@@ -487,7 +487,7 @@ export default class DetailItemView extends Component {
             spec:this.state.editSpec,
             hashTag:this.state.hashTag.toString(),
         };
-
+        console.log(this.state.quality)
         return (
 
             <View style={styles.itemDetail_view}>
@@ -736,12 +736,17 @@ export default class DetailItemView extends Component {
                                     </Text>
                                 </View>
                                 <View style={styles.editGoodsQuality}>
-                                    <Picker
+                                  {/*   <Picker
                                         selectedValue={`${this.state.quality}`}
                                         onValueChange={(value, index) => { this.setState({ quality: value }) }}>
                                         <Picker.Item label='새제품이에요 📦' value="1" />
                                         <Picker.Item label='깨끗해요 🙂' value="2" />
                                         <Picker.Item label='쓸만해요 👍' value="3" />
+                                    </Picker> */}
+                                    <Picker
+                                        selectedValue={`${this.state.quality}`}
+                                        onValueChange={(value, index) => { this.setState({ quality: value }) }}>
+                                        {this.goodsQuality.map((item,i)=><Picker.Item label={item} key={i} value={`${i+1}`}/>)}
                                     </Picker>
                                 </View>
                             </View>}

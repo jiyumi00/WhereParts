@@ -32,6 +32,8 @@ class AddGoods extends Component {
         this.hashTagRef = React.createRef();
 
         this.cameraIcon = React.createRef();
+
+        this.goodsQuality=Constant.getGoodsQuality();
         // 팝업메뉴위치
         this.cameraModalX = null;
         this.cameraModalY = null;
@@ -387,6 +389,7 @@ class AddGoods extends Component {
 
     render() {
         console.log(this.state.imageURLs)
+        console.log('quality',this.state.quality)
         return (
             <>
                 <View style={template.total_container}>
@@ -567,9 +570,7 @@ class AddGoods extends Component {
                                     <Picker
                                         selectedValue={this.state.quality}
                                         onValueChange={(value, index) => { this.setState({ quality: value }) }}>
-                                        <Picker.Item label='새제품이에요 📦' value="1" />
-                                        <Picker.Item label='깨끗해요 🙂' value="2" />
-                                        <Picker.Item label='쓸만해요 👍' value="3" />
+                                        {this.goodsQuality.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
                                     </Picker>
                                 </View>
 
