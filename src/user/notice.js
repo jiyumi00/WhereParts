@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, FlatList, TouchableOpacity,RefreshControl } from 'react-native';
 
 import Constant from '../util/constatnt_variables';
 import WebServiceManager from '../util/webservice_manager';
@@ -21,6 +21,7 @@ export default class Notice extends Component {
             unReadNotiesButton: false, // 미확인알림 선택 여부
 
             isRefresh:false,
+            viewVisible:1,
         }
     }
 
@@ -31,11 +32,20 @@ export default class Notice extends Component {
     goGetNoties=()=>{
         this.getUserID().then((value) => {
             this.callGetNotiesAPI(value).then((response) => {
-                console.log('noti data',response);
+                //console.log('noti data',response);
                 this.contents=response;
-                this.setState({notiContents:this.dataFiltering()});
+                this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()});
             });
         })
+    }
+
+    handleEmptyView=()=>{
+        if(this.state.notiContents.length==0){
+            this.setState({viewVisible:0});
+        }
+        else{
+            this.setState({viewVisible:1});
+        }
     }
 
     async getUserID() {
@@ -61,12 +71,12 @@ export default class Notice extends Component {
 
     //전체 알림
     allNotiesClicked = () => {
-        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()})});
+        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()})});
     }
 
     //읽지 않은 알림
     unReadNotiesClicked = () => {
-        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()})});
+        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()})});
     }
 
     //필터링(reading=0 or reading=1, 읽지 않은 알람과 읽은 알람)
@@ -79,7 +89,7 @@ export default class Notice extends Component {
                     return true;
             });
         }          
-        console.log('filtered contents',filteredContents); 
+       // console.log('filtered contents',filteredContents);
         return filteredContents;
     }
 
@@ -95,13 +105,16 @@ export default class Notice extends Component {
                             <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    <FlatList
+                    {this.state.viewVisible == 1 && (<FlatList
                         data={this.state.notiContents}
                         renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} />}
                         refreshing={this.state.isRefresh}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
-                    />
+                    />)}
+                    {this.state.viewVisible == 0 && (<ScrollView refreshControl={<RefreshControl refreshing={this.state.isRefresh} onRefresh={this.goGetNoties} />}>
+                            <Text>결과없뜸</Text>
+                        </ScrollView>)}
                 </View>
             </View>
         );
@@ -119,13 +132,18 @@ class ItemList extends PureComponent {
         if(response.ok)
             return response.json();
     }
-
+    async callGetSellDetailAPI(orderID) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetSellDetail?id=" + orderID);
+        let response = await manager.start();
+        if (response.ok)
+            return response.json();
+    }
     goListClicked=()=>{
         const {id, orderID, kind, reading} = this.props.item;
-        
+        console.log('orderID',orderID)
         if(reading==0){
             this.callSetReadNotiAPI(id).then((response)=>{
-                console.log('success',response);
+                //console.log('success',response);
             })
         }
 
@@ -134,8 +152,16 @@ class ItemList extends PureComponent {
             this.props.navigation.navigate('BuyList');
         }
         else if(kind=='sell'){
-            this.props.refreshListener();
-            this.props.navigation.navigate('AddDelivery', {id:orderID,navigation:this.props.navigation});
+            this.callGetSellDetailAPI(orderID).then((response)=>{
+                if(response.status==1){
+                    this.props.refreshListener();
+                    this.props.navigation.navigate('AddDelivery', {id:orderID,navigation:this.props.navigation});
+                }
+                else{
+                    this.props.refreshListener();
+                    this.props.navigation.navigate('SalesList')
+                }
+            })
         }
     }
 
@@ -157,7 +183,7 @@ class ItemList extends PureComponent {
                                 <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>
                                     <Text style={{fontSize:12}}>{todate}</Text>
                                     {/* 읽었는지 읽지 않았는지 판별하여 text 표시 */}
-                                    <Text style={{color:'red'}}>{reading==0 ? '  new':''}</Text>
+                                    <Text style={{color:'red'}}>{reading==0 ? '  new':null}</Text>
                                 </Text>
                                 <Text style={{color:'black'}}>{body}</Text>
                             </View>
