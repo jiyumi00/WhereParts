@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SellIcon from 'react-native-vector-icons/Feather';
 import BuyIcon from 'react-native-vector-icons/FontAwesome';
 import CircleIcon from 'react-native-vector-icons/FontAwesome';
+
 import { template } from "../styles/template/page_style";
 import { styles } from '../styles/notice';
 

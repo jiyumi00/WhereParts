@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     top:ScreenHeight*0.13,
     //borderWidth:1,
     paddingHorizontal:'7%',
+   
    },
    page_view:{
     position:'absolute',

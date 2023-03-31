@@ -4,6 +4,7 @@ import { View, Text,  TextInput, TouchableOpacity, FlatList, ScrollView,Keyboard
 import { styles } from "../../styles/address_search";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import EmptyIcon from 'react-native-vector-icons/SimpleLineIcons';
 import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
 
@@ -17,6 +18,7 @@ class SearchAddress extends Component {
             commonContents:[],
             searchText: "",
             searchViewVisible:false,
+            emptyListViewVisible:false,
             page:1,
             totalCount:0,
             indicator:false,
@@ -38,7 +40,12 @@ class SearchAddress extends Component {
     goGetAddress=(page)=>{
         this.setState({indicator:true})
         this.callGetAddressAPI(page).then((response) => {
-            this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false });
+            this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false,emptyListViewVisible:false }
+                ,()=>{
+                    if(this.state.addressContents.length==0){
+                        this.setState({emptyListViewVisible:true})
+                    }
+                });
             //console.log('componentResponse',response)
         });
     }
@@ -61,6 +68,7 @@ class SearchAddress extends Component {
     }
     render() {
         console.log('searchText',this.state.searchText)
+        console.log(this.state.emptyListViewVisible)
         return (
             <View style={styles.total_container}> 
                <View style={styles.search_view}>
@@ -81,10 +89,17 @@ class SearchAddress extends Component {
                <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
+                    {this.state.emptyListViewVisible && <>
+                        <View style={{justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
+                        <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
+                        <Text style={{marginTop:'5%'}}>검색 결과가 없습니다</Text>
+                        </View>
+                    </>}
                     {this.state.searchViewVisible?
-                     <FlatList
+                        
+                        <FlatList
                         data={this.state.addressContents}
-                        renderItem={({item,index})=><AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener}/>}/>:
+                        renderItem={({item,index})=><AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener}/>}/> :
                         <>
                         <Text style={styles.title}>TIP</Text>
                         <Text style={styles.text}>도로명, 건물명, 지번 중 선택하여</Text>
@@ -95,7 +110,7 @@ class SearchAddress extends Component {
                         </>}
                    
                </View>
-                {this.state.searchViewVisible&&
+                {this.state.searchViewVisible&&this.state.emptyListViewVisible==false&&
                 <View style={styles.page_view}>
                     <View style={styles.row_layout}>
                         <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
