@@ -9,12 +9,11 @@ import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../../util/indicator';
 import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
+import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import ListItem from './item';
-
 
 //import { SearchWebView } from "./web_view";
 
@@ -29,7 +28,8 @@ class Home extends Component {
         this.imageModule = ImageModule;
 
         this.state = {
-            refreshing: false,
+            isRefresh: false,
+            emptyListViewVisible:1,
             goodsContent: [],
             indicator: false,
             recentRadioButtonChecked: true,
@@ -50,14 +50,13 @@ class Home extends Component {
         BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
 
-
     //부품 검색
     search = (value) => {
         console.log('selected data: ', value);
         this.setState({
             number: value,
         });
-        this.setState({ goodsContent: this.dataFiltering(value) })
+        this.setState({ goodsContent: this.dataFiltering(value) },()=>{this.handleEmptyListView()})
     };
 
     //필터링 (부품번호, 부품명 동시 검색)
@@ -77,7 +76,6 @@ class Home extends Component {
         });
         return goodsContent;
     }
-
 
     // 품번인식 카메라로 이동 goCameraButtonClicked
     goCameraButtonClicked = () => {
@@ -105,27 +103,18 @@ class Home extends Component {
         });
     }
 
-
     //부품 목록 호출 메서드
     goGetGoods = () => {
-
         console.log('refresh_home');
         this.setState({ indicator: true });
         this.callGetGoodsAPI().then((response) => {
             this.contents = response;
             const goodsQuantity = Object.keys(response).length;
             console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
-            this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity });
+            this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity },()=>{this.handleEmptyListView()});
         });
         console.log('refresh success')
-        this.setState({ refreshing: false })
-    }
-
-
-    //새로고침
-    handleRefresh = () => {
-        this.setState({ refreshing: true });
-        this.goGetGoods();
+        this.setState({ isRefresh: false })
     }
 
     dateSort = () => { //최신순
@@ -134,7 +123,7 @@ class Home extends Component {
         const sortedData = this.state.goodsContent.sort((a, b) => {
             return new Date(b.registerDate) - new Date(a.registerDate);
         });
-        this.setState({ goodsContent: sortedData });
+        this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
         this.setState({ indicator: false });
     }
 
@@ -145,10 +134,18 @@ class Home extends Component {
         const sortedData = this.state.goodsContent.sort((a, b) => {
             return a.name.localeCompare(b.name);
         })
-        this.setState({ goodsContent: sortedData });
+        this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
         this.setState({ indicator: false });
     }
 
+    handleEmptyListView=()=>{
+        if(this.state.goodsContent.length==0){
+            this.setState({emptyListViewVisible:0});
+        }
+        else{
+            this.setState({emptyListViewVisible:1});
+        }
+    }
 
     //Web Service 시작
     //사진으로부터 품번 인식 서비스 API
@@ -214,18 +211,18 @@ class Home extends Component {
                     <Indicator />
                 </Modal>
                 <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
-                    <Animated.FlatList
-
+                    {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
-                        refreshing={this.state.refreshing} //새로고침
-                        onRefresh={this.handleRefresh}
+                        refreshing={this.state.isRefresh} //새로고침
+                        onRefresh={this.goGetGoods}
                         scrollEventThrottle={16}
                         contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 30 }}
                         onScroll={Animated.event(
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                             { useNativeDriver: true })}
-                    />
+                        />}
+                    {this.state.emptyListViewVisible==0 && <EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} />}
 
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={{ width: "100%", height: "100%" }}>

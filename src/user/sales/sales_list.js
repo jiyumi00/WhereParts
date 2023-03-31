@@ -21,9 +21,7 @@ export default class SalesDetails extends Component {
             soldoutContents: [],
 
             saleState:1,
-            //salebarclicked: false,//판매중
-            //shippingbarclicked: false,//배송정보입력
-            //soldoutbarclicked: false,//판매완료
+            
             isRefresh:false,
             emptyListViewVisible:1,
         };
@@ -111,15 +109,15 @@ export default class SalesDetails extends Component {
     }
 
     saleBarClicked = () => { //판매중
-        this.setState({ /* delivery: false, salebarclicked: true, shippingbarclicked: false, soldoutbarclicked: false */saleState:1 },()=>{this.goSellGoods()});
+        this.setState({ saleState:1 },()=>{this.goSellGoods()});
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ /* salebarclicked: false, shippingbarclicked: true, soldoutbarclicked: false  */ saleState:2},()=>{this.goSellingGoods()});
+        this.setState({ saleState:2},()=>{this.goSellingGoods()});
     }
 
     soldout = () => { //판매완료
-        this.setState({ /* salebarclicked: false, shippingbarclicked: false, soldoutbarclicked: true */ saleState:3},()=>{this.goSellingGoods()});
+        this.setState({ saleState:3},()=>{this.goSellingGoods()});
     }
 
     render() {
