@@ -8,8 +8,6 @@ import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
 
 import Indicator from '../../util/indicator';
-const ScreenHeight=Dimensions.get('window').height;
-const ScreenWidth=Dimensions.get('window').width;
 
 class SearchAddress extends Component {
     constructor(props) {
@@ -32,29 +30,29 @@ class SearchAddress extends Component {
             alert("주소를 입력해주세요");
         }
         else{
-            this.goGetAddress();
+            this.setState({page:1},()=>this.goGetAddress(this.state.page))
             this.setState({searchViewVisible:true});
             Keyboard.dismiss();
         }
     }
-    goGetAddress=()=>{
+    goGetAddress=(page)=>{
         this.setState({indicator:true})
-        this.callGetAddressAPI().then((response) => {
+        this.callGetAddressAPI(page).then((response) => {
             this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false });
-            console.log('componentResponse',response)
+            //console.log('componentResponse',response)
         });
     }
 
     pageDownClicked=()=>{
         if (this.state.page > 1)
-            this.setState({ page: this.state.page - 1 },()=>this.goGetAddress())
+            this.setState({ page: this.state.page - 1 },()=>this.goGetAddress(this.state.page))
     }
     pageUpClicked=()=>{
         if (this.state.page < (this.state.totalCount / 4))
-            this.setState({ page: this.state.page + 1 },()=>this.goGetAddress())
+            this.setState({ page: this.state.page + 1 },()=>this.goGetAddress(this.state.page))
     }
-    async callGetAddressAPI() {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=4&keyword=" + this.state.searchText + "&resultType=json");
+    async callGetAddressAPI(page) {
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + page + "&countPerPage=4&keyword=" + this.state.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();

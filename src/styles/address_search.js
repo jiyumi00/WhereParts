@@ -93,11 +93,11 @@ export const styles = StyleSheet.create({
   outputStyle:{
     borderColor:'#909098',
     borderWidth:1,
-    height: 105,
+    height: 107,
     paddingHorizontal:'2%'
   },
   titleLayout:{
-    height:100,
+    height:107,
     flexDirection:'column'
   },
   addressLayout:{

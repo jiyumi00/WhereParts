@@ -2,7 +2,9 @@ import React, { Component, PureComponent } from 'react';
 import { View, Text, ScrollView, FlatList, TouchableOpacity,RefreshControl } from 'react-native';
 
 import Constant from '../util/constatnt_variables';
+
 import WebServiceManager from '../util/webservice_manager';
+import EmptyListView from '../util/empty_list_view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SellIcon from 'react-native-vector-icons/Feather';
 import BuyIcon from 'react-native-vector-icons/FontAwesome';
@@ -32,14 +34,14 @@ export default class Notice extends Component {
     goGetNoties=()=>{
         this.getUserID().then((value) => {
             this.callGetNotiesAPI(value).then((response) => {
-                //console.log('noti data',response);
+                console.log('noti data',response);
                 this.contents=response;
-                this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()});
+                this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()});
             });
         })
     }
 
-    handleEmptyView=()=>{
+    handleEmptyListView=()=>{
         if(this.state.notiContents.length==0){
             this.setState({viewVisible:0});
         }
@@ -71,12 +73,12 @@ export default class Notice extends Component {
 
     //전체 알림
     allNotiesClicked = () => {
-        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()})});
+        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
     }
 
     //읽지 않은 알림
     unReadNotiesClicked = () => {
-        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyView()})});
+        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
     }
 
     //필터링(reading=0 or reading=1, 읽지 않은 알람과 읽은 알람)
@@ -89,7 +91,7 @@ export default class Notice extends Component {
                     return true;
             });
         }          
-       // console.log('filtered contents',filteredContents);
+        console.log('filtered contents',filteredContents);
         return filteredContents;
     }
 
@@ -112,15 +114,12 @@ export default class Notice extends Component {
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
                     />)}
-                    {this.state.viewVisible == 0 && (<ScrollView refreshControl={<RefreshControl refreshing={this.state.isRefresh} onRefresh={this.goGetNoties} />}>
-                            <Text>결과없뜸</Text>
-                        </ScrollView>)}
+                    {this.state.viewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
                 </View>
             </View>
         );
     }
 }
-
 class ItemList extends PureComponent {
     constructor(props) {
         super(props);
