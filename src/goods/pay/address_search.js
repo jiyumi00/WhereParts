@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text,  TextInput, TouchableOpacity, FlatList, ScrollView,Keyboard,Dimensions,Modal} from 'react-native';
+import { View, Text,  TextInput, TouchableOpacity, FlatList,Keyboard,Modal} from 'react-native';
 
 import { styles } from "../../styles/address_search";
 
@@ -67,8 +67,6 @@ class SearchAddress extends Component {
             Promise.reject(response);
     }
     render() {
-        console.log('searchText',this.state.searchText)
-        console.log(this.state.emptyListViewVisible)
         return (
             <View style={styles.total_container}> 
                <View style={styles.search_view}>

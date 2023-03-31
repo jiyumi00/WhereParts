@@ -9,29 +9,38 @@ import WebServiceManager from '../../util/webservice_manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-class BuyList extends Component {
+export default class BuyList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             buyContents: [],
-            listRefresh: false,
+            isRefresh: false,
+            emptyListViewVisible:1,
         }
     }
+
     componentDidMount() {
-        this.getUserID().then((value) => {
-            this.callGetGoodsAPI(value).then((response) => {
-                this.setState({ buyContents: response })
-            });
-        })
+        this.goGetGoods();
     }
+
     goGetGoods = () => {
         this.getUserID().then((value) => {
             this.callGetGoodsAPI(value).then((response) => {
-                this.setState({ buyContents: response })
+                this.setState({ buyContents: response },()=>{this.handleEmptyListView()})
             });
         });
     }
+
+    handleEmptyListView=()=>{
+        if(this.state.buyContents.length==0){
+            this.setState({emptyListViewVisible:0});
+        }
+        else{
+            this.setState({emptyListViewVisible:1});
+        }
+    }
+
     async getUserID() {
         let obj = await AsyncStorage.getItem('obj')
         let parsed = JSON.parse(obj);
@@ -56,18 +65,18 @@ class BuyList extends Component {
         { console.log(this.state.buyContents) }
         return (
             <View style={{ flex: 1, marginBottom: 10, }}>
-                <FlatList
+                {this.state.emptyListViewVisible==1 && (<FlatList
                     data={this.state.buyContents}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} goodsID={item.goodsID} id={item.id} navigation={this.props.navigation} refresh={this.goGetGoods} />}
-                    refreshing={this.state.listRefresh}
+                    refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
-                />
+                />)}
+                {this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
             </View>
         );
     }
 }
-export default BuyList;
 
 class ListItem extends Component {
     constructor(props) {

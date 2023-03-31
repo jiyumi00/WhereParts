@@ -24,7 +24,7 @@ export default class Notice extends Component {
             unReadNotiesButton: false, // 미확인알림 선택 여부
 
             isRefresh:false,
-            viewVisible:1,
+            emptyListViewVisible:1,
         }
     }
 
@@ -44,10 +44,10 @@ export default class Notice extends Component {
 
     handleEmptyListView=()=>{
         if(this.state.notiContents.length==0){
-            this.setState({viewVisible:0});
+            this.setState({emptyListViewVisible:0});
         }
         else{
-            this.setState({viewVisible:1});
+            this.setState({emptyListViewVisible:1});
         }
     }
 
@@ -108,14 +108,14 @@ export default class Notice extends Component {
                             <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    {this.state.viewVisible == 1 && (<FlatList
+                    {this.state.emptyListViewVisible == 1 && (<FlatList
                         data={this.state.notiContents}
                         renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} />}
                         refreshing={this.state.isRefresh}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
                     />)}
-                    {this.state.viewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
+                    {this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
                 </View>
             </View>
         );
@@ -159,7 +159,7 @@ class ItemList extends PureComponent {
                 }
                 else{
                     this.props.refreshListener();
-                    this.props.navigation.navigate('SalesList')
+                    this.props.navigation.navigate('SalesList', {saleState:2})
                 }
             })
         }

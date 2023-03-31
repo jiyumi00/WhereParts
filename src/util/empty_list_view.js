@@ -11,13 +11,24 @@ export default class EmptyListView extends Component {
 
     render() {
         return (
-            <ScrollView
-                style={{ borderWidth: 0,paddingTop:"45%", paddingLeft:"35%" }}
-                refreshControl={<RefreshControl refreshing={this.props.isRefresh} onRefresh={this.props.onRefreshListener} />}
-            >
-                <EmptyListIcon name='clipboard-text-off-outline' size={100} />
-                <Text style={{fontSize:18, }}>항목이 없습니다</Text>
-            </ScrollView>
+            <>
+                {this.props.hasOwnProperty('contentContainerStyle') && (<ScrollView
+                    style={{ borderWidth: 0, paddingTop: "45%", paddingLeft: "35%" }}
+                    refreshControl={<RefreshControl refreshing={this.props.isRefresh} onRefresh={this.props.onRefreshListener} />}
+                    contentContainerStyle={this.props.contentContainerStyle}
+                >
+                    <EmptyListIcon name='clipboard-text-off-outline' size={100} />
+                    <Text style={{ fontSize: 18, }}>항목이 없습니다</Text>
+                </ScrollView>)}
+                
+                {this.props.hasOwnProperty('contentContainerStyle')==false && (<ScrollView
+                    style={{ borderWidth: 0, paddingTop: "45%", paddingLeft: "35%" }}
+                    refreshControl={<RefreshControl refreshing={this.props.isRefresh} onRefresh={this.props.onRefreshListener} />}
+                >
+                    <EmptyListIcon name='clipboard-text-off-outline' size={100} />
+                    <Text style={{ fontSize: 18, }}>항목이 없습니다</Text>
+                </ScrollView>)}
+            </>
         );
     }
 }

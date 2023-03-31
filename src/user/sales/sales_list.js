@@ -6,6 +6,7 @@ import { styles } from "../../styles/saleslist";
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EmptyListView from '../../util/empty_list_view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DetailItemView from "../../goods/list/components/item_detail";
 import { color } from 'react-native-reanimated';
@@ -18,33 +19,43 @@ export default class SalesDetails extends Component {
         this.state = {
             userIDContents: [],
             soldoutContents: [],
-            salebarclicked: false,//판매중
-            shippingbarclicked: false,//배송정보입력
-            soldoutbarclicked: false,//판매완료
-            listRefresh:false,
+
+            saleState:1,
+            //salebarclicked: false,//판매중
+            //shippingbarclicked: false,//배송정보입력
+            //soldoutbarclicked: false,//판매완료
+            isRefresh:false,
+            emptyListViewVisible:1,
         };
     }
 
     componentDidMount() {
-        this.setState({ salebarclicked: true })
-        this.getUserID().then((value) => {
+        console.log('[ComponentDidempty확인]',this.state.emptyListViewVisible)
+        if(this.props.route.params!=null){
+            this.setState({ saleState: this.props.route.params.saleState })
+        }
+        
+        this.goSellGoods();
+        this.goSellingGoods();
+        /*this.getUserID().then((value) => {
             this.callGetSellsAPI(value).then((response) => {
-                this.setState({ soldoutContents: response });
-                //console.log(this.state.soldoutContents)              
+                this.setState({ soldoutContents: response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
+                //console.log(response.length);     
             })
             this.callGetGoodsIdAPI(value).then((response) => {
+                console.log(response.length);  
                 this.contents = response;
-                this.setState({ userIDContents: response });
-                //console.log(this.state.userIDContents)
+                this.setState({ userIDContents: response },()=>{this.handleEmptyListView(this.state.userIDContents.length)});
+                //console.log(this.state.userIDContents)   
             })
-        })
+        })*/
     }
 
     goSellGoods = () => {
         //console.log("refresh sell");
         this.getUserID().then((value) => {
             this.callGetSellsAPI(value).then((response) => {
-                this.setState({ soldoutContents: response });
+                this.setState({ soldoutContents: response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
             })
         });
     }
@@ -54,9 +65,20 @@ export default class SalesDetails extends Component {
         this.getUserID().then((value)=> {
             this.callGetGoodsIdAPI(value).then((response) => {
                 this.contents = response;
-                this.setState({userIDContents:response});
+                this.setState({userIDContents:response},()=>{this.handleEmptyListView(this.state.userIDContents.length)});
             })
         });
+    }
+
+    handleEmptyListView = (length) => {
+        //console.log("userIDContents Length",this.state.userIDContents.length);
+        //console.log("soldoutContents Length",this.state.soldoutContents.length);
+        if (length == 0) {
+            this.setState({ emptyListViewVisible: 0 });
+        }
+        else {
+            this.setState({ emptyListViewVisible: 1 });
+        }
     }
 
     async callGetGoodsIdAPI(userID) { //로그인 된 id값으로 올린 상품 가져오는 API
@@ -89,18 +111,19 @@ export default class SalesDetails extends Component {
     }
 
     saleBarClicked = () => { //판매중
-        this.setState({ delivery: false, salebarclicked: true, shippingbarclicked: false, soldoutbarclicked: false });
+        this.setState({ /* delivery: false, salebarclicked: true, shippingbarclicked: false, soldoutbarclicked: false */saleState:1 },()=>{this.goSellGoods()});
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ salebarclicked: false, shippingbarclicked: true, soldoutbarclicked: false });
+        this.setState({ /* salebarclicked: false, shippingbarclicked: true, soldoutbarclicked: false  */ saleState:2},()=>{this.goSellingGoods()});
     }
 
     soldout = () => { //판매완료
-        this.setState({ salebarclicked: false, shippingbarclicked: false, soldoutbarclicked: true });
+        this.setState({ /* salebarclicked: false, shippingbarclicked: false, soldoutbarclicked: true */ saleState:3},()=>{this.goSellingGoods()});
     }
 
     render() {
+        console.log('[Renderempty확인]',this.state.emptyListViewVisible)
         {/*console.log(this.userID)*/ }
         return (
             <View style={{ flex: 1 }}>
@@ -110,39 +133,42 @@ export default class SalesDetails extends Component {
                         <Icon style={{ marginLeft: "58%" }} name="account-circle" size={60} color={'lightgrey'}></Icon>
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%" }}>
-                        <View style={{ borderBottomWidth: this.state.salebarclicked ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.salebarclicked ? "#EE636A" : "black" }]}>판매중</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.saleState==1 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==1 ? "#EE636A" : "black" }]}>판매중</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.shippingbarclicked ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.shippingbarclicked ? "#EE636A" : "black" }]}>배송정보입력</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.saleState==2 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? "#EE636A" : "black" }]}>배송정보입력</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.soldoutbarclicked ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.soldout}><Text style={[styles.slidertext, { color: this.state.soldoutbarclicked ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.saleState==3 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.soldout}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
 
-                {this.state.salebarclicked == true && (<FlatList
+                {this.state.saleState==1 && this.state.emptyListViewVisible==1 && (<FlatList
                     data={this.state.userIDContents}
                     renderItem={({ item, index }) => <ListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goSellingGoods} />}
-                    refreshing={this.state.listRefresh}
+                    refreshing={this.state.isRefresh}
                     onRefresh={this.goSellingGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.shippingbarclicked == true && (<FlatList
+                {this.state.saleState==2 && this.state.emptyListViewVisible==1 &&(<FlatList
                     data={this.state.soldoutContents}
                     renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goSellGoods} />}
-                    refreshing={this.state.listRefresh}
+                    refreshing={this.state.isRefresh}
                     onRefresh={this.goSellGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.soldoutbarclicked == true && (<FlatList
+                {this.state.saleState==3 && this.state.emptyListViewVisible==1 &&(<FlatList
                     data={this.state.soldoutContents}
                     renderItem={({ item, index }) => <SoldOutInfoList navigation={this.props.navigation} item={item} id={item.goodsID} />}
-                    refreshing={this.state.listRefresh}
+                    refreshing={this.state.isRefresh}
                     onRefresh={this.goSellGoods}
                     scrollEventThrottle={16}
                 />)}
+                {this.state.saleState==1 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goSellingGoods} />)}
+                {this.state.saleState==2 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goSellGoods} />)}
+                {this.state.saleState==3 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goSellGoods} />)}
             </View>
         );
     }

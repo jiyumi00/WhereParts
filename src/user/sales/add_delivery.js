@@ -53,7 +53,7 @@ class AddDelivery extends Component {
                 Alert.alert('배송신청완료', '배송등록이 완료되었습니다', [
                     { text: '확인', onPress: () => {
                         this.props.navigation.pop();
-                        this.props.route.params.navigation.navigate("SalesList");
+                        this.props.route.params.navigation.navigate("SalesList",{saleState:2});
                         if (this.props.route.params.hasOwnProperty("refresh")) {
                             this.props.route.params.refresh();
                         }

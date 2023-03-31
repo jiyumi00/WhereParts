@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
+import EmptyListView from '../../util/empty_list_view';
 
 import DetailItemView from "../../goods/list/components/item_detail";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,19 +19,32 @@ class PickList extends Component {
         this.userID=""
         this.state={
             wishContent:[],
+
+            isRefresh:false,
+            emptyListViewVisible:1,
         }
     }
     componentDidMount() {
-        this.goGetWish()
+        this.goGetWish();
     }
     goGetWish=()=>{
         this.getUserID().then(()=>{
             this.callGetWishAPI().then((response) => { 
-                this.setState({wishContent:response})
-             });
-             
+                this.setState({wishContent:response},()=>{this.handleEmptyListView()})
+             });         
         } )
     }
+
+    handleEmptyListView=()=>{
+        console.log("wishContent",this.state.wishContent.length)
+        if(this.state.wishContent.length==0){
+            this.setState({emptyListViewVisible:0});
+        }
+        else{
+            this.setState({emptyListViewVisible:1});
+        }
+    }
+
     async getUserID(){
         let obj=await AsyncStorage.getItem('obj')
         let parsed=JSON.parse(obj);
@@ -54,12 +68,13 @@ class PickList extends Component {
     render() {
         return (
            <View style={styles.total_container}>
-                <FlatList
+                {this.state.emptyListViewVisible==1 && (<FlatList
                     numColumns={2} 
                     data={this.state.wishContent}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} pickRefreshListener={this.goGetWish}/>}
                     scrollEventThrottle={16}
-                />
+                />)}
+                {this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetWish} />)}
            </View>
         );
     }
@@ -114,7 +129,6 @@ class ListItem extends Component {
     }
    
     dipsButtonClicked=()=>{
-       
         this.callRemoveWishAPI().then((response)=>{
             console.log(response);
             this.props.pickRefreshListener();

@@ -238,7 +238,8 @@ class Login extends Component {
         if(message.data.kind=="buy")
             this.props.navigation.navigate("BuyList");
         else if(message.data.kind=="sell") 
-            this.props.navigation.navigate("SalesList");
+            //this.props.navigation.navigate("SalesList");
+            this.props.navigation.navigate('SalesList', {saleState:2})
 
     }
 
