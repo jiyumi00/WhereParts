@@ -20,6 +20,7 @@ import ListItem from './item';
 class Home extends Component {
     constructor(props) {
         super(props);
+        this.dataSortName=["최신순", "거리순", "가나다순"];
         this.contents = [];  //모든 users값 가져오는 것
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
 
@@ -37,6 +38,7 @@ class Home extends Component {
 
             goodsQuantity: null,
             quality: 1,
+            dataSort:1,
 
         };
     }
@@ -232,6 +234,7 @@ class Home extends Component {
                                     <Text style={[styles.title_text, styles.titleBold_text]}>
                                         손쉽게 검색
                                     </Text>
+                                    
                                     <Text style={[styles.title_text, styles.titleRegular_text]}>
                                         하고
                                     </Text>
@@ -245,9 +248,11 @@ class Home extends Component {
                                     </Text>
 
                                 </View>
+                                
                                 <Text style={styles.description_text}>
                                     원하는 키워드, 품번 사진으로 {'\n'} 바로 검색 가능합니다.
                                 </Text>
+                               
                             </View>
                         </View>
                     </Animated.View>
@@ -278,18 +283,29 @@ class Home extends Component {
 
                         </View>
                         <View style={styles.sortBar_view}>
-                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
+                               
+                            <View style={{flex:1.5,marginLeft:'5%',flexDirection:'row',}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
+                                
                                 <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
                             </View>
-                                <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
+                           
+                              {/*   <Picker
+                                    style={{width:130}}
+                                    selectedValue={this.state.dataSort}
+                                    onValueChange={(value, index) => { this.setState({ dataSort: value }) }}>
+                                    {this.dataSortName.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
+                                </Picker> */}
+                        
+                                    
+                             <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
                                     <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
                                     <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
                                     <Text style={styles.sortBar_text}> 가나다순</Text>
-                                </TouchableOpacity>   
+                                </TouchableOpacity>  
                         </View>
                     </Animated.View>
                     

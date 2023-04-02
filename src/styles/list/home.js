@@ -78,11 +78,11 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   sortBar_view: { // 가로정렬
     backgroundColor: 'white',
     width:"100%",
-    paddingVertical:"1%",
     paddingRight:"4%",
-    
+    //borderWidth:1,
+    height:45,
     flexDirection:'row',
-    paddingTop:5
+    paddingTop:10,
   },
   
   sortBar_text: { //최신순/오래된순 글씨
@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingHorizontal:10,
     paddingVertical:5,
     marginHorizontal:10,
-    marginVertical:5,
+    marginVertical:15,
     borderColor:"#D1D1D1",
     borderRadius:10,
   },

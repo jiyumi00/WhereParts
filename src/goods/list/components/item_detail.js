@@ -624,9 +624,9 @@ export default class DetailItemView extends Component {
                         <View style={styles.toggleDetail_view}>
                             <View style={styles.toggleDetailTitle_view}>
                                 <Text style={[styles.text, { fontSize: 16, }]}>상품 정보</Text>
-                                <TouchableOpacity onPress={() => this.setState({ togglebuttonclicked: !this.state.togglebuttonclicked })}>
+                                {/* <TouchableOpacity onPress={() => this.setState({ togglebuttonclicked: !this.state.togglebuttonclicked })}>
                                     <IconToggle name={this.state.togglebuttonclicked ? "chevron-up" : "chevron-down"} size={20} color={'black'}></IconToggle>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                         
                                     {/*해시태그*/}
