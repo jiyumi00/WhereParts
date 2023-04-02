@@ -28,50 +28,42 @@ export default class DetailItemView extends Component {
         this.storageUserID = "";
 
         this.state = {
-            imageLength: 0,
             images: [],
-
-            editGoodsViewVisible: false,
-
-            tagName: '',
-            
-            dipsbuttonclicked: false,//찜하기
-            //togglebuttonclicked: false,
-
-            editVisible: false,//수정가능
-            buyVisible: false,//구매가능
-            imageVisible : false,//큰사진보기
-
             item: {}, //상품 상세정보
 
-            genuine:1,
-            quality: 1, // 상품상태
+            price:0, //수정하기
             quantity: 1, // 수량
+            tagName: '',
             hashTag:[],
-            price:0,
+            quality: 1, // 상품상태
+            genuine:1,
             editSpec:"",
-
+            
+            
+            dipsbuttonclicked: false,//찜하기
+            editGoodsViewVisible: false, //수정하기 View
+            editBarVisible: false,//수정가능
+            buyBarVisible: false,//구매가능
+            imageVisible : false,//큰사진보기
             validForm:false,
             selectedImageIndex:0,
         }
     }
 
     componentDidMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+        //this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        //this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
 
         this.callimageLengthAPI().then((response) => {
             console.log('Image length', response);
-            this.setState({ imageLength: response.length });
+           
             for (let i = 1; i <= response.length; i++) {
-                this.callGetImageAPI(i).then((response) => {
-                    this.setState({ imageTest: response })
+                this.callGetImageAPI(i).then((response) => { 
                     let reader = new FileReader();
                     reader.readAsDataURL(response); //blob을 읽어줌 읽은 놈이 reader
                     reader.onloadend = () => {
                         const images = this.state.images;
                         images.push(reader.result.replace("application/octet-stream", "image/jpeg"));
-                        console.log(images.length);
                         this.setState({ images: images });
                     }
                 })
@@ -80,8 +72,7 @@ export default class DetailItemView extends Component {
 
         this.getUserID().then((value) => {
             this.storageUserID = value; // 휴대폰에 저장된 userID
-            console.log("UserID:", this.storageUserID)
-
+    
             this.callGetGoodsDetailAPI().then((response) => {
                 this.setState({ item: response,  hashTag: response.hashTag.split(',').map(tag => `${tag}`), 
                     price:response.price, editSpec:response.spec ,quantity:response.quantity,quality:response.quality, 
@@ -90,11 +81,10 @@ export default class DetailItemView extends Component {
 
                 //올린사람만 수정하기
                 if (this.storageUserID == this.serverUserID) { // 휴대폰 vs 서버 userID 비교
-                    this.setState({ editVisible: true })
-                    console.log('editVisivle', this.state.editVisible)
+                    this.setState({ editBarVisible: true })
                 }
                 else { //구매가능
-                    this.setState({ buyVisible: true })
+                    this.setState({ buyBarVisible: true })
                     this.callGetWishIdAPI(value).then((response) => {
                         if (response.includes(this.goodsID) == true) {
                             this.setState({ dipsbuttonclicked: true })
@@ -107,20 +97,191 @@ export default class DetailItemView extends Component {
         BackHandler.addEventListener("hardwareBackPress", this.backPressed);
     }
     componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
+        //this.keyboardDidShowListener.remove();
+        //this.keyboardDidHideListener.remove();
         BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
     }
 
-    keyboardDidShow = () => {
+   /*  keyboardDidShow = () => {
         console.log('Keyboard Shown');
+    } */
+
+   /*  keyboardDidHide = () => {
+        console.log('Keyboard Hide');
+    } */
+
+
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView=()=> {
+        this.props.navigation.navigate('GoogleWebView',{url:'http://www.google.com/search?q='+this.state.item.number});
     }
 
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
+
+    //TabBar 버튼 클릭
+    editButtonClicked = () => { // 수정 버튼 클릭
+        this.setState({ editGoodsViewVisible: true });
         this.onValueChange();
     }
+    
+    editCancelButtonClicked = () => { //수정 취소 버튼 클릭
+        const { price, quantity, quality, genuine, spec} = this.state.item;
+        const hashTag = this.state.item.hashTag.split(',').map(tag => `${tag}`);
+        Alert.alert(
+            '',
+            '수정을 취소 하시겠어요?',
+            [
+                { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                { text: '확인', onPress: () => this.setState({ editGoodsViewVisible: false, price: price, quantity: quantity, hashTag: hashTag, quality: quality, genuine: genuine, editSpec: spec }) },
+            ],);
+    }
+    
+    goodsDisableButtonClicked=()=>{ //숨김버튼 클릭
+        Alert.alert(
+            '',
+            '상품을 숨기겠습니까?',
+            [
+                { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                {
+                    text: '확인', onPress: () => this.callSetDisableGoodsAPI().then((response) => {
+                        console.log("숨김완료", response);
+                        if(response.success==1){
+                            this.props.navigation.pop();
+                            this.refresh();
+                        }
+                    })
+                },
+            ],);
+    }
 
+    goodsEnableButtonClicked = () => { //숨김해제 버튼 클릭
+        Alert.alert(
+            '',
+            '상품 숨기기를 해제하시겠습니까?',
+            [
+                { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                {
+                    text: '확인', onPress: () => this.callSetEnableGoodsAPI().then((response) => {
+                        console.log("숨김해제완료", response);
+                        if(response.success==1){
+                            this.props.navigation.pop();
+                            this.refresh();
+                        }
+                    })
+                },
+            ],);
+    }
+    
+    removeButtonClicked = () => { //삭제버튼 클릭
+        Alert.alert(
+            '',
+            '상품을 정말 삭제 하시겠어요?',
+            [
+                { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                {
+                    text: '확인', onPress: () => this.callRemoveGoodsAPI().then((response) => {
+                        console.log("삭제완료", response);
+                        this.props.navigation.pop();
+                        this.refresh();
+                    })
+                },
+            ],);
+    }
+
+
+
+    // 수정완료 버튼 클릭
+    editCompleteButtonClicked = (value) => {
+        console.log("수정완료버튼클릭");
+        this.callUpdateGoodsAPI(value).then((response)=>{
+            console.log('수정완료', response)
+            if(response.success==1){
+                Alert.alert(
+                    '',
+                    '수정이 완료되었습니다',
+                    [
+                        { text: '취소', onPress: () => console.log('Cancel Pressed') },
+                        { text: '확인', onPress: () => {console.log('수정완료'); this.refresh();} },
+                    ],);
+            }
+            if (this.state.editGoodsViewVisible == true) {
+                this.setState({ editGoodsViewVisible: false });
+            }
+        })
+    }
+    // 구매하기 버튼 클릭
+    buyButtonClicked = () => {
+        this.props.navigation.navigate("Payment", { item: this.state.item, userID: this.storageUserID });
+    }
+
+   
+    
+   
+    //해시태그 추가버튼을 누를때
+    addTag = () => {
+        const tagNames = this.state.tagName.split(' ');
+
+        if (tagNames.slice(-1)[0] == '') {
+            tagNames.splice(tagNames.length - 1)
+        }
+        if (this.state.hashTag.length < 7 && tagNames.length < 7 && this.state.hashTag.length + tagNames.length < 8) {
+            this.onValueChange({ hashTag: this.state.hashTag.concat(tagNames) });
+        }
+        else {
+            this.setState({ hashTagError: false })
+        }
+
+        this.state.tagName = ""
+        this.hashTagRef.clear();
+    }
+
+    //해시태그 삭제할 때
+    hashTagRemove = (index) => {
+        this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
+    }
+
+    // 판매수량 수정 버튼 클릭
+    editMinus = (value) => {
+        if (value <= 1) {
+            this.setState({ quantity : 1 })
+        }
+        else {
+            this.setState({ quantity : value - 1 });
+        }
+    }
+
+    editPlus = (value) => {
+        this.setState({ quantity : value + 1 })
+    }
+
+    dipsButtonClicked = () => {
+        if (this.state.dipsbuttonclicked == false) {
+            this.callAddWishAPI().then((response) => {
+                console.log("add wish", response);
+            })
+            this.setState({ dipsbuttonclicked: true });
+        } else {
+            this.callRemoveWishAPI().then((response) => {
+                console.log("remove wish", response);
+            })
+            this.setState({ dipsbuttonclicked: false })
+        }
+    }
+    qulityValueText = (value) => {
+        return this.goodsQuality[value - 1];
+    }
+
+    genuineValueText = (value) => {
+        let genuineText = ["정품", "비정품"];
+        return genuineText[value - 1];
+    }
+     //정품 클릭
+     genuineCheck = () => {
+        this.setState({  genuine: 1 });
+    }
+    //비정품 클릭
+    non_genuineCheck = () => {
+        this.setState({  genuine: 2 });
+    }
     backPressed = () => {
         if(this.state.editGoodsViewVisible==true){
             Alert.alert(
@@ -135,14 +296,47 @@ export default class DetailItemView extends Component {
             this.props.navigation.pop();
         }
         
-        if(this.props.route.params.pickRefreshListener !=null){
+        if(this.props.route.params.hasOwnProperty('pickRefreshListener')){
             this.props.route.params.pickRefreshListener();
         }
         return true;
     }
+    onValueChange = (value) => {
+        this.setState(value,()=>{
+            let isValidForm = true;
+            console.log("hashTag_length", this.state.hashTag.length);
+    
+            if (this.state.price.length == 0) {
+                isValidForm = false;
+            }
+            if(this.state.price <= 0){
+                isValidForm = false;
+            }
+            if (this.state.hashTag.length <= 0) {
+                isValidForm = false;
+            }
+    
+            console.log("isValidForm", isValidForm);
+            this.setState({ validForm: isValidForm });
+        });
+    }
 
-    // userID값 가져오는 함수
-    async getUserID() {
+    hashTagOnChangeText=(value)=>{
+        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
+        let newTagName=value.replace(reg,'')
+        this.setState({ tagName: newTagName })
+    }
+    handleModal = (index) => {
+        this.setState({
+            imageVisible: !this.state.imageVisible,
+            selectedImageIndex: index
+        })
+    };
+    refresh =()=>{
+        this.props.route.params.refresh();
+    }
+     // userID값 가져오는 함수
+     async getUserID() {
         let obj = await AsyncStorage.getItem('obj') // 접속 중인 세션, 로컬스토리지 세션 따로생각, 로그인확인방법check
         let parsed = JSON.parse(obj);
         if (obj !== null) {
@@ -176,6 +370,7 @@ export default class DetailItemView extends Component {
         }
     }
 
+    //수정
     async callUpdateGoodsAPI(value){
         let manager = new WebServiceManager(Constant.serviceURL+"/UpdateGoods", "post");
         
@@ -190,7 +385,7 @@ export default class DetailItemView extends Component {
             return response.json();
         }
     }
-
+    //삭제
     async callRemoveGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/RemoveGoods?id=" + this.goodsID);
 
@@ -199,7 +394,7 @@ export default class DetailItemView extends Component {
             return response.json();
         }
     }
-
+    //숨김
     async callSetDisableGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/SetDisableGoods?id=" + this.goodsID);
 
@@ -217,237 +412,7 @@ export default class DetailItemView extends Component {
             return response.json();
         }
     }
-
-    qulityValueText = (value) => {
-        return this.goodsQuality[value - 1];
-    }
-
-    genuineValueText = (value) => {
-        let genuineText = ["정품", "비정품"];
-        return genuineText[value - 1];
-    }
-
-    //부품번호에 대한 Goodle 검색창 보이기(Web View)
-    goGoodsNumberWebView=()=> {
-        this.props.navigation.navigate('GoogleWebView',{url:'http://www.google.com/search?q='+this.state.item.number});
-    }
-
-
-
-    // 수정 버튼 클릭
-    editButtonClicked = () => {
-        this.setState({ editGoodsViewVisible: true });
-        this.onValueChange();
-    }
-    //수정 취소 버튼 클릭
-    editCancelButtonClicked = () => {
-        const { price, quantity, quality, genuine, spec} = this.state.item;
-        const hashTag = this.state.item.hashTag.split(',').map(tag => `${tag}`);
-        Alert.alert(
-            '',
-            '수정을 취소 하시겠어요?',
-            [
-                { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                { text: '확인', onPress: () => this.setState({ editGoodsViewVisible: false, price: price, quantity: quantity, hashTag: hashTag, quality: quality, genuine: genuine, editSpec: spec }) },
-            ],);
-
-    }
-
-    // 수정완료 버튼 클릭
-    editCompleteButtonClicked = (value) => {
-        console.log("수정완료버튼클릭");
-        this.callUpdateGoodsAPI(value).then((response)=>{
-            console.log('수정완료', response)
-            if(response.success==1){
-                Alert.alert(
-                    '',
-                    '수정이 완료되었습니다',
-                    [
-                        { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                        { text: '확인', onPress: () => {console.log('수정완료'); this.refresh();} },
-                    ],);
-            }
-            if (this.state.editGoodsViewVisible == true) {
-                this.setState({ editGoodsViewVisible: false });
-            }
-        })
-    }
-    // 구매하기 버튼 클릭
-    buyButtonClicked = () => {
-        this.props.navigation.navigate("Payment", { item: this.state.item, userID: this.storageUserID });
-    }
-
-    refresh =()=>{
-        this.props.route.params.refresh();
-    }
-    
-    //숨김버튼 클릭
-    goodsDisableButtonClicked=()=>{
-        Alert.alert(
-            '',
-            '상품을 숨기겠습니까?',
-            [
-                { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                {
-                    text: '확인', onPress: () => this.callSetDisableGoodsAPI().then((response) => {
-                        console.log("숨김완료", response);
-                        if(response.success==1){
-                            this.props.navigation.pop();
-                            this.refresh();
-                        }
-                    })
-                },
-            ],);
-    }
-
-    //숨김해제 버튼 클릭
-    goodsEnableButtonClicked = () => {
-        Alert.alert(
-            '',
-            '상품 숨기기를 해제하시겠습니까?',
-            [
-                { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                {
-                    text: '확인', onPress: () => this.callSetEnableGoodsAPI().then((response) => {
-                        console.log("숨김해제완료", response);
-                        if(response.success==1){
-                            this.props.navigation.pop();
-                            this.refresh();
-                        }
-                    })
-                },
-            ],);
-    }
-    //삭제버튼 클릭
-    removeButtonClicked = () => {
-        Alert.alert(
-            '',
-            '상품을 정말 삭제 하시겠어요?',
-            [
-                { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                {
-                    text: '확인', onPress: () => this.callRemoveGoodsAPI().then((response) => {
-                        console.log("삭제완료", response);
-                        this.props.navigation.pop();
-                        this.refresh();
-                    })
-                },
-            ],);
-    }
-
-   /* async addHashTag(tagNames) {
-        this.setState({ hashTag: this.state.hashTag.concat(tagNames) })
-    }
-
-    async removeHashTag(index) {
-        this.setState({
-            hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index),
-        })
-    }*/
-    //해시태그 추가버튼을 누를때
-    addTag = () => {
-        const tagNames = this.state.tagName.split(' ');
-
-        if (tagNames.slice(-1)[0] == '') {
-            tagNames.splice(tagNames.length - 1)
-        }
-        if (this.state.hashTag.length < 7 && tagNames.length < 7 && this.state.hashTag.length + tagNames.length < 8) {
-            this.onValueChange({ hashTag: this.state.hashTag.concat(tagNames) });
-            /*this.addHashTag(tagNames).then(() => {
-                this.onValueChange();
-            });*/
-        }
-        else {
-            this.setState({ hashTagError: false })
-        }
-
-        this.state.tagName = ""
-        this.hashTagRef.clear();
-    }
-
-    //해시태그 삭제할 때
-    hashTagRemove = (index) => {
-        this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
-        /*this.removeHashTag(index).then(() => {
-            this.onValueChange();
-        });*/
-    }
-
-    // 판매수량 수정 버튼 클릭
-    editMinus = (value) => {
-        if (value <= 1) {
-            this.setState({ quantity : 1 })
-        }
-        else {
-            this.setState({ quantity : value - 1 });
-        }
-    }
-
-    editPlus = (value) => {
-        this.setState({ quantity : value + 1 })
-    }
-
-    //정품 클릭
-    genuineCheck = () => {
-        this.setState({  genuine: 1 });
-    }
-    //비정품 클릭
-    non_genuineCheck = () => {
-        this.setState({  genuine: 2 });
-    }
-
-    dipsButtonClicked = () => {
-        // this.setState({dipsbuttonclicked: !this.state.dipsbuttonclicked})
-        if (this.state.dipsbuttonclicked == false) {
-            this.callAddWishAPI().then((response) => {
-                console.log("add wish", response);
-            })
-            console.log("색칠하트");
-            this.setState({ dipsbuttonclicked: true });
-        } else {
-            this.callRemoveWishAPI().then((response) => {
-                console.log("remove wish", response);
-                //this.props.navigation.navigate('PickList')
-                //this.props.route.params.pickRefreshListener();
-            })
-
-            console.log("색칠안한하트");
-            this.setState({ dipsbuttonclicked: false })
-        }
-    }
-
-    onValueChange = (value) => {
-        this.setState(value,()=>{
-            let isValidForm = true;
-            console.log("hashTag_length", this.state.hashTag.length);
-    
-            if (this.state.price.length == 0) {
-                isValidForm = false;
-            }
-            if(this.state.price <= 0){
-                isValidForm = false;
-            }
-            if (this.state.hashTag.length <= 0) {
-                isValidForm = false;
-            }
-    
-            console.log("isValidForm", isValidForm);
-            this.setState({ validForm: isValidForm });
-        });
-    }
-
-    hashTagOnChangeText=(value)=>{
-        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
-        let newTagName=value.replace(reg,'')
-        this.setState({ tagName: newTagName })
-    }
-    handleModal = (index) => {
-        this.setState({
-            imageVisible: !this.state.imageVisible,
-            selectedImageIndex: index
-        })
-    };
-
+    //찜하기
     async callAddWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/AddWishList?user_id=" + this.storageUserID + "&goods_id=" + this.goodsID);
         let response = await manager.start();
@@ -473,8 +438,7 @@ export default class DetailItemView extends Component {
 
 
     render() {
-        console.log("renderItem_hashTag", this.state.hashTag);
-        const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
+        const { name, number, valid } = this.state.item;
         // 값 변환
         const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
        
@@ -487,12 +451,11 @@ export default class DetailItemView extends Component {
             spec:this.state.editSpec,
             hashTag:this.state.hashTag.toString(),
         };
-        console.log(this.state.quality)
         return (
 
             <View style={styles.itemDetail_view}>
                 <View style={styles.tabBar_view}>
-                    {this.state.editVisible &&
+                    {this.state.editBarVisible &&
                         <>
                             {this.state.editGoodsViewVisible ?
                                 <>
@@ -736,13 +699,6 @@ export default class DetailItemView extends Component {
                                     </Text>
                                 </View>
                                 <View style={styles.editGoodsQuality}>
-                                  {/*   <Picker
-                                        selectedValue={`${this.state.quality}`}
-                                        onValueChange={(value, index) => { this.setState({ quality: value }) }}>
-                                        <Picker.Item label='새제품이에요 📦' value="1" />
-                                        <Picker.Item label='깨끗해요 🙂' value="2" />
-                                        <Picker.Item label='쓸만해요 👍' value="3" />
-                                    </Picker> */}
                                     <Picker
                                         selectedValue={`${this.state.quality}`}
                                         onValueChange={(value, index) => { this.setState({ quality: value }) }}>
@@ -800,14 +756,14 @@ export default class DetailItemView extends Component {
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {(this.state.buyVisible&&this.state.quantity!=0)  &&
+                        {(this.state.buyBarVisible&&this.state.quantity!=0)  &&
                             <View style={styles.pick_view}>
                                 <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
                                     <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
                                 </TouchableOpacity>
                             </View>}
                         <View style={styles.buy_view}>
-                            {(this.state.buyVisible&&this.state.quantity!=0)  &&
+                            {(this.state.buyBarVisible&&this.state.quantity!=0)  &&
                                 <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                     <Text style={styles.buyButton_text}>구매하기</Text>
                                 </TouchableOpacity>}
