@@ -11,7 +11,7 @@ import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
 import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home";
-
+import { Main_Color,Light_Gray,Dark_Gray } from '../../../util/color';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListItem from './item';
 
@@ -212,7 +212,7 @@ class Home extends Component {
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
+                <View style={{ flex: 1,backgroundColor:'white' }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
@@ -260,11 +260,11 @@ class Home extends Component {
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
                         <View style={{ flexDirection: 'row', marginTop: '1%' }}>
                             <View style={styles.searchSection}>
-                                <Icon style={{ padding: 10 }} name="search" size={20} color="#000" />
+                                <Icon style={{ padding: 10 }} name="search" size={20} />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요."
-                                    placeholderTextColor="light grey"
+                                    placeholderTextColor={Dark_Gray}
                                     style={styles.search_input}
                                     value={this.state.number}
                                 />
@@ -287,7 +287,7 @@ class Home extends Component {
                             <View style={{flex:1.5,marginLeft:'5%',flexDirection:'row',}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
                                 
-                                <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
+                                <Text style={{color:Main_Color}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
                             </View>
                            
                               {/*   <Picker
@@ -296,14 +296,13 @@ class Home extends Component {
                                     onValueChange={(value, index) => { this.setState({ dataSort: value }) }}>
                                     {this.dataSortName.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
                                 </Picker> */}
-                        
-                                    
+            
                              <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
-                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
+                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Main_Color} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
-                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
+                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Main_Color}  />
                                     <Text style={styles.sortBar_text}> 가나다순</Text>
                                 </TouchableOpacity>  
                         </View>

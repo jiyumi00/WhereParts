@@ -1,5 +1,6 @@
 //Home Style
 import { Dimensions, StyleSheet } from 'react-native';
+import { Main_Color,Light_Gray,Dark_Gray, Sub_Color } from '../../util/color';
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
 
   //Home
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   homeTop_view: { //홈의 위의 디자인 담당
     width: "100%",
     height: 200,
-    backgroundColor: '#113AE2',
+    backgroundColor: Main_Color,
     position: 'absolute',
   },
   title_view: { 
@@ -24,16 +25,16 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   titleRegular_text: {
     fontFamily: 'Pretendard-Regular',
-    color: '#E9E9E9',
+    color: Light_Gray,
   },
   titleBold_text: {
     fontFamily: 'Pretendard-SemiBold',
-    color: '#FFF',
+    color: 'white',
   },
   description_text: {
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
-    color: '#FFF',
+    color: 'white',
     lineHeight: 21,
   },
 
@@ -43,7 +44,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     width: "100%",
     position: 'absolute',
     alignItems: 'center',
-    backgroundColor: "#113AE2",
+    backgroundColor: Main_Color,
   
   },
   searchSection:{
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
 
   },
   search_input: { //Home TextInput 안에 글씨
@@ -68,7 +69,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginLeft: 10,
     width: 54,
     height: 50,
-    backgroundColor: '#0066FF',
+    backgroundColor: Sub_Color,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -88,7 +89,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   sortBar_text: { //최신순/오래된순 글씨
     fontWeight: 'bold',
     textAlign: 'right',
-    color: '#6495ED',
+    color: Sub_Color,
     fontSize: 13,
   },
   
@@ -103,11 +104,11 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingVertical:5,
     marginHorizontal:10,
     marginVertical:15,
-    borderColor:"#D1D1D1",
+    borderColor:Light_Gray,
     borderRadius:10,
   },
   productImage_view: {
-    borderColor: '#E9E9E9',
+    borderColor: Light_Gray,
     borderStyle: 'solid',
     overflow: 'hidden',
   },
@@ -143,6 +144,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
-    color: '#000000',
+    color: 'black',
   },
 });
