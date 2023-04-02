@@ -10,6 +10,7 @@ import SplashScreen from 'react-native-splash-screen';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 
 import messaging from '@react-native-firebase/messaging';
+import { Light_Gray } from '../util/color';
 
 class Login extends Component {
 
@@ -296,11 +297,11 @@ class Login extends Component {
                                 </View>
                                 <View style={{ flexDirection: 'row', marginTop: "-5%" }}>
                                     <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
-                                        <IconRadio name={this.state.autoLoginChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
+                                        <IconRadio name={this.state.autoLoginChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Light_Gray} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> 자동로그인  </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
-                                        <IconRadio name={this.state.rememberIdChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
+                                        <IconRadio name={this.state.rememberIdChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Light_Gray} style={{ paddingTop: 5 }} />
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> id기억  </Text>
                                     </TouchableOpacity>
                                 </View>

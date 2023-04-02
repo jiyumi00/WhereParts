@@ -14,6 +14,7 @@ import IconPopup from 'react-native-vector-icons/EvilIcons';
 
 import Constant from "../../util/constatnt_variables";
 import WebServiceManager from "../../util/webservice_manager";
+import { Main_Color, Sub_Color } from '../../util/color';
 
 class EditProfile extends Component {
 
@@ -269,7 +270,7 @@ class EditProfile extends Component {
 
                         <View style={styles.container}>
                             <View style={styles.header_textLayout_view}>
-                                <Text style={[styles.default_text, styles.main_title_text, { color: '#4B89DC' }]}>비밀번호 확인</Text>
+                                <Text style={[styles.default_text, styles.main_title_text, { color: Sub_Color }]}>비밀번호 확인</Text>
                                 <Text style={[styles.default_text, styles.login_guide_text]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
                             </View>
                             <View style={{ flex: 7 }}>

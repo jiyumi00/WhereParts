@@ -1,4 +1,5 @@
 import { StyleSheet,Dimensions } from 'react-native';
+import { Dark_Gray } from '../util/color';
 const ScreenHeight=Dimensions.get('window').height;
 const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({
@@ -35,7 +36,7 @@ export const styles = StyleSheet.create({
     width:'90%'
    },
    search_input:{
-    borderColor:'#BDBDBD',  
+    borderColor:Dark_Gray,  
     borderWidth:1,
     borderRadius: 5,
     height: 45,
@@ -77,7 +78,7 @@ export const styles = StyleSheet.create({
     marginTop:5,
     fontWeight: 'Cochin',
     fontSize: 15,
-    color: "#747272",
+    color: Dark_Gray,
   },
   content2:{
     marginTop:5,
@@ -92,7 +93,7 @@ export const styles = StyleSheet.create({
     //borderWidth:1,
   },
   outputStyle:{
-    borderColor:'#909098',
+    borderColor:Dark_Gray,
     borderWidth:1,
     height: 107,
     paddingHorizontal:'2%'

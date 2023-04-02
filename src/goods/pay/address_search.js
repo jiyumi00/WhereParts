@@ -9,6 +9,7 @@ import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
 
 import Indicator from '../../util/indicator';
+import { Dark_Gray, Light_Gray, Main_Color } from '../../util/color';
 
 class SearchAddress extends Component {
     constructor(props) {
@@ -76,9 +77,9 @@ class SearchAddress extends Component {
                                 onChangeText={(text) => this.setState({ searchText: text  })}
                                 onEndEditing={this.searchAddress }
                                 placeholder="도로명 또는 지번을 입력하세요"
-                                placeholderTextColor="light grey" />
+                                placeholderTextColor={Light_Gray} />
                             <TouchableOpacity style={styles.search_btn} onPress={this.searchAddress}>
-                                <Icon name="search" size={30} color="light grey" />
+                                <Icon name="search" size={30} color={Dark_Gray} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -89,7 +90,7 @@ class SearchAddress extends Component {
                 </Modal>
                     {this.state.emptyListViewVisible && <>
                         <View style={{justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
-                        <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
+                        <EmptyIcon name="exclamation" size={40} color={Light_Gray} />
                         <Text style={{marginTop:'5%'}}>검색 결과가 없습니다</Text>
                         </View>
                     </>}
@@ -112,12 +113,12 @@ class SearchAddress extends Component {
                 <View style={styles.page_view}>
                     <View style={styles.row_layout}>
                         <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
-                        <PageIcon name="leftsquareo" size={30} color="light grey" />
+                        <PageIcon name="leftsquareo" size={30} color={Dark_Gray} />
                         </TouchableOpacity>
                     
-                        <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/4)}   </Text>
+                        <Text  style={styles.text}>   <Text style={[styles.text,{color:Main_Color}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/4)}   </Text>
                         <TouchableOpacity onPress={this.pageUpClicked} activeOpacity={0.8}>
-                            <PageIcon name="rightsquareo" size={30} color="light grey" />
+                            <PageIcon name="rightsquareo" size={30} color={Dark_Gray} />
                         </TouchableOpacity>
                     </View>
                 </View>}

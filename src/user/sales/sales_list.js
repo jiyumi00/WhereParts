@@ -10,6 +10,7 @@ import EmptyListView from '../../util/empty_list_view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DetailItemView from "../../goods/list/components/item_detail";
 import { color } from 'react-native-reanimated';
+import { Light_Gray, Red_Color, Sub_Color } from '../../util/color';
 
 
 export default class SalesDetails extends Component {
@@ -21,7 +22,9 @@ export default class SalesDetails extends Component {
             soldoutContents: [],
 
             saleState:1,
-            
+            //salebarclicked: false,//판매중
+            //shippingbarclicked: false,//배송정보입력
+            //soldoutbarclicked: false,//판매완료
             isRefresh:false,
             emptyListViewVisible:1,
         };
@@ -35,18 +38,6 @@ export default class SalesDetails extends Component {
         
         this.goSellGoods();
         this.goSellingGoods();
-        /*this.getUserID().then((value) => {
-            this.callGetSellsAPI(value).then((response) => {
-                this.setState({ soldoutContents: response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
-                //console.log(response.length);     
-            })
-            this.callGetGoodsIdAPI(value).then((response) => {
-                console.log(response.length);  
-                this.contents = response;
-                this.setState({ userIDContents: response },()=>{this.handleEmptyListView(this.state.userIDContents.length)});
-                //console.log(this.state.userIDContents)   
-            })
-        })*/
     }
 
     goSellGoods = () => {
@@ -109,15 +100,15 @@ export default class SalesDetails extends Component {
     }
 
     saleBarClicked = () => { //판매중
-        this.setState({ saleState:1 },()=>{this.goSellGoods()});
+        this.setState({ /* delivery: false, salebarclicked: true, shippingbarclicked: false, soldoutbarclicked: false */saleState:1 },()=>{this.goSellGoods()});
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ saleState:2},()=>{this.goSellingGoods()});
+        this.setState({ /* salebarclicked: false, shippingbarclicked: true, soldoutbarclicked: false  */ saleState:2},()=>{this.goSellingGoods()});
     }
 
     soldout = () => { //판매완료
-        this.setState({ saleState:3},()=>{this.goSellingGoods()});
+        this.setState({ /* salebarclicked: false, shippingbarclicked: false, soldoutbarclicked: true */ saleState:3},()=>{this.goSellingGoods()});
     }
 
     render() {
@@ -128,17 +119,17 @@ export default class SalesDetails extends Component {
                 <View style={styles.wrap}>
                     <View style={styles.salesdetailsheader}>
                         <Text style={styles.headertext}> 나의 판매내역</Text>
-                        <Icon style={{ marginLeft: "58%" }} name="account-circle" size={60} color={'lightgrey'}></Icon>
+                        <Icon style={{ marginLeft: "58%" }} name="account-circle" size={60} color={Light_Gray}></Icon>
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%" }}>
                         <View style={{ borderBottomWidth: this.state.saleState==1 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==1 ? "#EE636A" : "black" }]}>판매중</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==1 ? Red_Color : "black" }]}>판매중</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState==2 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? "#EE636A" : "black" }]}>배송정보입력</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? Red_Color : "black" }]}>배송정보입력</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState==3 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.soldout}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.soldout}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? Red_Color : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -224,7 +215,7 @@ class ListItem extends PureComponent {
                                     <Text style={styles.itemNameText}>{item.name}</Text>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
+                                        <Text style={{ fontSize: 17, color: Light_Gray}}> |</Text>
                                         <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
                                     </View>
                                     <Text style={styles.itemNumberText}>{item.number}</Text>
@@ -291,7 +282,7 @@ class DeliveryInfoList extends PureComponent {
                                     <Text style={styles.itemNameText}>{item.goodsName}</Text>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
+                                        <Text style={{ fontSize: 17, color: Light_Gray}}> |</Text>
                                         <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
                                     </View>
                                     <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
@@ -299,7 +290,7 @@ class DeliveryInfoList extends PureComponent {
                             </View>
                         </View>
                         {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.refreshListener })}>
-                            <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
+                            <Text style={[styles.itemDistanceText, { color: Sub_Color }]}>배송등록</Text>
                         </TouchableOpacity>}
 
                         {item.status == 2 && <TouchableOpacity style={styles.productInfoRight}>
@@ -360,7 +351,7 @@ class SoldOutInfoList extends PureComponent {
                                     <Text style={styles.itemNameText}>{item.goodsName}</Text>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
+                                        <Text style={{ fontSize: 17, color: Light_Gray }}> |</Text>
                                         <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
                                     </View>
                                     <Text style={styles.itemNumberText}>{item.goodsNo}</Text>

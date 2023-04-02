@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { Light_Gray } from '../util/color';
 
 export const styles = StyleSheet.create({
     total_container:{
@@ -34,7 +35,7 @@ export const styles = StyleSheet.create({
     payInfoDetail_view:{
         marginTop:20,
         borderWidth:1,
-        borderColor:'#D1D1D1',
+        borderColor:Light_Gray,
         paddingVertical:10,
         paddingHorizontal:10,
         justifyContent:'center',

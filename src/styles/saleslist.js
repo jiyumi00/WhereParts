@@ -1,8 +1,9 @@
 //Home Style
 import { StyleSheet } from 'react-native';
+import { Light_Gray, Line_Color } from '../util/color';
 export const styles = StyleSheet.create({
   wrap: {
-    backgroundColor: '#FFF',
+    backgroundColor: 'white',
   },
   salesdetailsheader: {
     flexDirection: 'row',
@@ -13,13 +14,13 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-SemiBold',
-    color: '#000000',
+    color: 'black',
   },
   slidertext: {
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-SemiBold',
-    color: '#000000',
+    color: 'black',
     //marginLeft: "15%",
   },
   product: {
@@ -27,20 +28,20 @@ export const styles = StyleSheet.create({
     //flexDirection: 'row',
     alignItems: 'center',
     borderWidth:2,
-    borderColor:'#E9E9E9',
+    borderColor:Line_Color,
     marginTop:"2%",
     marginLeft:"2%",
     marginRight:"2%",
     paddingBottom:"2%",
     borderRadius:10,
-    backgroundColor: '#FFF',
+    backgroundColor: 'white',
   },
 
   productImageView: {
     marginLeft: 5,
     //borderWidth: 1,
     flexDirection:"row",
-    borderColor: '#E9E9E9',
+    borderColor: Line_Color,
     borderStyle: 'solid',
     overflow: 'hidden',
   },
@@ -68,7 +69,7 @@ export const styles = StyleSheet.create({
   },
   productInfoRight: {
     borderTopWidth:1,
-    borderTopColor:'#D1D1D1',
+    borderTopColor:Light_Gray,
     alignItems:'center',
     marginTop:'1%',
     paddingTop:'2%',
@@ -96,7 +97,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
-    color: '#000000',
+    color: 'black',
   },
   itemRegisterDateText: {
     fontSize: 14
@@ -109,6 +110,6 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-SemiBold',
-    color: '#000000',
+    color: 'black',
   },
 });

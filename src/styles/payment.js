@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { Dark_Gray, Light_Gray, Line_Color, Mark_Color, Sub_Color, TextInput_Color } from '../util/color';
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -9,12 +10,12 @@ export const styles = StyleSheet.create({
     height: 40,
     width: 200,
     borderRadius: 5,
-    backgroundColor: '#0066FF',
+    backgroundColor: Sub_Color,
   },
   buyButtonText: {
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 18,
-    color: '#FFF',
+    color: 'white',
   },
   indexText:{
     fontSize: 16, 
@@ -25,7 +26,7 @@ export const styles = StyleSheet.create({
   indexView:{
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "lightgray",
+    borderColor: Light_Gray,
     padding: 10
   },
   priceText:{
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
     height: 40,
     width: "auto",
     borderRadius: 5,
-    backgroundColor: '#0066FF', 
+    backgroundColor: Sub_Color, 
   },
   goListButton:{
     justifyContent: 'center',
@@ -46,14 +47,14 @@ export const styles = StyleSheet.create({
     height: 40,
     width: "48%",
     borderRadius: 5,
-    backgroundColor: '#0066FF',
+    backgroundColor: Sub_Color,
   },
   //수량디자인
   selectQuantityView: {
     marginLeft:"60%",
     width:"auto",
     borderRadius: 6,
-    borderColor: '#D4D4D4',
+    borderColor: Light_Gray,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -61,7 +62,7 @@ export const styles = StyleSheet.create({
   quantityItemText: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 15,
-    color: '#000',
+    color: 'black',
   },
   quantityItem: {
     width: 36,
@@ -70,7 +71,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   quantityCount: {
-    borderColor: '#D4D4D4',
+    borderColor: Light_Gray,
     borderLeftWidth: 1,
     borderRightWidth: 1,
   },
@@ -82,7 +83,7 @@ export const styles = StyleSheet.create({
   //pay_complete
   goodsInfoView:{
     height:'30%',
-    backgroundColor:'gray'
+    backgroundColor:Dark_Gray
   },
   payInfoView:{
     flex:2,
@@ -104,7 +105,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textInput: {
-    backgroundColor: '#F1F1F3',
+    backgroundColor: Line_Color,
     marginBottom: 15,
     marginRight: 15,
     paddingHorizontal: 10,
@@ -112,7 +113,7 @@ export const styles = StyleSheet.create({
     height: 55,
     width: "96%",
     borderRadius: 10,
-    borderColor: '#F1F1F3',
+    borderColor:Line_Color,
     borderWidth: 1,
   },
 
@@ -149,7 +150,7 @@ export const styles = StyleSheet.create({
     width: '55%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
+    backgroundColor: Line_Color,
     borderRadius: 10,
     height: 55,
     marginBottom: 15,
@@ -159,7 +160,7 @@ export const styles = StyleSheet.create({
   address_text: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
+    backgroundColor: Line_Color,
     borderRadius: 10,
     height: 55,
     width: "96%",
@@ -169,7 +170,7 @@ export const styles = StyleSheet.create({
     marginBottom:20,
     paddingBottom:10,
     borderBottomWidth:1,
-    borderColor:'lightgray',
+    borderColor:Line_Color,
   },
   productImage: {
     flex: 1,

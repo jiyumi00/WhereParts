@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { Light_Gray, Line_Color, Sub_Color } from '../util/color';
 
 export const styles = StyleSheet.create({
    
@@ -6,7 +7,7 @@ export const styles = StyleSheet.create({
     //내정보 부분
     viewHeaderLayout:{
         flex:5,
-        backgroundColor:"#EDEDED",
+        backgroundColor:Line_Color,
         //borderWidth:1,
        
     },
@@ -37,7 +38,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: "Cochin",
         fontSize: 20,
-        color: "#325AFB",
+        color: Sub_Color,
         marginBottom:5,
        
     },
@@ -51,7 +52,7 @@ export const styles = StyleSheet.create({
         width:90,
         height: 90,
         backgroundColor: "white",
-        borderColor:"#D1D1D1",
+        borderColor:Light_Gray,
         borderWidth:2,
         alignItems: 'center',
         justifyContent: 'center',
@@ -69,7 +70,7 @@ export const styles = StyleSheet.create({
         width:90,
         height: 90,
         backgroundColor: "white",
-        borderColor:"#D1D1D1",
+        borderColor:Light_Gray,
         borderWidth:2,
         alignItems: 'center',
         justifyContent: 'center',
@@ -88,7 +89,7 @@ export const styles = StyleSheet.create({
         borderBottomWidth:1,
         paddingHorizontal:30,
         alignItems:'center',
-        borderColor:"#D1D1D1",
+        borderColor:Light_Gray,
         flexDirection: 'row',
     },
     btn_select_text:{
@@ -111,7 +112,7 @@ export const styles = StyleSheet.create({
 
     btn_logout: {
         height: 45,
-        backgroundColor: "#1E90FF",
+        backgroundColor:Sub_Color,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { Dark_Gray, Light_Gray, Line_Color } from '../util/color';
 
 export const styles = StyleSheet.create({
   total_container: {
@@ -17,7 +18,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textInput: {
-    backgroundColor: '#F1F1F3',
+    backgroundColor: Line_Color,
     marginBottom: 15,
     marginRight: 15,
     paddingHorizontal: 10,
@@ -25,7 +26,7 @@ export const styles = StyleSheet.create({
     height: 55,
     width: "96%",
     borderRadius: 10,
-    borderColor: '#F1F1F3',
+    borderColor: Line_Color,
     borderWidth: 1,
   },
 
@@ -62,7 +63,7 @@ export const styles = StyleSheet.create({
     width: '55%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
+    backgroundColor: Line_Color,
     borderRadius: 10,
     height: 55,
     marginBottom: 15,
@@ -72,7 +73,7 @@ export const styles = StyleSheet.create({
   address_text: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
+    backgroundColor:Line_Color,
     borderRadius: 10,
     height: 55,
     width: "96%",
@@ -82,6 +83,6 @@ export const styles = StyleSheet.create({
     marginBottom:20,
     paddingBottom:10,
     borderBottomWidth:1,
-    borderColor:'lightgray',
+    borderColor:Light_Gray,
   },
 });

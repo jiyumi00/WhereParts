@@ -176,7 +176,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     justifyContent: 'center',
     alignItems: 'center',
     borderColor:Light_Gray,
-    borderWidth:1,
+    //borderWidth:1,
     height:55,
     paddingHorizontal:20,
   },

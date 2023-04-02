@@ -12,6 +12,7 @@ import EmptyListView from '../../util/empty_list_view';
 
 import DetailItemView from "../../goods/list/components/item_detail";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Red_Color } from '../../util/color';
 
 class PickList extends Component {
     constructor(props) {
@@ -164,7 +165,7 @@ class ListItem extends Component {
                 <View style={styles.itemView}>
                     <View style={styles.pickView}>
                         <TouchableOpacity onPress ={this.dipsButtonClicked}>
-                            <Icon name="favorite" color={"#EE636A" } size={25}></Icon>
+                            <Icon name="favorite" color={Red_Color} size={25}></Icon>
                         </TouchableOpacity>
                     </View>
                     <Image

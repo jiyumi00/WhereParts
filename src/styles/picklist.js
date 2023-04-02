@@ -1,11 +1,12 @@
 import { StyleSheet,Dimensions } from 'react-native';
+import { Light_Gray } from '../util/color';
 const ScreenHeight=Dimensions.get('window').height;
 const ScreenWidth=Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
     goodsContent: {
         position: 'relative',
-        backgroundColor: '#FFF',
+        backgroundColor: 'white',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
       },
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
         justifyContent:'center',
         borderRadius:10,
         marginHorizontal:10,
-        borderColor:"#D1D1D1",
+        borderColor:Light_Gray,
       },
      
      
@@ -55,20 +56,16 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-Medium',
-        color: '#000000',
+        color: 'black',
       },
       itemRegisterDateText:{
         fontSize: 15
       },
-      itemDistanceText:{
-        fontSize: 15,
-        color:'#EE636A',
-       
-      },
+     
       itemPriceText: {
         fontSize: 18,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-SemiBold',
-        color: '#000000',
+        color: 'black',
       },
 });

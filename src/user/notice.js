@@ -12,6 +12,7 @@ import CircleIcon from 'react-native-vector-icons/FontAwesome';
 
 import { template } from "../styles/template/page_style";
 import { styles } from '../styles/notice';
+import { Red_Color, Sub_Color } from '../util/color';
 
 export default class Notice extends Component {
     constructor(props) {
@@ -102,10 +103,10 @@ export default class Notice extends Component {
                 <View style={[template.container,{marginTop:15,marginLeft:10,marginRight:10}]}>
                     <View style={{ flexDirection: 'row', width: "100%", marginBottom:10 }}>
                         <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>
-                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? Red_Color : "black" }]}>전체알림</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.unReadNotiesButton ? 1 : 0, width: "50%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? Red_Color: "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
                     {this.state.emptyListViewVisible == 1 && (<FlatList
@@ -175,15 +176,15 @@ class ItemList extends PureComponent {
                         <View style={{flexDirection:'row',width:"100%"}}>
                             <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
                                 {/*<SellIcon name={this.iconNameValue(kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />*/}                              
-                                <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{position:'absolute',paddingTop:10}} />
+                                <CircleIcon name="circle-thin" size={60} color={Sub_Color} style={{position:'absolute',paddingTop:10}} />
                                 {/* buy, sell 판별하여 text 표시 */}
-                                <Text style={{ color: "#0066FF", paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
+                                <Text style={{ color: Sub_Color, paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
                             </View>
                             <View style={{flex:8,paddingTop:5,paddingLeft:10}}>
                                 <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>
                                     <Text style={{fontSize:12}}>{todate}</Text>
                                     {/* 읽었는지 읽지 않았는지 판별하여 text 표시 */}
-                                    <Text style={{color:'red'}}>{reading==0 ? '  new':null}</Text>
+                                    <Text style={{color:Red_Color}}>{reading==0 ? '  new':null}</Text>
                                 </Text>
                                 <Text style={{color:'black'}}>{body}</Text>
                             </View>
