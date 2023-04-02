@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   sortBar_text: { //최신순/오래된순 글씨
     fontWeight: 'bold',
     textAlign: 'right',
-    color: Sub_Color,
+    color: Main_Color,
     fontSize: 13,
   },
   

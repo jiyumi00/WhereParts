@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import { Dark_Gray, Light_Gray, Line_Color, Main_Color, Mark_Color, Red_Color, Sub_Color } from '../../util/color';
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
  
   text:{ //공통
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     height:'9%',
     flexDirection:'row',
     alignItems:'center',
-    borderBottomColor: '#E6E6E6',
+    borderBottomColor: Line_Color,
     borderBottomWidth:1, //
     justifyContent: 'flex-end',
     paddingVertical:3,
@@ -76,20 +77,20 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
         marginHorizontal:'5%',
         paddingBottom:30,
         padding: 20,
-        borderColor: '#E6E6E6',
+        borderColor: Line_Color,
         borderBottomWidth:1,
     },
     //인증업체
     certificationMark_view: { 
         width: 64,
-        backgroundColor: '#E8EEF0',
+        backgroundColor: Mark_Color,
         borderRadius: 4,
         marginBottom: 15,
     },
     certificationMark_text: {
         fontFamily: 'Pretendard-SemiBold',
         fontSize: 12,
-        color: '#000',
+        color: 'black',
         textAlign: 'center',
     },
     //부품 이름, 번호
@@ -106,7 +107,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     detailUnit_text: {
         fontFamily: 'Pretendard-Regular',
         fontSize: 15,
-        color: '#000',
+        color: 'black',
         lineHeight: 28,
     },
     remaining_view: {
@@ -117,7 +118,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     },
     selectQuantity_view: {
         borderRadius: 6,
-        borderColor: '#D4D4D4',
+        borderColor: Light_Gray,
         borderWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
@@ -129,7 +130,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
         alignItems: 'center',
     },
     quantityCount: {
-        borderColor: '#D4D4D4',
+        borderColor: Light_Gray,
         borderLeftWidth: 1,
         borderRightWidth: 1,
       },
@@ -156,7 +157,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     toggleDetailItemTItleText: {
       fontFamily: 'Pretendard-Regular',
       fontSize: 14,
-      color: '#949CA1',
+      color: Dark_Gray,
       lineHeight: 20,
     },
     toggleDetailTextArea: {
@@ -174,7 +175,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor:'#E4E4E4',
+    borderColor:Light_Gray,
     borderWidth:1,
     height:55,
     paddingHorizontal:20,
@@ -198,12 +199,12 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     height: '70%',
     width:"80%",
     borderRadius:5,
-    backgroundColor: '#0066FF',
+    backgroundColor: Sub_Color,
   },
   buyButton_text: {
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 18,
-    color: '#FFF',
+    color: 'white',
   },
   pick_button:{
     backgroundColor:"white",
@@ -218,7 +219,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     height: 48,
     width:"40%",
     borderRadius: 10,
-    borderColor: '#D1D1D1',
+    borderColor: Light_Gray,
     borderWidth: 2,
   },
   editGoodsQuality:{
@@ -227,7 +228,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     height: 40,
     width: "70%",
     borderRadius: 10,
-    borderColor: '#D1D1D1',
+    borderColor: Light_Gray,
     borderWidth: 2,
   },
   genuine_view: {
@@ -250,7 +251,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     backgroundColor: 'white',
     width:"100%",
     borderRadius: 10,
-    borderColor: '#D1D1D1',
+    borderColor: Light_Gray,
     borderWidth: 2,
   },
   // 해쉬태그 수정 view style
@@ -260,7 +261,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingLeft: 20,
     height: 60,
     borderRadius: 10,
-    borderColor: '#D1D1D1',
+    borderColor: Light_Gray,
     borderWidth: 2,
     flexDirection: 'row',
   },
@@ -272,14 +273,14 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   errorMessage_text: { 
     fontSize: 13,
-    color: "#FD9C91",
+    color: Red_Color,
     marginTop: -15,
   },
   tag_button: { //해시태그 버튼 
    marginTop:5,
     width:45,
     height:45,
-    backgroundColor: "#F1F1F3",
+    backgroundColor: Mark_Color,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
@@ -297,7 +298,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingRight: 10,
     marginRight: 10,
     marginBottom: 10,
-    backgroundColor: "#E9E9F1",
+    backgroundColor: Mark_Color,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,

@@ -16,6 +16,7 @@ import IconToggle from 'react-native-vector-icons/Entypo';
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dark_Gray, Light_Gray, Main_Color, Red_Color } from '../../../util/color';
 
 export default class DetailItemView extends Component {
     constructor(props) {
@@ -460,25 +461,25 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible ?
                                 <>
                                     <TouchableOpacity onPress={this.editCancelButtonClicked} >
-                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정취소  </Text>
+                                        <Text style={[styles.text,{color:Dark_Gray}]}>수정취소  </Text>
                                     </TouchableOpacity >
                                 </> :
                                 <>
                                     <TouchableOpacity onPress={this.editButtonClicked} >
-                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정    </Text>
+                                        <Text style={[styles.text,{color:Dark_Gray}]}>수정    </Text>
                                     </TouchableOpacity >
                                 </>}
                             <TouchableOpacity onPress={this.removeButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>삭제    </Text>
+                                <Text style={[styles.text,{color:Dark_Gray}]}>삭제    </Text>
                             </TouchableOpacity>
 
                             {valid==1 && 
                                 <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김    </Text>
+                                <Text style={[styles.text,{color:Dark_Gray}]}>숨김    </Text>
                             </TouchableOpacity>}
                             {valid==0 && 
                             <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김해제    </Text>
+                                <Text style={[styles.text,{color:Dark_Gray}]}>숨김해제    </Text>
                             </TouchableOpacity>}
                         </>}
 
@@ -494,7 +495,7 @@ export default class DetailItemView extends Component {
                                     data={this.state.images}
                                     showPagination={true}
                                     onPaginationSelectedIndex={true}
-                                    paginationActiveColor='blue'
+                                    paginationActiveColor={Main_Color}
                                     paginationStyleItem={{ width: 10, height: 10 }}
                                     paginationStyleItemActive={{ width: 15, height: 10 }}
                                     renderItem={item => (
@@ -532,7 +533,7 @@ export default class DetailItemView extends Component {
                                     {name}
                                 </Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                    <Text style={[styles.text, { paddingLeft: '5%', color: 'blue' }]}>
+                                    <Text style={[styles.text, { paddingLeft: '5%', color: Main_Color }]}>
                                         {number}
                                     </Text>
                                 </TouchableOpacity>
@@ -561,8 +562,8 @@ export default class DetailItemView extends Component {
                                     {/* 남은 수량 */}
                                     <View style={styles.remaining_view}>
                                         {this.state.quantity==0 ?
-                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text>:
-                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
+                                        <Text style={[styles.text, { fontSize: 13, color: Red_Color, }]}>구매할 수 없습니다</Text>:
+                                        <Text style={[styles.text, { fontSize: 13, color: Dark_Gray, }]}>{this.state.quantity}개 남음</Text>}
                                     </View>
 
                                     {/* 남은수량 수정 */}
@@ -595,7 +596,7 @@ export default class DetailItemView extends Component {
                                     {/*해시태그*/}
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                         <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                            <Text style={[styles.text, { fontSize: 14, color: Dark_Gray, }]}>
                                                 해시 태그
                                             </Text>
                                         </View>
@@ -615,7 +616,7 @@ export default class DetailItemView extends Component {
                                     {/* 제품 상태 */}
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                         <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                            <Text style={[styles.text, { fontSize: 14, color: Dark_Gray, }]}>
                                                 제품 상태
                                             </Text>
                                         </View>
@@ -629,7 +630,7 @@ export default class DetailItemView extends Component {
                                     {/*정품 비정품*/}
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                         <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>정품 유무</Text>
+                                            <Text style={[styles.text, { fontSize: 14, color: Dark_Gray, }]}>정품 유무</Text>
                                         </View>
                                         <View>
                                             <Text style={styles.text}>
@@ -640,7 +641,7 @@ export default class DetailItemView extends Component {
 
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
                                         <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                            <Text style={[styles.text, { fontSize: 14, color: Dark_Gray, }]}>
                                                 상품 설명
                                             </Text>
                                         </View>
@@ -759,7 +760,7 @@ export default class DetailItemView extends Component {
                         {(this.state.buyBarVisible&&this.state.quantity!=0)  &&
                             <View style={styles.pick_view}>
                                 <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
-                                    <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
+                                    <Icon name="favorite" color={this.state.dipsbuttonclicked ? Red_Color: Light_Gray} size={35}></Icon>
                                 </TouchableOpacity>
                             </View>}
                         <View style={styles.buy_view}>
@@ -774,7 +775,7 @@ export default class DetailItemView extends Component {
                             (<TouchableOpacity onPress={()=>this.editCompleteButtonClicked(editItem)} style={styles.buy_button}>
                                 <Text style={styles.buyButton_text}>수정완료</Text>
                             </TouchableOpacity>)
-                            :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: "#C9CCD1"}]}>
+                            :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: Light_Gray}]}>
                                 <Text style={styles.buyButton_text}>수정완료</Text>
                             </TouchableOpacity>)}
                             </>
