@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
       },
      
       itemNameText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-Medium',
         color: '#000000',

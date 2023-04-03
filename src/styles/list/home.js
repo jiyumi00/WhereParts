@@ -141,7 +141,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontFamily:'Pretendard-SemiBold'
   },
   itemName_text: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',

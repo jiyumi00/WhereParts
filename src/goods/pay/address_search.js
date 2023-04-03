@@ -40,12 +40,16 @@ class SearchAddress extends Component {
     goGetAddress=(page)=>{
         this.setState({indicator:true})
         this.callGetAddressAPI(page).then((response) => {
-            this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false,emptyListViewVisible:false }
-                ,()=>{
-                    if(this.state.addressContents.length==0){
-                        this.setState({emptyListViewVisible:true})
-                    }
-                });
+            console.log('api response',response)
+            if(response.results.common.errorMessage=="정상"){
+                this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false,emptyListViewVisible:false }
+                    ,()=>{
+                        if(this.state.addressContents.length==0){
+                            this.setState({emptyListViewVisible:true})
+                        }
+                    });
+            }
+           
             //console.log('componentResponse',response)
         });
     }

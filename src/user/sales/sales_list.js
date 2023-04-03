@@ -36,6 +36,8 @@ export default class SalesDetails extends Component {
         }
         
         //this.goGetSells();
+       
+
         this.goGetGoods();
     }
 
