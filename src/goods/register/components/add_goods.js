@@ -14,14 +14,12 @@ import IconMark from 'react-native-vector-icons/AntDesign';
 import IconDelete from 'react-native-vector-icons/Ionicons';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
-import IconQuantity from 'react-native-vector-icons/Feather';
 
 import { Picker } from '@react-native-picker/picker';
 import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
 import GalleryX from '../../../util/gallery_x';
 import { parse } from '@babel/core';
-import { Dark_Gray, Light_Gray, Line_Color, Main_Color, Mark_Color, Sub_Color } from '../../../util/color';
 
 
 class AddGoods extends Component {
@@ -412,7 +410,7 @@ class AddGoods extends Component {
                                     <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
                                         <TouchableOpacity style={styles.camera_btn} onPress={this.goodsCameraButtonClicked}>
                                             <IconCamera name="camera" size={30} color={'black'}></IconCamera>
-                                            <Text><Text style={{color: Main_Color}}>{this.state.imageURLs.length}</Text>/5</Text>
+                                            <Text><Text style={{color: "#0076D1"}}>{this.state.imageURLs.length}</Text>/5</Text>
                                         </TouchableOpacity>
                                     </View>
                                     {/*이미지 뿌려주기 */}
@@ -512,7 +510,7 @@ class AddGoods extends Component {
                                             />
                                         </View>
                                         <View style={{flex:1}}>
-                                            <TouchableOpacity style={[styles.add_btn,{backgroundColor: Line_Color}]} onPress={this.addTag}>
+                                            <TouchableOpacity style={[styles.add_btn,{backgroundColor: "#F1F1F3"}]} onPress={this.addTag}>
                                                 <Text>추가</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -554,16 +552,14 @@ class AddGoods extends Component {
                                         <Text>{this.state.quantity}</Text>
                                     </View>
                                     <View style={styles.center_view}>
-                                        <IconQuantity name="plus-square" size={40} color={Light_Gray} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}/>
-                                       {/*  <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn,{width: 40,height: 40,}]} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}>
+                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn,{width: 40,height: 40,}]} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}>
                                             <Text style={[styles.btn_text,{fontSize:25}]}>+</Text>
-                                        </TouchableOpacity> */}
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.center_view}>
-                                    <IconQuantity name="minus-square" size={40} color={Light_Gray} onPress={this.minusNum}/>
-                                       {/*  <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn,{width: 40,height: 40,justifyContent:'flex-start'}]} onPress={this.minusNum}>
+                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn,{width: 40,height: 40,justifyContent:'flex-start'}]} onPress={this.minusNum}>
                                             <Text style={[styles.btn_text,{fontSize:35,}]}>-</Text>
-                                        </TouchableOpacity> */}
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
 
@@ -622,7 +618,7 @@ class AddGoods extends Component {
                             (<TouchableOpacity activeOpacity={0.8} style={styles.activate_btn} onPress={() => this.setState({ goodsDetailModal: !this.state.goodsDetailModal })}>
                                 <Text style={[styles.btn_text,{fontSize:17}]}>상품등록하기</Text>
                             </TouchableOpacity>)
-                            : (<TouchableOpacity activeOpacity={0.8} style={[styles.activate_btn,{backgroundColor: Light_Gray}]}>
+                            : (<TouchableOpacity activeOpacity={0.8} style={[styles.activate_btn,{backgroundColor: "#C9CCD1"}]}>
                                 <Text style={[styles.btn_text,{fontSize:17}]}>상품등록하기</Text>
                             </TouchableOpacity>)}
                     </ScrollView>
@@ -760,7 +756,7 @@ class GoodsDetailModal extends Component {
                             <Text style={[styles.modal_text,{color:'black'}]}>{" 등록 하시겠습니까? "}</Text>
                             <View style={{flexDirection:'row', marginVertical:'3%'}}>
                                 <TouchableOpacity  style={styles.modal_button} onPress={this.props.setstatemodal}><Text style={{color:'black'}}>취소</Text></TouchableOpacity>
-                                <TouchableOpacity style={[styles.modal_button,{backgroundColor:Sub_Color}]} onPress={this.props.upload}><Text style={{color:'white'}}>확인</Text></TouchableOpacity>
+                                <TouchableOpacity style={[styles.modal_button,{backgroundColor:'#1E90FF'}]} onPress={this.props.upload}><Text style={{color:'white'}}>확인</Text></TouchableOpacity>
                             </View>                      
                         </View>
                     </View>

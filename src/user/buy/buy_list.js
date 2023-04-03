@@ -7,7 +7,6 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Main_Color, Sub_Color } from '../../util/color';
 
 
 export default class BuyList extends Component {
@@ -175,8 +174,8 @@ class ListItem extends Component {
 
                                 </View>
                                 <View style={styles.productInfoRight}>
-                                    <View style={styles.productStatus}>
-                                        <Text style={styles.itemStausText}>{this.goodsStatusText(item.status)}</Text>
+                                    <View style={styles.productDistance}>
+                                        <Text style={styles.itemDistanceText}>{this.goodsStatusText(item.status)}</Text>
                                     </View>
 
                                 </View>
@@ -184,20 +183,20 @@ class ListItem extends Component {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.productButtonView}>
-                        <View style={[styles.payInfoButtonView, { borderColor:Main_Color}]}>
-                            <TouchableOpacity onPress={this.goOrderDetailScreen}><Text style={{ color: Main_Color}}>주문상세</Text></TouchableOpacity>
+                        <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                            <TouchableOpacity onPress={this.goOrderDetailScreen}><Text style={{ color: 'blue' }}>주문상세</Text></TouchableOpacity>
                         </View>
                         {item.status != 1 &&
-                            <View style={[styles.payInfoButtonView, { borderColor: Main_Color }]}>
-                                <TouchableOpacity onPress={this.goDeliveryDetailScreen}><Text style={{ color: Main_Color}}>배송조회</Text></TouchableOpacity>
+                            <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                                <TouchableOpacity onPress={this.goDeliveryDetailScreen}><Text style={{ color: 'blue' }}>배송조회</Text></TouchableOpacity>
                             </View>}
                         {item.status == 1 &&
                             <View style={styles.payInfoButtonView}>
                                 <TouchableOpacity><Text >배송조회</Text></TouchableOpacity>
                             </View>}
                         {item.status == 2 &&
-                            <View style={[styles.payInfoButtonView, { borderColor:Main_Color}]}>
-                                <TouchableOpacity onPress={this.orderCompleteButtonClick}><Text style={{ color: Main_Color}}>구매확정</Text></TouchableOpacity>
+                            <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                                <TouchableOpacity onPress={this.orderCompleteButtonClick}><Text style={{ color: 'blue' }}>구매확정</Text></TouchableOpacity>
                             </View>}
                         {item.status != 2 &&
                             <View style={styles.payInfoButtonView}>

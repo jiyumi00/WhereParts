@@ -1,12 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { Line_Color } from '../util/color';
 
 export const styles = StyleSheet.create({
     slidertext: {
         fontSize: 16,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-SemiBold',
-        color: 'black',
+        color: '#000000',
         //marginLeft: "15%",
       },
 
@@ -16,10 +15,10 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'center',
         borderWidth:2,
-        borderColor:Line_Color,
+        borderColor:'#E9E9E9',
         marginTop:"2%",
         paddingBottom:"2%",
         borderRadius:10,
-        backgroundColor: 'white',
+        backgroundColor: '#FFF',
       },
 });

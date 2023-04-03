@@ -1,6 +1,5 @@
 //Home Style
 import { Dimensions, StyleSheet } from 'react-native';
-import { Main_Color,Light_Gray,Dark_Gray, Sub_Color } from '../../util/color';
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
 
   //Home
@@ -8,7 +7,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   homeTop_view: { //홈의 위의 디자인 담당
     width: "100%",
     height: 200,
-    backgroundColor: Main_Color,
+    backgroundColor: '#113AE2',
     position: 'absolute',
   },
   title_view: { 
@@ -25,16 +24,16 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   titleRegular_text: {
     fontFamily: 'Pretendard-Regular',
-    color: Light_Gray,
+    color: '#E9E9E9',
   },
   titleBold_text: {
     fontFamily: 'Pretendard-SemiBold',
-    color: 'white',
+    color: '#FFF',
   },
   description_text: {
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
-    color: 'white',
+    color: '#FFF',
     lineHeight: 21,
   },
 
@@ -44,7 +43,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     width: "100%",
     position: 'absolute',
     alignItems: 'center',
-    backgroundColor: Main_Color,
+    backgroundColor: "#113AE2",
   
   },
   searchSection:{
@@ -55,8 +54,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
-
+    backgroundColor: '#fff',
+    
   },
   search_input: { //Home TextInput 안에 글씨
     flex:1,
@@ -69,7 +68,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginLeft: 10,
     width: 54,
     height: 50,
-    backgroundColor: Sub_Color,
+    backgroundColor: '#0066FF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -79,17 +78,18 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   sortBar_view: { // 가로정렬
     backgroundColor: 'white',
     width:"100%",
+    height:50,
+    paddingVertical:"1%",
     paddingRight:"4%",
     //borderWidth:1,
-    height:45,
     flexDirection:'row',
-    paddingTop:10,
+    paddingTop:5
   },
   
   sortBar_text: { //최신순/오래된순 글씨
     fontWeight: 'bold',
     textAlign: 'right',
-    color: Main_Color,
+    color: '#6495ED',
     fontSize: 13,
   },
   
@@ -103,12 +103,12 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingHorizontal:10,
     paddingVertical:5,
     marginHorizontal:10,
-    marginVertical:15,
-    borderColor:Light_Gray,
+    marginVertical:5,
+    borderColor:"#D1D1D1",
     borderRadius:10,
   },
   productImage_view: {
-    borderColor: Light_Gray,
+    borderColor: '#E9E9E9',
     borderStyle: 'solid',
     overflow: 'hidden',
   },
@@ -144,6 +144,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
-    color: 'black',
+    color: '#000000',
   },
 });

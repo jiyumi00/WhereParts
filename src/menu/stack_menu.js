@@ -27,9 +27,9 @@ import EditProfile from "../user/buy/edit_profile";
 //로그인 경로
 import Login from "../login/member_register";
 import SignUp from "../login/signup";
-import RegisterGallery from "../login/gallery_register";
+import CompanyGallery from "../login/gallery_company";
 import BusinessCardCamera from "../login/camera_business_card";
-import PhotoGallery from "../login/gallery_photo";
+import BusinessCardGallery from "../login/gallery_business_card";
 import CompanyCamera from "../login/camera_company";
 import PartsNoCamera from "../goods/register/components/camera_goods_no";
 
@@ -40,7 +40,8 @@ import SearchAddress from "../goods/pay/address_search";
 const NativeStack = createNativeStackNavigator();
 
 class Stack extends Component {
-
+  
+    
     render() {
         return (
       
@@ -66,10 +67,10 @@ class Stack extends Component {
                     options={{ headerShown: false }} />
                 <NativeStack.Screen name="SignUp" component={SignUp} 
                      initialParams={{ companyNoImageURL: [],cardImageURL:[],companyNo:"" }} options={{ title: " " }} />
-                <NativeStack.Screen name="RegisterGallery" component={RegisterGallery}/>
+                <NativeStack.Screen name="CompanyGallery" component={CompanyGallery}/>
                 <NativeStack.Screen name="BusinessCardCamera" component={BusinessCardCamera}
                     options={{ title: "명함" }} />
-                <NativeStack.Screen name="PhotoGallery" component={PhotoGallery}/>
+                <NativeStack.Screen name="BusinessCardGallery" component={BusinessCardGallery}/>
                 <NativeStack.Screen name="CompanyCamera" component={CompanyCamera}
                     options={{ title: "사업자 등록증" }} />
                 <NativeStack.Screen name="PartsNoCamera" component={PartsNoCamera}

@@ -1,5 +1,4 @@
 import { StyleSheet ,Dimensions} from 'react-native';
-import { Light_Gray, Sub_Color } from '../util/color';
 const ScreenHeight=Dimensions.get('window').height;
 const ScreenWidth=Dimensions.get('window').width;
 
@@ -28,7 +27,7 @@ export const styles = StyleSheet.create({
         flex:2.5,
         flexDirection:"column",
         backgroundColor:'#FFFF',
-        borderColor: Light_Gray,
+        borderColor: '#D1D1D1',
     },
 
     //배송선택
@@ -49,7 +48,7 @@ export const styles = StyleSheet.create({
         paddingTop:5,
         height: 70,
         borderRadius: 10,
-        borderColor: Light_Gray,
+        borderColor: '#D1D1D1',
         borderWidth: 2,
     },
     textLayout: {
@@ -81,7 +80,7 @@ export const styles = StyleSheet.create({
     },
     okbtn: {
         height: 50,
-        backgroundColor: Sub_Color,
+        backgroundColor: "#1E90FF",
         alignItems: 'center',
         justifyContent: 'center'
     },

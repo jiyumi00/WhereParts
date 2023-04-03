@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import { Line_Color } from '../../util/color';
 
 export const template= StyleSheet.create({
     total_container:{
@@ -13,12 +12,12 @@ export const template= StyleSheet.create({
         marginRight:30,
     },
      textInput:{
-        backgroundColor:Line_Color,
+        backgroundColor:'#F1F1F3',
         marginBottom: 15,
         paddingHorizontal: 10,
         height: 55,
         borderRadius: 10,
-        borderColor:Line_Color,
+        borderColor:'#F1F1F3',
         borderWidth: 1,
      },
   });

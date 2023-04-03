@@ -11,7 +11,7 @@ import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
 import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home";
-import { Main_Color,Light_Gray,Dark_Gray } from '../../../util/color';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListItem from './item';
 
@@ -29,17 +29,15 @@ class Home extends Component {
         this.imageModule = ImageModule;
 
         this.state = {
+            goodsContent: [],
+            goodsQuantity: null,
+
             isRefresh: false,
             emptyListViewVisible:1,
-            goodsContent: [],
-            indicator: false,
             recentRadioButtonChecked: true,
             abcRadioButtonChecked: false,
-
-            goodsQuantity: null,
-            quality: 1,
+            indicator: false,
             dataSort:1,
-
         };
     }
 
@@ -107,7 +105,6 @@ class Home extends Component {
 
     //부품 목록 호출 메서드
     goGetGoods = () => {
-        console.log('refresh_home');
         this.setState({ indicator: true });
         this.callGetGoodsAPI().then((response) => {
             this.contents = response;
@@ -115,7 +112,6 @@ class Home extends Component {
             console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
             this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity },()=>{this.handleEmptyListView()});
         });
-        console.log('refresh success')
         this.setState({ isRefresh: false })
     }
 
@@ -212,7 +208,7 @@ class Home extends Component {
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1,backgroundColor:'white' }}>
+                <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
@@ -234,7 +230,6 @@ class Home extends Component {
                                     <Text style={[styles.title_text, styles.titleBold_text]}>
                                         손쉽게 검색
                                     </Text>
-                                    
                                     <Text style={[styles.title_text, styles.titleRegular_text]}>
                                         하고
                                     </Text>
@@ -248,23 +243,23 @@ class Home extends Component {
                                     </Text>
 
                                 </View>
-                                
                                 <Text style={styles.description_text}>
                                     원하는 키워드, 품번 사진으로 {'\n'} 바로 검색 가능합니다.
                                 </Text>
-                               
+                             
                             </View>
                         </View>
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
                         <View style={{ flexDirection: 'row', marginTop: '1%' }}>
+                          
                             <View style={styles.searchSection}>
-                                <Icon style={{ padding: 10 }} name="search" size={20} />
+                                <Icon style={{ padding: 10 }} name="search" size={20} color="#000" />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요."
-                                    placeholderTextColor={Dark_Gray}
+                                    placeholderTextColor="light grey"
                                     style={styles.search_input}
                                     value={this.state.number}
                                 />
@@ -280,31 +275,29 @@ class Home extends Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-
-                        </View>
-                        <View style={styles.sortBar_view}>
-                               
-                            <View style={{flex:1.5,marginLeft:'5%',flexDirection:'row',}}>
-                                <Text style={{color:'black'}}>총 상품개수 : </Text>
-                                
-                                <Text style={{color:Main_Color}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
-                            </View>
                            
-                              {/*   <Picker
-                                    style={{width:130}}
+                          
+                        </View>
+                    
+                        <View style={styles.sortBar_view}>
+                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
+                                <Text style={{color:'black'}}>총 상품개수 : </Text>
+                                <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
+                            </View>
+                               {/* <Picker
+                                    style={{width:140,}}
                                     selectedValue={this.state.dataSort}
                                     onValueChange={(value, index) => { this.setState({ dataSort: value }) }}>
                                     {this.dataSortName.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
                                 </Picker> */}
-            
-                             <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
-                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Main_Color} />
+                                <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
+                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
-                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={Main_Color}  />
+                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
                                     <Text style={styles.sortBar_text}> 가나다순</Text>
-                                </TouchableOpacity>  
+                                </TouchableOpacity>   
                         </View>
                     </Animated.View>
                     

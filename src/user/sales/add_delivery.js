@@ -9,7 +9,6 @@ import IconCamera from 'react-native-vector-icons/Feather';
 
 import Constant from "../../util/constatnt_variables";
 import WebServiceManager from "../../util/webservice_manager";
-import { Light_Gray } from '../../util/color';
 
 class AddDelivery extends Component {
     constructor(props) {
@@ -54,7 +53,7 @@ class AddDelivery extends Component {
                 Alert.alert('배송신청완료', '배송등록이 완료되었습니다', [
                     { text: '확인', onPress: () => {
                         this.props.navigation.pop();
-                        this.props.route.params.navigation.navigate("SalesList",{status:2});
+                        this.props.route.params.navigation.navigate("SalesList");
                         if (this.props.route.params.hasOwnProperty("refresh")) {
                             this.props.route.params.refresh();
                         }
@@ -169,14 +168,14 @@ class AddDelivery extends Component {
                     </View>
                     <View style={styles.bodyContainer}>
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>받는사람</Text>
-                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: Light_Gray, padding: "3%", marginBottom: 20 }}>
+                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "3%", marginBottom: 20 }}>
                             <Text style={[styles.text, { fontSize: 17, fontWeight: "bold" }]}>{buyerName}</Text>
                             <Text style={[styles.text, { paddingTop: "2%" }]}>{address}</Text>
                             <Text style={styles.text}>{buyerTel.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</Text>
                         </View>
 
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>결제정보</Text>
-                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: Light_Gray, padding: "3%", marginBottom: 20 }}>
+                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "3%", marginBottom: 20 }}>
                             <Text style={[styles.text, { paddingTop: "2%" }]}>{"총 결제금액 : " + total}</Text>
                             <Text style={[styles.text, { paddingTop: "2%" }]}>{"결제수단 : 카드"}</Text>
                             <Text style={[styles.text, { paddingTop: "2%" }]}>{"결제사 : " + payBank}</Text>
@@ -213,7 +212,7 @@ class AddDelivery extends Component {
                         (<TouchableOpacity onPress={this.deliveryCompleteButtonClicked} activeOpacity={0.8} style={styles.okbtn} >
                             <Text style={styles.btn_text}>배송완료신청</Text>
                         </TouchableOpacity>)
-                        : (<TouchableOpacity activeOpacity={0.8} style={[styles.okbtn, { backgroundColor: Light_Gray }]} >
+                        : (<TouchableOpacity activeOpacity={0.8} style={[styles.okbtn, { backgroundColor: "#C9CCD1" }]} >
                             <Text style={styles.btn_text}>배송완료신청</Text>
                         </TouchableOpacity>)}
                 </View>

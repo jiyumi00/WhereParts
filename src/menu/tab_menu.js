@@ -7,7 +7,7 @@ import Home from '../goods/list/components/home';
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';
 import ShopHistory from '../user/shophistory'; //
-import Notice from '../user/notice';
+import Notification from '../user/notification';
 
 const Tab = createBottomTabNavigator(); // Tab 일 경우
 
@@ -106,7 +106,7 @@ class Tabs extends Component {
        
         <Tab.Screen
           name="Notice"
-          component={Notice} // 변경해야됨
+          component={Notification} // 변경해야됨
           options={{
             title: '알림',
             tabBarIcon: ({focused}) => {

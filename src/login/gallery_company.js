@@ -9,14 +9,14 @@ import WebServiceManager from "../util/webservice_manager";
 import Constant from "../util/constatnt_variables";
 
 //사업자등록번호 중간 gallery
-class RegisterGallery extends Component {
+class CompanyGallery extends Component {
 
     constructor(props) {
         super(props);
     }
 
     async callCompanyNoAPI(imageData) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyNo", "post");
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
         manager.addBinaryData("file", imageData);
         let response = await manager.start();
         if (response.ok) {
@@ -32,7 +32,7 @@ class RegisterGallery extends Component {
             name: 'photo.jpg',
         }
         this.callCompanyNoAPI(fileData).then((response) => {
-            console.log("responseNo", response);
+            console.log("company info", response);
             if (response.success == 0)
                 this.props.route.params.onResultListener("0", uris);
             else
@@ -52,4 +52,4 @@ class RegisterGallery extends Component {
     }
 }
 
-export default RegisterGallery;
+export default CompanyGallery;

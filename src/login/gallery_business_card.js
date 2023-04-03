@@ -7,7 +7,7 @@ import { styles } from "../styles/gallery";
 import GalleryX from '../util/gallery_x';
 
 //명함 중간 gallery
-class RegisterGallery extends Component {
+class BusinessCardGallery extends Component {
 
     constructor(props) {
         super(props);
@@ -26,4 +26,4 @@ class RegisterGallery extends Component {
     }
 }
 
-export default RegisterGallery;
+export default BusinessCardGallery;

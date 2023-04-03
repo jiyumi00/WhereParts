@@ -5,7 +5,6 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/payment";
-import { Light_Gray } from '../../util/color';
 
 class Payment extends Component {
     constructor(props) {
@@ -307,7 +306,7 @@ class Payment extends Component {
                 {
                     this.state.validForm ? 
                     (<TouchableOpacity style={styles.paymentButton} onPress={this.paymentButtonClicked}/*onPress={this.callAndroidPaymentActivity}*/><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
-                    :(<TouchableOpacity style={[styles.paymentButton,{backgroundColor: Light_Gray}]} ><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                    :(<TouchableOpacity style={[styles.paymentButton,{backgroundColor: "#C9CCD1"}]} ><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
                 }
             </View>
         );

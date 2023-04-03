@@ -23,7 +23,7 @@ export default class CompanyCamera extends Component {
     }
 
     async callCompanyNoAPI(imageData) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyNo", "post");
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
         manager.addBinaryData("file", imageData);
         let response = await manager.start();
         if (response.ok) {
@@ -42,7 +42,7 @@ export default class CompanyCamera extends Component {
         }
 
         this.callCompanyNoAPI(fileData).then((response) => {
-            console.log("responseNo", response);
+            console.log("company info", response);
             if (response.success == 0)
                 this.props.route.params.onResultListener("0", uri);
             else

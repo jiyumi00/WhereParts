@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { Dark_Gray, Light_Gray, Sub_Color } from '../../util/color';
 
 export const styles = StyleSheet.create({
    
@@ -28,7 +27,7 @@ export const styles = StyleSheet.create({
             paddingVertical: 7,
             height: 70,
             borderRadius: 10,
-            borderColor: Light_Gray,
+            borderColor: '#D1D1D1',
             borderWidth: 2,
         },
         row_view : {
@@ -46,10 +45,10 @@ export const styles = StyleSheet.create({
         },
         // login 활성화,비활성화
         disable_login_btn: {
-            backgroundColor: Light_Gray,
+            backgroundColor: "#C9CCD1",
         },
         enable_login_btn:{
-            backgroundColor: Sub_Color,
+            backgroundColor: "#1E90FF",
         },
 
     // Text
@@ -70,17 +69,17 @@ export const styles = StyleSheet.create({
             marginBottom: -15,
         },
         parts_title_text: {
-            color: Sub_Color,
+            color: "#1E90FF",
             marginBottom: 80,
         },
         // 일반
         login_guide_text: {
-            color: Dark_Gray,
+            color: "gray",
             marginBottom:70,
         },
         pw_signup_text: {
             fontSize: 15,
-            color: Dark_Gray,
+            color: "gray",
             marginBottom: 15, 
         },
         login_btn_text: {
@@ -89,7 +88,7 @@ export const styles = StyleSheet.create({
         },
         // radio버튼
         radio_btn_text:{
-            color:Dark_Gray,
+            color:"gray",
             paddingTop:5,
         },
 })

@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { Dark_Gray, Light_Gray, Line_Color, Red_Color, Sub_Color } from '../../util/color';
 
 export const styles = StyleSheet.create({
 
@@ -49,7 +48,7 @@ export const styles = StyleSheet.create({
             paddingVertical: 10,
             height: 75,
             borderRadius: 10,
-            borderColor: Light_Gray,
+            borderColor: '#D1D1D1',
             borderWidth: 2,
         },
     
@@ -58,7 +57,7 @@ export const styles = StyleSheet.create({
         imageRegister_btn: {
             width: 140,
             height: 120,
-            backgroundColor: Line_Color,
+            backgroundColor: "#F1F1F3",
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 10,
@@ -77,10 +76,10 @@ export const styles = StyleSheet.create({
             justifyContent: 'center'
         },
         enable_btn: {
-            backgroundColor: Sub_Color,
+            backgroundColor: "#1E90FF",
         },
         disable_btn:{
-            backgroundColor: Light_Gray,
+            backgroundColor: "#C9CCD1",
         },
 
         //내정보 수정
@@ -89,12 +88,12 @@ export const styles = StyleSheet.create({
             width:"49%",
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: Sub_Color,
+            backgroundColor: "#4B89DC",
             borderRadius:5,
         },
         errorMessage_text: { 
             fontSize: 13,
-            color: Red_Color,
+            color: "#FD9C91",
             marginTop: -15,
           },
         
@@ -112,7 +111,7 @@ export const styles = StyleSheet.create({
             marginBottom: 0,
         },
         login_guide_text: {
-            color: Dark_Gray,
+            color: "gray",
             marginTop: 5,
             marginBottom: 0,
         },

@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { Dark_Gray, Light_Gray, Line_Color, Red_Color, Sub_Color } from '../../util/color';
 
 export const styles = StyleSheet.create({
   //View
@@ -65,7 +64,7 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
     marginRight: 10,
     marginBottom: 10,
-    backgroundColor: Line_Color,
+    backgroundColor: "#E9E9F1",
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
@@ -75,7 +74,7 @@ export const styles = StyleSheet.create({
     width: 300,
     margin: 20,
     backgroundColor: 'white',
-    borderColor:Light_Gray,
+    borderColor:'#D1D1D1',
     borderWidth:1,
     borderRadius: 20,
     padding: 35,
@@ -84,7 +83,7 @@ export const styles = StyleSheet.create({
   },
   modal_button:{
     borderWidth:1,
-    borderColor:Light_Gray,
+    borderColor:'#D1D1D1',
     borderRadius:10,
     width:'30%',
     height:40,
@@ -103,19 +102,19 @@ export const styles = StyleSheet.create({
   modal_text:{
     fontFamily: "Cochin",
     fontSize: 16,
-    color:Dark_Gray,
+    color:'#949CA1',
     alignItems:'center',
     marginBottom:'3%'
   },
   camera_text: {
     fontFamily: "Cochin",
     fontSize: 13,
-    color: Dark_Gray,
+    color: "gray",
     marginBottom: 15
   },
   errormessage_text: {
     fontSize: 13,
-    color: Red_Color,
+    color: "#FD9C91",
     marginTop: -15,
   },
   productinf_text: {
@@ -136,7 +135,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 70,
     borderRadius: 10,
-    borderColor: Light_Gray,
+    borderColor: '#D1D1D1',
     borderWidth: 2,
   },
   sales_quantity_textInput: { // 판매개수
@@ -144,7 +143,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "white",
-    borderColor: Light_Gray,
+    borderColor: '#D1D1D1',
     borderWidth: 2,
     borderRadius: 10,
     height: 55,
@@ -157,7 +156,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 75,
     borderRadius: 10,
-    borderColor: Light_Gray,
+    borderColor: '#D1D1D1',
     borderWidth: 2,
   },
   textDetailInput: {
@@ -168,7 +167,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 140,
     borderRadius: 10,
-    borderColor: Light_Gray,
+    borderColor: '#D1D1D1',
     borderWidth: 2,
   },
 
@@ -176,7 +175,7 @@ export const styles = StyleSheet.create({
   camera_btn: {
     width: 60,
     height: 60,
-    backgroundColor: Line_Color,
+    backgroundColor: "#F1F1F3",
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
@@ -193,7 +192,7 @@ export const styles = StyleSheet.create({
   },
   activate_btn: {
     height: 50,
-    backgroundColor: Sub_Color,
+    backgroundColor: "#1E90FF",
     alignItems: 'center',
     justifyContent: 'center'
   },

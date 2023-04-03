@@ -1,10 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { Dark_Gray, Line_Color, Red_Color } from '../util/color';
 
 export const styles = StyleSheet.create({
     goodsContent: {
         position: 'relative',
-        backgroundColor: 'white',
+        backgroundColor: '#FFF',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
       },
@@ -14,9 +13,9 @@ export const styles = StyleSheet.create({
         marginLeft: "3%",
         marginRight: "3%",
         borderRadius: 10,
-        backgroundColor:'white',
+        backgroundColor:'#FFFF',
         borderWidth:2,
-        borderColor:Line_Color,
+        borderColor:'#E9E9E9',
       },
       dateView:{
         flex:1,
@@ -43,7 +42,7 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         borderWidth:1,
         borderRadius:5,
-        borderColor: Dark_Gray,
+        borderColor: '#ABABAB',
         marginHorizontal:'2%',
         paddingVertical:'2%'
       },
@@ -55,7 +54,7 @@ export const styles = StyleSheet.create({
       productImageView: {
         
         //borderWidth: 1,
-        borderColor: Dark_Gray,
+        borderColor: '#ABABAB',
         borderStyle: 'solid',
         overflow: 'hidden',
       },
@@ -92,7 +91,7 @@ export const styles = StyleSheet.create({
         justifyContent:'flex-end',
         
       },
-      productStatus:{
+      productDistance:{
         flex:1,
         justifyContent:'flex-start',
       },
@@ -110,20 +109,20 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-Medium',
-        color: 'black',
+        color: '#000000',
       },
       itemRegisterDateText:{
         fontSize: 15,
       },
-      itemStausText:{
+      itemDistanceText:{
         fontSize: 15,
-        color:Red_Color,
+        color:'#EE636A',
      
       },
       itemPriceText: {
         fontSize: 18,
         fontWeight: 'bold',
         fontFamily: 'Pretendard-SemiBold',
-        color: 'black',
+        color: '#000000',
       },
 });

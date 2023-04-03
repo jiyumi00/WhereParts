@@ -12,9 +12,8 @@ import CircleIcon from 'react-native-vector-icons/FontAwesome';
 
 import { template } from "../styles/template/page_style";
 import { styles } from '../styles/notice';
-import { Red_Color, Sub_Color } from '../util/color';
 
-export default class Notice extends Component {
+export default class Notification extends Component {
     constructor(props) {
         super(props);
         this.contents=[];
@@ -63,7 +62,7 @@ export default class Notice extends Component {
         }
     }
 
-    //사용자 id값에 해당하는 모든 알림 받아오기
+    //사용자 id값에 해당하는 모든 알림 받아오기 API
     async callGetNotiesAPI(userID) { //로그인 된 id값으로 모든알림정보 가져오는 API
         let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + userID);
         let response = await manager.start();
@@ -73,19 +72,28 @@ export default class Notice extends Component {
             Promise.reject(response);
     }    
 
-    //전체 알림
+    //noti리스트에서 삭제하는 API
+    async callRemoveNotiAPI(id) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/RemoveNoti?id=" + id);
+        let response = await manager.start();
+        if(response.ok)
+            return response.json();
+        else    
+            Promise.reject(response); 
+    }
+
+    //전체 알림 리스트 
     allNotiesClicked = () => {
         this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
     }
 
-    //읽지 않은 알림
+    //읽지 않은 알림 리스트
     unReadNotiesClicked = () => {
         this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
     }
 
     //필터링(reading=0 or reading=1, 읽지 않은 알람과 읽은 알람)
     dataFiltering() {
-        console.log('data filtering start');
         let filteredContents = this.contents;
         if(this.state.unReadNotiesButton==true) {
             filteredContents = filteredContents.filter((content) => {
@@ -93,8 +101,25 @@ export default class Notice extends Component {
                     return true;
             });
         }          
-        console.log('filtered contents',filteredContents);
         return filteredContents;
+    }
+
+
+    //리스트의 항목에서 삭제 버튼 클릭시
+    deleteItemListener(id) {
+        console.log('delete ',id)
+        this.callRemoveNotiAPI(id).then((response)=> {
+            if(response.success==1) {
+                let filteredContents = this.contents;
+                filteredContents = filteredContents.filter((content)=> {
+                    if(content.id!=id)
+                        return true;
+                });
+                console.log('delete api ',response);
+                this.contents=filteredContents;
+                this.setState({notiContents:this.dataFiltering()});
+            }
+        });        
     }
 
     render() {
@@ -103,15 +128,15 @@ export default class Notice extends Component {
                 <View style={[template.container,{marginTop:15,marginLeft:10,marginRight:10}]}>
                     <View style={{ flexDirection: 'row', width: "100%", marginBottom:10 }}>
                         <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>
-                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? Red_Color : "black" }]}>전체알림</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.unReadNotiesButton ? 1 : 0, width: "50%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? Red_Color: "black" }]}>미확인알림</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
                     {this.state.emptyListViewVisible == 1 && (<FlatList
                         data={this.state.notiContents}
-                        renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} />}
+                        renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} deleteItemListener={(id)=>this.deleteItemListener(id)}/>}
                         refreshing={this.state.isRefresh}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
@@ -122,6 +147,10 @@ export default class Notice extends Component {
         );
     }
 }
+
+
+
+//리스트에 표시된 각 항목 클래스
 class ItemList extends PureComponent {
     constructor(props) {
         super(props);
@@ -133,13 +162,16 @@ class ItemList extends PureComponent {
         if(response.ok)
             return response.json();
     }
+
     async callGetSellDetailAPI(orderID) {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetSellDetail?id=" + orderID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
     }
-    goListClicked=()=>{
+
+    //항목 선택시 어디로 가는지... 구매 또는 판매에 따라...
+    itemClicked=()=>{
         const {id, orderID, kind, reading} = this.props.item;
         console.log('orderID',orderID)
         if(reading==0){
@@ -152,6 +184,7 @@ class ItemList extends PureComponent {
             this.props.refreshListener();
             this.props.navigation.navigate('BuyList');
         }
+        //판매 알람일 경우 이미 배송정보가 입력되었을 경우이므로...?????
         else if(kind=='sell'){
             this.callGetSellDetailAPI(orderID).then((response)=>{
                 if(response.status==1){
@@ -166,28 +199,36 @@ class ItemList extends PureComponent {
         }
     }
 
+    //삭제 버튼 클릭시 상위 클래스의 listener호출
+    deleteButtonClicked=()=> {
+        this.props.deleteItemListener(this.props.item.id);
+    }
+
     render() {
         const { body, todate, kind, reading } = this.props.item;
        
         return (
             <>
-                <TouchableOpacity onPress={()=>this.goListClicked()}>
+                <TouchableOpacity onPress={()=>this.itemClicked()}>
                     <View style={styles.product}>
                         <View style={{flexDirection:'row',width:"100%"}}>
                             <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
                                 {/*<SellIcon name={this.iconNameValue(kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />*/}                              
-                                <CircleIcon name="circle-thin" size={60} color={Sub_Color} style={{position:'absolute',paddingTop:10}} />
+                                <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{position:'absolute',paddingTop:10}} />
                                 {/* buy, sell 판별하여 text 표시 */}
-                                <Text style={{ color: Sub_Color, paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
+                                <Text style={{ color: "#0066FF", paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
                             </View>
                             <View style={{flex:8,paddingTop:5,paddingLeft:10}}>
                                 <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>
                                     <Text style={{fontSize:12}}>{todate}</Text>
                                     {/* 읽었는지 읽지 않았는지 판별하여 text 표시 */}
-                                    <Text style={{color:Red_Color}}>{reading==0 ? '  new':null}</Text>
+                                    <Text style={{color:'red'}}>{reading==0 ? '  new':null}</Text>
                                 </Text>
                                 <Text style={{color:'black'}}>{body}</Text>
                             </View>
+                            <TouchableOpacity onPress={this.deleteButtonClicked}>
+                                <Text>삭제</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </TouchableOpacity>

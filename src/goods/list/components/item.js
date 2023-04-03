@@ -6,7 +6,6 @@ import { styles } from "../../../styles/list/home";
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
 import FunctionUtil from '../../../util/libraries_function';
-import { Red_Color } from '../../../util/color';
 
 export default class ListItem extends PureComponent {
     constructor(props) {
@@ -57,7 +56,7 @@ export default class ListItem extends PureComponent {
                         </View>
                         <View style={styles.productInfoRight_view}>
                             <View style={{flex:1,justifyContent:'flex-start'}}>
-                                <Text style={[styles.itemDetail_text,{color:Red_Color}]}>1km</Text> 
+                                <Text style={[styles.itemDetail_text,{color:'#EE636A'}]}>1km</Text> 
                             </View>
                             <View style={{flex:1,justifyContent:'flex-end'}}>
                                {/*  <Text style={styles.itemDetail_text}>{item.registerDate.slice(2,10)}</Text> */}

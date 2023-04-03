@@ -134,7 +134,7 @@ class SignUp extends Component {
     goCompanyGalleryScreen = () => {
         this.setState({companyPopupMenuVisible:false});
         //this.props.navigation.navigate('Gallery', { companyImageInfoListener:this.companyImageInfo })
-        this.props.navigation.navigate('RegisterGallery', { onResultListener:this.companyImageInfo });   
+        this.props.navigation.navigate('CompanyGallery', { onResultListener:this.companyImageInfo });   
     }    
 
     // 명함 이미지 선택을 위한 카메라로 이동
@@ -145,7 +145,7 @@ class SignUp extends Component {
     // 명함 이미지 선택을 위한 갤러리로 이동
     goNamecardGalleryScreen = () => { 
         this.setState({cardPopupMenuVisible:false}); 
-        this.props.navigation.navigate('PhotoGallery', {onResultListener: this.cardImageInfo});
+        this.props.navigation.navigate('BusinessCardGallery', {onResultListener: this.cardImageInfo});
     }
 
     //사업자 등록증 이미지 선택 후 (카메라로부터 인식된 사업자등록번호와 imageURI 받음)
@@ -275,7 +275,7 @@ class SignUp extends Component {
                             </View>
                           
                            
-                            {/*사업자등록증 모달*/}
+                            {/*사업자등록증 이미지 크게 보기 모달*/}
                             <Modal 
                                 animationType='fade' 
                                 transparent={true} 
@@ -287,7 +287,7 @@ class SignUp extends Component {
                             goCamera={this.goCompanyCameraScreen} goGallery={this.goCompanyGalleryScreen} />
                             </Modal>
 
-                            {/*명함모달*/}
+                            {/*명함 이미지 크게 보기 모달*/}
                             <Modal 
                                 animationType='fade' 
                                 transparent={true} 
