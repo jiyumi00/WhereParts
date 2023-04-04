@@ -50,7 +50,7 @@ export default class ListItem extends PureComponent {
                     </View>
                     <View style={styles.productInfo_view}>
                         <View style={styles.productInfoLeft_view}>
-                            <Text style={styles.itemName_text}>{item.name.length>15 ? `${item.name.slice(0,15)}...`:item.name}</Text>
+                            <Text style={styles.itemName_text}>{item.name}</Text>
                             <Text style={styles.itemName_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                             <Text style={styles.itemDetail_text}>{item.number}</Text>
                         </View>

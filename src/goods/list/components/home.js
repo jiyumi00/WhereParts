@@ -3,7 +3,7 @@ import {
     ScrollView, Pressable, TextInput, ImageBackground, View, Text,
     Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules
 } from 'react-native';
-
+import SplashScreen from 'react-native-splash-screen';
 
 import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../../util/indicator';
@@ -20,7 +20,6 @@ import ListItem from './item';
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.dataSortName=["최신순", "거리순", "가나다순"];
         this.contents = [];  //모든 users값 가져오는 것
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
 
@@ -29,19 +28,21 @@ class Home extends Component {
         this.imageModule = ImageModule;
 
         this.state = {
-            goodsContent: [],
-            goodsQuantity: null,
-
             isRefresh: false,
             emptyListViewVisible:1,
+            goodsContent: [],
+            indicator: false,
             recentRadioButtonChecked: true,
             abcRadioButtonChecked: false,
-            indicator: false,
-            dataSort:1,
+
+            goodsQuantity: null,
+            quality: 1,
+
         };
     }
 
     componentDidMount() {
+        SplashScreen.hide();
         this.goGetGoods();
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
@@ -105,6 +106,7 @@ class Home extends Component {
 
     //부품 목록 호출 메서드
     goGetGoods = () => {
+        console.log('refresh_home');
         this.setState({ indicator: true });
         this.callGetGoodsAPI().then((response) => {
             this.contents = response;
@@ -112,6 +114,7 @@ class Home extends Component {
             console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
             this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity },()=>{this.handleEmptyListView()});
         });
+        console.log('refresh success')
         this.setState({ isRefresh: false })
     }
 
@@ -246,14 +249,12 @@ class Home extends Component {
                                 <Text style={styles.description_text}>
                                     원하는 키워드, 품번 사진으로 {'\n'} 바로 검색 가능합니다.
                                 </Text>
-                             
                             </View>
                         </View>
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
                         <View style={{ flexDirection: 'row', marginTop: '1%' }}>
-                          
                             <View style={styles.searchSection}>
                                 <Icon style={{ padding: 10 }} name="search" size={20} color="#000" />
                                 <TextInput
@@ -275,21 +276,13 @@ class Home extends Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-                           
-                          
+
                         </View>
-                    
                         <View style={styles.sortBar_view}>
                             <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
                                 <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
                             </View>
-                               {/* <Picker
-                                    style={{width:140,}}
-                                    selectedValue={this.state.dataSort}
-                                    onValueChange={(value, index) => { this.setState({ dataSort: value }) }}>
-                                    {this.dataSortName.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
-                                </Picker> */}
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
                                     <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>

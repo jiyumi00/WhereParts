@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, FlatList, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, FlatList, Image, Alert,BackHandler } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/buylist";
@@ -22,6 +22,16 @@ export default class BuyList extends Component {
 
     componentDidMount() {
         this.goGetGoods();
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
+
+    backPressed = () => {
+        this.props.navigation.navigate('TabHome');
+        return true;
     }
 
     goGetGoods = () => {
@@ -62,7 +72,7 @@ export default class BuyList extends Component {
     }
 
     render() {
-        { console.log(this.state.buyContents) }
+       
         return (
             <View style={{ flex: 1, marginBottom: 10, }}>
                 {this.state.emptyListViewVisible==1 && (<FlatList

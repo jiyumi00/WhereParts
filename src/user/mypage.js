@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, BackHandler} from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
 import { template } from "../styles/template/page_style";
 import { styles } from "../styles/mypage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +10,8 @@ import IconList from 'react-native-vector-icons/Feather'
 import { ScrollView } from 'react-native-gesture-handler';
 import WebServiceManager from '../util/webservice_manager';
 import Constant from '../util/constatnt_variables';
+
+import FunctionUtil from '../util/libraries_function';
 
 
 class MyPage extends Component {
@@ -26,6 +28,10 @@ class MyPage extends Component {
     this.getLoginInfo().then((value) => {
       this.setState({ companyNo: value.slice(0, 3) + "-" + value.slice(3, 5) + "-" + value.slice(5, 10) });
     });
+    /*FunctionUtil.isLogined().then((response) => {
+      const companyNo = response.companyNo;
+      this.setState({ companyNo: companyNo.slice(0, 3) + "-" + companyNo.slice(3, 5) + "-" + companyNo.slice(5, 10) });
+    });*/
   }
 
   async getLoginInfo() {
@@ -40,26 +46,53 @@ class MyPage extends Component {
   }
 
   logout = async () => {
-    try {
-      const obj = await AsyncStorage.getItem('obj');
-      const {companyNo,passwd,detailLogin} = JSON.parse(obj);
-      if(detailLogin==0 || detailLogin==1)
+    FunctionUtil.isLogined(this.props.navigation).then((response) => {
+      console.log('login info ', response);
+      const detailLogin = response.detailLogin;
+      if (detailLogin == 0)
         AsyncStorage.clear();
-      else if(detailLogin==2) {
-        const newObj={
-          companyNo:companyNo,
-          passwd:'',
-          detailLogin:2
+      else if (detailLogin == 1) { // 자동로그인일 경우 로그아웃 시에도 항상 자동로그인 (30일 후 자동로그아웃 될 수 있도록 구현)
+        const newObj = {
+          companyNo: response.companyNo,
+          passwd: response.passwd,
+          id:response.id,
+          detailLogin: 1
         };
         AsyncStorage.setItem('obj', JSON.stringify(newObj));
-        console.log('logout async detail 2',newObj);
+      }
+      else if (detailLogin == 2) {
+        const newObj = {
+          companyNo: response.companyNo,
+          passwd: '',
+          id: response.id,
+          detailLogin: 2
+        };
+        AsyncStorage.setItem('obj', JSON.stringify(newObj));
+        console.log('logout async detail 2', newObj);
       }
       this.goExitApp();
-
-    } catch (error) {
-      console.log(error);
+    });}
+  
+  /*try {
+    const obj = await AsyncStorage.getItem('obj');
+    const {companyNo,passwd,detailLogin} = JSON.parse(obj);
+    if(detailLogin==0 || detailLogin==1)
+      AsyncStorage.clear();
+    else if(detailLogin==2) {
+      const newObj={
+        companyNo:companyNo,
+        passwd:'',
+        detailLogin:2
+      };
+      AsyncStorage.setItem('obj', JSON.stringify(newObj));
+      console.log('logout async detail 2',newObj);
     }
-  };
+    this.goExitApp();
+
+  } catch (error) {
+    console.log(error);
+  }*/
+
 
   goSalesListScreen = () => {
     this.props.navigation.navigate('SalesList')
@@ -78,8 +111,8 @@ class MyPage extends Component {
       '주의',
       '로그아웃하고 앱을 종료합니다.',
       [
-          { text: '취소', onPress: () => {console.log("로그아웃 완료")}},
-          { text: '확인', onPress: () => BackHandler.exitApp() },
+        { text: '취소', onPress: () => { return false; } },
+        { text: '확인', onPress: () => BackHandler.exitApp() },
       ],
       { cancelable: false });
     return true;

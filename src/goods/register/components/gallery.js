@@ -13,16 +13,16 @@ class Gallery extends Component {
         super(props);
 
         console.log('imageLength는?', this.props.route.params.imageLength);
-    }    
+    }
 
-    onResultListener=(uris)=> {
+    onResultListener = (uris) => {
         this.props.route.params.onResultListener(uris);
     }
 
     render() {
         return (
             <View style={template.total_container}>
-                <GalleryX autoClose={false} max={5-this.props.route.params.imageLength} onResultListener={(uris)=>this.onResultListener(uris)} navigation={this.props.navigation} />
+                <GalleryX autoClose={false} max={5 - this.props.route.params.imageLength} onResultListener={(uris) => this.onResultListener(uris)} navigation={this.props.navigation} />
             </View>
         )
     }

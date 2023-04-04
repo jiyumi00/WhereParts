@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, Image, Platform, Pressable, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constant from '../util/constatnt_variables';
-import WebServiceManager from '../util/webservice_manager';
+
 // 경로를 위한 import
 import Home from '../goods/list/components/home';
 import AddGoods from '../goods/register/components/add_goods';
@@ -22,47 +20,7 @@ const styles = StyleSheet.create({
 });
 
 class Tabs extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-        notiesCount: null,
-
-    }
-}
-  componentDidMount(){
-    this.goGetNoties();
-  }
-  goGetNoties=()=>{
-    this.getUserID().then((value) => {
-        this.callGetNotiesAPI(value).then((response) => {
-            this.setState({notiesCount:response.length});
-        });
-    })
-  }
-  async getUserID() {
-    let obj = await AsyncStorage.getItem('obj')
-    let parsed = JSON.parse(obj);
-    if (obj !== null) {
-        return parsed.id;
-    }
-    else {
-        return false;
-    }
-  }
-
-  //사용자 id값에 해당하는 모든 알림 받아오기 API
-  async callGetNotiesAPI(userID) { //로그인 된 id값으로 모든알림정보 가져오는 API
-    let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + userID);
-    let response = await manager.start();
-    if (response.ok)
-        return response.json();
-    else
-        Promise.reject(response);
-  }    
-
   render() {
-    console.log('notiCount',this.state.notiesCount)
     return (
       <Tab.Navigator
         screenOptions={{
@@ -150,7 +108,6 @@ class Tabs extends Component {
           name="Notice"
           component={Notification} // 변경해야됨
           options={{
-            tabBarBadge:null,
             title: '알림',
             tabBarIcon: ({focused}) => {
               return (

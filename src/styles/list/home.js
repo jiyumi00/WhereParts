@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    
+
   },
   search_input: { //Home TextInput 안에 글씨
     flex:1,
@@ -78,10 +78,9 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   sortBar_view: { // 가로정렬
     backgroundColor: 'white',
     width:"100%",
-    height:50,
     paddingVertical:"1%",
     paddingRight:"4%",
-    //borderWidth:1,
+    
     flexDirection:'row',
     paddingTop:5
   },
@@ -141,7 +140,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontFamily:'Pretendard-SemiBold'
   },
   itemName_text: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',

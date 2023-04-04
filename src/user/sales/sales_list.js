@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground,BackHandler } from 'react-native';
 
 import { styles } from "../../styles/saleslist";
 
@@ -15,7 +15,7 @@ import { color } from 'react-native-reanimated';
 export default class SalesDetails extends Component {
     constructor(props) {
         super(props);
-        this.contents = [];
+        this.contents = []; //soldoutContents
         this.state = {
             salesContents: [],
             soldoutContents: [],
@@ -23,27 +23,28 @@ export default class SalesDetails extends Component {
             saleState:1,
            
             isRefresh:false,
-            emptyListViewVisible:1,
+            
+            emptySaleListViewVisible:1,
+            emptySoldOutListViewVisible:1,
         };
     }
 
     componentDidMount() {
-        //console.log('[ComponentDidempty확인]',this.state.emptyListViewVisible)
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
         if(this.props.route.params!=null){
             this.setState({ saleState: this.props.route.params.saleState} )
-            
         }
          this.goGetGoods();
          this.goGetSells();
     }
-
-  
-
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
     goGetGoods = () => {
         //console.log("refresh selling");
         this.getUserID().then((value)=> {
             this.callGetGoodsAPI(value).then((response) => {
-                this.setState({salesContents:response},()=>{this.handleEmptyListView(this.state.salesContents.length)});
+                this.setState({salesContents:response},()=>{this.handleEmptySaleListView(this.state.salesContents.length)});
             })
         });
     }
@@ -52,22 +53,27 @@ export default class SalesDetails extends Component {
         this.getUserID().then((value) => {
             this.callGetSellsAPI(value).then((response) => {
                 this.contents=response;
-                this.setState({ soldoutContents:response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
+                this.setState({ soldoutContents:this.dataFiltering() },()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)});
             })
         });
     }
  
-    handleEmptyListView = (length) => {
-        //console.log("salesContents Length",this.state.salesContents.length);
-        //console.log("soldoutContents Length",this.state.soldoutContents.length);
+    handleEmptySaleListView = (length) => {
         if (length == 0) {
-            this.setState({ emptyListViewVisible: 0 });
+            this.setState({ emptySaleListViewVisible: 0 });
         }
         else {
-            this.setState({ emptyListViewVisible: 1 });
+            this.setState({ emptySaleListViewVisible: 1 });
         }
     }
-
+    handleEmptySoldOutListView = (length) => {
+        if (length == 0) {
+            this.setState({ emptySoldOutListViewVisible: 0 });
+        }
+        else {
+            this.setState({ emptySoldOutListViewVisible: 1 });
+        }
+    }
     async callGetGoodsAPI(userID) { //로그인 된 id값으로 올린 상품 가져오는 API
         let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + userID);
         let response = await manager.start();
@@ -102,11 +108,11 @@ export default class SalesDetails extends Component {
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ saleState:2},()=>{this.setState({soldoutContents:this.dataFiltering()})});
+        this.setState({ saleState:2},()=>{this.setState({soldoutContents:this.dataFiltering()},()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)})});
     }
 
     soldoutBarClicked = () => { //판매완료
-        this.setState({saleState:3},()=>{this.setState({soldoutContents:this.dataFiltering()})});
+        this.setState({saleState:3},()=>{this.setState({soldoutContents:this.dataFiltering()},()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)})});
     }
     dataFiltering(){ 
         let filteredContents=this.contents;
@@ -121,12 +127,16 @@ export default class SalesDetails extends Component {
             filteredContents=filteredContents.filter((content)=>{  
                 if(content.status==1 || content.status==2){
                     return true;
-                }
-                
+                }     
             })
         }
         console.log('[filter]',filteredContents);
         return filteredContents;
+    }
+     //뒤로가기 했을 때 앱 종료
+     backPressed = () => {
+        this.props.navigation.navigate('TabHome');
+        return true;
     }
     render() {
     
@@ -150,14 +160,14 @@ export default class SalesDetails extends Component {
                     </View>
                 </View>
 
-                {this.state.saleState==1 && this.state.emptyListViewVisible==1 && (<FlatList
+                {this.state.saleState==1 && this.state.emptySaleListViewVisible==1 && (<FlatList
                     data={this.state.salesContents}
                     renderItem={({ item, index }) => <SaleListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.saleState!=1 &&this.state.emptyListViewVisible==1 &&(<FlatList
+                {this.state.saleState!=1 &&this.state.emptySoldOutListViewVisible==1 &&(<FlatList
                     data={this.state.soldoutContents}
                     renderItem={({ item, index }) => <SoldOutListItem navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
                     refreshing={this.state.isRefresh}
@@ -165,9 +175,9 @@ export default class SalesDetails extends Component {
                     scrollEventThrottle={16}
                 />)}
       
-                {this.state.saleState==1 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
-                {this.state.saleState==2 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
-                {this.state.saleState==3 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
+                {this.state.saleState==1 && this.state.emptySaleListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
+                {this.state.saleState!=1&& this.state.emptySoldOutListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
+             
             </View>
         );
     }
@@ -274,8 +284,7 @@ class SoldOutListItem extends PureComponent {
         const item = this.props.item;
 
         return (
-            <>
-                
+            <>           
                     <View style={styles.product}>
                         <View style={styles.productRegisterDate}>
                             <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>

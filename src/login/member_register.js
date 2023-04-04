@@ -9,6 +9,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SplashScreen from 'react-native-splash-screen';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 
+import FunctionUtil from '../util/libraries_function';
+
 import messaging from '@react-native-firebase/messaging';
 
 class Login extends Component {
@@ -28,23 +30,24 @@ class Login extends Component {
 
             detailLogin: 0, //0->자동로그인X, 아이디기억 X, 1->자동로그인, 2->아이디 기억
             autoLoginChecked: false,
-            rememberIdChecked: false
+            rememberIdChecked: false,
+
+            loginValid:false,
         }
     }
 
     //자동로그인
     componentDidMount() {
         SplashScreen.hide();
-
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
-
         //퍼미션 설정되었는지 확인
+
+        this.isLogined();
         this.requestPermission();
         //알림메시지 처리
         this.handleFCMMessage();
+
         //자동 로그인 처리되는지 확인
-        this.availableLogin().then((response) => {
+        /*this.availableLogin().then((response) => {
             if(response==true) {
                 //this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
                 //this.autoLoginRadioButtonChecked();
@@ -53,24 +56,8 @@ class Login extends Component {
                     this.props.navigation.navigate('TabHome');
                 });
             }
-        });
+        });*/
     }
-
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-    }
-
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        //this.onValueChange();
-    }
-
     async requestPermission() {
         try {
             const granted = await PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -107,6 +94,18 @@ class Login extends Component {
         } catch(err) {
             console.warn(err);
         }
+    }
+
+    isLogined() {
+        FunctionUtil.isLogined().then((response) => {
+            console.log('login info ', response);
+            this.setState(response, () => {
+                this.availableLogin();
+                if (response != undefined && response.logined == true) {
+                    this.props.navigation.navigate('TabHome');
+                }
+            });
+        });
     }
 
     //로그인 정보가 앱에 저장되어 있다면...(자동로그인,id기억 관리)
@@ -150,13 +149,9 @@ class Login extends Component {
         });
     }
 
-    loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
-        //this.loginInfo.companyNo = this.state.companyNo;
-        //this.loginInfo.passwd = this.state.passwd;
-        
-        this.callLoginAPI(false).then((response) => {
+     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
+        this.callLoginAPI().then((response) => {
             if (response.id == "0") { //회원정보가 없을 경우 
-                //this.passwordRef.clear();
                 Alert.alert('아이디 비밀번호를 확인해주세요', '',);
                 return false;
             }
@@ -167,11 +162,25 @@ class Login extends Component {
                     passwd: this.state.passwd, //비밀번호
                     detailLogin: this.state.detailLogin
                 }
-                console.log("로그인 성공");
                 AsyncStorage.setItem('obj', JSON.stringify(obj));
                 console.log('storage=',obj);
-                console.log(response);
-                this.props.navigation.navigate('TabHome');
+                console.log('loginapi response =',response);
+                this.setState({loginValid:true});//(로그인 창에서 알림이 왔을 경우) 로그인 유무 판단 state 변수
+
+                //(BackGround 알림 확인 버튼 클릭!)로그인 완료 후 kind에 맞게 페이지 이동 
+                if(this.props.route.params != null){
+                    if(this.props.route.params.kind == "buy"){
+                        //this.props.navigation.pop();
+                        this.props.navigation.navigate('BuyList');
+                    }
+                    else if(this.props.route.params.kind == "sell"){
+                        //this.props.navigation.pop();
+                        this.props.navigation.navigate('SalesList');
+                    }
+                }
+                else{
+                    this.props.navigation.navigate('TabHome');
+                }
             }
         })
     }
@@ -192,7 +201,7 @@ class Login extends Component {
         }
     }
 
-    async callSetReadNotiAPI(id) {
+    async callSetReadNotiAPI(id) { 
         let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
         let response = await manager.start();
         if(response.ok)
@@ -229,18 +238,76 @@ class Login extends Component {
         }
     }
 
-
     //추가된부분
-    notiOkButtonClicked=(message)=> {
-        this.callSetReadNotiAPI(message.data.id).then((response)=> {
+    /*notiOkButtonClicked = (message) => {
+        console.log('[notiOkButtonClicked 실행]')
+        this.callSetReadNotiAPI(message.data.id).then((response) => {
             console.log(response);
         })
-        if(message.data.kind=="buy")
-            this.props.navigation.navigate("BuyList");
-        else if(message.data.kind=="sell") 
-            //this.props.navigation.navigate("SalesList");
-            this.props.navigation.navigate('SalesList', {saleState:2})
+        FunctionUtil.isLogined().then((response) => {
+            this.setState(response, () => {
+                if (response != undefined && response.logined == true) {
+                    if (message.data.kind == "buy") {
+                        this.props.navigation.navigate("BuyList");
+                    }
+                    else if (message.data.kind == "sell") {
+                        this.props.navigation.navigate("SalesList");
+                    }
+                }
+                else if (this.state.loginValid == true || response.logined == true) {
+                    if (message.data.kind == "buy")
+                        this.props.navigation.navigate("BuyList");
+                    else if (message.data.kind == "sell")
+                        this.props.navigation.navigate("SalesList");
+                }
+                else {
+                    this.onValueChange();
+                    this.props.navigation.navigate("Login", { kind: message.data.kind });
+                }
+            })
+        })
+    }*/
 
+    backGroundNotiOkButtonClicked = (message) => {
+        console.log('[notiOkButtonClicked 실행]')
+        this.callSetReadNotiAPI(message.data.id).then((response) => {
+            console.log(response);
+        })
+        FunctionUtil.isLogined().then((response) => {
+            this.setState(response, () => {
+                if (response != undefined && response.logined == true) {
+                    if (message.data.kind == "buy") {
+                        this.props.navigation.navigate("BuyList");
+                    }
+                    else if (message.data.kind == "sell") {
+                        this.props.navigation.navigate("SalesList");
+                    }
+                }
+                else {
+                    this.onValueChange();
+                    
+                    this.props.navigation.navigate("Login", { kind: message.data.kind });
+                }
+            })
+        })
+    }
+
+    foreGroundNotiOkButtonClicked = (message) => {
+        this.callSetReadNotiAPI(message.data.id).then((response) => {
+            console.log(response);
+        })
+        console.log("loginvalid 값 =",this.state.loginValid)
+        FunctionUtil.isLogined().then((response) => {
+            this.setState(response, () => {
+                if (this.state.loginValid == true || response.logined==true) {
+                    if (message.data.kind == "buy")
+                        this.props.navigation.navigate("BuyList");
+                    else if (message.data.kind == "sell")
+                        this.props.navigation.navigate("SalesList");
+                }
+                else { return false;}
+            })
+        })
     }
 
     //알림이 올 경우 
@@ -249,21 +316,20 @@ class Login extends Component {
         const unsubscribe = messaging().onMessage(async remoteMessage => {             
             Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
                 { text: '취소', onPress: () => { } },
-                { text: '확인', onPress: () => this.notiOkButtonClicked(remoteMessage)}],
+                { text: '확인', onPress: () => this.foreGroundNotiOkButtonClicked(remoteMessage)}],
                 { cancelable: false });
             return false;
-            console.log(JSON.stringify(remoteMessage));            
+                        
         });
               
         //Background 상태에서 알림창을 클릭한 경우 해당 페이지로 이동         
         messaging().onNotificationOpenedApp(remoteMessage => {        
             console.log('Notification caused app to open from background state:',remoteMessage.notification);
-            this.notiOkButtonClicked(remoteMessage);
+            this.backGroundNotiOkButtonClicked(remoteMessage);
         });
     }
 
     render() {
-        const isLogout = this.state.isLogout;
         return (
             <>
                 <View style={styles.total_container}>
