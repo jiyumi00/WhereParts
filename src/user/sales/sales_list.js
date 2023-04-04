@@ -17,51 +17,48 @@ export default class SalesDetails extends Component {
         super(props);
         this.contents = [];
         this.state = {
-            userIDContents: [],
+            salesContents: [],
             soldoutContents: [],
 
             saleState:1,
-            //salebarclicked: false,//판매중
-            //shippingbarclicked: false,//배송정보입력
-            //soldoutbarclicked: false,//판매완료
+           
             isRefresh:false,
             emptyListViewVisible:1,
         };
     }
 
     componentDidMount() {
-        console.log('[ComponentDidempty확인]',this.state.emptyListViewVisible)
+        //console.log('[ComponentDidempty확인]',this.state.emptyListViewVisible)
         if(this.props.route.params!=null){
-            this.setState({ saleState: this.props.route.params.saleState })
+            this.setState({ saleState: this.props.route.params.saleState} )
+            
         }
-        
-        //this.goGetSells();
-       
-
-        this.goGetGoods();
+         this.goGetGoods();
+         this.goGetSells();
     }
 
-    goGetSells = () => {
-        //console.log("refresh sell");
-        this.getUserID().then((value) => {
-            this.callGetSellsAPI(value).then((response) => {
-                this.setState({ soldoutContents: response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
-            })
-        });
-    }
+  
 
     goGetGoods = () => {
         //console.log("refresh selling");
         this.getUserID().then((value)=> {
             this.callGetGoodsAPI(value).then((response) => {
-                //this.contents = response;
-                this.setState({userIDContents:response},()=>{this.handleEmptyListView(this.state.userIDContents.length)});
+                this.setState({salesContents:response},()=>{this.handleEmptyListView(this.state.salesContents.length)});
             })
         });
     }
-
+    goGetSells = () => {
+        //console.log("refresh sell");
+        this.getUserID().then((value) => {
+            this.callGetSellsAPI(value).then((response) => {
+                this.contents=response;
+                this.setState({ soldoutContents:response },()=>{this.handleEmptyListView(this.state.soldoutContents.length)});
+            })
+        });
+    }
+ 
     handleEmptyListView = (length) => {
-        //console.log("userIDContents Length",this.state.userIDContents.length);
+        //console.log("salesContents Length",this.state.salesContents.length);
         //console.log("soldoutContents Length",this.state.soldoutContents.length);
         if (length == 0) {
             this.setState({ emptyListViewVisible: 0 });
@@ -101,20 +98,38 @@ export default class SalesDetails extends Component {
     }
 
     saleBarClicked = () => { //판매중
-        this.setState({ /* delivery: false, salebarclicked: true, shippingbarclicked: false, soldoutbarclicked: false */saleState:1 },()=>{this.goGetGoods()});
+        this.setState({ saleState:1 });
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ /* salebarclicked: false, shippingbarclicked: true, soldoutbarclicked: false  */ saleState:2},()=>{this.goGetSells()});
+        this.setState({ saleState:2},()=>{this.setState({soldoutContents:this.dataFiltering()})});
     }
 
-    soldout = () => { //판매완료
-        this.setState({ /* salebarclicked: false, shippingbarclicked: false, soldoutbarclicked: true */ saleState:3},()=>{this.goGetSells()});
+    soldoutBarClicked = () => { //판매완료
+        this.setState({saleState:3},()=>{this.setState({soldoutContents:this.dataFiltering()})});
     }
-
+    dataFiltering(){ 
+        let filteredContents=this.contents;
+        if(this.state.saleState==3){
+            filteredContents=filteredContents.filter((content)=>{    
+                if(content.status==3){
+                    return true;
+                }
+            })
+        }
+        else {
+            filteredContents=filteredContents.filter((content)=>{  
+                if(content.status==1 || content.status==2){
+                    return true;
+                }
+                
+            })
+        }
+        console.log('[filter]',filteredContents);
+        return filteredContents;
+    }
     render() {
-        console.log('[Renderempty확인]',this.state.emptyListViewVisible)
-        {/*console.log(this.userID)*/ }
+    
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
@@ -130,32 +145,26 @@ export default class SalesDetails extends Component {
                             <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? "#EE636A" : "black" }]}>배송입력할 상품</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState==3 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.soldout}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
 
                 {this.state.saleState==1 && this.state.emptyListViewVisible==1 && (<FlatList
-                    data={this.state.userIDContents}
-                    renderItem={({ item, index }) => <ListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
+                    data={this.state.salesContents}
+                    renderItem={({ item, index }) => <SaleListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.saleState==2 && this.state.emptyListViewVisible==1 &&(<FlatList
+                {this.state.saleState!=1 &&this.state.emptyListViewVisible==1 &&(<FlatList
                     data={this.state.soldoutContents}
-                    renderItem={({ item, index }) => <DeliveryInfoList navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
+                    renderItem={({ item, index }) => <SoldOutListItem navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetSells}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.saleState==3 && this.state.emptyListViewVisible==1 &&(<FlatList
-                    data={this.state.soldoutContents}
-                    renderItem={({ item, index }) => <SoldOutInfoList navigation={this.props.navigation} item={item} id={item.goodsID} />}
-                    refreshing={this.state.isRefresh}
-                    onRefresh={this.goGetSells}
-                    scrollEventThrottle={16}
-                />)}
+      
                 {this.state.saleState==1 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
                 {this.state.saleState==2 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
                 {this.state.saleState==3 && this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
@@ -164,7 +173,7 @@ export default class SalesDetails extends Component {
     }
 }
 
-class ListItem extends PureComponent {
+class SaleListItem extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -185,7 +194,6 @@ class ListItem extends PureComponent {
     }
 
     handleDetailViewModal = () => {
-        //this.setState({isDetailViewModal:!this.state.isDetailViewModal});
         this.props.navigation.navigate('GoodsDetail', { id: this.props.item.id, userID: this.props.item.userID, refresh:this.props.refreshListener});
     }
 
@@ -236,7 +244,7 @@ class ListItem extends PureComponent {
     }
 }
 
-class DeliveryInfoList extends PureComponent {
+class SoldOutListItem extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -267,8 +275,8 @@ class DeliveryInfoList extends PureComponent {
 
         return (
             <>
-                {(item.status == 1 || item.status == 2) &&
-                    (<View style={styles.product}>
+                
+                    <View style={styles.product}>
                         <View style={styles.productRegisterDate}>
                             <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>
                         </View>
@@ -299,69 +307,9 @@ class DeliveryInfoList extends PureComponent {
                         </TouchableOpacity>}
 
                     </View>
-                    )}
+                    
             </>
         );
     }
 }
 
-class SoldOutInfoList extends PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            imageURL: null,
-        };
-
-    }
-
-    componentDidMount() {
-        this.callGetGoodsImageAPI().then((response) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(response);
-            reader.onloadend = () => {
-                this.setState({ imageURL: reader.result })
-            }
-        });
-    }
-
-    async callGetGoodsImageAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.props.id + "&position=1");
-        let response = await manager.start();
-        if (response.ok)
-            return response.blob();
-    }
-
-    render() {
-        const item = this.props.item;
-        return (
-            <>
-                {item.status == 3 &&
-                    (<View style={styles.product}>
-                        <View style={styles.productRegisterDate}>
-                            <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>
-                        </View>
-                        {/*이미지 */}
-                        <View style={styles.productImageView}>
-                            <Image
-                                source={{ uri: this.state.imageURL }}
-                                style={styles.productImage} />
-
-                            <View style={styles.productInfo}>
-                                <View style={styles.productInfoLeft}>
-                                    <Text style={styles.itemNameText}>{item.goodsName}</Text>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
-                                        <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
-                                    </View>
-                                    <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                    )}
-            </>
-        );
-    }
-}
