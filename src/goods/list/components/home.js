@@ -5,9 +5,11 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
+import FunctionUtil from '../../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../../util/indicator';
 import Constant from "../../../util/constatnt_variables";
+import Session from '../../../util/session';
 import WebServiceManager from "../../../util/webservice_manager";
 import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home";
@@ -35,15 +37,20 @@ class Home extends Component {
             recentRadioButtonChecked: true,
             abcRadioButtonChecked: false,
 
+        
             goodsQuantity: null,
             quality: 1,
-
         };
+        FunctionUtil.loginInfo().then((response)=>{
+            console.log("getLoginType",response);
+        })
+        console.log("Session",Session.isLoggedin);
     }
 
     componentDidMount() {
-        SplashScreen.hide();
-        this.goGetGoods();
+        FunctionUtil.loginInfo().then((response)=>{
+            this.goGetGoods(response.id);
+        })
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 
@@ -105,10 +112,10 @@ class Home extends Component {
     }
 
     //부품 목록 호출 메서드
-    goGetGoods = () => {
+    goGetGoods = (userID) => {
         console.log('refresh_home');
         this.setState({ indicator: true });
-        this.callGetGoodsAPI().then((response) => {
+        this.callGetGoodsAPI(userID).then((response) => {
             this.contents = response;
             const goodsQuantity = Object.keys(response).length;
             console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
@@ -163,8 +170,8 @@ class Home extends Component {
     }
 
     //등록된 상품 리스트 API
-    async callGetGoodsAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?login_id=30");
+    async callGetGoodsAPI(userID) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?login_id=" + userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();

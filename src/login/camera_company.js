@@ -22,7 +22,7 @@ export default class CompanyCamera extends Component {
         };
     }
 
-    async callCompanyNoAPI(imageData) {
+    async callCompanyInfoAPI(imageData) {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
         manager.addBinaryData("file", imageData);
         let response = await manager.start();
@@ -41,12 +41,9 @@ export default class CompanyCamera extends Component {
             name: 'photo.jpg',
         }
 
-        this.callCompanyNoAPI(fileData).then((response) => {
+        this.callCompanyInfoAPI(fileData).then((response) => {
             console.log("company info", response);
-            if (response.success == 0)
-                this.props.route.params.onResultListener("0", uri);
-            else
-                this.props.route.params.onResultListener(response.no, uri);
+            this.props.route.params.onResultListener(response,uri);
             //this.props.navigation.pop();
         })
     }

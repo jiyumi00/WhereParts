@@ -46,7 +46,7 @@ class MyPage extends Component {
   }
 
   logout = async () => {
-    FunctionUtil.isLogined(this.props.navigation).then((response) => {
+    FunctionUtil.getLoginType().then((response) => {
       console.log('login info ', response);
       const detailLogin = response.detailLogin;
       if (detailLogin == 0)
@@ -54,7 +54,7 @@ class MyPage extends Component {
       else if (detailLogin == 1) { // 자동로그인일 경우 로그아웃 시에도 항상 자동로그인 (30일 후 자동로그아웃 될 수 있도록 구현)
         const newObj = {
           companyNo: response.companyNo,
-          passwd: response.passwd,
+          passwd: "123", //response.passwd
           id:response.id,
           detailLogin: 1
         };

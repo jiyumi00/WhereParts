@@ -30,6 +30,8 @@ class SignUp extends Component {
         this.state = {
             validForm : false, //유효성
             companyNo: '',
+            companyAddress:'',
+            companyName:'',
             passwd: '',
             passwordok: '',
 
@@ -55,22 +57,20 @@ class SignUp extends Component {
 
     makeBinaryData() {
         let imageData = []; 
-            //사업자등록번호
-            const uri = this.state.companyImageURI; 
-            const companyNoData = {
-                uri: uri,
+            //사업자등록증 이미지
+            const companyImageData = {
+                uri: this.state.companyImageURI,
                 type: "image/jpeg",
                 name: 'photo.jpg',
             }
-            imageData.push(companyNoData);
-            //명함
-            const carduri = this.state.nameCardImageURI;
-            const cardData = {
-                uri: carduri,
+            imageData.push(companyImageData);
+            //명함 이미지
+            const cardImageData = {
+                uri: this.state.nameCardImageURI,
                 type: "image/jpeg",
                 name: 'photo.jpg',
             }
-            imageData.push(cardData);
+            imageData.push(cardImageData);
         return imageData;
     }
 
@@ -78,35 +78,43 @@ class SignUp extends Component {
         if (this.state.passwd !== this.state.passwordok) {
             Alert.alert("비밀번호가 일치하지 않습니다");
         }
-        else {
-            const imageData = this.makeBinaryData();
-            this.callAddUserAPI(imageData).then((response) => {
+        else {            
+            this.callAddUserAPI().then((response) => {
                 console.log(response);
-                if (response.success == "0") {
+                if (response.success == 0) {
                     Alert.alert("이미 있는 사업자번호입니다");
+                }
+                else if(response.success==-1) {
+                    Alert.alert("서버 오류로 회원가입에 실패했습니다.");
                 }
                 else {
                     Alert.alert('가입 신청 완료', '입력 된 내용 확인 후 승인이 완료됩니다.', [
                         { text: '확인', onPress: () => { this.props.navigation.navigate("Login") } },
                     ]);
                     //this.setState({ modal: this.state.modal ? false : true }); //신청대기 모달
-
                 }
             })
         }
     }
 
 
-    //사업자 등록증, 명함 이미지와 사업자등록 번호와 패스워드를 서버로 전송하여 사용자 추가 요청
-    async callAddUserAPI(imageData) { 
+    //사업자 등록증 이미지, 명함 이미지, 사업자등록 번호, 패스워드, 사업자 주소, 이름을 서버로 전송하여 사용자 추가 요청
+    //서버에서 사업자 주소를 이용하여 위경도 값 추출하여 DB에 저장
+    async callAddUserAPI() { 
+        const userData={
+            companyNo:this.state.companyNo,
+            companyName:this.state.companyName,
+            companyAddress:this.state.companyAddress,
+            passwd:this.state.passwd
+        };
+        const imageData = this.makeBinaryData();
+
         let manager = new WebServiceManager(Constant.serviceURL + "/AddUser", "post");
-        manager.addBinaryData("file1", imageData[0]); //사업자번호
-        manager.addBinaryData("file2", imageData[1]); //명함
+        manager.addFormData("data", userData);
+        manager.addBinaryData("file1", imageData[0]); //사업자 등록증 이미지
+        manager.addBinaryData("file2", imageData[1]); //명함 이미지
         
-        manager.addFormData("data", {
-            companyNo:this.state.companyNo.replaceAll('-',''), passwd: this.state.passwd,
-        });
-        console.log(this.state.companyNo);
+        console.log(userData);
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -148,15 +156,16 @@ class SignUp extends Component {
         this.props.navigation.navigate('BusinessCardGallery', {onResultListener: this.cardImageInfo});
     }
 
-    //사업자 등록증 이미지 선택 후 (카메라로부터 인식된 사업자등록번호와 imageURI 받음)
-    companyImageInfo=(companyNo,imageURI)=>{
-        if(companyNo==="0") {
-            this.setState({companyImageURI:imageURI});
+    //사업자 등록증 이미지 선택 후 (카메라로부터 인식된 사업자등록번호, 주소, 상호와 imageURI 받음)
+    companyImageInfo=(companyInfo,imageURI)=>{
+        console.log('사업자 등록증 인식 후 결과값',companyInfo);
+        this.setState({companyImageURI:imageURI});
+        if(companyInfo.success==0) {            
             Alert.alert('사업자 인식', '사업자 등록번호를 인식하지 못했습니다. 직접 입력하세요', [
-                { text: '확인', onPress: () => {this.setState({companyNo:""})}}]);
+                { text: '확인', onPress: () => {this.setState({companyNo:"",companyName:"",companyAddress:""})}}]);
         }
         else
-            this.setState({companyNo:companyNo,companyImageURI:imageURI})
+            this.setState({companyNo:companyInfo.no,companyName:companyInfo.name,companyAddress:companyInfo.address});
         this.imageLength++;
         this.onValueChange();
     }

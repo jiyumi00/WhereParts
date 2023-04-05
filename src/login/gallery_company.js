@@ -15,7 +15,7 @@ class CompanyGallery extends Component {
         super(props);
     }
 
-    async callCompanyNoAPI(imageData) {
+    async callCompanyInfoAPI(imageData) {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
         manager.addBinaryData("file", imageData);
         let response = await manager.start();
@@ -25,18 +25,15 @@ class CompanyGallery extends Component {
     }
 
 
-    onResultListener=(uris)=> {
+    onResultListener=(uri)=> {
         const fileData = {
-            uri: uris,
+            uri: uri,
             type: "image/jpeg",
             name: 'photo.jpg',
         }
-        this.callCompanyNoAPI(fileData).then((response) => {
+        this.callCompanyInfoAPI(fileData).then((response) => {
             console.log("company info", response);
-            if (response.success == 0)
-                this.props.route.params.onResultListener("0", uris);
-            else
-                this.props.route.params.onResultListener(response.no, uris);
+            this.props.route.params.onResultListener(response, uri);
             //this.props.navigation.pop();
         })
     }

@@ -10,7 +10,7 @@ import SplashScreen from 'react-native-splash-screen';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 
 import FunctionUtil from '../util/libraries_function';
-
+import Session from '../util/session';
 import messaging from '@react-native-firebase/messaging';
 
 class Login extends Component {
@@ -28,7 +28,6 @@ class Login extends Component {
             id: '', //userID
             validForm: false, //유효성 검사
 
-            detailLogin: 0, //0->자동로그인X, 아이디기억 X, 1->자동로그인, 2->아이디 기억
             autoLoginChecked: false,
             rememberIdChecked: false,
 
@@ -40,9 +39,8 @@ class Login extends Component {
     componentDidMount() {
         SplashScreen.hide();
         //퍼미션 설정되었는지 확인
-
-        this.isLogined();
         this.requestPermission();
+        this.goLoginType();   
         //알림메시지 처리
         this.handleFCMMessage();
 
@@ -96,41 +94,28 @@ class Login extends Component {
         }
     }
 
-    isLogined() {
-        FunctionUtil.isLogined().then((response) => {
+    goLoginType() {
+        FunctionUtil.getLoginType().then((response) => {
             console.log('login info ', response);
-            this.setState(response, () => {
-                this.availableLogin();
-                if (response != undefined && response.logined == true) {
-                    this.props.navigation.navigate('TabHome');
-                }
-            });
+            if(response.detailLogin==1){
+                // 자동로그인
+                this.setState({autoLoginChecked:true});
+                const value = {companyNo:response.companyNo, passwd:response.passwd, deviceToken:""}
+                FunctionUtil.callLoginAPI(value).then((res)=>{
+                    console.log("login success",res);
+                    if(res.id != 0){
+                        this.successLogin(res);
+                    }
+                    else{
+                        Alert.alert('아이디 비밀번호를 확인해주세요', '',);
+                    }
+                });
+            }
+            else if(response.detailLogin==2){
+                // 패스워드만 입력
+                this.setState({companyNo:response.companyNo, rememberIdChecked:true});
+            }
         });
-    }
-
-    //로그인 정보가 앱에 저장되어 있다면...(자동로그인,id기억 관리)
-    async availableLogin() {
-        const obj = await AsyncStorage.getItem('obj');
-        if(obj !== null) {
-            const {companyNo,passwd,detailLogin} = JSON.parse(obj);  
-            console.log(companyNo,passwd,detailLogin);        
-            if (detailLogin == 0) {         //로그인 방법을 아무것도 선택하지 않았을 경우
-                return false;
-            }
-            else if (detailLogin == 1) {    //자동 로그인일 경우
-                this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
-                this.autoLoginCheckButtonChecked();
-                return true;
-            }
-            else {                          //id 기억일 경우
-                this.setState({ companyNo: companyNo, detailLogin:detailLogin });
-                this.rememberIdCheckButtonChecked();
-                return false;
-            }
-        }
-        else {
-            return false; //null 값일 경우 false (저장되어 있는 로그인 정보가 없다면)
-        }
     }
 
     //입력값 유효성 검사
@@ -149,56 +134,32 @@ class Login extends Component {
         });
     }
 
-     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
-        this.callLoginAPI().then((response) => {
-            if (response.id == "0") { //회원정보가 없을 경우 
-                Alert.alert('아이디 비밀번호를 확인해주세요', '',);
-                return false;
-            }
-            else {
-                const obj = {
-                    companyNo: this.state.companyNo, //사업자번호
-                    id: response.id, //userId
-                    passwd: this.state.passwd, //비밀번호
-                    detailLogin: this.state.detailLogin
-                }
-                AsyncStorage.setItem('obj', JSON.stringify(obj));
-                console.log('storage=',obj);
-                console.log('loginapi response =',response);
-                this.setState({loginValid:true});//(로그인 창에서 알림이 왔을 경우) 로그인 유무 판단 state 변수
-
-                //(BackGround 알림 확인 버튼 클릭!)로그인 완료 후 kind에 맞게 페이지 이동 
-                if(this.props.route.params != null){
-                    if(this.props.route.params.kind == "buy"){
-                        //this.props.navigation.pop();
-                        this.props.navigation.navigate('BuyList');
-                    }
-                    else if(this.props.route.params.kind == "sell"){
-                        //this.props.navigation.pop();
-                        this.props.navigation.navigate('SalesList');
-                    }
-                }
-                else{
-                    this.props.navigation.navigate('TabHome');
-                }
-            }
-        })
+    successLogin=(logInfo)=>{
+        const obj = {
+            companyNo: logInfo.companyNo, //사업자번호
+            id: logInfo.id, //userId
+            passwd:logInfo.passwd, //비밀번호
+            detailLogin: this.getDetailLogin(),
+            companyName:logInfo.companyName,
+            companyAddress:logInfo.companyAddress
+        }
+        Session.isLoggedin=true;
+        AsyncStorage.setItem('obj', JSON.stringify(obj));
+        this.props.navigation.navigate('TabHome');
     }
 
-    async callLoginAPI(autoLogined) { //사업자번호와 비밀번호를 서버로 보내주는 API
-        const {companyNo,passwd} = this.state;
-        let manager = new WebServiceManager(Constant.serviceURL + "/Login", "post");
-        
-        //자동 로그인으로 할 경우에는 deviceToken을 빈문자열로 넘겨준다(디바이스가 같은것이므로 굳이 token을 변경할 필요가 없다)
-        if(autoLogined)
-            manager.addFormData("data", {companyNo: companyNo, passwd: passwd,deviceToken:""});
-        else
-            manager.addFormData("data", {companyNo: companyNo, passwd: passwd,deviceToken:this.deviceToken});
-            
-        let response = await manager.start();
-        if (response.ok) {
-            return response.json();
-        }
+     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
+        const value = {companyNo:this.state.companyNo,passwd:this.state.passwd,deviceToken:""}
+        FunctionUtil.callLoginAPI(value).then((response) => {
+            console.log("response",response);
+            if (response.id == 0) { //회원정보가 없을 경우 
+                Alert.alert('아이디 비밀번호를 확인해주세요', '',);
+                return;
+            }
+            else {
+               this.successLogin(response);
+            }
+        })
     }
 
     async callSetReadNotiAPI(id) { 
@@ -214,30 +175,27 @@ class Login extends Component {
 
     //아무것도 체크안한 상태 --0, 자동로그인 체크 --1, id기억 체크 --2
     autoLoginCheckButtonChecked = () => {
-        if (this.state.autoLoginChecked == true) {
-            this.setState({ autoLoginChecked: false, detailLogin: 0 });
-        } 
-        else if (this.state.rememberIdChecked == true) {
-            this.setState({ autoLoginChecked: true, rememberIdChecked: false, detailLogin: 1 })
-        }
-        else {
-            this.setState({ autoLoginChecked: true, detailLogin: 1 })
-        }
-        
-    }
-
-    rememberIdCheckButtonChecked = () => {
-        if (this.state.rememberIdChecked == true) {
-            this.setState({ rememberIdChecked: false, detailLogin: 0 }); //아무것도 체크안한 상태
-        } 
-        else if (this.state.autoLoginChecked == true) {
-            this.setState({ rememberIdChecked: true, autoLoginChecked: false, detailLogin: 2 })
-        }
-        else {
-            this.setState({ rememberIdChecked: true, detailLogin: 2 }) //id 기억 체크    
+        this.setState({autoLoginChecked: !this.state.autoLoginChecked});
+        if(this.state.rememberIdChecked){
+            this.setState({rememberIdChecked:false});
         }
     }
 
+    rememberIdCheckButtonChecked=()=>{
+        this.setState({rememberIdChecked: !this.state.rememberIdChecked});
+        if(this.state.autoLoginChecked){
+            this.setState({autoLoginChecked:false});
+        }
+    }
+
+    getDetailLogin(){
+        if(this.state.autoLoginChecked)
+            return 1;
+        if(this.state.rememberIdChecked)
+            return 2;
+        else
+            return 0;
+    }
     //추가된부분
     /*notiOkButtonClicked = (message) => {
         console.log('[notiOkButtonClicked 실행]')
@@ -284,8 +242,7 @@ class Login extends Component {
                     }
                 }
                 else {
-                    this.onValueChange();
-                    
+                    this.onValueChange();          
                     this.props.navigation.navigate("Login", { kind: message.data.kind });
                 }
             })
@@ -295,19 +252,18 @@ class Login extends Component {
     foreGroundNotiOkButtonClicked = (message) => {
         this.callSetReadNotiAPI(message.data.id).then((response) => {
             console.log(response);
-        })
-        console.log("loginvalid 값 =",this.state.loginValid)
-        FunctionUtil.isLogined().then((response) => {
-            this.setState(response, () => {
-                if (this.state.loginValid == true || response.logined==true) {
-                    if (message.data.kind == "buy")
-                        this.props.navigation.navigate("BuyList");
-                    else if (message.data.kind == "sell")
-                        this.props.navigation.navigate("SalesList");
-                }
-                else { return false;}
-            })
-        })
+        });
+        const isLogin = Session.isLoggedin;
+        console.log("loginvalid 값 =",isLogin);
+       
+        if (isLogin == true) {
+            if (message.data.kind == "buy")
+                this.props.navigation.navigate("BuyList");
+            else if (message.data.kind == "sell")
+                this.props.navigation.navigate("SalesList");
+        }
+        else
+            return;
     }
 
     //알림이 올 경우 
