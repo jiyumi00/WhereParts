@@ -164,7 +164,7 @@ class Home extends Component {
 
     //등록된 상품 리스트 API
     async callGetGoodsAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods");
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?login_id=30");
         let response = await manager.start();
         if (response.ok)
             return response.json();
