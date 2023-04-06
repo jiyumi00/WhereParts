@@ -41,16 +41,11 @@ class Home extends Component {
             goodsQuantity: null,
             quality: 1,
         };
-        FunctionUtil.loginInfo().then((response)=>{
-            console.log("getLoginType",response);
-        })
-        console.log("Session",Session.isLoggedin);
+        console.log("Session",Session.isLoggedin());
     }
 
     componentDidMount() {
-        FunctionUtil.loginInfo().then((response)=>{
-            this.goGetGoods(response.id);
-        })
+        this.goGetGoods(Session.getValue('id'));
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 
@@ -221,7 +216,7 @@ class Home extends Component {
                 <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
-                        renderItem={({ item, index }) => <ListItem index={index} item={item} id={item.id} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
+                        renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
                         refreshing={this.state.isRefresh} //새로고침
                         onRefresh={this.goGetGoods}
                         scrollEventThrottle={16}

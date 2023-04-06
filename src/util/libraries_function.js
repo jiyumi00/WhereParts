@@ -7,7 +7,7 @@ import Session from "./session";
 export default class FunctionUtil {
     
     static async getLoginType() {
-        const obj = await AsyncStorage.getItem('obj');
+        const obj = await AsyncStorage.getItem('userInfo');
         let value = { companyNo: "", passwd: "", id: 0, detailLogin: 0};
         if (obj != null) {
             const { companyNo, passwd, id, detailLogin } = JSON.parse(obj);
@@ -28,8 +28,33 @@ export default class FunctionUtil {
         }
     }
 
-    static async callLoginAPI(value) {
-        const {companyNo,passwd, deviceToken} = value 
+    static async goLogin(loginInfo){
+        let success = await this.callLoginAPI(loginInfo).then((response) => {
+            console.log("after login", response);
+            if (response.id != 0) {
+                let userInfo = {
+                    id: response.id,
+                    companyName: response.companyName,
+                    companyAddress: response.companyAddress,
+                    isLoggedin: true
+                }
+                Session.setItem(userInfo);
+
+                userInfo = {
+                    companyNo: response.companyNo,
+                    passwd: response.passwd,
+                    detailLogin: loginInfo.detailLogin,
+                }
+                AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+                return true;
+            }
+            return false;
+        });
+        return success;
+    }
+
+    static async callLoginAPI(loginInfo) {
+        const {companyNo,passwd, deviceToken} = loginInfo 
         let manager = new WebServiceManager(Constant.serviceURL + "/Login", "post");
         manager.addFormData("data", { companyNo: companyNo, passwd: passwd, deviceToken: deviceToken });
         let response = await manager.start();
@@ -39,7 +64,7 @@ export default class FunctionUtil {
     }
 
     static async loginInfo(){
-        const obj = await AsyncStorage.getItem('obj');
+        const obj = await AsyncStorage.getItem('userInfo');
         const { companyNo, passwd, id, detailLogin, companyName, companyAddress } = JSON.parse(obj);
         value = { companyNo: companyNo, passwd: passwd, id: id, detailLogin: detailLogin, companyName: companyName, companyAddress: companyAddress };
         return value;

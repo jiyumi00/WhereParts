@@ -6,6 +6,8 @@ import { styles } from "../../styles/buylist";
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 
+import Session from '../../util/session';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -13,6 +15,7 @@ export default class BuyList extends Component {
     constructor(props) {
         super(props);
 
+        this.userID=0;
         this.state = {
             buyContents: [],
             isRefresh: false,
@@ -21,7 +24,12 @@ export default class BuyList extends Component {
     }
 
     componentDidMount() {
-        this.goGetGoods();
+        if(Session.isLoggedin()){
+            this.userID = Session.getValue('id');
+            this.goGetGoods();
+        }
+        else 
+            this.props.navigation.navigate('Login',{nextPage:'BuyList'});
         BackHandler.addEventListener("hardwareBackPress", this.backPressed);
     }
 
@@ -30,15 +38,13 @@ export default class BuyList extends Component {
     }
 
     backPressed = () => {
-        this.props.navigation.navigate('TabHome');
+        this.props.navigation.navigate('TabHome',{initialTabMenu:'MyPage'});
         return true;
     }
 
     goGetGoods = () => {
-        this.getUserID().then((value) => {
-            this.callGetGoodsAPI(value).then((response) => {
-                this.setState({ buyContents: response },()=>{this.handleEmptyListView()})
-            });
+        this.callGetGoodsAPI().then((response) => {
+            this.setState({ buyContents: response }, () => { this.handleEmptyListView() })
         });
     }
 
@@ -51,19 +57,9 @@ export default class BuyList extends Component {
         }
     }
 
-    async getUserID() {
-        let obj = await AsyncStorage.getItem('obj')
-        let parsed = JSON.parse(obj);
-        if (obj !== null) {
-            return parsed.id;
-        }
-        else {
-            return false;
-        }
-    }
     //등록된 상품 리스트 API
-    async callGetGoodsAPI(userID) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetOrders?id=" + userID);
+    async callGetGoodsAPI() {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetOrders?id=" + this.userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();

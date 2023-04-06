@@ -20,9 +20,21 @@ const styles = StyleSheet.create({
 });
 
 class Tabs extends Component {
+  constructor(props){
+    super(props);
+
+    this.initialTabMenu='Home';
+    if(this.props.route.params != null){
+      const params = this.props.route.params;
+      if(params.hasOwnProperty("initialTabMenu"))
+        this.initialTabMenu = params.initialTabMenu;
+    }
+  }
+
   render() {
     return (
       <Tab.Navigator
+        initialRouteName={this.initialTabMenu}
         screenOptions={{
           headerTitleAlign: 'center',
           headerShown: true,

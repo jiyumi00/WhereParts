@@ -16,15 +16,17 @@ import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import Session from '../../../util/session';
+
 export default class DetailItemView extends Component {
     constructor(props) {
         super(props);
         this.hashTagRef = React.createRef();
         this.goodsQuality=Constant.getGoodsQuality();
 
-        this.goodsID = this.props.route.params.id;
-        this.serverUserID = this.props.route.params.userID;
-        this.storageUserID = "";
+        this.goodsID = this.props.route.params.goodsID;
+        this.sellerID = this.props.route.params.sellerID;
+        this.userID = Session.getValue('id');
 
         this.state = {
             images: [],
@@ -67,29 +69,27 @@ export default class DetailItemView extends Component {
             }
         });
 
-        this.getUserID().then((value) => {
-            this.storageUserID = value; // 휴대폰에 저장된 userID
+        this.callGetGoodsDetailAPI().then((response) => {
+            this.setState({
+                item: response, hashTag: response.hashTag.split(',').map(tag => `${tag}`),
+                price: response.price, editSpec: response.spec, quantity: response.quantity, quality: response.quality,
+                genuine: response.genuine
+            });
+            console.log(response);
 
-            this.callGetGoodsDetailAPI().then((response) => {
-                this.setState({ item: response,  hashTag: response.hashTag.split(',').map(tag => `${tag}`), 
-                    price:response.price, editSpec:response.spec ,quantity:response.quantity,quality:response.quality, 
-                    genuine:response.genuine});
-                console.log(response);
-
-                //올린사람만 수정하기
-                if (this.storageUserID == this.serverUserID) { // 휴대폰 vs 서버 userID 비교
-                    this.setState({ editVisible: true })
-                }
-                else { //구매가능
-                    this.setState({ buyVisible: true })
-                    this.callGetWishIdAPI(value).then((response) => {
-                        if (response.includes(this.goodsID) == true) {
-                            this.setState({ dipsbuttonclicked: true })
-                        }
-                    });
-                }
-            })
-        });
+            //올린사람만 수정하기
+            if (this.userID == this.sellerID) { // 휴대폰 vs 서버 userID 비교
+                this.setState({ editVisible: true })
+            }
+            else { //구매가능
+                this.setState({ buyVisible: true })
+                this.callGetWishIdAPI().then((response) => {
+                    if (response.includes(this.goodsID) == true) {
+                        this.setState({ dipsbuttonclicked: true })
+                    }
+                });
+            }
+        })
 
         BackHandler.addEventListener("hardwareBackPress", this.backPressed);
     }
@@ -114,7 +114,6 @@ export default class DetailItemView extends Component {
                 { text: '취소', onPress: () => console.log('Cancel Pressed') },
                 { text: '확인', onPress: () => this.setState({ editGoodsViewVisible: false, price: price, quantity: quantity, hashTag: hashTag, quality: quality, genuine: genuine, editSpec: spec }) },
             ],);
-
     }
      //숨김버튼 클릭
      goodsDisableButtonClicked=()=>{
@@ -174,12 +173,12 @@ export default class DetailItemView extends Component {
     //하단 Bar부분
     // 구매하기 버튼 클릭
     buyButtonClicked = () => {
-        this.props.navigation.navigate("Payment", { item: this.state.item, userID: this.storageUserID });
+        this.props.navigation.navigate("Payment", { item: this.state.item, userID: this.userID });
     }
     // 수정완료 버튼 클릭
-    editCompleteButtonClicked = (value) => {
+    editCompleteButtonClicked = () => {
         console.log("수정완료버튼클릭");
-        this.callUpdateGoodsAPI(value).then((response)=>{
+        this.callUpdateGoodsAPI().then((response)=>{
             console.log('수정완료', response)
             if(response.success==1){
                 Alert.alert(
@@ -324,18 +323,6 @@ export default class DetailItemView extends Component {
         return true;
     }
 
-    // userID값 가져오는 함수
-    async getUserID() {
-        let obj = await AsyncStorage.getItem('obj') // 접속 중인 세션, 로컬스토리지 세션 따로생각, 로그인확인방법check
-        let parsed = JSON.parse(obj);
-        if (obj !== null) {
-            return parsed.id;
-        }
-        else {
-            return false;
-        }
-    }
-
     async callimageLengthAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImageLength?id=" + this.goodsID)
         let response = await manager.start();
@@ -359,10 +346,19 @@ export default class DetailItemView extends Component {
         }
     }
     //수정, 삭제, 숨김
-    async callUpdateGoodsAPI(value){
+    async callUpdateGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/UpdateGoods", "post");
         
-        const editItem = value;
+        const editItem = {
+            id:this.goodsID,
+            quantity:this.state.quantity,
+            quality:this.state.quality,
+            price:this.state.price,
+            genuine:this.state.genuine,
+            spec:this.state.editSpec,
+            hashTag:this.state.hashTag.toString(),
+        };
+
         manager.addFormData("data", {
             id: editItem.id, quantity: editItem.quantity, quality: editItem.quality,
             price: editItem.price, genuine: editItem.genuine, spec: editItem.spec, hashTag: editItem.hashTag
@@ -401,21 +397,21 @@ export default class DetailItemView extends Component {
     }
     //찜하기
     async callAddWishAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/AddWishList?user_id=" + this.storageUserID + "&goods_id=" + this.goodsID);
+        let manager = new WebServiceManager(Constant.serviceURL + "/AddWishList?user_id=" + this.userID + "&goods_id=" + this.goodsID);
         let response = await manager.start();
 
         if (response.ok)
             return response.json();
     }
     async callRemoveWishAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/RemoveWishList?user_id=" + this.storageUserID + "&goods_id=" + this.goodsID)
+        let manager = new WebServiceManager(Constant.serviceURL + "/RemoveWishList?user_id=" + this.userID + "&goods_id=" + this.goodsID)
         let response = await manager.start();
         if (response.ok) {
             return response.json();
         }
     }
-    async callGetWishIdAPI(storageUserID) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetWishIdList?user_id=" + storageUserID);
+    async callGetWishIdAPI() {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetWishIdList?user_id=" + this.userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -428,16 +424,6 @@ export default class DetailItemView extends Component {
         const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
         // 값 변환
         const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-       
-        const editItem = {
-            id:this.goodsID,
-            quantity:this.state.quantity,
-            quality:this.state.quality,
-            price:this.state.price,
-            genuine:this.state.genuine,
-            spec:this.state.editSpec,
-            hashTag:this.state.hashTag.toString(),
-        };
 
         return (
 
@@ -755,7 +741,7 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible &&
                             <>
                             {this.state.validForm ? 
-                            (<TouchableOpacity onPress={()=>this.editCompleteButtonClicked(editItem)} style={styles.buy_button}>
+                            (<TouchableOpacity onPress={()=>this.editCompleteButtonClicked} style={styles.buy_button}>
                                 <Text style={styles.buyButton_text}>수정완료</Text>
                             </TouchableOpacity>)
                             :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: "#C9CCD1"}]}>

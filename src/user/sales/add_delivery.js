@@ -16,6 +16,7 @@ class AddDelivery extends Component {
 
         //Constant에서 미리 정의한 택배사 리스트 가져오기
         this.invoiceName=Constant.getInvoiceNames();
+        this.orderID = this.props.route.params.id;
 
         this.state = {
             invoiceKind: 0,
@@ -38,7 +39,6 @@ class AddDelivery extends Component {
                 }
             });
         })
-
     }
 
     goCameraButtonClicked = () => {
@@ -100,7 +100,7 @@ class AddDelivery extends Component {
     }
 
     async callGetSellDetailAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetSellDetail?id=" + this.props.route.params.id);
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetSellDetail?id=" + this.orderID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -112,13 +112,12 @@ class AddDelivery extends Component {
         if (response.ok)
             return response.blob();
     }
-
     
     async callSetDeliveryAPI(){
         let manager=new WebServiceManager(Constant.serviceURL +"/SetDelivery","post");
 
         manager.addFormData("data",{
-            orderID:this.props.route.params.id,
+            orderID:this.orderID,
             invoiceKind:this.state.invoiceKind,
             invoiceName:this.invoiceName[(this.state.invoiceKind)],
             invoiceNo:this.state.invoiceNo,
@@ -145,7 +144,6 @@ class AddDelivery extends Component {
     
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address } = this.state.sellDetailInfo;
-        console.log(this.props.route.params.id)
         return (
 
             <View style={styles.total_container}>

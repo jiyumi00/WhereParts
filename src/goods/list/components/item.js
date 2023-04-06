@@ -10,6 +10,8 @@ import FunctionUtil from '../../../util/libraries_function';
 export default class ListItem extends PureComponent {
     constructor(props) {
         super(props);
+
+        this.item = this.props.item;
         this.state = {
             imageURI: null,
             isDetailViewModal: false,
@@ -17,7 +19,7 @@ export default class ListItem extends PureComponent {
     }
 
     componentDidMount() {
-        this.callGetGoodsImageAPI(this.props.item).then((response) => {
+        this.callGetGoodsImageAPI().then((response) => {
             let reader = new FileReader();
             reader.readAsDataURL(response); //blob을 읽어줌 읽은 놈이 reader
             reader.onloadend = () => {
@@ -27,14 +29,14 @@ export default class ListItem extends PureComponent {
         });
     }
     async callGetGoodsImageAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.props.id + "&position=1");
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.item.id + "&position=1");
         let response = await manager.start();
         if (response.ok)
             return response.blob();
     }
 
     goGoodsDetailScreen=()=> {
-        this.props.navigation.push('GoodsDetail',{id:this.props.item.id, userID:this.props.item.userID, refresh:this.props.refreshListener});
+        this.props.navigation.push('GoodsDetail',{goodsID:this.item.id, sellerID:this.item.userID, refresh:this.props.refreshListener});
     }
 
     render() {

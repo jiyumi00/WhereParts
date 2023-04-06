@@ -7,6 +7,7 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmptyListView from '../../util/empty_list_view';
+import Session from '../../util/session';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DetailItemView from "../../goods/list/components/item_detail";
 import { color } from 'react-native-reanimated';
@@ -16,6 +17,7 @@ export default class SalesDetails extends Component {
     constructor(props) {
         super(props);
         this.contents = []; //soldoutContents
+        this.userID=0;
         this.state = {
             salesContents: [],
             soldoutContents: [],
@@ -30,32 +32,34 @@ export default class SalesDetails extends Component {
     }
 
     componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
-        if(this.props.route.params!=null){
-            this.setState({ saleState: this.props.route.params.saleState} )
+        if(Session.isLoggedin){
+            if(this.props.route.params!=null){
+                this.setState({ saleState: this.props.route.params.saleState});
+            }
+            this.userID = Session.getValue('id');
+            this.goGetGoods();
+            this.goGetSells();
         }
-         this.goGetGoods();
-         this.goGetSells();
+        else
+            this.props.navigation.navigate('Login',{nextPage:"SalesList"});
+        
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
     goGetGoods = () => {
         //console.log("refresh selling");
-        this.getUserID().then((value)=> {
-            this.callGetGoodsAPI(value).then((response) => {
-                this.setState({salesContents:response},()=>{this.handleEmptySaleListView(this.state.salesContents.length)});
-            })
-        });
+        this.callGetGoodsAPI().then((response) => {
+            this.setState({ salesContents: response }, () => { this.handleEmptySaleListView(this.state.salesContents.length) });
+        })
     }
     goGetSells = () => {
         //console.log("refresh sell");
-        this.getUserID().then((value) => {
-            this.callGetSellsAPI(value).then((response) => {
-                this.contents=response;
-                this.setState({ soldoutContents:this.dataFiltering() },()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)});
-            })
-        });
+        this.callGetSellsAPI().then((response) => {
+            this.contents = response;
+            this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) });
+        })
     }
  
     handleEmptySaleListView = (length) => {
@@ -74,8 +78,8 @@ export default class SalesDetails extends Component {
             this.setState({ emptySoldOutListViewVisible: 1 });
         }
     }
-    async callGetGoodsAPI(userID) { //로그인 된 id값으로 올린 상품 가져오는 API
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + userID);
+    async callGetGoodsAPI() { //로그인 된 id값으로 올린 상품 가져오는 API
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + this.userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -83,24 +87,13 @@ export default class SalesDetails extends Component {
             Promise.reject(response);
     }
 
-    async callGetSellsAPI(userID) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetSells?id=" + userID)
+    async callGetSellsAPI() {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetSells?id=" + this.userID)
         let response = await manager.start();
         if (response.ok)
             return response.json();
         else
             Promise.reject(response);
-    }
-
-    async getUserID() {
-        let obj = await AsyncStorage.getItem('obj')
-        let parsed = JSON.parse(obj);
-        if (obj !== null) {
-            return parsed.id;
-        }
-        else {
-            return false;
-        }
     }
 
     saleBarClicked = () => { //판매중
@@ -135,7 +128,7 @@ export default class SalesDetails extends Component {
     }
      //뒤로가기 했을 때 앱 종료
      backPressed = () => {
-        this.props.navigation.navigate('TabHome');
+        this.props.navigation.navigate('TabHome',{initialTabMenu:"MyPage"});
         return true;
     }
     render() {

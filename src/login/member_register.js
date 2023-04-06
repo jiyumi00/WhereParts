@@ -33,6 +33,14 @@ class Login extends Component {
 
             loginValid:false,
         }
+
+        this.nextPage='TabHome';
+        if(this.props.route.params != null){
+            const params = this.props.route.params;
+            if(params.hasOwnProperty('nextPage'))
+                this.nextPage=params.nextPage;
+        }
+        console.log("nextPage",this.nextPage);
     }
 
     //자동로그인
@@ -40,10 +48,10 @@ class Login extends Component {
         SplashScreen.hide();
         //퍼미션 설정되었는지 확인
         this.requestPermission();
-        this.goLoginType();   
+        this.goLoginType();
         //알림메시지 처리
         this.handleFCMMessage();
-
+        
         //자동 로그인 처리되는지 확인
         /*this.availableLogin().then((response) => {
             if(response==true) {
@@ -100,14 +108,20 @@ class Login extends Component {
             if(response.detailLogin==1){
                 // 자동로그인
                 this.setState({autoLoginChecked:true});
-                const value = {companyNo:response.companyNo, passwd:response.passwd, deviceToken:""}
-                FunctionUtil.callLoginAPI(value).then((res)=>{
-                    console.log("login success",res);
-                    if(res.id != 0){
-                        this.successLogin(res);
-                    }
-                    else{
+                const loginInfo = {
+                    companyNo:response.companyNo, 
+                    passwd:response.passwd, 
+                    deviceToken:"",
+                    detailLogin:response.detailLogin,
+                }
+                FunctionUtil.goLogin(loginInfo).then((success) => {
+                    console.log("success", success);
+                    if (success == false) { //회원정보가 없을 경우
                         Alert.alert('아이디 비밀번호를 확인해주세요', '',);
+                        return;
+                    }
+                    else {
+                        this.props.navigation.navigate(this.nextPage);
                     }
                 });
             }
@@ -118,59 +132,30 @@ class Login extends Component {
         });
     }
 
-    //입력값 유효성 검사
-    onValueChange = (value) => {
-        this.setState(value,()=>{
-            let isValidForm = true;
-            if (this.state.companyNo.trim().length < 10) { // 조건 필요시 추가
-                isValidForm = false;
-            }
-            if (this.state.passwd.trim().length == 0) {
-                isValidForm = false;
-            }
-    
-            console.log("isValidForm", isValidForm);
-            this.setState({ validForm: isValidForm });
-        });
-    }
-
-    successLogin=(logInfo)=>{
-        const obj = {
-            companyNo: logInfo.companyNo, //사업자번호
-            id: logInfo.id, //userId
-            passwd:logInfo.passwd, //비밀번호
+    loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
+        const loginInfo = {
+            companyNo: this.state.companyNo,
+            passwd: this.state.passwd,
+            deviceToken: this.deviceToken,
             detailLogin: this.getDetailLogin(),
-            companyName:logInfo.companyName,
-            companyAddress:logInfo.companyAddress
         }
-        Session.isLoggedin=true;
-        AsyncStorage.setItem('obj', JSON.stringify(obj));
-        this.props.navigation.navigate('TabHome');
-    }
 
-     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
-        const value = {companyNo:this.state.companyNo,passwd:this.state.passwd,deviceToken:""}
-        FunctionUtil.callLoginAPI(value).then((response) => {
-            console.log("response",response);
-            if (response.id == 0) { //회원정보가 없을 경우 
+        FunctionUtil.goLogin(loginInfo).then((success) => {
+            console.log("success", success);
+            console.log("session value", Session.getItem());
+            console.log("isLoggedin", Session.isLoggedin());
+            if (success == false) { //회원정보가 없을 경우
                 Alert.alert('아이디 비밀번호를 확인해주세요', '',);
                 return;
             }
             else {
-               this.successLogin(response);
+                this.props.navigation.navigate(this.nextPage);
+                /* console.log("session value", Session.getItem());
+                FunctionUtil.loginInfo().then((response) => {
+                    console.log("async value", response);
+                }); */
             }
-        })
-    }
-
-    async callSetReadNotiAPI(id) { 
-        let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
-        let response = await manager.start();
-        if(response.ok)
-            return response.json();
-    }
-
-    registerUserButtonClicked = () => {
-        this.props.navigation.navigate('SignUp'); //회원가입 버튼 눌렀을 경우
+        });
     }
 
     //아무것도 체크안한 상태 --0, 자동로그인 체크 --1, id기억 체크 --2
@@ -180,7 +165,6 @@ class Login extends Component {
             this.setState({rememberIdChecked:false});
         }
     }
-
     rememberIdCheckButtonChecked=()=>{
         this.setState({rememberIdChecked: !this.state.rememberIdChecked});
         if(this.state.autoLoginChecked){
@@ -195,6 +179,33 @@ class Login extends Component {
             return 2;
         else
             return 0;
+    }
+
+    //입력값 유효성 검사
+    onValueChange = (value) => {
+        this.setState(value, () => {
+            let isValidForm = true;
+            if (this.state.companyNo.trim().length < 10) { // 조건 필요시 추가
+                isValidForm = false;
+            }
+            if (this.state.passwd.trim().length == 0) {
+                isValidForm = false;
+            }
+
+            console.log("isValidForm", isValidForm);
+            this.setState({ validForm: isValidForm });
+        });
+    }
+    
+    registerUserButtonClicked = () => {
+        this.props.navigation.navigate('SignUp'); //회원가입 버튼 눌렀을 경우
+    }
+
+    async callSetReadNotiAPI(id) { 
+        let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
+        let response = await manager.start();
+        if(response.ok)
+            return response.json();
     }
     //추가된부분
     /*notiOkButtonClicked = (message) => {
@@ -230,33 +241,22 @@ class Login extends Component {
         console.log('[notiOkButtonClicked 실행]')
         this.callSetReadNotiAPI(message.data.id).then((response) => {
             console.log(response);
-        })
-        FunctionUtil.isLogined().then((response) => {
-            this.setState(response, () => {
-                if (response != undefined && response.logined == true) {
-                    if (message.data.kind == "buy") {
-                        this.props.navigation.navigate("BuyList");
-                    }
-                    else if (message.data.kind == "sell") {
-                        this.props.navigation.navigate("SalesList");
-                    }
-                }
-                else {
-                    this.onValueChange();          
-                    this.props.navigation.navigate("Login", { kind: message.data.kind });
-                }
-            })
-        })
+        });
+
+        if (message.data.kind == "buy")
+            this.props.navigation.navigate("BuyList");
+        else if (message.data.kind == "sell")
+            this.props.navigation.navigate("SalesList");
     }
 
     foreGroundNotiOkButtonClicked = (message) => {
         this.callSetReadNotiAPI(message.data.id).then((response) => {
             console.log(response);
         });
-        const isLogin = Session.isLoggedin;
-        console.log("loginvalid 값 =",isLogin);
+        const isLoggedin = Session.isLoggedin();
+        console.log("loginvalid 값 =",isLoggedin);
        
-        if (isLogin == true) {
+        if (isLoggedin == true) {
             if (message.data.kind == "buy")
                 this.props.navigation.navigate("BuyList");
             else if (message.data.kind == "sell")
