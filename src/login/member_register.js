@@ -40,7 +40,9 @@ class Login extends Component {
             if(params.hasOwnProperty('nextPage'))
                 this.nextPage=params.nextPage;
         }
-        console.log("nextPage",this.nextPage);
+        //console.log("nextPage",this.nextPage);
+        const date = parseInt(Date.now()/1000);
+        console.log("date", date);
     }
 
     //자동로그인
@@ -113,6 +115,7 @@ class Login extends Component {
                     passwd:response.passwd, 
                     deviceToken:"",
                     detailLogin:response.detailLogin,
+                    isAutoLogin:true,
                 }
                 FunctionUtil.goLogin(loginInfo).then((success) => {
                     console.log("success", success);
@@ -138,6 +141,7 @@ class Login extends Component {
             passwd: this.state.passwd,
             deviceToken: this.deviceToken,
             detailLogin: this.getDetailLogin(),
+            isAutoLogin:false,
         }
 
         FunctionUtil.goLogin(loginInfo).then((success) => {
@@ -246,7 +250,7 @@ class Login extends Component {
         if (message.data.kind == "buy")
             this.props.navigation.navigate("BuyList");
         else if (message.data.kind == "sell")
-            this.props.navigation.navigate("SalesList");
+            this.props.navigation.navigate("SalesList", {saleState:2});
     }
 
     foreGroundNotiOkButtonClicked = (message) => {
@@ -260,7 +264,7 @@ class Login extends Component {
             if (message.data.kind == "buy")
                 this.props.navigation.navigate("BuyList");
             else if (message.data.kind == "sell")
-                this.props.navigation.navigate("SalesList");
+                this.props.navigation.navigate("SalesList", {saleState:2});
         }
         else
             return;

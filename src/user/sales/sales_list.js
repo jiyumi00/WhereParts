@@ -128,11 +128,12 @@ export default class SalesDetails extends Component {
     }
      //뒤로가기 했을 때 앱 종료
      backPressed = () => {
-        this.props.navigation.navigate('TabHome',{initialTabMenu:"MyPage"});
+        this.props.navigation.pop();
+        this.props.navigation.push('TabHome',{initialTabMenu:"MyPage"});
         return true;
     }
     render() {
-    
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
@@ -197,7 +198,7 @@ class SaleListItem extends PureComponent {
     }
 
     handleDetailViewModal = () => {
-        this.props.navigation.navigate('GoodsDetail', { id: this.props.item.id, userID: this.props.item.userID, refresh:this.props.refreshListener});
+        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID, refresh:this.props.refreshListener});
     }
 
     async callGetGoodsImageAPI() {

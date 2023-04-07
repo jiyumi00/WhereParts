@@ -73,8 +73,6 @@ class Payment extends Component {
         this.onValueChange();
     }
 
-    
-
     countPlus=()=>{
         if( this.state.quantity>0 && this.state.quantity < this.item.quantity)
             this.setState({quantity:this.state.quantity+1});

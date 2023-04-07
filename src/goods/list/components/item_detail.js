@@ -71,9 +71,13 @@ export default class DetailItemView extends Component {
 
         this.callGetGoodsDetailAPI().then((response) => {
             this.setState({
-                item: response, hashTag: response.hashTag.split(',').map(tag => `${tag}`),
-                price: response.price, editSpec: response.spec, quantity: response.quantity, quality: response.quality,
-                genuine: response.genuine
+                item: response, 
+                hashTag: response.hashTag.split(',').map(tag => `${tag}`),
+                price: response.price, 
+                editSpec: response.spec, 
+                quantity: response.quantity, 
+                quality: response.quality,
+                genuine: response.genuine,
             });
             console.log(response);
 
@@ -169,7 +173,6 @@ export default class DetailItemView extends Component {
             ],);
     }
 
-
     //하단 Bar부분
     // 구매하기 버튼 클릭
     buyButtonClicked = () => {
@@ -186,7 +189,7 @@ export default class DetailItemView extends Component {
                     '수정이 완료되었습니다',
                     [
                         { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                        { text: '확인', onPress: () => {console.log('수정완료'); this.refresh();} },
+                        { text: '확인', onPress: () => {console.log('수정완료'); this.refresh()} },
                     ],);
             }
             if (this.state.editGoodsViewVisible == true) {
@@ -227,7 +230,6 @@ export default class DetailItemView extends Component {
             this.setState({ validForm: isValidForm });
         });
     }
-
 
     //item_detail
     handleModal = (index) => {
@@ -272,22 +274,25 @@ export default class DetailItemView extends Component {
     hashTagRemove = (index) => {
         this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
     }
+
     hashTagOnChangeText=(value)=>{
         const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
-        let newTagName=value.replace(reg,'')
-        this.setState({ tagName: newTagName })
+        let newTagName=value.replace(reg,'');
+        this.setState({ tagName: newTagName });
     }
+
     // 판매수량 수정 버튼 클릭
     editMinus = (value) => {
         if (value <= 1) {
-            this.setState({ quantity : 1 })
+            this.setState({ quantity : 1 });
         }
         else {
             this.setState({ quantity : value - 1 });
         }
     }
+
     editPlus = (value) => {
-        this.setState({ quantity : value + 1 })
+        this.setState({ quantity : value + 1 });
     }
 
     //정품 클릭
@@ -305,13 +310,7 @@ export default class DetailItemView extends Component {
 
     backPressed = () => {
         if(this.state.editGoodsViewVisible==true){
-            Alert.alert(
-                '',
-                '수정을 취소 하시겠어요?',
-                [
-                    { text: '취소', onPress: () => console.log('Cancel Pressed') },
-                    { text: '확인', onPress: () => this.props.navigation.pop() },
-                ],);
+            this.editCancelButtonClicked();
         }
         else{
             this.props.navigation.pop();
@@ -360,8 +359,13 @@ export default class DetailItemView extends Component {
         };
 
         manager.addFormData("data", {
-            id: editItem.id, quantity: editItem.quantity, quality: editItem.quality,
-            price: editItem.price, genuine: editItem.genuine, spec: editItem.spec, hashTag: editItem.hashTag
+            id: editItem.id, 
+            quantity: editItem.quantity, 
+            quality: editItem.quality,
+            price: editItem.price, 
+            genuine: editItem.genuine, 
+            spec: editItem.spec, 
+            hashTag: editItem.hashTag,
         });
 
         let response = await manager.start();// --끝났다
@@ -369,9 +373,9 @@ export default class DetailItemView extends Component {
             return response.json();
         }
     }
+
     async callRemoveGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/RemoveGoods?id=" + this.goodsID);
-
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -380,7 +384,6 @@ export default class DetailItemView extends Component {
 
     async callSetDisableGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/SetDisableGoods?id=" + this.goodsID);
-
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -389,7 +392,6 @@ export default class DetailItemView extends Component {
 
     async callSetEnableGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/SetEnableGoods?id=" + this.goodsID);
-
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -399,10 +401,10 @@ export default class DetailItemView extends Component {
     async callAddWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/AddWishList?user_id=" + this.userID + "&goods_id=" + this.goodsID);
         let response = await manager.start();
-
         if (response.ok)
             return response.json();
     }
+
     async callRemoveWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/RemoveWishList?user_id=" + this.userID + "&goods_id=" + this.goodsID)
         let response = await manager.start();
@@ -410,6 +412,7 @@ export default class DetailItemView extends Component {
             return response.json();
         }
     }
+
     async callGetWishIdAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetWishIdList?user_id=" + this.userID);
         let response = await manager.start();
@@ -419,9 +422,8 @@ export default class DetailItemView extends Component {
             Promise.reject(response);
     }
 
-
     render() {
-        const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
+        //const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
         // 값 변환
         const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -446,11 +448,11 @@ export default class DetailItemView extends Component {
                                 <Text style={[styles.text,{color:'#808e9b'}]}>삭제    </Text>
                             </TouchableOpacity>
 
-                            {valid==1 && 
+                            {this.state.item.valid==1 && 
                                 <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
                                 <Text style={[styles.text,{color:'#808e9b'}]}>숨김    </Text>
                             </TouchableOpacity>}
-                            {valid==0 && 
+                            {this.state.item.valid==0 && 
                             <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
                                 <Text style={[styles.text,{color:'#808e9b'}]}>숨김해제    </Text>
                             </TouchableOpacity>}
@@ -502,11 +504,11 @@ export default class DetailItemView extends Component {
                             {/* 부품 번호 & 부품이름 */}
                             <View style={styles.goodsName_view}>
                                 <Text style={[styles.text, { fontSize: 24, }]}>
-                                    {name}
+                                    {this.state.item.name}
                                 </Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                     <Text style={[styles.text, { paddingLeft: '5%', color: 'blue' }]}>
-                                        {number}
+                                        {this.state.item.number}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -741,7 +743,7 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible &&
                             <>
                             {this.state.validForm ? 
-                            (<TouchableOpacity onPress={()=>this.editCompleteButtonClicked} style={styles.buy_button}>
+                            (<TouchableOpacity onPress={this.editCompleteButtonClicked} style={styles.buy_button}>
                                 <Text style={styles.buyButton_text}>수정완료</Text>
                             </TouchableOpacity>)
                             :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: "#C9CCD1"}]}>

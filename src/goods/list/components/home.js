@@ -24,6 +24,7 @@ class Home extends Component {
         super(props);
         this.contents = [];  //모든 users값 가져오는 것
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
+        this.userID = Session.getValue('id');
 
         //안드로이드에서 정의한 모듈 가져옴
         const { ImageModule } = NativeModules;
@@ -37,7 +38,6 @@ class Home extends Component {
             recentRadioButtonChecked: true,
             abcRadioButtonChecked: false,
 
-        
             goodsQuantity: null,
             quality: 1,
         };
@@ -107,10 +107,10 @@ class Home extends Component {
     }
 
     //부품 목록 호출 메서드
-    goGetGoods = (userID) => {
+    goGetGoods = () => {
         console.log('refresh_home');
         this.setState({ indicator: true });
-        this.callGetGoodsAPI(userID).then((response) => {
+        this.callGetGoodsAPI().then((response) => {
             this.contents = response;
             const goodsQuantity = Object.keys(response).length;
             console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
@@ -165,8 +165,8 @@ class Home extends Component {
     }
 
     //등록된 상품 리스트 API
-    async callGetGoodsAPI(userID) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?login_id=" + userID);
+    async callGetGoodsAPI() {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?login_id=" + this.userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();

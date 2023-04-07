@@ -9,8 +9,8 @@ import WebServiceManager from '../../util/webservice_manager';
 class OrderDetail extends Component {
     constructor(props) {
         super(props);
-        this.id = this.props.route.params.id;
 
+        this.orderID = this.props.route.params.orderID;
         this.state = {
             item: {},
             days: []
@@ -29,7 +29,7 @@ class OrderDetail extends Component {
     }
 
     async callGetOrderDetailAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetOrderDetail?id=" + this.id);
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetOrderDetail?id=" + this.orderID);
         let response = await manager.start();
         if (response.ok) {
             return response.json();

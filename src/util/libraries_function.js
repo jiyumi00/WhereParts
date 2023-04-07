@@ -10,13 +10,17 @@ export default class FunctionUtil {
         const obj = await AsyncStorage.getItem('userInfo');
         let value = { companyNo: "", passwd: "", id: 0, detailLogin: 0};
         if (obj != null) {
-            const { companyNo, passwd, id, detailLogin } = JSON.parse(obj);
+            const { companyNo, passwd, id, detailLogin, startDate } = JSON.parse(obj);
             console.log("libraries_fuction(사업자번호, 패스워드, id, detailLogin) = ",companyNo,passwd,id,detailLogin)
             if (detailLogin == 0) {//로그인 방법을 아무것도 선택하지 않았을 경우
                 value = { companyNo: "", passwd: "", id: 0, detailLogin: 0};
             }
             else if (detailLogin == 1) {    //자동 로그인일 경우
-                value = { companyNo: companyNo, passwd: passwd, id: 0, detailLogin: 1};
+                const today = parseInt(Date.now()/1000);
+                if(today-startDate > 60)
+                    value = { companyNo: "", passwd: "", id: 0, detailLogin: 0 };
+                else
+                    value = { companyNo: companyNo, passwd: passwd, id: 0, detailLogin: 1 };
             }
             else if (detailLogin == 2) { //id 기억일 경우
                 value = { companyNo: companyNo, passwd: "", id: 0, detailLogin: 2 };
@@ -39,11 +43,16 @@ export default class FunctionUtil {
                     isLoggedin: true
                 }
                 Session.setItem(userInfo);
-
+                
+                let today = 0;
+                if(loginInfo.isAutoLogin==false)
+                    today = parseInt(Date.now()/1000);
+                
                 userInfo = {
                     companyNo: response.companyNo,
                     passwd: response.passwd,
                     detailLogin: loginInfo.detailLogin,
+                    startDate: today
                 }
                 AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
                 return true;

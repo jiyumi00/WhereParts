@@ -25,24 +25,10 @@ class MyPage extends Component {
   }
 
   componentDidMount() {
-    this.getLoginInfo().then((value) => {
-      this.setState({ companyNo: value.slice(0, 3) + "-" + value.slice(3, 5) + "-" + value.slice(5, 10) });
-    });
-    /*FunctionUtil.isLogined().then((response) => {
-      const companyNo = response.companyNo;
+    FunctionUtil.loginInfo().then((value) => {
+      let companyNo = value.companyNo;
       this.setState({ companyNo: companyNo.slice(0, 3) + "-" + companyNo.slice(3, 5) + "-" + companyNo.slice(5, 10) });
-    });*/
-  }
-
-  async getLoginInfo() {
-    let obj = await AsyncStorage.getItem('obj')
-    let parsed = JSON.parse(obj);
-    if (obj !== null) {
-      return parsed.companyNo;
-    }
-    else {
-      return false;
-    }
+    });
   }
 
   logout = async () => {
@@ -54,44 +40,22 @@ class MyPage extends Component {
       else if (detailLogin == 1) { // 자동로그인일 경우 로그아웃 시에도 항상 자동로그인 (30일 후 자동로그아웃 될 수 있도록 구현)
         const newObj = {
           companyNo: response.companyNo,
-          passwd: "123", //response.passwd
-          id:response.id,
+          passwd: response.passwd,
           detailLogin: 1
         };
-        AsyncStorage.setItem('obj', JSON.stringify(newObj));
+        AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
       }
       else if (detailLogin == 2) {
         const newObj = {
           companyNo: response.companyNo,
           passwd: '',
-          id: response.id,
           detailLogin: 2
         };
-        AsyncStorage.setItem('obj', JSON.stringify(newObj));
+        AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
         console.log('logout async detail 2', newObj);
       }
       this.goExitApp();
     });}
-  
-  /*try {
-    const obj = await AsyncStorage.getItem('obj');
-    const {companyNo,passwd,detailLogin} = JSON.parse(obj);
-    if(detailLogin==0 || detailLogin==1)
-      AsyncStorage.clear();
-    else if(detailLogin==2) {
-      const newObj={
-        companyNo:companyNo,
-        passwd:'',
-        detailLogin:2
-      };
-      AsyncStorage.setItem('obj', JSON.stringify(newObj));
-      console.log('logout async detail 2',newObj);
-    }
-    this.goExitApp();
-
-  } catch (error) {
-    console.log(error);
-  }*/
 
 
   goSalesListScreen = () => {
