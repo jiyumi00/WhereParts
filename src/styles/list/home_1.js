@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     width:'50%',
     paddingLeft:'5%',
     marginBottom:'3%',
+    flexDirection:'row',
     backgroundColor:'#D6DFF5'
   },
   row_view: {
@@ -79,7 +80,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   search_input: { //Home TextInput 안에 글씨
     flex:1,
     backgroundColor: 'white',
-    paddingLeft:0,
+    paddingLeft:5,
     borderRadius:10,
     fontSize: 14,
   },
@@ -114,9 +115,13 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
 
   //list
   listItem_view: { //공통부분
-    //borderWidth:1,
-    width:ScreenWidth/3.5,
-    marginBottom:50
+    borderWidth:1,
+    borderRadius:10,
+    borderColor:'#E3E3E3',
+    marginHorizontal:10,
+    width:ScreenWidth/2.5,
+    marginBottom:20,
+    paddingBottom:'5%'
   },
   productImage_view: {
     alignItems:'center',
@@ -124,10 +129,10 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   product_image: {
     flex:1,
-    width:(ScreenWidth/3.5)-10,
-    height: (ScreenWidth/3.5)-10,
-    borderRadius: 6,
-    
+    width:(ScreenWidth/2.5),
+    height: (ScreenWidth/3),
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   productInfo_view: {
     flex:3,

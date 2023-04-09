@@ -15,7 +15,7 @@ import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ListItem from './item_1';
+import ListItem from './item';
 
 //import { SearchWebView } from "./web_view";
 

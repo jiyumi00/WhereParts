@@ -12,11 +12,12 @@ import Constant from "../../../util/constatnt_variables";
 import Session from '../../../util/session';
 import WebServiceManager from "../../../util/webservice_manager";
 import EmptyListView from '../../../util/empty_list_view';
-import { styles } from "../../../styles/list/home_1";
+import { styles } from "../../../styles/list/home_2";
 
 import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ListItem from './item_1';
+import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
+import ListItem from './item_2';
 
 //import { SearchWebView } from "./web_view";
 
@@ -239,8 +240,7 @@ class Home extends Component {
                 <View style={{ flex: 1,backgroundColor: '#FFFF', paddingHorizontal:'5%', }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
-                        numColumns={2}
-                        horizontal={false}
+                        
                         renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
                         refreshing={this.state.isRefresh} //새로고침
                         onRefresh={this.goGetGoods}
@@ -256,17 +256,15 @@ class Home extends Component {
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={styles.title_view}>
 
-                           <View style={{flexDirection:'row'}}>
-                          
                             <View style={styles.row_title_view}>
-                               
                                 <Text style={[styles.title_text,{fontSize:25,}]}>
-                                      내가 찾는 부품 
+                                    <View style={{width:50,height:50,backgroundColor:'#D6DFF5', borderRadius:40,}}>
+                                    <CarIcon name="car-wrench" size={50} color="#193067" /> 
+                                    </View>
+                                    내가 찾는 부품 
                                 </Text>
-                                
+                               
                             </View>
-                           </View>
-                            
                             <View style={{paddingLeft:'5%'}}>
                                 <Text style={[styles.titleBold_text]}>
                                     손쉽게 검색하고
@@ -280,7 +278,7 @@ class Home extends Component {
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row', marginTop: '5%' }}>
+                        <View style={{ flexDirection: 'row', marginTop: '5%',marginBottom:'2%' }}>
                             <View style={styles.searchSection}>
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
@@ -297,13 +295,11 @@ class Home extends Component {
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
-                                    <Image
-                                        source={require('../../../images/icon/camera-icon/camera-icon.png')}
-                                    />
+                                    <CameraIcon name="camera" size={25} color="#0066FF" />
                                 </TouchableOpacity>
                             </View>
                             </View>
-                            <View style={{flexDirection:'row'}}>
+                            <View style={{flexDirection:'row', backgroundColor:'white'}}>
                             <View style={{flex:1,marginLeft:'5%',flexDirection:'row', alignItems:'center'}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
                                 <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
