@@ -29,7 +29,7 @@ class Home extends Component {
         //안드로이드에서 정의한 모듈 가져옴
         const { ImageModule } = NativeModules;
         this.imageModule = ImageModule;
-
+        this.sortKind=["최신순","거리순","가나다순"];
         this.state = {
             isRefresh: false,
             emptyListViewVisible:1,
@@ -40,6 +40,7 @@ class Home extends Component {
 
             goodsQuantity: null,
             quality: 1,
+            sortedData:1,
         };
         console.log("Session",Session.isLoggedin());
     }
@@ -120,7 +121,27 @@ class Home extends Component {
         this.setState({ isRefresh: false })
     }
 
-    dateSort = () => { //최신순
+    listSort=(value)=>{
+       
+        if(value==1){
+           this.setState({ indicator: true });
+            const sortedData = this.state.goodsContent.sort((a, b) => {
+                return new Date(b.registerDate) - new Date(a.registerDate);
+            });
+            this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
+            this.setState({ indicator: false });
+        }
+        else if(value==3){
+            this.setState({ indicator: true });
+            const sortedData = this.state.goodsContent.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            })
+            this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
+            this.setState({ indicator: false });
+        }
+        
+    }
+   /*  dateSort = () => { //최신순
         this.setState({ indicator: true });
         this.setState({ recentRadioButtonChecked: true, abcRadioButtonChecked: false });
         const sortedData = this.state.goodsContent.sort((a, b) => {
@@ -140,7 +161,7 @@ class Home extends Component {
         this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
         this.setState({ indicator: false });
     }
-
+ */
     handleEmptyListView=()=>{
         if(this.state.goodsContent.length==0){
             this.setState({emptyListViewVisible:0});
@@ -193,7 +214,7 @@ class Home extends Component {
 
     render() {
         const Header_Maximum_Height = 160;
-        const Header_Minimum_Height = 110;
+        const Header_Minimum_Height = 120;
 
         const renderHeader = this.AnimatedHeaderValue.interpolate(
             {
@@ -207,9 +228,10 @@ class Home extends Component {
                 outputRange: [Header_Maximum_Height, 0],
                 extrapolate: 'clamp'
             });
-
+        console.log('sortKiond',this.state.sortedData)
         return (
             <>
+              
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
@@ -264,7 +286,7 @@ class Home extends Component {
                                 {/* 카메라로 검색 */}
 
                             </View>
-                            <View style={{ marginBottom: '3%' }}>
+                            <View >
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
@@ -275,20 +297,30 @@ class Home extends Component {
                             </View>
                             </View>
                             <View style={{flexDirection:'row'}}>
-                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
+                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row', alignItems:'center'}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
                                 <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
+                               
                             </View>
-                            <View style={{flex:1,flexDirection:'row'}}>
-                                <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
+                            <View style={{flex:1,flexDirection:'row', justifyContent:'flex-end'}}>
+                                <Picker
+                                        style={{width:150,}}
+                                        selectedValue={this.state.sortedData}
+                                        onValueChange={(value,index)=>{this.setState({sortedData:value, },()=>this.listSort(value))}}>
+                                        {this.sortKind.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
+                                  </Picker>
+                            </View>
+                                  
+                                 
+                              {/*   <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
                                     <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
                                     <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
                                     <Text style={styles.sortBar_text}> 가나다순</Text>
-                                </TouchableOpacity> 
-                            </View>
+                                </TouchableOpacity>  */}
+                         
                             </View>
                         
                      

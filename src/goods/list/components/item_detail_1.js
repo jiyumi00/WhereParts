@@ -11,6 +11,7 @@ import { styles } from "../../../styles/list/home_item_detail_1";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import TabIcon from 'react-native-vector-icons/Entypo';
 
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
@@ -47,6 +48,7 @@ export default class DetailItemView extends Component {
             imageVisible : false,//큰사진보기
             validForm:false,
             selectedImageIndex:0,
+            tabBarModalVisible:false,
         }
     }
 
@@ -102,6 +104,9 @@ export default class DetailItemView extends Component {
     }
 
     //상단 Bar부분
+    tabModalButtonClicked=()=>{
+        this.setState({tabBarModalVisible:true})
+    }
     // 수정 버튼 클릭
     editButtonClicked = () => {
         this.setState({ editGoodsViewVisible: true });
@@ -431,7 +436,7 @@ export default class DetailItemView extends Component {
 
             <View style={styles.itemDetail_view}>
                 <View style={styles.tabBar_view}>
-                    {this.state.editVisible &&
+                {this.state.editVisible &&
                         <>
                             {this.state.editGoodsViewVisible ?
                                 <>
@@ -460,7 +465,7 @@ export default class DetailItemView extends Component {
 
 
                 </View>
-
+             
                 <View style={styles.itemInfo_view}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {/* 이미지 리스트 */}
@@ -503,7 +508,7 @@ export default class DetailItemView extends Component {
 
                             {/* 부품 번호 & 부품이름 */}
                             <View style={styles.goodsName_view}>
-                                <Text style={[styles.text, { fontSize: 24, }]}>
+                                <Text style={[styles.text, { fontSize: 24, fontWeight:'bold'}]}>
                                     {this.state.item.name}
                                 </Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
@@ -515,7 +520,21 @@ export default class DetailItemView extends Component {
 
                             {/* 금액 */}
                             <View style={styles.detailPrice_view}>
-                            
+                                {!this.state.editGoodsViewVisible &&
+                                        <Text style={[styles.text, { fontSize: 22, }]}>{renderPrice}</Text>
+                                    }
+
+                                    {/* 금액 수정 */}
+                                    {this.state.editGoodsViewVisible && <View style={styles.editGoodsPrice_input}>
+                                        <TextInput style={[styles.text, { fontSize: 22, }]}
+                                            onChangeText={(value) => this.onValueChange({ price: value })}>
+                                                {this.state.price}</TextInput>
+                                    </View>}
+
+                                    {/* 단위 */}
+                                    <View style={{ marginLeft: 2, }}>
+                                        <Text style={styles.detailUnit_text}>원</Text>
+                                    </View>
 
                                 
 
@@ -565,30 +584,10 @@ export default class DetailItemView extends Component {
                         </View>
                         {/* 토글 디테일 */}
                         <View style={styles.toggleDetail_view}>
-                            <View style={styles.toggleDetailTitle_view}>
+                        <View style={styles.toggleDetailTitle_view}>
                                 <Text style={[styles.text, { fontSize: 16, }]}>상품 정보</Text>
                             </View>
-
-                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
-                                        <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
-                                                가격
-                                            </Text>
-                                        </View>
-                                        <View>
-                                        {!this.state.editGoodsViewVisible &&
-                                    <Text style={[styles.text, { fontSize: 22, }]}>{renderPrice}</Text>
-                                    
-                                }
-                              
-                                {/* 금액 수정 */}
-                                {this.state.editGoodsViewVisible && <View style={styles.editGoodsPrice_input}>
-                                    <TextInput style={[styles.text, { fontSize: 22, }]}
-                                        onChangeText={(value) => this.onValueChange({ price: value })}>
-                                            {this.state.price}</TextInput>
-                                </View>}
-                                        </View>
-                                    </View>}
+                                
 
                                     {/*해시태그*/}
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
@@ -601,7 +600,7 @@ export default class DetailItemView extends Component {
                                             <Text style={styles.toggleDetailItemValueText}>
                                                 {!this.state.editGoodsViewVisible && <View style={styles.detailHashTags_view}>
                                                     {this.state.hashTag.map((tag, index) => (
-                                                        <View style={styles.tagStyle_view} key={index}>
+                                                        <View style={[styles.tagStyle_view,{backgroundColor:'white',borderWidth:1,borderColor:'#949CA1'}]} key={index}>
                                                             <Text style={styles.text}>#{tag}</Text>
                                                         </View>
                                                     ))}
@@ -678,8 +677,22 @@ export default class DetailItemView extends Component {
                                 </View></View>}
 
                             {/* 제품 상태 수정 */}
-
-                          
+                    
+                            {this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
+                                <View style={styles.toggleDetailItemTItle}>
+                                    <Text style={styles.toggleDetailItemTItleText}>
+                                        제품 상태
+                                    </Text>
+                                </View>
+                                <View style={styles.editGoodsQuality}>
+                                    <Picker
+                                        selectedValue={`${this.state.quality}`}
+                                        onValueChange={(value, index) => { this.setState({ quality: value }) }}>
+                                        {this.goodsQuality.map((item,i)=><Picker.Item label={item} key={i} value={`${i+1}`}/>)}
+                                    </Picker>
+                                </View>
+                            </View>}
+                                                
 
 
                             {/*정품 비정품 수정*/}
@@ -708,21 +721,7 @@ export default class DetailItemView extends Component {
                             {/* 그 외 내용 */}
 
 
-                            {/* 상품설명 수정 */}
-                            {this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
-                                <View style={styles.toggleDetailItemTItle}>
-                                    <Text style={styles.toggleDetailItemTItleText}>
-                                        상품 설명
-                                    </Text>
-                                </View>
-                                <View style={styles.editGoodsExplainInput_view}>
-                                    <TextInput
-                                        multiline={true}
-                                        onChangeText={(value) => this.setState({ editSpec: value })}>
-                                        {this.state.editSpec}
-                                    </TextInput>
-                                </View>
-                            </View>}
+                         
                         </View>
                     </ScrollView>
                     {/* 구매하기 버튼 */}

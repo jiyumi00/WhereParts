@@ -142,6 +142,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
         borderWidth:1,
         borderColor: '#E6E6E6',
         borderRadius:10,
+        marginBottom:'5%',
         marginHorizontal:'5%',
         paddingHorizontal:'5%',
         paddingVertical:'3%',
