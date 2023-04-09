@@ -15,7 +15,7 @@ import EmptyListView from '../../../util/empty_list_view';
 import { styles } from "../../../styles/list/home_1";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ListItem from './item';
+import ListItem from './item_1';
 
 //import { SearchWebView } from "./web_view";
 
@@ -192,8 +192,8 @@ class Home extends Component {
 
 
     render() {
-        const Header_Maximum_Height = 180;
-        const Header_Minimum_Height = 60;
+        const Header_Maximum_Height = 160;
+        const Header_Minimum_Height = 110;
 
         const renderHeader = this.AnimatedHeaderValue.interpolate(
             {
@@ -213,9 +213,11 @@ class Home extends Component {
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1, backgroundColor: '#FFFF' }}>
+                <View style={{ flex: 1,backgroundColor: '#FFFF', paddingHorizontal:'5%', }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
+                        numColumns={3}
+                        horizontal={false}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
                         refreshing={this.state.isRefresh} //새로고침
                         onRefresh={this.goGetGoods}
@@ -228,37 +230,30 @@ class Home extends Component {
                     {this.state.emptyListViewVisible==0 && <EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} />}
 
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
-                        <View style={{ width: "100%", height: "100%" }}>
-                            <View style={styles.title_view}>
+                        <View style={styles.title_view}>
 
-                                <View style={styles.row_view}>
-                                    <Text style={[styles.title_text, styles.titleBold_text]}>
-                                        손쉽게 검색
-                                    </Text>
-                                    <Text style={[styles.title_text, styles.titleRegular_text]}>
-                                        하고
-                                    </Text>
-                                </View>
-                                <View style={styles.row_view}>
-                                    <Text style={[styles.title_text, styles.titleBold_text]}>
-                                        판매/구매
-                                    </Text>
-                                    <Text style={[styles.title_text, styles.titleRegular_text]}>
-                                        까지 바로!
-                                    </Text>
-
-                                </View>
-                                <Text style={styles.description_text}>
-                                    원하는 키워드, 품번 사진으로 {'\n'} 바로 검색 가능합니다.
+                            <View style={styles.row_title_view}>
+                                <Text style={[styles.title_text,{fontSize:25,}]}>
+                                    내가 찾는 부품
+                                </Text>
+                                
+                            </View>
+                            <View style={{paddingLeft:'5%'}}>
+                                <Text style={[styles.titleBold_text]}>
+                                    손쉽게 검색하고
+                                </Text>
+                                <Text style={[styles.titleBold_text]}>
+                                    판매/ 구매까지 바로!
                                 </Text>
                             </View>
                         </View>
+                       
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row', marginTop: '1%' }}>
+                        <View style={{ flexDirection: 'row', marginTop: '5%' }}>
                             <View style={styles.searchSection}>
-                                <Icon style={{ padding: 10 }} name="search" size={20} color="#000" />
+                                <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요."
@@ -269,7 +264,7 @@ class Home extends Component {
                                 {/* 카메라로 검색 */}
 
                             </View>
-                            <View style={{ marginBottom: '1%' }}>
+                            <View style={{ marginBottom: '3%' }}>
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
@@ -278,13 +273,13 @@ class Home extends Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-
-                        </View>
-                        <View style={styles.sortBar_view}>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
                             <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
                                 <Text style={{color:'black'}}>총 상품개수 : </Text>
                                 <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
                             </View>
+                            <View style={{flex:1,flexDirection:'row'}}>
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
                                     <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
                                         <Text style={styles.sortBar_text}> 최신순  </Text>
@@ -292,8 +287,11 @@ class Home extends Component {
                                 <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
                                     <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
                                     <Text style={styles.sortBar_text}> 가나다순</Text>
-                                </TouchableOpacity>   
-                        </View>
+                                </TouchableOpacity> 
+                            </View>
+                            </View>
+                        
+                     
                     </Animated.View>
                     
                 </View>

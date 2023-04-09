@@ -19,7 +19,7 @@ import GoodsImageCamera from "../goods/register/components/camera_goods_image";
 import GoogleWebView from "../util/google_web_view";
 import Payment from "../goods/pay/payment";
 import PayComplete from "../goods/pay/pay_complete";
-import GoodsDetail from "../goods/list/components/item_detail";
+import GoodsDetail from "../goods/list/components/item_detail_1";
 import OrderDetail from "../user/buy/order_detail";
 import EditProfile from "../user/buy/edit_profile";
 
