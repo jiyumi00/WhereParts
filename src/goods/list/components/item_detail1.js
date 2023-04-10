@@ -7,11 +7,10 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import { styles } from "../../../styles/list/home_item_detail_2";
+import { styles } from "../../../styles/list/home_item_detail1";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import TabIcon from 'react-native-vector-icons/Entypo';
 
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
@@ -19,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Session from '../../../util/session';
 
-export default class DetailItemView extends Component {
+export default class DetailItemView1 extends Component {
     constructor(props) {
         super(props);
         this.hashTagRef = React.createRef();
@@ -48,7 +47,6 @@ export default class DetailItemView extends Component {
             imageVisible : false,//큰사진보기
             validForm:false,
             selectedImageIndex:0,
-            tabBarModalVisible:false,
         }
     }
 
@@ -104,9 +102,6 @@ export default class DetailItemView extends Component {
     }
 
     //상단 Bar부분
-    tabModalButtonClicked=()=>{
-        this.setState({tabBarModalVisible:true})
-    }
     // 수정 버튼 클릭
     editButtonClicked = () => {
         this.setState({ editGoodsViewVisible: true });
@@ -436,7 +431,7 @@ export default class DetailItemView extends Component {
 
             <View style={styles.itemDetail_view}>
                 <View style={styles.tabBar_view}>
-                {this.state.editVisible &&
+                    {this.state.editVisible &&
                         <>
                             {this.state.editGoodsViewVisible ?
                                 <>
@@ -462,10 +457,8 @@ export default class DetailItemView extends Component {
                                 <Text style={[styles.text,{color:'#808e9b'}]}>숨김해제    </Text>
                             </TouchableOpacity>}
                         </>}
-
-
                 </View>
-             
+
                 <View style={styles.itemInfo_view}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {/* 이미지 리스트 */}
@@ -508,47 +501,39 @@ export default class DetailItemView extends Component {
 
                             {/* 부품 번호 & 부품이름 */}
                             <View style={styles.goodsName_view}>
-                                <Text style={[styles.text, { fontSize: 24, fontWeight:'bold'}]}>
-                                    {this.state.item.name}
-                                </Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                    <Text style={[styles.text, {  color: 'blue' }]}>
-                                    {this.state.item.number}
+                                    <Text style={[styles.text, { color: 'blue' }]}>
+                                        {this.state.item.number}
                                     </Text>
                                 </TouchableOpacity>
+                                <Text style={[styles.text, { fontSize: 24 }]}>
+                                    {this.state.item.name}
+                                </Text>
                             </View>
 
                             {/* 금액 */}
                             <View style={styles.detailPrice_view}>
-                                {!this.state.editGoodsViewVisible &&
-                                        <Text style={[styles.text, { fontSize: 22, }]}>{renderPrice}</Text>
-                                    }
+                                {/* 남은 수량 */}
+                                <View style={styles.remaining_view}>
+                                    {this.state.quantity == 0 ?
+                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
+                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
+                                </View>
 
+                                {/* 금액, 수량 수정 */}
+                                {this.state.editGoodsViewVisible && <View style={{flexDirection:'row', borderWidth:0,marginTop:12}}>
                                     {/* 금액 수정 */}
-                                    {this.state.editGoodsViewVisible && <View style={styles.editGoodsPrice_input}>
+                                    <View style={styles.editGoodsPrice_input}>
                                         <TextInput style={[styles.text, { fontSize: 22, }]}
                                             onChangeText={(value) => this.onValueChange({ price: value })}>
-                                                {this.state.price}</TextInput>
-                                    </View>}
-
-                                    {/* 단위 */}
-                                    <View style={{ marginLeft: 2, }}>
+                                            {this.state.price}</TextInput>
+                                    </View>
+                                    <View style={{ marginLeft: 2, justifyContent: 'flex-end' }}>
                                         <Text style={styles.detailUnit_text}>원</Text>
                                     </View>
-
-                                
-
-                                {/* 구매 수량 선택 => TODO 여러 개일 경우에만 보이도록*/}
-                                <View style={{ marginLeft: 'auto', }}>
-                                    {/* 남은 수량 */}
-                                    <View style={styles.remaining_view}>
-                                        {this.state.quantity==0 ?
-                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text>:
-                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
-                                    </View>
-
+                                    
                                     {/* 남은수량 수정 */}
-                                    {this.state.editGoodsViewVisible && <View style={styles.selectQuantity_view}>
+                                    <View style={styles.selectQuantity_view}>
                                         <Pressable onPress={() => this.editMinus(this.state.quantity)} style={styles.quantity_button}>
                                             <Text style={[styles.text, { fontSize: 18, }]}>-</Text>
                                         </Pressable>
@@ -560,35 +545,18 @@ export default class DetailItemView extends Component {
                                         <Pressable onPress={() => this.editPlus(this.state.quantity)} style={styles.quantity_button}>
                                             <Text style={[styles.text, { fontSize: 18, }]}>+</Text>
                                         </Pressable>
-                                    </View>}
-                                    
+                                    </View>
                                 </View>
-                                
+                                }
                             </View>
-                            
                         </View>
 
-                        <View style={{paddingHorizontal:'10%',paddingVertical:'5%'}}>
-                            {!this.state.editGoodsViewVisible &&<Text style={styles.text}>
-                                {this.state.editSpec}
-                            </Text>}
-                            {this.state.editGoodsViewVisible && 
-                                <View style={styles.editGoodsExplainInput_view}>
-                                    <TextInput
-                                        multiline={true}
-                                        onChangeText={(value) => this.setState({ editSpec: value })}>
-                                        {this.state.editSpec}
-                                    </TextInput>
-                                </View>
-                           }
-                        </View>
                         {/* 토글 디테일 */}
                         <View style={styles.toggleDetail_view}>
-                        <View style={styles.toggleDetailTitle_view}>
+                            <View style={styles.toggleDetailTitle_view}>
                                 <Text style={[styles.text, { fontSize: 16, }]}>상품 정보</Text>
                             </View>
-                                
-
+                        
                                     {/*해시태그*/}
                                     {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                         <View style={styles.toggleDetailItemTItle}>
@@ -600,7 +568,7 @@ export default class DetailItemView extends Component {
                                             <Text style={styles.toggleDetailItemValueText}>
                                                 {!this.state.editGoodsViewVisible && <View style={styles.detailHashTags_view}>
                                                     {this.state.hashTag.map((tag, index) => (
-                                                        <View style={[styles.tagStyle_view,{backgroundColor:'white',borderWidth:1,borderColor:'#949CA1'}]} key={index}>
+                                                        <View style={{ marginRight: 8, }} key={index}>
                                                             <Text style={styles.text}>#{tag}</Text>
                                                         </View>
                                                     ))}
@@ -635,6 +603,17 @@ export default class DetailItemView extends Component {
                                         </View>
                                     </View>}
 
+                                    {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
+                                        <View style={styles.toggleDetailItemTItle}>
+                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                                상품 설명
+                                            </Text>
+                                        </View>
+                                        {/* TODO 추가 하기 */}
+                                        <Text style={styles.text}>
+                                            {this.state.editSpec}
+                                        </Text>
+                                    </View>}
                                
 
                             {/* 수정 모아보기 */}
@@ -677,7 +656,7 @@ export default class DetailItemView extends Component {
                                 </View></View>}
 
                             {/* 제품 상태 수정 */}
-                    
+
                             {this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                 <View style={styles.toggleDetailItemTItle}>
                                     <Text style={styles.toggleDetailItemTItleText}>
@@ -692,7 +671,7 @@ export default class DetailItemView extends Component {
                                     </Picker>
                                 </View>
                             </View>}
-                                                
+
 
 
                             {/*정품 비정품 수정*/}
@@ -721,40 +700,56 @@ export default class DetailItemView extends Component {
                             {/* 그 외 내용 */}
 
 
-                         
+                            {/* 상품설명 수정 */}
+                            {this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
+                                <View style={styles.toggleDetailItemTItle}>
+                                    <Text style={styles.toggleDetailItemTItleText}>
+                                        상품 설명
+                                    </Text>
+                                </View>
+                                <View style={styles.editGoodsExplainInput_view}>
+                                    <TextInput
+                                        multiline={true}
+                                        onChangeText={(value) => this.setState({ editSpec: value })}>
+                                        {this.state.editSpec}
+                                    </TextInput>
+                                </View>
+                            </View>}
                         </View>
                     </ScrollView>
                     {/* 구매하기 버튼 */}
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {(this.state.buyVisible&&this.state.quantity!=0)  &&
-                            <View style={styles.pick_view}>
+                        {(this.state.buyVisible && this.state.quantity != 0) &&
+                            <View style={[styles.pick_view,{borderWidth:0}]}>
+                                <Text style={[styles.text, { fontSize: 22, paddingLeft:10}]}>{renderPrice}<Text style={styles.detailUnit_text}>원</Text></Text>
+
                                 <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
                                     <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
                                 </TouchableOpacity>
-                            </View>}
-                        <View style={styles.buy_view}>
-                            {(this.state.buyVisible&&this.state.quantity!=0)  &&
+
                                 <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                     <Text style={styles.buyButton_text}>구매하기</Text>
-                                </TouchableOpacity>}
-                            {/* 수정완료 버튼 */}
-                            {this.state.editGoodsViewVisible &&
-                            <>
-                            {this.state.validForm ? 
-                            (<TouchableOpacity onPress={this.editCompleteButtonClicked} style={styles.buy_button}>
-                                <Text style={styles.buyButton_text}>수정완료</Text>
-                            </TouchableOpacity>)
-                            :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: "#C9CCD1"}]}>
-                                <Text style={styles.buyButton_text}>수정완료</Text>
-                            </TouchableOpacity>)}
-                            </>
-                            }
-                        </View>
-
+                                </TouchableOpacity>
+                            </View>
+                        }
+                        {!this.state.editGoodsViewVisible && !this.state.buyVisible &&
+                            <Text style={[styles.text, { fontSize: 22, }]}>{renderPrice}<Text style={styles.detailUnit_text}>원</Text></Text>
+                        }
+                        {/* 수정완료 버튼 */}
+                        {this.state.editGoodsViewVisible &&
+                            <View style={styles.buy_view}>
+                                {this.state.validForm ?
+                                    (<TouchableOpacity onPress={this.editCompleteButtonClicked} style={styles.buy_button}>
+                                        <Text style={styles.buyButton_text}>수정완료</Text>
+                                    </TouchableOpacity>)
+                                    : (<TouchableOpacity style={[styles.buy_button, { backgroundColor: "#C9CCD1" }]}>
+                                        <Text style={styles.buyButton_text}>수정완료</Text>
+                                    </TouchableOpacity>)}
+                            </View>
+                        }
                     </View>
-
                 </View>
             </View>
 

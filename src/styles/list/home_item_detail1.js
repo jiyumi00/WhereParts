@@ -1,6 +1,4 @@
 import { Dimensions, StyleSheet } from 'react-native';
-const ScreenHeight=Dimensions.get('window').height;
-const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
  
   text:{ //공통
@@ -50,14 +48,15 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
       paddingHorizontal:"5%",
     },
     slideImage_view: { 
-      //borderRadius:10,
-      height: ScreenWidth/1.3,
-      width: ScreenWidth,
+      borderRadius:10,
+      height: 320,
+      width: 280,
+      marginVertical:"3%",
     },
     goods_image: {
-      width: ScreenWidth,
-      height: ScreenWidth/1.3,
-      //borderRadius:10,
+      width: 280,
+      height: 280,
+      borderRadius:10,
     },
     goods_modal_image:{
       width: "95%",
@@ -73,11 +72,9 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     },
     //상품 설명 부분
     productInfo_view: { 
-       
-        
-        borderRadius:10,
+        borderTopWidth:1,
         marginHorizontal:'5%',
-        paddingBottom:30,
+        paddingBottom:20,
         padding: 20,
         borderColor: '#E6E6E6',
         borderBottomWidth:1,
@@ -97,26 +94,27 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     },
     //부품 이름, 번호
     goodsName_view: {
-        //flexDirection:'row',
+        flexDirection:'column',
         //alignItems: 'center',
     }, 
     //가격
     detailPrice_view: {
         marginTop: 3,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
+        flexDirection: 'column',
+        //alignItems: 'flex-end',
     },
     detailUnit_text: {
         fontFamily: 'Pretendard-Regular',
-        fontSize: 15,
+        fontSize: 17,
         color: '#000',
         lineHeight: 28,
     },
     remaining_view: {
-        marginLeft: 'auto',
-        marginBottom: 5,
-        flexDirection: 'row',
-        alignItems:'center',
+        //marginLeft: 'auto',
+        //marginBottom: 5,
+        paddingTop:15,
+        //flexDirection: 'row',
+        //alignItems:'center',
     },
     selectQuantity_view: {
         borderRadius: 6,
@@ -124,6 +122,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
         borderWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        marginLeft:70
     },
     quantity_button: {
         width: 36,
@@ -139,19 +138,13 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
 
     // 상품 정보///////////////////////////////////////////////////////
     toggleDetail_view: {
-        borderWidth:1,
-        borderColor: '#F5F5F5',
-        borderRadius:10,
-        marginBottom:'5%',
-        marginHorizontal:'5%',
-        paddingHorizontal:'5%',
-        paddingVertical:'3%',
-        backgroundColor:'#F5F5F5'
+        paddingVertical:15,
+        paddingHorizontal:35,
     },
     toggleDetailTitle_view: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 15,
+        marginBottom: 7,
       
     },
     toggleDetailItem: {
@@ -185,14 +178,17 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     borderColor:'#E4E4E4',
     borderWidth:1,
     height:60,
+    //width:"100%",
     paddingHorizontal:20,
   },
   pick_view:{
     flex:1,
     //borderWidth:1,
+    width:'100%',
     height:'100%',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    flexDirection:'row',
   },
   buy_view:{
     flex:2,
@@ -204,7 +200,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     justifyContent: 'center',
     alignItems: 'center',
     height: '70%',
-    width:"80%",
+    width:"46%",
     borderRadius:5,
     backgroundColor: '#0066FF',
   },
@@ -215,7 +211,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   pick_button:{
     backgroundColor:"white",
-    marginRight:10,
+    //marginRight:10,
+    marginHorizontal:30,
     alignItems:'center',
     justifyContent:'center',
   },
@@ -228,6 +225,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 2,
+    flexDirection:'row'
   },
   editGoodsQuality:{
     justifyContent:'center',

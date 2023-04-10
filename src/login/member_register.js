@@ -273,7 +273,8 @@ class Login extends Component {
     //알림이 올 경우 
     handleFCMMessage=()=> {
         //Foreground 상태에서 알림이 오면 Alert 창 보여줌
-        const unsubscribe = messaging().onMessage(async remoteMessage => {             
+        const unsubscribe = messaging().onMessage(async remoteMessage => {           
+            console.log('백그라운드 상태에서 알림을 받았습니다.');  
             Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
                 { text: '취소', onPress: () => { } },
                 { text: '확인', onPress: () => this.foreGroundNotiOkButtonClicked(remoteMessage)}],

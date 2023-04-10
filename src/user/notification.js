@@ -1,22 +1,21 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, ScrollView, FlatList, TouchableOpacity,RefreshControl } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 
 import Constant from '../util/constatnt_variables';
 
 import WebServiceManager from '../util/webservice_manager';
 import EmptyListView from '../util/empty_list_view';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SellIcon from 'react-native-vector-icons/Feather';
-import BuyIcon from 'react-native-vector-icons/FontAwesome';
 import CircleIcon from 'react-native-vector-icons/FontAwesome';
 
 import { template } from "../styles/template/page_style";
 import { styles } from '../styles/notice';
+import Session from '../util/session';
 
 export default class Notification extends Component {
     constructor(props) {
         super(props);
         this.contents=[];
+        this.userID=Session.getValue('id')
 
         this.state = {
             notiContents: [],
@@ -33,13 +32,11 @@ export default class Notification extends Component {
     }
 
     goGetNoties=()=>{
-        this.getUserID().then((value) => {
-            this.callGetNotiesAPI(value).then((response) => {
+            this.callGetNotiesAPI().then((response) => {
                 console.log('noti data',response);
                 this.contents=response;
                 this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()});
             });
-        })
     }
 
     handleEmptyListView=()=>{
@@ -51,20 +48,9 @@ export default class Notification extends Component {
         }
     }
 
-    async getUserID() {
-        let obj = await AsyncStorage.getItem('obj')
-        let parsed = JSON.parse(obj);
-        if (obj !== null) {
-            return parsed.id;
-        }
-        else {
-            return false;
-        }
-    }
-
     //사용자 id값에 해당하는 모든 알림 받아오기 API
-    async callGetNotiesAPI(userID) { //로그인 된 id값으로 모든알림정보 가져오는 API
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + userID);
+    async callGetNotiesAPI() { //로그인 된 id값으로 모든알림정보 가져오는 API
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetNoties?id=" + this.userID);
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -103,7 +89,6 @@ export default class Notification extends Component {
         }          
         return filteredContents;
     }
-
 
     //리스트의 항목에서 삭제 버튼 클릭시
     deleteItemListener(id) {
@@ -147,9 +132,6 @@ export default class Notification extends Component {
         );
     }
 }
-
-
-
 //리스트에 표시된 각 항목 클래스
 class ItemList extends PureComponent {
     constructor(props) {
@@ -179,7 +161,6 @@ class ItemList extends PureComponent {
                 //console.log('success',response);
             })
         }
-
         if(kind=='buy'){
             this.props.refreshListener();
             this.props.navigation.navigate('BuyList');
@@ -206,14 +187,12 @@ class ItemList extends PureComponent {
 
     render() {
         const { body, todate, kind, reading } = this.props.item;
-       
         return (
             <>
                 <TouchableOpacity onPress={()=>this.itemClicked()}>
                     <View style={styles.product}>
                         <View style={{flexDirection:'row',width:"100%"}}>
                             <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
-                                {/*<SellIcon name={this.iconNameValue(kind)} size={40} color="#0066FF" style={{alignItems:'center',justifyContent:'center'}} />*/}                              
                                 <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{position:'absolute',paddingTop:10}} />
                                 {/* buy, sell 판별하여 text 표시 */}
                                 <Text style={{ color: "#0066FF", paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           

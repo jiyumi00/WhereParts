@@ -7,17 +7,18 @@ import Session from "./session";
 export default class FunctionUtil {
     
     static async getLoginType() {
-        const obj = await AsyncStorage.getItem('userInfo');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const firedDate = await AsyncStorage.getItem('firedDate');
         let value = { companyNo: "", passwd: "", id: 0, detailLogin: 0};
-        if (obj != null) {
-            const { companyNo, passwd, id, detailLogin, startDate } = JSON.parse(obj);
+        if (userInfo != null) {
+            const { companyNo, passwd, id, detailLogin } = JSON.parse(userInfo);
             console.log("libraries_fuction(사업자번호, 패스워드, id, detailLogin) = ",companyNo,passwd,id,detailLogin)
             if (detailLogin == 0) {//로그인 방법을 아무것도 선택하지 않았을 경우
                 value = { companyNo: "", passwd: "", id: 0, detailLogin: 0};
             }
             else if (detailLogin == 1) {    //자동 로그인일 경우
                 const today = parseInt(Date.now()/1000);
-                if(today-startDate > 60)
+                if(firedDate.firedDate - today < 0)
                     value = { companyNo: "", passwd: "", id: 0, detailLogin: 0 };
                 else
                     value = { companyNo: companyNo, passwd: passwd, id: 0, detailLogin: 1 };
@@ -44,15 +45,17 @@ export default class FunctionUtil {
                 }
                 Session.setItem(userInfo);
                 
-                let today = 0;
-                if(loginInfo.isAutoLogin==false)
-                    today = parseInt(Date.now()/1000);
-                
+                if (loginInfo.isAutoLogin == false && loginInfo.detailLogin == 1) {
+                    const firedDate = {
+                        firedDate: parseInt(Date.now() / 1000) * Constant.asyncFiredTerm * 7,
+                    }
+                    AsyncStorage.setItem('firedDate', Json.stringify(firedDate));
+                }
+
                 userInfo = {
                     companyNo: response.companyNo,
                     passwd: response.passwd,
                     detailLogin: loginInfo.detailLogin,
-                    startDate: today
                 }
                 AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
                 return true;

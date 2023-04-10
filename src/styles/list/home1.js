@@ -95,45 +95,46 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
 
   //list
   listItem_view: { //공통부분
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    //borderWidth:1,
     backgroundColor:'white',
-    paddingHorizontal:10,
+    //paddingHorizontal:10,
     paddingVertical:5,
     marginHorizontal:10,
     marginVertical:5,
     borderColor:"#D1D1D1",
     borderRadius:10,
+    width:185,
+    height:280,
+    borderWidth:1,
   },
   productImage_view: {
     borderColor: '#E9E9E9',
     borderStyle: 'solid',
     overflow: 'hidden',
+    width: 160,
+    height: 150,
   },
   product_image: {
     flex:1,
     margin:5,
-    width: 80,
-    height: 80,
+    width: 150,
+    height: 150,
     borderRadius: 6,
   },
   productInfo_view: {
     flex:3,
+    //borderWidth:1,
+    width:"80%",
     height:70,
-    flexDirection:'row',
+    flexDirection:'column',
     marginLeft:10,
     marginTop:5,
     marginBottom:5,
     marginRight:15,
   },
-  productInfoLeft_view:{
-    flex:4,
-    height:70,
-  },
-  productInfoRight_view:{
+  productInfoDetail_view:{
     flex:2,
-    alignItems:'flex-end',
   },
   itemDetail_text:{
     fontsize:15,
