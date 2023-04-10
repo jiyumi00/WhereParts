@@ -295,7 +295,7 @@ class Home extends Component {
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
-                                    <CameraIcon name="camera" size={25} color="#0066FF" />
+                                    <CameraIcon name="camera" size={25} color="#193067" />
                                 </TouchableOpacity>
                             </View>
                             </View>

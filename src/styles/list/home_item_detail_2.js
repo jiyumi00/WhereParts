@@ -140,12 +140,13 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     // 상품 정보///////////////////////////////////////////////////////
     toggleDetail_view: {
         borderWidth:1,
-        borderColor: '#E6E6E6',
+        borderColor: '#F5F5F5',
         borderRadius:10,
         marginBottom:'5%',
         marginHorizontal:'5%',
         paddingHorizontal:'5%',
         paddingVertical:'3%',
+        backgroundColor:'#F5F5F5'
     },
     toggleDetailTitle_view: {
         flexDirection: 'row',

@@ -49,8 +49,6 @@ class Stack extends Component {
                 screenOptions={{
                     headerTitleAlign: 'center',
                 }}>
-
-
                 <NativeStack.Screen name="TabHome" component={TabHome}
                     options={{ headerShown:false}} />
             

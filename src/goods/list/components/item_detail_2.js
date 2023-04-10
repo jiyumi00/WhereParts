@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import { styles } from "../../../styles/list/home_item_detail_1";
+import { styles } from "../../../styles/list/home_item_detail_2";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';

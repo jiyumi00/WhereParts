@@ -156,14 +156,14 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     color:'#0066FF'
   },
   itemName_text: {
-    fontSize: 17,
-    fontWeight: 'bold',
+    fontSize: 15,
+    //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   },
   itemPrice_text:{
     fontSize: 15,
-    fontWeight: '200',
+    fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   }
