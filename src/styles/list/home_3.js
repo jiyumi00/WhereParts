@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   cameraSearch_button: { //공통사용
     marginLeft: 10,
     width: 50,
-    height: 50,
+    height: 45,
     backgroundColor: '#D6DFF5',
     justifyContent: 'center',
     alignItems: 'center',
@@ -114,36 +114,41 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   
 //list
 listItem_view: { //공통부분
-    borderWidth:1,
+    borderWidth:1.5,
     borderRadius:10,
     borderColor:'#D9D9D9',
     marginLeft:10,
     width:ScreenWidth/2.2,
     marginBottom:'5%',
     paddingHorizontal:10,
-    paddingVertical:5
+    //paddingVertical:3
   },
   productTop_view:{
     flexDirection:'row',
-    borderBottomWidth:1,
+    //borderBottomWidth:1,
     borderColor:'#D9D9D9',
     paddingBottom:8,
+    paddingTop:5,
   },
   product_image: {
     flex:1,
-    width:(ScreenWidth/5.5),
-    height: (ScreenWidth/5.5),
+    width:(ScreenWidth/6.5),
+    height: (ScreenWidth/6.5),
     borderRadius:10,
   },
   
   productInfoLeft_view:{
-    alignItems:'center',
-    paddingVertical:5,
+    alignItems:'flex-start',
+    paddingVertical:3,
+    borderBottomWidth:1,
+    borderColor:'#D9D9D9',
   },
   productInfoRight_view:{
     alignItems:'flex-end',
+    justifyContent:'flex-end',
+    paddingVertical:3,
     height:(ScreenWidth/5.5),
-    flex:1
+    //flex:1,
   },
   itemDetail_text:{
     fontsize:12,
@@ -151,14 +156,14 @@ listItem_view: { //공통부분
     color:'#0066FF'
   },
   itemName_text: {
-    fontSize: 16,
+    fontSize: 14,
     //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   },
   itemPrice_text:{
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 14,
+    //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   }

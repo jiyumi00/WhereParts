@@ -16,6 +16,7 @@ import { color } from 'react-native-reanimated';
 export default class SalesDetails extends Component {
     constructor(props) {
         super(props);
+
         this.contents = []; //soldoutContents
         this.userID=0;
         this.state = {
@@ -26,8 +27,8 @@ export default class SalesDetails extends Component {
            
             isRefresh:false,
             
-            emptySaleListViewVisible:1,
-            emptySoldOutListViewVisible:1,
+            emptySaleListViewVisible:true,
+            emptySoldOutListViewVisible:true,
         };
     }
 
@@ -63,21 +64,12 @@ export default class SalesDetails extends Component {
     }
  
     handleEmptySaleListView = (length) => {
-        if (length == 0) {
-            this.setState({ emptySaleListViewVisible: 0 });
-        }
-        else {
-            this.setState({ emptySaleListViewVisible: 1 });
-        }
+        this.setState({emptySaleListViewVisible: length == 0 ? true : false});
     }
     handleEmptySoldOutListView = (length) => {
-        if (length == 0) {
-            this.setState({ emptySoldOutListViewVisible: 0 });
-        }
-        else {
-            this.setState({ emptySoldOutListViewVisible: 1 });
-        }
+        this.setState({emptySoldOutListViewVisible: length == 0 ? true : false});
     }
+
     async callGetGoodsAPI() { //로그인 된 id값으로 올린 상품 가져오는 API
         let manager = new WebServiceManager(Constant.serviceURL + "/GetGoods?id=" + this.userID);
         let response = await manager.start();
@@ -154,14 +146,14 @@ export default class SalesDetails extends Component {
                     </View>
                 </View>
 
-                {this.state.saleState==1 && this.state.emptySaleListViewVisible==1 && (<FlatList
+                {this.state.saleState==1 && this.state.emptySaleListViewVisible==false && (<FlatList
                     data={this.state.salesContents}
                     renderItem={({ item, index }) => <SaleListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.saleState!=1 &&this.state.emptySoldOutListViewVisible==1 &&(<FlatList
+                {this.state.saleState!=1 &&this.state.emptySoldOutListViewVisible==false &&(<FlatList
                     data={this.state.soldoutContents}
                     renderItem={({ item, index }) => <SoldOutListItem navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
                     refreshing={this.state.isRefresh}
@@ -169,9 +161,8 @@ export default class SalesDetails extends Component {
                     scrollEventThrottle={16}
                 />)}
       
-                {this.state.saleState==1 && this.state.emptySaleListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
-                {this.state.saleState!=1&& this.state.emptySoldOutListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
-             
+                {this.state.saleState==1 && this.state.emptySaleListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
+                {this.state.saleState!=1 && this.state.emptySoldOutListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}            
             </View>
         );
     }

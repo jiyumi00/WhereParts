@@ -5,8 +5,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // 경로를 위한 import
 //import Home from '../goods/list/components/home';
 //import Home from '../goods/list/components/home1';
-import Home from '../goods/list/components/home_3';
+//import Home from '../goods/list/components/home_1';
 //import Home from '../goods/list/components/home_2'
+import Home from '../goods/list/components/home_3';
 
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';

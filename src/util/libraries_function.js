@@ -18,10 +18,12 @@ export default class FunctionUtil {
             }
             else if (detailLogin == 1) {    //자동 로그인일 경우
                 const today = parseInt(Date.now()/1000);
-                if(firedDate.firedDate - today < 0)
-                    value = { companyNo: "", passwd: "", id: 0, detailLogin: 0 };
-                else
-                    value = { companyNo: companyNo, passwd: passwd, id: 0, detailLogin: 1 };
+                if (firedDate != null) {
+                    if (firedDate.firedDate - today < 0)
+                        value = { companyNo: "", passwd: "", id: 0, detailLogin: 0 };
+                    else
+                        value = { companyNo: companyNo, passwd: passwd, id: 0, detailLogin: 1 };
+                }
             }
             else if (detailLogin == 2) { //id 기억일 경우
                 value = { companyNo: companyNo, passwd: "", id: 0, detailLogin: 2 };
@@ -49,7 +51,7 @@ export default class FunctionUtil {
                     const firedDate = {
                         firedDate: parseInt(Date.now() / 1000) * Constant.asyncFiredTerm * 7,
                     }
-                    AsyncStorage.setItem('firedDate', Json.stringify(firedDate));
+                    AsyncStorage.setItem('firedDate', JSON.stringify(firedDate));
                 }
 
                 userInfo = {

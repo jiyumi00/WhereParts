@@ -17,19 +17,16 @@ import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Constant from "../../util/constatnt_variables";
 import WebServiceManager from "../../util/webservice_manager";
 
+//비밀번호,명함 변경 및 사업자번호,명함 사진을 확인할 수 있는 내정보 수정 페이지
 class EditProfile extends Component {
-
     constructor(props) {
         super(props);
         //포커스를 위한 변수
         this.passwordRef = React.createRef();
         this.passwordokRef = React.createRef();
-
         this.photoCameraIcon = React.createRef();
         this.modalPhotoCameraX = null;
         this.modalPhotoCameraY = null;
-
-        this.imageLength = 1; //유효성
 
         this.loginInfo = { companyNo: null, passwd: null,userID:null }
 
@@ -38,30 +35,27 @@ class EditProfile extends Component {
             modal: true,
             passwderror: false,
 
-            userpasswd: '',
+            confirmPasswd: '',
 
             companyNo: '',
             passwd: '',
             passwordok: '',
 
             cardPopupMenuVisible: false,  //명함 팝업메뉴
-            cardImageDetailVisible: false,
-            companyImageDetailVisible: false,
+            cardImageDetailVisible: false, //명함 자세히
+            companyImageDetailVisible: false, //사업자등록증 자세히
 
-            companyNoImageURL: null,
-            cardImageURL: null,
+            companyNoImageURL: null, //사업자등록증 사진
+            cardImageURL: null, //명함 사진
 
-            editProfilestatus: 0,
+            editprofileModal: true,//취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
         }
     }
 
     componentDidMount() {
         FunctionUtil.loginInfo().then((value) => {
-            this.loginInfo.companyNo = value.companyNo;
-            this.loginInfo.userID = Session.getValue('id');
-            this.loginInfo.passwd = value.passwd;
+            this.loginInfo = { companyNo: value.companyNo, passwd: value.passwd,userID:Session.getValue('id') }
             this.setState({ companyNo: value.companyNo })
-
             this.callGetCompanyImage(this.loginInfo).then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
@@ -106,8 +100,8 @@ class EditProfile extends Component {
 
     //현재비밀번호 확인버튼 클릭 시
     passwdOkButtonClicked = () => {
-        if (this.state.userpasswd === this.loginInfo.passwd)
-            this.setState({modal: !this.state.modal, passwderror: false, editProfilestatus: 1});
+        if (this.state.confirmPasswd === this.loginInfo.passwd)
+            this.setState({modal: !this.state.modal, passwderror: false, editprofileModal: false});
         else
             this.setState({ passwderror: true })
     }
@@ -122,15 +116,14 @@ class EditProfile extends Component {
             else if (this.state.passwd == this.state.passwordok) {
                 this.setState({ passwderror: false })
                 if (response.success == 1) {
-                    const obj = { passwd: this.state.passwd }
-                    AsyncStorage.setItem('userInfo', JSON.stringify(obj));
+                    AsyncStorage.clear();
                     Alert.alert('정보 수정이 완료되었습니다', '로그인 창에서 재로그인 해주세요', [
                         { text: '확인', onPress: () => { this.props.navigation.navigate("Login") } },
                     ]);
                 }
-            }
-            else {
-                Alert.alert('정보 수정을 실패하였습니다.');
+                else {
+                    Alert.alert('정보 수정을 실패하였습니다.');
+                }
             }
         })
     }
@@ -149,7 +142,6 @@ class EditProfile extends Component {
     //명함 사진 URL
     cardImageInfo = (cardImageURI) => {
         this.setState({ cardImageURL: cardImageURI });
-        this.imageLength++;
         this.onValueChange();
     }
 
@@ -159,12 +151,11 @@ class EditProfile extends Component {
     }
     // 명함 갤러리로 이동
     goPhotoGalleryScreen = () => {
-        this.props.navigation.navigate('PhotoGallery', { onResultListener: this.cardImageInfo })
+        this.props.navigation.navigate('BusinessCardGallery', { onResultListener: this.cardImageInfo })
     }
     //명함 사진 삭제 함수
     photoRemoveClicked = () => {
         this.setState({ cardImageURL: "" });
-        this.imageLength--;
         this.onValueChange();
     }
 
@@ -185,7 +176,7 @@ class EditProfile extends Component {
             if (this.state.passwd == this.state.passwordok) {
                 this.setState({ passwderror: false });
             }
-            if (this.imageLength == 0) {
+            if (this.state.cardImageURL == "") {
                 isValidForm = false;
             }
             console.log("imageLength", this.imageLength);
@@ -238,8 +229,8 @@ class EditProfile extends Component {
                                         returnKeyType="done"
                                         onSubmitEditing={this.passwdOkButtonClicked}
                                         secureTextEntry={true}
-                                        onChangeText={(value) => this.setState({ userpasswd: value })}
-                                        value={this.state.userpasswd}
+                                        onChangeText={(value) => this.setState({ confirmPasswd: value })}
+                                        value={this.state.confirmPasswd}
                                     />
                                 </View>
                                 {this.state.passwderror == true ? (
@@ -260,7 +251,7 @@ class EditProfile extends Component {
 
                     </ScrollView>
                 </Modal>
-                {(this.state.editProfilestatus == 1) &&
+                {(this.state.editprofileModal == false) &&
                     <View style={styles.total_container}>
                         <ScrollView
                             onScroll={event => {

@@ -20,8 +20,8 @@ class Login extends Component {
         this.idRef = React.createRef(); //다음을 눌렀을 경우 포커싱 이동을 위함
         this.passwordRef = React.createRef();
         this.loginButtonRef = React.createRef();
-        this.deviceToken='';
-        
+        this.deviceToken = '';
+
         this.state = {
             companyNo: '', //사업자번호
             passwd: '', //비밀번호
@@ -31,17 +31,17 @@ class Login extends Component {
             autoLoginChecked: false,
             rememberIdChecked: false,
 
-            loginValid:false,
+            loginValid: false,
         }
 
-        this.nextPage='TabHome';
-        if(this.props.route.params != null){
+        this.nextPage = 'TabHome';
+        if (this.props.route.params != null) {
             const params = this.props.route.params;
-            if(params.hasOwnProperty('nextPage'))
-                this.nextPage=params.nextPage;
+            if (params.hasOwnProperty('nextPage'))
+                this.nextPage = params.nextPage;
         }
         //console.log("nextPage",this.nextPage);
-        const date = parseInt(Date.now()/1000);
+        const date = parseInt(Date.now() / 1000);
         console.log("date", date);
     }
 
@@ -49,33 +49,27 @@ class Login extends Component {
     componentDidMount() {
         SplashScreen.hide();
         //퍼미션 설정되었는지 확인
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false,})})
         this.requestPermission();
         this.goLoginType();
         //알림메시지 처리
         this.handleFCMMessage();
-        
-        //자동 로그인 처리되는지 확인
-        /*this.availableLogin().then((response) => {
-            if(response==true) {
-                //this.setState({companyNo:companyNo,passwd:passwd,detailLogin:detailLogin});
-                //this.autoLoginRadioButtonChecked();
-                this.callLoginAPI(true).then((response) => {
-                    console.log("자동 로그인 성공", response);
-                    this.props.navigation.navigate('TabHome');
-                });
-            }
-        });*/
+    }
+
+    componentWillUnmount () {
+        this.focusListener()
     }
     async requestPermission() {
         try {
             const granted = await PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.CAMERA,
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, 
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, 
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
             ]).then((result) => {
-                if (result['android.permission.CAMERA'] && 
-                    result['android.permission.ACCESS_FINE_LOCATION'] && 
-                    result['android.permission.READ_EXTERNAL_STORAGE'] && 
+                if (result['android.permission.CAMERA'] &&
+                    result['android.permission.ACCESS_FINE_LOCATION'] &&
+                    result['android.permission.READ_EXTERNAL_STORAGE'] &&
                     result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
                     console.log('모든 권한 획득')
                 }
@@ -85,21 +79,21 @@ class Login extends Component {
             });
 
             //push notification 퍼미션이 허용되어 있으면 토큰을 가져옴 (안드로이드 12까지는 알림이 무조건 허용되어 있음 13부터는 퍼미션 물어봄)
-            const authStatus = await messaging().requestPermission();        
+            const authStatus = await messaging().requestPermission();
             const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-                    
+
             //알림 권한이 설정되어 있으면...
-            if (enabled) {        
+            if (enabled) {
                 const token = await messaging().getToken();
-            //푸시 토큰 표시         
-                console.log('fcm token:', token);            
-                console.log('Authorization status:', authStatus);    
-                this.deviceToken=token;        
-            
-            } else {        
-                console.log('fcm auth fail');        
+                //푸시 토큰 표시         
+                console.log('fcm token:', token);
+                console.log('Authorization status:', authStatus);
+                this.deviceToken = token;
+
+            } else {
+                console.log('fcm auth fail');
             }
-        } catch(err) {
+        } catch (err) {
             console.warn(err);
         }
     }
@@ -107,15 +101,15 @@ class Login extends Component {
     goLoginType() {
         FunctionUtil.getLoginType().then((response) => {
             console.log('login info ', response);
-            if(response.detailLogin==1){
+            if (response.detailLogin == 1) {
                 // 자동로그인
-                this.setState({autoLoginChecked:true});
+                this.setState({ autoLoginChecked: true });
                 const loginInfo = {
-                    companyNo:response.companyNo, 
-                    passwd:response.passwd, 
-                    deviceToken:"",
-                    detailLogin:response.detailLogin,
-                    isAutoLogin:true,
+                    companyNo: response.companyNo,
+                    passwd: response.passwd,
+                    deviceToken: "",
+                    detailLogin: response.detailLogin,
+                    isAutoLogin: true,
                 }
                 FunctionUtil.goLogin(loginInfo).then((success) => {
                     console.log("success", success);
@@ -128,9 +122,9 @@ class Login extends Component {
                     }
                 });
             }
-            else if(response.detailLogin==2){
+            else if (response.detailLogin == 2) {
                 // 패스워드만 입력
-                this.setState({companyNo:response.companyNo, rememberIdChecked:true});
+                this.setState({ companyNo: response.companyNo, rememberIdChecked: true });
             }
         });
     }
@@ -141,7 +135,7 @@ class Login extends Component {
             passwd: this.state.passwd,
             deviceToken: this.deviceToken,
             detailLogin: this.getDetailLogin(),
-            isAutoLogin:false,
+            isAutoLogin: false,
         }
 
         FunctionUtil.goLogin(loginInfo).then((success) => {
@@ -164,22 +158,22 @@ class Login extends Component {
 
     //아무것도 체크안한 상태 --0, 자동로그인 체크 --1, id기억 체크 --2
     autoLoginCheckButtonChecked = () => {
-        this.setState({autoLoginChecked: !this.state.autoLoginChecked});
-        if(this.state.rememberIdChecked){
-            this.setState({rememberIdChecked:false});
+        this.setState({ autoLoginChecked: !this.state.autoLoginChecked });
+        if (this.state.rememberIdChecked) {
+            this.setState({ rememberIdChecked: false });
         }
     }
-    rememberIdCheckButtonChecked=()=>{
-        this.setState({rememberIdChecked: !this.state.rememberIdChecked});
-        if(this.state.autoLoginChecked){
-            this.setState({autoLoginChecked:false});
+    rememberIdCheckButtonChecked = () => {
+        this.setState({ rememberIdChecked: !this.state.rememberIdChecked });
+        if (this.state.autoLoginChecked) {
+            this.setState({ autoLoginChecked: false });
         }
     }
 
-    getDetailLogin(){
-        if(this.state.autoLoginChecked)
+    getDetailLogin() {
+        if (this.state.autoLoginChecked)
             return 1;
-        if(this.state.rememberIdChecked)
+        if (this.state.rememberIdChecked)
             return 2;
         else
             return 0;
@@ -200,46 +194,17 @@ class Login extends Component {
             this.setState({ validForm: isValidForm });
         });
     }
-    
+
     registerUserButtonClicked = () => {
         this.props.navigation.navigate('SignUp'); //회원가입 버튼 눌렀을 경우
     }
 
-    async callSetReadNotiAPI(id) { 
-        let manager = new WebServiceManager(Constant.serviceURL +"/SetReadNoti?id="+id);
+    async callSetReadNotiAPI(id) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/SetReadNoti?id=" + id);
         let response = await manager.start();
-        if(response.ok)
+        if (response.ok)
             return response.json();
     }
-    //추가된부분
-    /*notiOkButtonClicked = (message) => {
-        console.log('[notiOkButtonClicked 실행]')
-        this.callSetReadNotiAPI(message.data.id).then((response) => {
-            console.log(response);
-        })
-        FunctionUtil.isLogined().then((response) => {
-            this.setState(response, () => {
-                if (response != undefined && response.logined == true) {
-                    if (message.data.kind == "buy") {
-                        this.props.navigation.navigate("BuyList");
-                    }
-                    else if (message.data.kind == "sell") {
-                        this.props.navigation.navigate("SalesList");
-                    }
-                }
-                else if (this.state.loginValid == true || response.logined == true) {
-                    if (message.data.kind == "buy")
-                        this.props.navigation.navigate("BuyList");
-                    else if (message.data.kind == "sell")
-                        this.props.navigation.navigate("SalesList");
-                }
-                else {
-                    this.onValueChange();
-                    this.props.navigation.navigate("Login", { kind: message.data.kind });
-                }
-            })
-        })
-    }*/
 
     backGroundNotiOkButtonClicked = (message) => {
         console.log('[notiOkButtonClicked 실행]')
@@ -250,7 +215,7 @@ class Login extends Component {
         if (message.data.kind == "buy")
             this.props.navigation.navigate("BuyList");
         else if (message.data.kind == "sell")
-            this.props.navigation.navigate("SalesList", {saleState:2});
+            this.props.navigation.navigate("SalesList", { saleState: 2 });
     }
 
     foreGroundNotiOkButtonClicked = (message) => {
@@ -258,34 +223,34 @@ class Login extends Component {
             console.log(response);
         });
         const isLoggedin = Session.isLoggedin();
-        console.log("loginvalid 값 =",isLoggedin);
-       
+        console.log("loginvalid 값 =", isLoggedin);
+
         if (isLoggedin == true) {
             if (message.data.kind == "buy")
                 this.props.navigation.navigate("BuyList");
             else if (message.data.kind == "sell")
-                this.props.navigation.navigate("SalesList", {saleState:2});
+                this.props.navigation.navigate("SalesList", { saleState: 2 });
         }
         else
             return;
     }
 
     //알림이 올 경우 
-    handleFCMMessage=()=> {
+    handleFCMMessage = () => {
         //Foreground 상태에서 알림이 오면 Alert 창 보여줌
-        const unsubscribe = messaging().onMessage(async remoteMessage => {           
-            console.log('백그라운드 상태에서 알림을 받았습니다.');  
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            console.log('백그라운드 상태에서 알림을 받았습니다.');
             Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
                 { text: '취소', onPress: () => { } },
-                { text: '확인', onPress: () => this.foreGroundNotiOkButtonClicked(remoteMessage)}],
+                { text: '확인', onPress: () => this.foreGroundNotiOkButtonClicked(remoteMessage) }],
                 { cancelable: false });
             return false;
-                        
+
         });
-              
+
         //Background 상태에서 알림창을 클릭한 경우 해당 페이지로 이동         
-        messaging().onNotificationOpenedApp(remoteMessage => {        
-            console.log('Notification caused app to open from background state:',remoteMessage.notification);
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log('Notification caused app to open from background state:', remoteMessage.notification);
             this.backGroundNotiOkButtonClicked(remoteMessage);
         });
     }
@@ -307,7 +272,7 @@ class Login extends Component {
                                         ref={(c) => { this.idRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={() => { this.passwordRef.focus(); }}
-                                        onChangeText={(value) => {this.onValueChange({ companyNo: value });}}
+                                        onChangeText={(value) => { this.onValueChange({ companyNo: value }); }}
                                         value={this.state.companyNo}
                                     />
                                 </View>
@@ -316,7 +281,7 @@ class Login extends Component {
                                     <TextInput
                                         ref={(c) => { this.passwordRef = c; }}
                                         returnKeyType="next"
-                                        onChangeText={(value) => this.onValueChange({passwd:value})}
+                                        onChangeText={(value) => this.onValueChange({ passwd: value })}
                                         secureTextEntry={true}
                                         value={this.state.passwd}
                                     />

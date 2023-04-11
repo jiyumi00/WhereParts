@@ -36,7 +36,7 @@ export default class ListItem extends PureComponent {
     }
 
     goGoodsDetailScreen = () => {
-        this.props.navigation.push('GoodsDetail', { goodsID: this.item.id, sellerID: this.item.userID, refresh: this.props.refreshListener });
+        this.props.navigation.push('GoodsDetail', { goodsID: this.item.id, sellerID: this.item.userID, distance:this.item.distance, refresh: this.props.refreshListener });
     }
 
     render() {
