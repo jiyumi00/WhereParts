@@ -5,6 +5,7 @@ import { styles } from "../../styles/saleslist";
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EmptyListView from '../../util/empty_list_view';
 import Session from '../../util/session';
@@ -134,13 +135,13 @@ export default class SalesDetails extends Component {
                         <Icon style={{ marginLeft: "58%" }} name="account-circle" size={60} color={'lightgrey'}></Icon>
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%" }}>
-                        <View style={{ borderBottomWidth: this.state.saleState==1 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                        <View style={{ borderBottomWidth: this.state.saleState==1 ? 1 : 0, width: "33.3%", borderBottomColor:"#EE636A", alignItems: 'center' }}>
                             <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==1 ? "#EE636A" : "black" }]}>판매중</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.saleState==2 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                        <View style={{ borderBottomWidth: this.state.saleState==2 ? 1 : 0, width: "33.3%", borderBottomColor:"#EE636A",alignItems: 'center' }}>
                             <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? "#EE636A" : "black" }]}>배송입력할 상품</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.saleState==3 ? 1 : 0, width: "33.3%", alignItems: 'center' }}>
+                        <View style={{ borderBottomWidth: this.state.saleState==3 ? 1 : 0, width: "33.3%",borderBottomColor:"#EE636A", alignItems: 'center' }}>
                             <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
@@ -162,7 +163,8 @@ export default class SalesDetails extends Component {
                 />)}
       
                 {this.state.saleState==1 && this.state.emptySaleListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
-                {this.state.saleState!=1 && this.state.emptySoldOutListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}            
+                {this.state.saleState!=1&& this.state.emptySoldOutListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
+             
             </View>
         );
     }
@@ -203,33 +205,30 @@ class SaleListItem extends PureComponent {
         const item = this.props.item;
         return (
             <>
-                <TouchableOpacity onPress={this.handleDetailViewModal}>
+                 <TouchableOpacity onPress={this.handleDetailViewModal}>
                     <View style={styles.product}>
-                        <View style={styles.productRegisterDate}>
+                       {/*  <View style={styles.productRegisterDate}>
                             <Text style={styles.itemRegisterDateText}>등록일 {item.registerDate.slice(2, 10)}</Text>
-                        </View>
+                        </View> */}
                         {/*이미지 */}
-                        <View style={styles.productImageView}>
-                            <Image
-                                source={{ uri: this.state.imageURL }}
-                                style={styles.productImage} />
+                       
+                        <Image
+                            source={{ uri: this.state.imageURL }}
+                            style={styles.productImage} />
 
-                            <View style={styles.productInfo}>
-                                <View style={styles.productInfoLeft}>
-                                    <Text style={styles.itemNameText}>{item.name}</Text>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
-                                        <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
-                                    </View>
-                                    <Text style={styles.itemNumberText}>{item.number}</Text>
-                                </View>
-                            </View>
-                            {item.valid == 0 && <View style={{ marginRight: '4%' }}>
-                                <Text style={{ fontSize: 14 }}>숨김</Text>
-                            </View>}
+                        <View style={styles.productInfo}>
+                            
+                                <Text style={styles.itemNameText}>{item.name}</Text>
+                                <Text style={styles.itemNumberText}>{item.number}</Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'gray'}}>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemRegisterDateText}>{item.registerDate.slice(0, 10)}</Text>
+                            
+                        </View>
+                        <View style={{ flex:0.4,justifyContent:'flex-start'}}>
+                        {item.valid == 0 &&  <Text style={{ fontSize: 14 }}>숨김</Text>}
                         </View>
                     </View>
+                    
                 </TouchableOpacity>
                 <Modal animationType="slide" transparent={true} visible={this.state.isDetailViewModal}>
                     <DetailItemView detailViewModalListener={(value) => { this.setState({ isDetailViewModal: value }) }} item={item} />
@@ -270,38 +269,45 @@ class SoldOutListItem extends PureComponent {
 
         return (
             <>           
-                    <View style={styles.product}>
-                        <View style={styles.productRegisterDate}>
-                            <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(2, 10)}</Text>
+                    {/*       <View style={styles.product}>
+                      
+                        <Image
+                            source={{ uri: this.state.imageURL }}
+                            style={styles.productImage} />
+
+                        <View style={styles.productInfo}>
+                            
+                                <Text style={styles.itemNameText}>{item.name}</Text>
+                                <Text style={styles.itemNumberText}>{item.number}</Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'gray'}}>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemRegisterDateText}>{item.registerDate.slice(0, 10)}</Text>
+                            
                         </View>
-                        {/*이미지 */}
-                        <View style={styles.productImageView}>
+                      
+                    </View> */}
+                    <View style={[styles.product,{flexDirection:'column'}]}>
+                        <View style={{flexDirection:'row',paddingBottom:'2%'}}>
                             <Image
                                 source={{ uri: this.state.imageURL }}
                                 style={styles.productImage} />
 
                             <View style={styles.productInfo}>
-                                <View style={styles.productInfoLeft}>
-                                    <Text style={styles.itemNameText}>{item.goodsName}</Text>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={styles.itemPriceText}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{"원"}</Text>
-                                        <Text style={{ fontSize: 17, color: 'lightgrey' }}> |</Text>
-                                        <Text style={styles.itemPriceText}> {item.quantity}{"개"}</Text>
-                                    </View>
-                                    <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
-                                </View>
+                                <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'gray'}}>/ {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 / <Text style={{fontSize:12,color:'black'}}>카드</Text></Text>
+                                <Text style={styles.itemRegisterDateText}>{item.orderingDate.slice(0, 10)}</Text>
                             </View>
                         </View>
                         {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.refreshListener })}>
-                            <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
-                        </TouchableOpacity>}
+                    <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
+                </TouchableOpacity>}
 
-                        {item.status == 2 && <TouchableOpacity style={styles.productInfoRight}>
-                            <Text style={styles.itemDistanceText}>배송등록완료</Text>
-                        </TouchableOpacity>}
-
+                {item.status == 2 && <TouchableOpacity style={styles.productInfoRight}>
+                    <Text style={styles.itemDistanceText}>배송등록완료</Text>
+                </TouchableOpacity>}
+                        
                     </View>
-                    
+                  
             </>
         );
     }

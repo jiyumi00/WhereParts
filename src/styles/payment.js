@@ -3,6 +3,50 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
+  indexView:{
+    borderWidth: 1,
+    height:200,
+    borderRadius: 5,
+    borderColor: "lightgray",
+    paddingBottom: 10,
+    //paddingHorizontal:10,
+  },
+   //상품정보
+  itemTopView: {
+    flex: 1,
+    borderBottomColor:'#D4D4D4',
+    paddingTop:10,
+    //borderBottomWidth:1,
+    backgroundColor:'#F7F7F7',
+    paddingHorizontal:10,
+    //borderWidth: 1,
+  },
+  itemBodyView: {
+    flex: 3,
+    flexDirection: 'row',
+    paddingVertical:8,
+    borderBottomColor:'#D4D4D4',
+    borderBottomWidth:1,
+    paddingHorizontal: 10
+    //borderWidth: 1,
+  },
+  itemBottomView: {
+    flex: 1,
+    paddingVertical:6,
+    paddingHorizontal: 10,
+    //borderWidth: 1,
+    flexDirection: 'row',
+  },
+  imageView: {
+    width:ScreenWidth/5,
+    height:ScreenWidth/5
+  },
+  itemInfoView: {
+    //borderWidth:1,
+    alignItems:'flex-end',
+    justifyContent:'center',
+    flex:2.5
+  },
   buyButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -17,17 +61,12 @@ export const styles = StyleSheet.create({
     color: '#FFF',
   },
   indexText:{
-    fontSize: 16, 
-    marginBottom:'3%',
-    fontWeight: "bold", 
-    color: 'black' 
+    fontSize: 16,
+    //fontWeight: 'bold',
+    fontFamily: 'Pretendard-Medium',
+    color: '#000000', 
   },
-  indexView:{
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "lightgray",
-    padding: 10
-  },
+  
   priceText:{
     fontSize: 18,
     color:'black' 
@@ -35,7 +74,7 @@ export const styles = StyleSheet.create({
   paymentButton:{
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
+    height: 55,
     width: "auto",
     borderRadius: 5,
     backgroundColor: '#0066FF', 
@@ -50,8 +89,7 @@ export const styles = StyleSheet.create({
   },
   //수량디자인
   selectQuantityView: {
-    marginLeft:"60%",
-    width:"auto",
+    
     borderRadius: 6,
     borderColor: '#D4D4D4',
     borderWidth: 1,
@@ -96,6 +134,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 30,
+    paddingBottom:30,
     //marginLeft:30,
     //marginRight:30,
   },
@@ -106,11 +145,8 @@ export const styles = StyleSheet.create({
   textInput: {
     backgroundColor: '#F1F1F3',
     marginBottom: 15,
-    marginRight: 15,
     paddingHorizontal: 10,
-
-    height: 55,
-    width: "96%",
+    height: 50,
     borderRadius: 10,
     borderColor: '#F1F1F3',
     borderWidth: 1,
@@ -126,7 +162,7 @@ export const styles = StyleSheet.create({
 
   btn: {
     width: 130,
-    height: 55,
+    height: 50,
     backgroundColor: "black",
     alignItems: 'center',
     justifyContent: 'center',
@@ -145,24 +181,21 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   number_text: {
-
     width: '55%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "#F1F1F3",
     borderRadius: 10,
-    height: 55,
+    height: 50,
     marginBottom: 15,
     marginRight: 15,
-
   },
   address_text: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "#F1F1F3",
     borderRadius: 10,
-    height: 55,
-    width: "96%",
+    height: 50,
     marginBottom: 15,
   },
   deliverView:{
@@ -173,9 +206,9 @@ export const styles = StyleSheet.create({
   },
   productImage: {
     flex: 1,
-    //margin: 5,
-    width: 75,
-    height: 65,
+    width:ScreenWidth/5,
+    height:ScreenWidth/5,
     borderRadius: 6,
   },
+ 
 })

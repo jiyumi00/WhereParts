@@ -3,9 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, Text
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/payment";
-
+import Icon from 'react-native-vector-icons/AntDesign';
 class Payment extends Component {
     constructor(props) {
         super(props);
@@ -216,39 +217,42 @@ class Payment extends Component {
                 <ScrollView style={template.ScrollView}>
                     <View style={template.container}>
                         <View style={styles.indexView}>
-                        <Text style={styles.indexText}>주문상품</Text>
-                            <View style={{flexDirection:'row'}}>
-                                <View style={{ width: 85, height: 75 }}>
-                                        <Image
-                                            source={{ uri: this.state.imageURL }}
-                                            style={styles.productImage} />
-                                </View>
-                                <View style={{flexDirection:'column'}}>
-                                    <Text> 주문번호 : {this.state.orderNo}</Text>
-                                    <Text> 상품명 : {this.item.name}</Text>
-                                    <Text> 품번 : {this.item.number}</Text>
-                                    <Text> 구매가능 수량 : {this.item.quantity}개{"\n"}</Text>
-                                    <Text style={styles.priceText}> {this.item.price*this.state.quantity}원</Text>
-                                </View>
-                                
+                            <View style={styles.itemTopView}>
+                                <Text style={styles.indexText}>{this.item.name}</Text>
                             </View>
-                           
-                            <View style={{flexDirection:'row',}}>
-                               
-                                <View style={styles.selectQuantityView}>
-                                    <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
-                                        <Text style={styles.quantityItemText}>-</Text>
-                                    </Pressable>
-
-                                    <View style={[styles.quantityItem, styles.quantityCount]}>
-                                        <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
-                                    </View>
-
-                                    <Pressable onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
-                                        <Text style={styles.quantityItemText}>+</Text>
-                                    </Pressable>
+                            <View style={styles.itemBodyView}>
+                                <View style={styles.imageView}>
+                                    <Image
+                                        source={{ uri: this.state.imageURL }}
+                                        style={styles.productImage} />
                                 </View>
-                            </View>                                                
+                                <View style={styles.itemInfoView}>
+                                  <Text> 주문번호 | <Text style={{fontSize:15,color:'black'}}>{this.state.orderNo}</Text></Text>
+                                  <Text> 품번 |  <Text style={{fontSize:15,color:'blue'}}>{this.item.number}</Text></Text>
+                                    <Text> 구매가능 수량 | <Text style={{fontSize:15,color:'black'}}>{this.item.quantity}개</Text></Text>
+                                </View>
+                            </View>
+                            <View style={styles.itemBottomView}>
+                                <View style={{flex:1,justifyContent:'center'}}>
+                                <Text style={styles.priceText}> {FunctionUtil.getPrice(this.item.price*this.state.quantity)}원 /<Text style={{fontSize:14,color:'gray'}}>{FunctionUtil.getPrice(this.item.price)}원</Text></Text> 
+                                </View>
+                                <View style={{flex:1,alignItems:'flex-end'}}>
+                                    <View style={styles.selectQuantityView}>
+                                        <TouchableOpacity onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
+                                            <Icon name="minus" size={15} color="black" />
+                                        </TouchableOpacity>
+
+                                        <View style={[styles.quantityItem, styles.quantityCount]}>
+                                            <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
+                                        </View>
+
+                                        <TouchableOpacity onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
+                                            <Icon name="plus" size={15} color="black" />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                                                  
                         </View>
 
                        
@@ -274,10 +278,11 @@ class Payment extends Component {
                             </View>
                             <Text style={styles.title}>주소</Text>
                             <View style={styles.rowLayout}>
-                                <View style={styles.number_text}>
+                                
+                                <TouchableOpacity activeOpacity={0.8} style={styles.number_text}  onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})} >
                                     <Text style={styles.text}>{this.state.zipNo}</Text>
-                                </View>
-
+                                </TouchableOpacity>
+                               
                                 <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
                                     <Text style={styles.btn_text}>우편번호 찾기</Text>
                                 </TouchableOpacity>
