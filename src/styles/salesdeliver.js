@@ -18,12 +18,14 @@ export const styles = StyleSheet.create({
     productImage: {
         flex: 1,
         //margin: 5,
-        width: 75,
-        height: 65,
+       /*  width: ScreenWidth/6,
+        height:  ScreenWidth/6, */
         borderRadius: 6,
       },
     //아이템 상세내역
     topContainer:{
+        borderWidth:1, 
+        padding:'5%',
         flex:2.5,
         flexDirection:"column",
         backgroundColor:'#FFFF',
@@ -80,7 +82,7 @@ export const styles = StyleSheet.create({
     },
     okbtn: {
         height: 50,
-        backgroundColor: "#1E90FF",
+        backgroundColor: "#0066FF",
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -89,6 +91,35 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         color: "white",
     },
+    imageView:{
+        width:ScreenWidth/5,
+        height:ScreenWidth/5,
+    },
+   // item 글자 디자인
+  itemNumberText: {
+    fontSize: 13,
+    color:'blue',
+    fontFamily: 'Pretendard-SemiBold',
+  },
 
-   
+  itemNameText: {
+    fontSize: 17,
+    //fontWeight: 'bold',
+    fontFamily: 'Pretendard-Medium',
+    color: '#000000', 
+  },
+  itemRegisterDateText: {
+    fontSize: 14,
+    color:'black'
+  },
+  itemDistanceText: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-SemiBold',
+  },
+  itemPriceText: {
+    fontSize: 15,
+    //fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000000',
+  },
 });

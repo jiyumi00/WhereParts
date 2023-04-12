@@ -1,5 +1,7 @@
 //Home Style
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
+const ScreenHeight=Dimensions.get('window').height;
+const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({
   wrap: {
     backgroundColor: '#FFF',
@@ -32,8 +34,8 @@ export const styles = StyleSheet.create({
     borderColor:'#E9E9E9',
     marginTop:"2%",
     marginHorizontal:'4%',
-    paddingHorizontal:'2%',
-    paddingVertical:"2%",
+    paddingHorizontal:'1%',
+    paddingVertical:"1%",
     borderRadius:10,
     backgroundColor: '#FFF',
   },
@@ -45,17 +47,22 @@ export const styles = StyleSheet.create({
     borderStyle: 'solid',
     overflow: 'hidden',
   },
+  imageView:{
+    width:ScreenWidth/5,
+    height:ScreenWidth/5,
+  },
   productImage: {
     flex: 1,
     margin: 5,
-    width: 80,
-    height: 80,
+ /*    width: 80,
+    height: 80, */
     borderRadius: 6,
 
   },
   productInfo: {
     //borderWidth:1,
     flex: 3,
+    //alignItems:'flex-start',
     alignItems:'flex-end',
     justifyContent:'flex-end',
     //flexDirection: 'row',
@@ -90,13 +97,13 @@ export const styles = StyleSheet.create({
   },
 
   itemNameText: {
-    fontSize: 16,
+    fontSize: 17,
     //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000', 
   },
   itemRegisterDateText: {
-    fontSize: 14,
+    fontSize: 13,
     color:'black'
   },
   itemDistanceText: {

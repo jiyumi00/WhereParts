@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground,BackHandler } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground,BackHandler, ViewComponent } from 'react-native';
 
 import { styles } from "../../styles/saleslist";
 
@@ -28,8 +28,8 @@ export default class SalesDetails extends Component {
            
             isRefresh:false,
             
-            emptySaleListViewVisible:true,
-            emptySoldOutListViewVisible:true,
+            emptySaleListViewVisible:false,
+            emptySoldOutListViewVisible:false,
         };
     }
 
@@ -211,16 +211,18 @@ class SaleListItem extends PureComponent {
                             <Text style={styles.itemRegisterDateText}>등록일 {item.registerDate.slice(2, 10)}</Text>
                         </View> */}
                         {/*이미지 */}
-                       
-                        <Image
+                        <View style={styles.imageView}>
+                       <Image
                             source={{ uri: this.state.imageURL }}
                             style={styles.productImage} />
+                       </View>
+                        
 
                         <View style={styles.productInfo}>
                             
                                 <Text style={styles.itemNameText}>{item.name}</Text>
                                 <Text style={styles.itemNumberText}>{item.number}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'gray'}}>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'black'}}>원 / {item.quantity}{"개"}</Text></Text>
                                 <Text style={styles.itemRegisterDateText}>{item.registerDate.slice(0, 10)}</Text>
                             
                         </View>
@@ -269,34 +271,37 @@ class SoldOutListItem extends PureComponent {
 
         return (
             <>           
-                    {/*       <View style={styles.product}>
-                      
-                        <Image
-                            source={{ uri: this.state.imageURL }}
-                            style={styles.productImage} />
-
-                        <View style={styles.productInfo}>
-                            
-                                <Text style={styles.itemNameText}>{item.name}</Text>
-                                <Text style={styles.itemNumberText}>{item.number}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'gray'}}>원 / {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemRegisterDateText}>{item.registerDate.slice(0, 10)}</Text>
-                            
-                        </View>
-                      
-                    </View> */}
                     <View style={[styles.product,{flexDirection:'column'}]}>
                         <View style={{flexDirection:'row',paddingBottom:'2%'}}>
+                            <View style={styles.imageView}>
                             <Image
                                 source={{ uri: this.state.imageURL }}
-                                style={styles.productImage} />
-
-                            <View style={styles.productInfo}>
-                                <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'gray'}}>/ {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 / <Text style={{fontSize:12,color:'black'}}>카드</Text></Text>
-                                <Text style={styles.itemRegisterDateText}>{item.orderingDate.slice(0, 10)}</Text>
+                                style={styles.productImage}/>
                             </View>
+                          
+                            {item.status!=3 &&<>
+                            <View style={styles.productInfo}>
+                                <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'black'}}>/ {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 | <Text style={{fontSize:12,color:'black'}}>카드</Text></Text>
+                                <Text style={styles.itemRegisterDateText}>주문일 {item.orderingDate.slice(0, 10)}</Text> 
+                            </View>
+                            </>}
+                            {item.status==3 &&<>
+                            <View style={[styles.productInfo,{flexDirection:'row', alignItems:'center'}]}>
+                                <View style={{flex:1}}>
+                                    <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'black'}}>/ {item.quantity}{"개"}</Text></Text>
+                                    <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                    <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 | <Text style={{fontSize:12,color:'black'}}>카드</Text></Text>
+                                </View>
+                                <View style={{flex:1, alignItems:'flex-end'}}>
+                                    <Text style={styles.itemRegisterDateText}>주문|  {item.orderingDate.slice(0, 10)}</Text> 
+                                    <Text style={styles.itemRegisterDateText}>배송|  {item.orderingDate.slice(0, 10)}</Text>
+                                    <Text style={styles.itemRegisterDateText}>구매|  {item.orderingDate.slice(0, 10)}</Text>
+                                </View>
+                            </View>
+                            </>}
+                        
                         </View>
                         {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.refreshListener })}>
                     <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
