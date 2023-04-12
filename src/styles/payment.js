@@ -3,12 +3,14 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
+
   indexView:{
     borderWidth: 1,
     height:200,
     borderRadius: 5,
     borderColor: "lightgray",
     paddingBottom: 10,
+    marginBottom:20,
     //paddingHorizontal:10,
   },
    //상품정보
@@ -135,6 +137,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginTop: 30,
     paddingBottom:30,
+    paddingHorizontal:'5%'
     //marginLeft:30,
     //marginRight:30,
   },

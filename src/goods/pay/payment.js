@@ -215,7 +215,7 @@ class Payment extends Component {
         return (
             <View style={template.total_container}>
                 <ScrollView style={template.ScrollView}>
-                    <View style={template.container}>
+                    <View style={styles.container}>
                         <View style={styles.indexView}>
                             <View style={styles.itemTopView}>
                                 <Text style={styles.indexText}>{this.item.name}</Text>
@@ -257,53 +257,52 @@ class Payment extends Component {
 
                        
                         {/* 주소 */}
-                        <View style={styles.container}>
-                            <View style={styles.deliverView}>
-                                <Text style={styles.title}>배송지 정보</Text>
-                                <TextInput style={styles.textInput}
-                                    ref={(c) => { this.buyerName = c; }}
-                                    returnKeyType = "next"
-                                    onSubmitEditing={() => { this.buyerTel.focus(); }}
-                                    placeholder="주문자 이름을 입력하세요"
-                                    onChangeText={(value) => this.onValueChange({ buyerName: value })}
-                                    //onEndEditing={(event)=> this.onValueChange()}
-                                    value={this.state.buyerName} />
-                                <TextInput style={styles.textInput}
-                                    ref={(c) => { this.buyerTel = c; }}
-                                    returnKeyType = "next"
-                                    placeholder="휴대폰 번호를 입력하세요"
-                                    onChangeText={(value) => this.onValueChange({ buyerTel: value })}
-                                    //onEndEditing={(event)=> this.onValueChange()}
-                                    value={this.state.buyerTel} />
-                            </View>
-                            <Text style={styles.title}>주소</Text>
-                            <View style={styles.rowLayout}>
-                                
-                                <TouchableOpacity activeOpacity={0.8} style={styles.number_text}  onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})} >
-                                    <Text style={styles.text}>{this.state.zipNo}</Text>
-                                </TouchableOpacity>
-                               
-                                <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
-                                    <Text style={styles.btn_text}>우편번호 찾기</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={styles.address_text}>
-                                <Text style={styles.text}>{this.state.roadAddr}</Text>
-                            </View>
-
+                       
+                        <View style={styles.deliverView}>
+                            <Text style={styles.title}>배송지 정보</Text>
                             <TextInput style={styles.textInput}
-                                placeholder="상세 주소를 입력하세요"
-                                onChangeText={(value) => this.onValueChange({ detailAddress: value })}
+                                ref={(c) => { this.buyerName = c; }}
+                                returnKeyType = "next"
+                                onSubmitEditing={() => { this.buyerTel.focus(); }}
+                                placeholder="주문자 이름을 입력하세요"
+                                onChangeText={(value) => this.onValueChange({ buyerName: value })}
                                 //onEndEditing={(event)=> this.onValueChange()}
-                                value={this.state.detailAddress} />
-
+                                value={this.state.buyerName} />
                             <TextInput style={styles.textInput}
-                                placeholder="배송요청사항"
-                                onChangeText={(value) => this.setState({ bigo: value })}
-                                value={this.state.bigo} />
+                                ref={(c) => { this.buyerTel = c; }}
+                                returnKeyType = "next"
+                                placeholder="휴대폰 번호를 입력하세요"
+                                onChangeText={(value) => this.onValueChange({ buyerTel: value })}
+                                //onEndEditing={(event)=> this.onValueChange()}
+                                value={this.state.buyerTel} />
                         </View>
-                                             
+                        <Text style={styles.title}>주소</Text>
+                        <View style={styles.rowLayout}>
+                            
+                            <TouchableOpacity activeOpacity={0.8} style={styles.number_text}  onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})} >
+                                <Text style={styles.text}>{this.state.zipNo}</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
+                                <Text style={styles.btn_text}>우편번호 찾기</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.address_text}>
+                            <Text style={styles.text}>{this.state.roadAddr}</Text>
+                        </View>
+
+                        <TextInput style={styles.textInput}
+                            placeholder="상세 주소를 입력하세요"
+                            onChangeText={(value) => this.onValueChange({ detailAddress: value })}
+                            //onEndEditing={(event)=> this.onValueChange()}
+                            value={this.state.detailAddress} />
+
+                        <TextInput style={styles.textInput}
+                            placeholder="배송요청사항"
+                            onChangeText={(value) => this.setState({ bigo: value })}
+                            value={this.state.bigo} />
+                                   
                     </View>
                 </ScrollView>
                 {

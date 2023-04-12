@@ -30,12 +30,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
    // alignItems: 'center',
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#E9E9E9',
-    marginTop:"2%",
-    marginHorizontal:'4%',
-    paddingHorizontal:'1%',
-    paddingVertical:"1%",
+    marginBottom:"2%",
+    paddingHorizontal:'2%',
+    paddingVertical:"2%",
     borderRadius:10,
     backgroundColor: '#FFF',
   },
@@ -71,11 +70,12 @@ export const styles = StyleSheet.create({
 
   productInfoRight: {
     borderTopWidth:1,
+    borderRadius:10,
     borderTopColor:'#D1D1D1',
     alignItems:'center',
-    marginTop:'1%',
-    paddingTop:'2%',
-    width:"96%",
+    justifyContent:'center',
+    marginTop:'2%',
+    paddingVertical:'2%'
   },
 
   productRegisterDate: {

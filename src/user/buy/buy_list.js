@@ -167,29 +167,28 @@ class ListItem extends Component {
             <>
                 <View style={styles.itemView}>
                     <TouchableOpacity onPress={this.handleDetailViewModal}>
-                        <View style={styles.dateView}>
-                            <Text>주문일  </Text><Text style={styles.itemRegisterDateText}>{orderingDate.slice(2, 10)}</Text>
-                        </View>
+                        {/* <View style={styles.dateView}>
+                            <Text style={styles.itemDistanceText}>{this.goodsStatusText(status)}</Text>
+                        </View> */}
                         <View style={styles.productView}>
                             <View style={styles.productImageView}>
-
                                 <Image
                                     source={{ uri: this.state.imageURI }}
                                     style={styles.productImage} />
                             </View>
-                            <View style={styles.productInfo}>
-                                <View style={styles.productInfoLeft}>
-                                    <Text style={styles.itemNameText}>{goodsName}</Text>
-                                    <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(total)}{"원"} <Text style={styles.text}> / {quantity}개 </Text></Text>
-                                    <Text style={styles.itemNumberText}>{goodsNo}</Text>
-                                </View>
-                                <View style={styles.productInfoRight}>
-                                    <View style={styles.productDistance}>
-                                        <Text style={styles.itemDistanceText}>{this.goodsStatusText(status)}</Text>
-                                    </View>
-
-                                </View>
+                            <View style={styles.productInfoLeft}>
+                                <Text style={styles.itemNameText}>{goodsName}</Text>
+                                <Text style={styles.itemNumberText}>{goodsNo}</Text>
+                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(total)}{"원"} <Text style={styles.text}> / {quantity}개 </Text></Text>
+                                <Text>주문일 <Text style={styles.itemRegisterDateText}>{orderingDate.slice(2, 10)}</Text> </Text>
                             </View>
+                            <View style={styles.productInfoRight}>
+                                <View style={styles.productDistance}>
+                                    <Text style={styles.itemDistanceText}>{this.goodsStatusText(status)}</Text>
+                                </View>
+
+                            </View>
+                           
                         </View>
                     </TouchableOpacity>
                     <View style={styles.productButtonView}>
