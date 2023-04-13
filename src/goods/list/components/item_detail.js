@@ -279,7 +279,7 @@ export default class DetailItemView1 extends Component {
         this.hashTagRef.clear();
     }
 
-    //해시태그 삭제할 때
+    // 해시태그 삭제할 때
     hashTagRemove = (index) => {
         this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
     }
@@ -357,11 +357,12 @@ export default class DetailItemView1 extends Component {
     async callUpdateGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/UpdateGoods", "post");
         const price = parseInt(this.state.price.toString().replace(/,/g,''));
+        
         const editItem = {
             id:this.goodsID,
             quantity:this.state.quantity,
             quality:this.state.quality,
-            price:this.state.price,
+            price:price,
             genuine:this.state.genuine,
             spec:this.state.editSpec,
             hashTag:this.state.hashTag.toString(),
@@ -371,7 +372,7 @@ export default class DetailItemView1 extends Component {
             id: editItem.id, 
             quantity: editItem.quantity, 
             quality: editItem.quality,
-            price: editItem.price.replace(/,/g,''), 
+            price: editItem.price,
             genuine: editItem.genuine, 
             spec: editItem.spec, 
             hashTag: editItem.hashTag,

@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
    search_view:{
     position:'absolute',
     width:'100%',
-    paddingHorizontal:'7%',
+    paddingHorizontal:'4%',
     paddingVertical:'5%'
     //borderWidth:1,
    },
@@ -21,15 +21,14 @@ export const styles = StyleSheet.create({
     width:'100%',
     top:ScreenHeight*0.13,
     //borderWidth:1,
-    paddingHorizontal:'7%',
+    paddingHorizontal:'5%',
    
    },
    page_view:{
     position:'absolute',
     width:'100%',
-    top:ScreenHeight*0.8,
+    bottom:'6%',
     //borderWidth:1,
-   
    },
    input:{
     width:'90%'
@@ -86,28 +85,28 @@ export const styles = StyleSheet.create({
     color: "#9595E9",
   },
 
-  flex:{
-    flex:1,
-    marginBottom:5,
-    //borderWidth:1,
-  },
+
   outputStyle:{
     borderColor:'#909098',
-    borderWidth:1,
-    height: 107,
-    paddingHorizontal:'2%'
+    borderBottomWidth:1,
+    //height: 107,
+    paddingHorizontal:'2%',
+    paddingVertical:'2%',
+    flexDirection:'row'
   },
-  titleLayout:{
-    height:107,
-    flexDirection:'column'
+  address_view:{
+    flex:5,
+    //borderWidth:1,
   },
-  addressLayout:{
-    flex:10,
-    paddingLeft:10,
-  },
-  numberLayout:{
-    flex:3,
-    paddingLeft:10,
+  zipNo_view:{
+    flex:1,
+    borderLeftWidth:0.8,
+    borderColor:'#909098',
+    alignItems:'center',
     justifyContent:'center'
   },
+  roadAddr_view:{
+    flexDirection:'row',
+    paddingBottom:'2%',
+  }
 });

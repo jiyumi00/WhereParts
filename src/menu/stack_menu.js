@@ -34,8 +34,8 @@ import GoogleWebView from "../util/google_web_view";
 //import SearchWebView from "../goods/list/components/web_view";
 
 //결제창
-//import Payment from "../goods/pay/payment";
-import Payment from "../goods/pay/payment_1";
+//import Payment from "../goods/pay/payment_2";
+import Payment from "../goods/pay/payment";
 //결제완료
 import PayComplete from "../goods/pay/pay_complete";
 

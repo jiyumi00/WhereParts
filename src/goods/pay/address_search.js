@@ -13,6 +13,7 @@ import Indicator from '../../util/indicator';
 class SearchAddress extends Component {
     constructor(props) {
         super(props);
+        this.countPerPage=6;
         this.state = {
             addressContents:[],
             commonContents:[],
@@ -32,8 +33,8 @@ class SearchAddress extends Component {
             alert("주소를 입력해주세요");
         }
         else{
-            this.setState({page:1},()=>this.goGetAddress(this.state.page))
-            this.setState({searchViewVisible:true});
+            this.setState({page:1,searchViewVisible:true},()=>this.goGetAddress(this.state.page))
+            //this.setState({searchViewVisible:true});
             Keyboard.dismiss();
         }
     }
@@ -46,7 +47,6 @@ class SearchAddress extends Component {
                         this.setState({emptyListViewVisible:true})
                     }
                 });
-            //console.log('componentResponse',response)
         });
     }
 
@@ -55,11 +55,11 @@ class SearchAddress extends Component {
             this.setState({ page: this.state.page - 1 },()=>this.goGetAddress(this.state.page))
     }
     pageUpClicked=()=>{
-        if (this.state.page < (this.state.totalCount / 4))
+        if (this.state.page < (this.state.totalCount / this.countPerPage))
             this.setState({ page: this.state.page + 1 },()=>this.goGetAddress(this.state.page))
     }
     async callGetAddressAPI(page) {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + page + "&countPerPage=4&keyword=" + this.state.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + page + "&countPerPage="+this.countPerPage+"&keyword=" + this.state.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -94,8 +94,9 @@ class SearchAddress extends Component {
                         </View>
                     </>}
                     {this.state.searchViewVisible?
-                        
+                       
                         <FlatList
+                        style={{borderColor:'#909098', borderLeftWidth:1,borderTopWidth:1,borderRightWidth:1}}
                         data={this.state.addressContents}
                         renderItem={({item,index})=><AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener}/>}/> :
                         <>
@@ -112,10 +113,10 @@ class SearchAddress extends Component {
                 <View style={styles.page_view}>
                     <View style={styles.row_layout}>
                         <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
-                        <PageIcon name="leftsquareo" size={30} color="light grey" />
+                            <PageIcon name="leftsquareo" size={30} color="light grey" />
                         </TouchableOpacity>
                     
-                        <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/4)}   </Text>
+                        <Text  style={styles.text}>   <Text style={[styles.text,{color:'blue'}]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount/this.countPerPage)}   </Text>
                         <TouchableOpacity onPress={this.pageUpClicked} activeOpacity={0.8}>
                             <PageIcon name="rightsquareo" size={30} color="light grey" />
                         </TouchableOpacity>
@@ -139,19 +140,26 @@ class AddressItem extends PureComponent{
         return(
             <TouchableOpacity activeOpacity={0.8} onPress={() => this.addressItemClicked(zipNo, roadAddr)}>
                 <View style={styles.outputStyle}>
-                    <View style={styles.row_layout}>
-                        <View style={styles.titleLayout}>
-
-                            <View style={styles.flex}><Text>도로명</Text></View >
-                            <View style={styles.flex}><Text>지번</Text></View >
+                    <View style={styles.address_view}>
+                        <View style={[styles.roadAddr_view]}>
+                            <View style={{flex:1,}}>
+                                <Text>도로명</Text>
+                            </View>
+                            <View style={{flex:5, paddingRight:'2%'}}>
+                                <Text style={{ color: "black" }}>{roadAddr} </Text>
+                            </View>
                         </View>
-                        <View style={styles.addressLayout}>
-                            <View style={styles.flex}><Text style={{ color: "black" }}>{roadAddr} </Text></View >
-                            <View style={styles.flex}><Text style={{ color: "black" }}>{jibunAddr}</Text></View >
+                        <View style={[styles.roadAddr_view,{paddingTop:'2%'}]}>
+                            <View style={{flex:1}}>
+                                <Text>지번</Text>
+                            </View>
+                            <View style={{flex:5,paddingRight:'2%'}}>
+                                <Text style={{ color: "black" }}>{jibunAddr}</Text>
+                            </View>
                         </View>
-                        <View style={styles.numberLayout}>
+                    </View>
+                    <View style={styles.zipNo_view}>
                             <Text style={[styles.text, { fontWeight: '600' }]}>{zipNo}</Text>
-                        </View>
                     </View>
                 </View>
             </TouchableOpacity>
