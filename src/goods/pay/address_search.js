@@ -137,11 +137,11 @@ class AddressItem extends PureComponent{
     render(){
         const { zipNo,roadAddr,jibunAddr } = this.props.item;
         return(
-        <TouchableOpacity activeOpacity={0.8} onPress={()=>this.addressItemClicked(zipNo,roadAddr)}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => this.addressItemClicked(zipNo, roadAddr)}>
                 <View style={styles.outputStyle}>
                     <View style={styles.row_layout}>
                         <View style={styles.titleLayout}>
-                            
+
                             <View style={styles.flex}><Text>도로명</Text></View >
                             <View style={styles.flex}><Text>지번</Text></View >
                         </View>
@@ -150,13 +150,12 @@ class AddressItem extends PureComponent{
                             <View style={styles.flex}><Text style={{ color: "black" }}>{jibunAddr}</Text></View >
                         </View>
                         <View style={styles.numberLayout}>
-                            <Text style={[styles.text,{fontWeight:'600'}]}>{zipNo}</Text>
+                            <Text style={[styles.text, { fontWeight: '600' }]}>{zipNo}</Text>
                         </View>
                     </View>
                 </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
         );
-       
     }
 }
 export default SearchAddress;

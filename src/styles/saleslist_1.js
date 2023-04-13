@@ -28,13 +28,12 @@ export const styles = StyleSheet.create({
   },
   product: {
     flex: 1,
-    paddingHorizontal:'4%',
+    paddingHorizontal:'2%',
     //flexDirection: 'row',
    // alignItems: 'center',
-    borderWidth:1,
+    borderWidth:2,
     borderColor:'#E9E9E9',
     marginBottom:"2%",
-    paddingHorizontal:'2%',
     paddingVertical:"2%",
     borderRadius:10,
     backgroundColor: '#FFF',
@@ -62,22 +61,24 @@ export const styles = StyleSheet.create({
   productInfo: {
     //borderWidth:1,
     flex: 3,
-    paddingLeft:'2%',
-    //alignItems:'flex-start',
-    alignItems:'flex-end',
-    justifyContent:'center',
+    //paddingLeft:'2%',
+    alignItems:'flex-start',
+    justifyContent:'flex-end',
+
+/*     alignItems:'flex-end',
+    justifyContent:'flex-end', */
+
     //flexDirection: 'row',
-    //
   },
 
   productInfoRight: {
     borderTopWidth:1,
     borderRadius:10,
     borderTopColor:'#D1D1D1',
-    alignItems:'center',
+    alignItems:'flex-end',
     justifyContent:'center',
-    marginTop:'2%',
-    paddingVertical:'2%'
+    //marginTop:'1%',
+    paddingTop:'1%'
   },
 
   productRegisterDate: {
@@ -105,12 +106,13 @@ export const styles = StyleSheet.create({
     color: '#000000', 
   },
   itemRegisterDateText: {
-    fontSize: 13,
+    fontSize: 15,
     color:'black'
   },
   itemDistanceText: {
     fontSize: 15,
     fontFamily: 'Pretendard-SemiBold',
+    color:'black'
   },
   itemPriceText: {
     fontSize: 15,

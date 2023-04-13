@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground,BackHandler, ViewComponent } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground, BackHandler, ViewComponent } from 'react-native';
 
 import { styles } from "../../styles/saleslist_1";
 
@@ -19,32 +19,32 @@ export default class SalesDetails extends Component {
         super(props);
 
         this.contents = []; //soldoutContents
-        this.userID=Session.getUserID();
+        this.userID = Session.getUserID();
         this.state = {
             salesContents: [],
             soldoutContents: [],
 
-            saleState:1,
-           
-            isRefresh:false,
-            
-            emptySaleListViewVisible:false,
-            emptySoldOutListViewVisible:false,
+            saleState: 3,
+
+            isRefresh: false,
+
+            emptySaleListViewVisible: false,
+            emptySoldOutListViewVisible: false,
         };
     }
 
     componentDidMount() {
-        if(Session.isLoggedin){
-            if(this.props.route.params!=null){
-                this.setState({ saleState: this.props.route.params.saleState});
+        if (Session.isLoggedin) {
+            if (this.props.route.params != null) {
+                this.setState({ saleState: this.props.route.params.saleState });
             }
             this.userID = Session.getUserID();
             this.goGetGoods();
             this.goGetSells();
         }
         else
-            this.props.navigation.navigate('Login',{nextPage:"SalesList"});
-        
+            this.props.navigation.navigate('Login', { nextPage: "SalesList" });
+
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
     componentWillUnmount() {
@@ -63,12 +63,12 @@ export default class SalesDetails extends Component {
             this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) });
         })
     }
- 
+
     handleEmptySaleListView = (length) => {
-        this.setState({emptySaleListViewVisible: length == 0 ? true : false});
+        this.setState({ emptySaleListViewVisible: length == 0 ? true : false });
     }
     handleEmptySoldOutListView = (length) => {
-        this.setState({emptySoldOutListViewVisible: length == 0 ? true : false});
+        this.setState({ emptySoldOutListViewVisible: length == 0 ? true : false });
     }
 
     async callGetGoodsAPI() { //로그인 된 id값으로 올린 상품 가져오는 API
@@ -90,39 +90,39 @@ export default class SalesDetails extends Component {
     }
 
     saleBarClicked = () => { //판매중
-        this.setState({ saleState:1 });
+        this.setState({ saleState: 1 });
     }
 
     shippingBarClicked = () => { //배송정보입력
-        this.setState({ saleState:2},()=>{this.setState({soldoutContents:this.dataFiltering()},()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)})});
+        this.setState({ saleState: 2 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
     }
 
     soldoutBarClicked = () => { //판매완료
-        this.setState({saleState:3},()=>{this.setState({soldoutContents:this.dataFiltering()},()=>{this.handleEmptySoldOutListView(this.state.soldoutContents.length)})});
+        this.setState({ saleState: 3 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
     }
-    dataFiltering(){ 
-        let filteredContents=this.contents;
-        if(this.state.saleState==3){
-            filteredContents=filteredContents.filter((content)=>{    
-                if(content.status==3){
+    dataFiltering() {
+        let filteredContents = this.contents;
+        if (this.state.saleState == 3) {
+            filteredContents = filteredContents.filter((content) => {
+                if (content.status == 3) {
                     return true;
                 }
             })
         }
         else {
-            filteredContents=filteredContents.filter((content)=>{  
-                if(content.status==1 || content.status==2){
+            filteredContents = filteredContents.filter((content) => {
+                if (content.status == 1 || content.status == 2) {
                     return true;
-                }     
+                }
             })
         }
-        console.log('[filter]',filteredContents);
+        console.log('[filter]', filteredContents);
         return filteredContents;
     }
-     //뒤로가기 했을 때 앱 종료
-     backPressed = () => {
+    //뒤로가기 했을 때 앱 종료
+    backPressed = () => {
         this.props.navigation.pop();
-        this.props.navigation.push('TabHome',{initialTabMenu:"MyPage"});
+        this.props.navigation.push('TabHome', { initialTabMenu: "MyPage" });
         return true;
     }
     render() {
@@ -130,45 +130,46 @@ export default class SalesDetails extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
-                    <View style={styles.salesdetailsheader}>
-                        <Text style={styles.headertext}> 나의 판매내역</Text>
-                        <Icon style={{ marginLeft: "58%" }} name="account-circle" size={60} color={'lightgrey'}></Icon>
+                    <View style={[styles.salesdetailsheader,{flexDirection:'column',alignItems:'flex-end'}]}>
+                        {/* <Text style={styles.headertext}> 나의 판매내역</Text> */}
+                        <Icon name="account-circle" size={60} color={'lightgrey'}></Icon>
+                        {/* <Text style={[styles.headertext,{fontSize:15}]}>인제정비</Text> */}
                     </View>
-                    <View style={{ flexDirection: 'row', width: "100%",}}>
-                        <View style={{ borderBottomWidth: this.state.saleState==1 ? 2 : 0, width: "33.3%", borderBottomColor:"#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==1 ? "#EE636A" : "black" }]}>판매중</Text></TouchableOpacity>
+                    <View style={{ flexDirection: 'row', width: "100%", }}>
+                        <View style={{ borderBottomWidth: this.state.saleState == 1 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.saleState==2 ? 2 : 0, width: "33.3%", borderBottomColor:"#EE636A",alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==2 ? "#EE636A" : "black" }]}>배송입력할 상품</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.saleState == 2 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>배송입력할 상품</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.saleState==3 ? 2 : 0, width: "33.3%",borderBottomColor:"#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState==3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                        <View style={{ borderBottomWidth: this.state.saleState == 3 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
-                <View style={{paddingVertical:'2%',flex:1, paddingHorizontal:'4%'}}>
-                {this.state.saleState==1 && this.state.emptySaleListViewVisible==false && (<FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={this.state.salesContents}
-                    renderItem={({ item, index }) => <SaleListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
-                    refreshing={this.state.isRefresh}
-                    onRefresh={this.goGetGoods}
-                    scrollEventThrottle={16}
-                />)}
-                {this.state.saleState!=1 &&this.state.emptySoldOutListViewVisible==false &&(<FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={this.state.soldoutContents}
-                    renderItem={({ item, index }) => <SoldOutListItem navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
-                    refreshing={this.state.isRefresh}
-                    onRefresh={this.goGetSells}
-                    scrollEventThrottle={16}
-                />)}
-      
-                {this.state.saleState==1 && this.state.emptySaleListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
-                {this.state.saleState!=1&& this.state.emptySoldOutListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
-             
+                <View style={{ paddingVertical: '2%', flex: 1, paddingHorizontal: '4%' }}>
+                    {this.state.saleState == 1 && this.state.emptySaleListViewVisible == false && (<FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={this.state.salesContents}
+                        renderItem={({ item, index }) => <SaleListItem navigation={this.props.navigation} item={item} id={item.id} refreshListener={this.goGetGoods} />}
+                        refreshing={this.state.isRefresh}
+                        onRefresh={this.goGetGoods}
+                        scrollEventThrottle={16}
+                    />)}
+                    {this.state.saleState != 1 && this.state.emptySoldOutListViewVisible == false && (<FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={this.state.soldoutContents}
+                        renderItem={({ item, index }) => <SoldOutListItem navigation={this.props.navigation} item={item} id={item.goodsID} refreshListener={this.goGetSells} />}
+                        refreshing={this.state.isRefresh}
+                        onRefresh={this.goGetSells}
+                        scrollEventThrottle={16}
+                    />)}
+
+                    {this.state.saleState == 1 && this.state.emptySaleListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
+                    {this.state.saleState != 1 && this.state.emptySoldOutListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetSells} />)}
+
                 </View>
-               
+
             </View>
         );
     }
@@ -195,7 +196,7 @@ class SaleListItem extends PureComponent {
     }
 
     handleDetailViewModal = () => {
-        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID, refresh:this.props.refreshListener});
+        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID, refresh: this.props.refreshListener });
     }
 
     async callGetGoodsImageAPI() {
@@ -209,34 +210,32 @@ class SaleListItem extends PureComponent {
         const item = this.props.item;
         return (
             <>
-                  <TouchableOpacity onPress={this.handleDetailViewModal}>
-
+                <TouchableOpacity onPress={this.handleDetailViewModal}>
                     <View style={styles.product}>
-                        <View style={{borderBottomColor:'#D1D1D1', borderBottomWidth:1,flexDirection:'row'}}>
-                            <View style={{flex:1, alignItems:'flex-start'}}>
-                            <Text style={styles.itemNameText}>{item.name}</Text>
+                        <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row',paddingBottom:'2%' }}>
+                            <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                                <Text style={styles.itemNameText}>{item.name}</Text>
                             </View>
-                            <View style={{flex:1, alignItems:'flex-end'}}>
-                                {item.valid == 0 &&  <Text style={{ fontSize: 14 }}>숨김</Text>}
+                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                {item.valid == 0 && <Text style={{ fontSize: 14 }}>숨김</Text>}
                             </View>
                         </View>
-                        <View style={{flexDirection:'row', flex:5,paddingTop:'2%'}}>
+                        <View style={{ flexDirection: 'row', flex: 5, paddingTop: '3%',paddingBottom:'2%' }}>
                             <View style={styles.imageView}>
                                 <Image
                                     source={{ uri: this.state.imageURL }}
                                     style={styles.productImage} />
-                                </View>
-                            <View style={styles.productInfo}>
-                               {/*  <Text style={styles.itemNameText}>{item.name}</Text> */}
-                                <Text style={styles.itemNumberText}>{item.number}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price)}<Text style={{fontSize:12,color:'black'}}>원 / {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemRegisterDateText}>{item.registerDate.slice(0, 10)}</Text> 
+                            </View>
+                            <View style={[styles.productInfo,{paddingLeft:'2%',alignItems:'flex-end',justifyContent:'flex-end'}]}>
+                                {/*  <Text style={styles.itemNameText}>{item.name}</Text> */}
+                                <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호 : </Text>{item.number}</Text>
+                                <Text style={styles.itemPriceText}><Text style={{color:'grey',fontSize:15}}>가격/수량 : </Text>{FunctionUtil.getPrice(item.price)}<Text style={{ fontSize: 15, color: 'black' }}>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{color:'grey',fontSize:15}}>등록일 : </Text>{item.registerDate.slice(0,10)}</Text>
                             </View>
                         </View>
-                    
                     </View>
                 </TouchableOpacity>
-                    <Modal animationType="slide" transparent={true} visible={this.state.isDetailViewModal}>
+                <Modal animationType="slide" transparent={true} visible={this.state.isDetailViewModal}>
                     <DetailItemView detailViewModalListener={(value) => { this.setState({ isDetailViewModal: value }) }} item={item} />
                 </Modal>
             </>
@@ -262,7 +261,7 @@ class SoldOutListItem extends PureComponent {
             }
         });
     }
-    goDeliveryDetailScreen=()=>{
+    goDeliveryDetailScreen = () => {
         const logisInfo = { code: "04", invoice: "651969374875" };
         this.props.navigation.navigate('DeliveryDetail', { logisInfo: logisInfo });
     }
@@ -277,60 +276,66 @@ class SoldOutListItem extends PureComponent {
         const item = this.props.item;
 
         return (
-            <>           
-                    <View style={[styles.product,{flexDirection:'column'}]}>
-                        <View style={{paddingBottom:'2%'}}>
-                            <Text>주문번호 : {item.orderNo}</Text>
+            <>
+                <View style={[styles.product, { flexDirection: 'column' }]}>
+                    <View style={{ paddingBottom: '2%', borderBottomWidth:1,borderColor:'#E9E9E9',flexDirection:'row' }}>
+                        <View style={{flex:1, alignItems:'flex-start'}}>
+                            <Text style={styles.itemNameText}>{item.goodsName}</Text>
                         </View>
-                        <View style={{flexDirection:'row',paddingBottom:'2%'}}>
-                            <View style={styles.imageView}>
+                        <View style={{flex:1, alignItems:'flex-end'}}>
+                            <Text style={{ fontSize: 16, color: 'black' }}>{item.quantity}{"개"}</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', paddingBottom: '2%', paddingTop:'2%' }}>
+                        {item.status != 3 && <>
+                            <View style={styles.productInfo}>
+                                <Text style={{fontSize:16,fontFamily: 'Pretendard-Medium',color:'black'}}><Text style={{color:'grey',fontSize:15}}>주문번호: </Text>{item.orderNo}</Text>
+                                <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호: </Text>{item.goodsNo}</Text>
+                                <Text style={styles.itemPriceText}><Text style={{color:'grey',fontSize:15}}>결제: </Text>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>카드</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{color:'grey',fontSize:15}}>주문일: </Text>{item.orderingDate.slice(0, 10)}</Text>
+                            </View>
+                        </>}
+
+                        <View style={styles.imageView}>
                             <Image
                                 source={{ uri: this.state.imageURL }}
-                                style={styles.productImage}/>
-                            </View>
-                          
-                            {item.status!=3 &&<>
-                            <View style={styles.productInfo}>
-                                <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'black'}}>/ {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 | <Text style={{fontSize:12,color:'black'}}>카드</Text></Text>
-                                <Text style={styles.itemRegisterDateText}>{item.orderingDate.slice(0, 10)}</Text> 
-                            </View>
-                            </>}
-                            {item.status==3 &&<>
-                            <View style={[styles.productInfo,{flexDirection:'row', alignItems:'center'}]}>
-                                <View style={{flex:1}}>
-                                    <Text style={styles.itemNameText}>{item.goodsName} <Text style={{fontSize:12,color:'black'}}>/ {item.quantity}{"개"}</Text></Text>
-                                    <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
-                                    <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price*item.quantity)} 원 | <Text style={{fontSize:12,color:'black'}}>{item.payKind}</Text></Text>
-                                </View>
-                                <View style={{flex:1, alignItems:'flex-end'}}>
-                                    <Text style={styles.itemRegisterDateText}>주문|  {item.days[0].slice(0, 10)}</Text> 
-                                    <Text style={styles.itemRegisterDateText}>배송|  {item.days[1].slice(0, 10)}</Text>
-                                    <Text style={styles.itemRegisterDateText}>확정|  {item.days[2].slice(0, 10)}</Text>
-                                </View>
-                            </View>
-                            </>}
-                        
+                                style={styles.productImage} />
                         </View>
-                        {item.status == 1 && <TouchableOpacity style={styles.productInfoRight} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation:this.props.navigation, refresh : this.props.refreshListener })}>
-                    <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
-                </TouchableOpacity>}
 
-                {item.status == 2 && 
-                <>
-               
-                    <TouchableOpacity style={styles.productInfoRight} onPress={this.goDeliveryDetailScreen}>
-                        <Text style={styles.itemDistanceText}>운송장 번호 | {item.invoiceNo} </Text>
-                    </TouchableOpacity>
-                  
-             
-                
-                </>
-                }
+                        {item.status == 3 && <>
+                            <View style={[styles.productInfo, { flexDirection: 'column', alignItems:'flex-end',justifyContent:'flex-end' }]}>
+                                <View style={{flex:1}}>
+                                    <Text style={{fontSize:15,fontFamily: 'Pretendard-Medium',color:'black'}}><Text style={{color:'grey',fontSize:15}}>주문번호:</Text>{item.orderNo}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flex: 1, alignItems: 'flex-end', borderRightWidth: 1, borderColor: 'grey', paddingRight: '3%' }}>
+                                        <Text style={[styles.itemNameText, { fontSize: 15 }]}>{item.goodsName}</Text>
+                                        <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                        <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>{item.payKind}</Text></Text>
+                                    </View>
+                                    <View style={{ alignItems: 'flex-end', marginLeft: '3%' }}>
+                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>주문:</Text> {item.days[0].slice(0, 10)}</Text>
+                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>배송:</Text> {item.days[1].slice(0, 10)}</Text>
+                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>완료:</Text> {item.days[2].slice(0, 10)}</Text>
+                                    </View>
+                                </View> 
+                            </View>
+                        </>}
                         
-            </View>
-                  
+                        
+                    </View>
+                    {item.status == 1 && <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
+                        <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
+                    </TouchableOpacity>}
+
+                    {item.status == 2 &&
+                        <>
+                            <TouchableOpacity style={styles.productInfoRight} onPress={this.goDeliveryDetailScreen}>
+                                <Text style={[styles.itemDistanceText, { color: "blue" }]}><Text style={[styles.itemDistanceText]}>운송장번호: </Text>{item.invoiceNo} </Text>
+                            </TouchableOpacity>
+                        </>
+                    }
+                </View>
             </>
         );
     }

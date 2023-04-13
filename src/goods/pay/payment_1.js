@@ -153,7 +153,7 @@ class Payment extends Component {
             console.log('완료', message);
             const paymentData = JSON.parse(message);
             console.log('data=', paymentData.data);
-            const addOrderData = this.getAddOrderData(paymentData)
+            const addOrderData = this.getAddOrderData(paymentData);
             console.log('payment data=', addOrderData);
 
             this.callAddOrderAPI(addOrderData).then((response) => {
@@ -167,7 +167,7 @@ class Payment extends Component {
     getAddOrderData = (paymentData) => {
         //const cardData = JSON.parse(paymentData.card_data);
         const address = this.state.roadAddr + " " + this.state.detailAddress;
-        const { orderNo, quantity, buyerName, buyerTel, bigo } = this.state;
+        const { orderNo, quantity, buyerName, buyerTel, bigo, zipNo } = this.state;
         const { id, price } = this.item;
 
         const payload = {
@@ -183,6 +183,7 @@ class Payment extends Component {
             payKind: paymentData.data.method_origin,
             payBank: paymentData.data.card_data.card_company,
             address: address,
+            zipCode: zipNo,
             bigo: bigo,
             receiptID: paymentData.data.receipt_id,
             billURL: paymentData.data.receipt_url
@@ -227,17 +228,17 @@ class Payment extends Component {
                         <View style={styles.indexView}>
                             {/* <Text style={styles.indexText}>주문상품</Text> */}
                             <Text style={[styles.orderGoodsDetailText,{fontSize:16,borderBottomWidth : 1,paddingBottom:3, borderColor:'#D9D9D9'}]}>{this.item.name}</Text>
-                            <View style={{ flexDirection: 'row', borderWidth:0, marginVertical:8, borderBottomWidth:1, paddingBottom:8, borderColor:'#D9D9D9'}}>
+                            <View style={{ flexDirection: 'row', borderWidth:0, marginVertical:15, borderBottomWidth:1, paddingBottom:8, borderColor:'#D9D9D9'}}>
                                 <View style={{ width: '18%', height: "100%",borderWidth:0 }}>
                                     <Image
                                         source={{ uri: this.state.imageURL }}
                                         style={styles.productImage} />
                                 </View>
                                 <View style={{ flexDirection: 'column',alignItems:'flex-end',width:'82%',borderWidth:0 }}>
+                                    <Text style={styles.orderGoodsDetailText}> 주문번호 : {this.state.orderNo}</Text>
                                     <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                         <Text style={[styles.orderGoodsDetailText,{color:'blue'}]}>{this.item.number}</Text>
                                     </TouchableOpacity>
-                                    <Text style={styles.orderGoodsDetailText}> 주문번호 : {this.state.orderNo}</Text>
                                     <Text style={styles.orderGoodsDetailText}> 구매가능 수량 : {this.item.quantity}개</Text>
                                 </View>
                             </View>
@@ -283,7 +284,7 @@ class Payment extends Component {
                             <Text style={styles.title}>주소</Text>
                             <View style={styles.rowLayout}>
                                 <TouchableOpacity style={styles.number_text} onPress={()=>this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
-                                    <Text style={styles.text}>{this.state.zipNo}</Text>
+                                    <Text style={[styles.text,{textAlign:'left'}]}>{this.state.zipNo}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
@@ -292,7 +293,7 @@ class Payment extends Component {
                             </View>
 
                             <View style={styles.address_text}>
-                                <Text style={styles.text}>{this.state.roadAddr}</Text>
+                                <Text style={[styles.text,{textAlign:'left'}]}>{this.state.roadAddr}</Text>
                             </View>
 
                             <TextInput style={styles.textInput}

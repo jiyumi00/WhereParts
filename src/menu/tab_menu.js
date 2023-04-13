@@ -3,15 +3,17 @@ import {Dimensions, Image, Platform, Pressable, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // 경로를 위한 import
-//import Home from '../goods/list/components/home';
-//import Home from '../goods/list/components/home1';
+
+//홈
+import Home from '../goods/list/components/home';
 //import Home from '../goods/list/components/home_1';
-//import Home from '../goods/list/components/home_2'
-import Home from '../goods/list/components/home_3';
+//import Home from '../goods/list/components/home_2';
+//import Home from '../goods/list/components/home_3';
+//import Home from '../goods/list/components/home_4';
 
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';
-import ShopHistory from '../user/shophistory'; //
+import ShopHistory from '../user/shophistory';
 import Notification from '../user/notification';
 
 const Tab = createBottomTabNavigator(); // Tab 일 경우

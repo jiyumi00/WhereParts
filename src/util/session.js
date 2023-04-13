@@ -35,7 +35,10 @@ export default class Session {
     }
 
     static getPageInfoItem() {
-        return Session.#items['pageInfo'];
+        if(Session.#items.hasOwnProperty('pageInfo'))
+            return Session.#items['pageInfo'];
+        else
+            return null;
     }
 
     static isLoggedin() {

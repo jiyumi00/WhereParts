@@ -120,15 +120,10 @@ class Login extends Component {
                         return;
                     } 
                     else if (Session.getPageInfoItem() != null) {
-                        if (Session.getNextPage() == "BuyList") {
-                            this.props.navigation.navigate(Session.getNextPage());
-                        }
-                        else if (Session.getNextPage() == "SalesList") {
-                            this.props.navigation.navigate(Session.getNextPage());
-                        }
+                        this.props.navigation.navigate(Session.getNextPage());
                     }
                     else {
-                        this.props.navigation.navigate(this.nextPage);
+                        this.props.navigation.navigate('TabHome');
                     }
                 });
             }
@@ -156,15 +151,10 @@ class Login extends Component {
                 return;
             }
             else if (Session.getPageInfoItem() != null) {
-                if (Session.getNextPage() == "BuyList") {
-                    this.props.navigation.navigate(Session.getNextPage());
-                }
-                else if (Session.getNextPage() == "SalesList") {
-                    this.props.navigation.navigate(Session.getNextPage());
-                }
+                this.props.navigation.navigate(Session.getNextPage());
             }
             else {
-                this.props.navigation.navigate(this.nextPage);
+                this.props.navigation.navigate('TabHome');
             }
         });
     }

@@ -15,6 +15,7 @@ class App extends Component {
     this.state={
       appState: AppState.currentState,
     }
+    console.log('session value',Session.getPageInfoItem());
   }
 
   componentDidMount() {

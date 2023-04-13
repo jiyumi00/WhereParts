@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, FlatList, Image, Alert,BackHandler } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/buylist";
+import { styles } from "../../styles/buylist_1";
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
-
-
 
 export default class BuyList extends Component {
     constructor(props) {

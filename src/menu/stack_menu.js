@@ -6,33 +6,43 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 //마이페이지
 import MyPage from "../user/mypage";
 
+//판매내역
 //import SalesList from "../user/sales/sales_list";
 import SalesList from "../user/sales/sales_list_1";
 
+//구매내역
 //import BuyList from "../user/buy/buy_list";
 import BuyList from "../user/buy/buy_list_1";
 
+//관심목록
 //import PickList from "../user/buy/pick_list";
 import PickList from "../user/buy/pick_list_1";
 
-import AddDelivery from "../user/sales/add_delivery";
+//배송등록
+//import AddDelivery from "../user/sales/add_delivery";
+import AddDelivery from "../user/sales/add_delivery_1";
+
+//배송조회
 import DeliveryDetail from "../user/buy/delivery_detail";
+
 //경로를 위한
 import TabHome from "./tab_menu";
 import Gallery from "../goods/register/components/gallery";
 import GalleryX from "../util/gallery_x";
 import GoodsImageCamera from "../goods/register/components/camera_goods_image";
-//import SearchWebView from "../goods/list/components/web_view";
 import GoogleWebView from "../util/google_web_view";
+//import SearchWebView from "../goods/list/components/web_view";
 
+//결제창
 //import Payment from "../goods/pay/payment";
 import Payment from "../goods/pay/payment_1";
-
+//결제완료
 import PayComplete from "../goods/pay/pay_complete";
 
-//import GoodsDetail from "../goods/list/components/item_detail";
-import GoodsDetail from "../goods/list/components/item_detail1";
+//상품상세
+import GoodsDetail from "../goods/list/components/item_detail";
 //import GoodsDetail from "../goods/list/components/item_detail_1";
+//import GoodsDetail from "../goods/list/components/item_detail_2";
 
 import OrderDetail from "../user/buy/order_detail";
 import EditProfile from "../user/buy/edit_profile";

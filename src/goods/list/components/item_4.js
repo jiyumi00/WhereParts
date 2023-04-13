@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity, } from 'react-native';
 
-import { styles } from "../../../styles/list/home1";
+import { styles } from "../../../styles/list/home_4";
 
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';

@@ -58,7 +58,7 @@ class PayComplete extends Component {
     render() {
         const { orderNo, goodsName, goodsNo, 
                 quantity, payBank, total, address,
-                buyerName, buyerTel } = this.state.item;
+                buyerName, buyerTel,zipCode } = this.state.item;
         return (
             <View style={template.total_container}>
                 <ScrollView>
@@ -89,6 +89,7 @@ class PayComplete extends Component {
                             <Text> {buyerName}</Text>
                             <Text> {buyerTel}</Text>
                             <Text> {address}  </Text>
+                            <Text> {zipCode}  </Text>
                         </View>
                         <View style={styles.buttonView}>
                             <TouchableOpacity style={[styles.goListButton,{marginRight:10}]} onPress={this.goHomeScreen}><Text style={styles.buyButtonText}>홈으로</Text></TouchableOpacity>

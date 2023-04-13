@@ -26,7 +26,7 @@ class Home extends Component {
         super(props);
         this.contents = [];  //모든 users값 가져오는 것
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
-        this.userID = Session.getValue('id');
+        this.userID = Session.getUserID();
 
         //안드로이드에서 정의한 모듈 가져옴
         const { ImageModule } = NativeModules;
@@ -48,7 +48,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.goGetGoods(Session.getValue('id'));
+        this.goGetGoods(Session.getUserID());
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 

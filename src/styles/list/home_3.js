@@ -1,50 +1,34 @@
 //Home Style
 import { Dimensions, StyleSheet } from 'react-native';
-const ScreenHeight=Dimensions.get('window').height;
-const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
 
   //Home
   //타이틀 
   homeTop_view: { //홈의 위의 디자인 담당
-    width: ScreenWidth,
+    width: "100%",
     height: 200,
-    paddingTop:'8%',
-    backgroundColor: '#0066FF',
+    backgroundColor: '#113AE2',
     position: 'absolute',
   },
   title_view: { 
-    marginTop:"5%",
+    marginTop:"8%",
+    padding:20,
   },
-  
-  row_title_view:{
-    //borderWidth:1,
-    width:'60%',
-    paddingLeft:'5%',
-    marginBottom:'3%',
-   
-  },
+    
   row_view: {
-    paddingLeft:'5%',
     flexDirection: 'row',
   },
   title_text: {
-  
-    fontSize: 18,
+    fontSize: 25,
     lineHeight: 30,
   },
   titleRegular_text: {
     fontFamily: 'Pretendard-Regular',
-    color: '#113AE2',
-  },
-  title_text: {
-    fontWeight:'600',
-    color: 'white',
+    color: '#E9E9E9',
   },
   titleBold_text: {
-    fontWeight:'300',
-    color: 'white',
-    fontSize:15,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#FFF',
   },
   description_text: {
     fontFamily: 'Pretendard-Regular',
@@ -56,34 +40,35 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   //검색창
   searchBar_view: { //home TextInput
     flexDirection: 'column',
-    width: ScreenWidth,
+    width: "100%",
     position: 'absolute',
     alignItems: 'center',
-    backgroundColor: "#0066FF",
+    backgroundColor: "#113AE2",
+  
   },
   searchSection:{
-    borderWidth:1,
-    borderColor:'#E3E6ED',
+    marginTop:'1%',
     borderRadius:10,
     width:'75%',
-    height:45,
+    height:'80%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+
   },
   search_input: { //Home TextInput 안에 글씨
     flex:1,
     backgroundColor: 'white',
-    paddingLeft:5,
+    paddingLeft:0,
     borderRadius:10,
     fontSize: 14,
   },
   cameraSearch_button: { //공통사용
     marginLeft: 10,
-    width: 50,
-    height: 45,
-    backgroundColor: '#D6DFF5',
+    width: 54,
+    height: 50,
+    backgroundColor: '#0066FF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -94,6 +79,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     backgroundColor: 'white',
     width:"100%",
     paddingVertical:"1%",
+    paddingRight:"4%",
+    
     flexDirection:'row',
     paddingTop:5
   },
@@ -105,61 +92,57 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontSize: 13,
   },
   
-//list
-listItem_view: { //공통부분
-    width:ScreenWidth/2.2,
-    borderWidth:1.5,
-    borderRadius:10,
-    borderColor:'#D9D9D9',
-    padding:'3%',
-    marginBottom:'5%',
-    marginLeft:'3%',
-  },
-  productTop_view:{
+
+  //list
+  listItem_view: { //공통부분
+    flexDirection: 'row',
+    alignItems: 'center',
     //borderWidth:1,
-    flexDirection:'row',
-    borderColor:'#D9D9D9',
-    paddingBottom:8,
-    paddingTop:10,
+    backgroundColor:'white',
+    paddingHorizontal:10,
+    paddingVertical:5,
+    marginHorizontal:10,
+    marginVertical:5,
+    borderColor:"#D1D1D1",
+    borderRadius:10,
   },
   productImage_view: {
-    width: ScreenWidth / 6.5,
-    height: ScreenWidth / 6.5,
+    borderColor: '#E9E9E9',
+    borderStyle: 'solid',
+    overflow: 'hidden',
   },
   product_image: {
     flex:1,
-    width:ScreenWidth/6.5,
-    height: ScreenWidth/6.5,
-    borderRadius:10,
+    margin:5,
+    width: 80,
+    height: 80,
+    borderRadius: 6,
   },
-  
+  productInfo_view: {
+    flex:3,
+    height:70,
+    flexDirection:'row',
+    marginLeft:10,
+    marginTop:5,
+    marginBottom:5,
+    marginRight:15,
+  },
   productInfoLeft_view:{
-    alignItems:'flex-start',
-    paddingVertical:3,
-    borderBottomWidth:1,
-    borderColor:'#D9D9D9',
+    flex:4,
+    height:70,
   },
   productInfoRight_view:{
-    flex:1,
-    height: ScreenWidth/6.5,
+    flex:2,
     alignItems:'flex-end',
-    justifyContent:'flex-end',
-    paddingVertical:3,
   },
   itemDetail_text:{
-    fontSize:12,
-    fontFamily:'200',
-    color:'#0066FF',
-    textAlign:'right',
+    fontsize:15,
+    fontFamily:'Pretendard-SemiBold'
   },
   itemName_text: {
-    fontSize: 14,
+    fontSize: 20,
+    fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   },
-  itemPrice_text:{
-    fontSize: 14,
-    fontFamily: 'Pretendard-Medium',
-    color: '#000000',
-  }
 });
