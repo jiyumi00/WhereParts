@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
 
   outputStyle:{
     borderColor:'#909098',
-    borderBottomWidth:1,
+    borderTopWidth:1,
     //height: 107,
     paddingHorizontal:'2%',
     paddingVertical:'2%',
@@ -107,6 +107,6 @@ export const styles = StyleSheet.create({
   },
   roadAddr_view:{
     flexDirection:'row',
-    paddingBottom:'2%',
+  
   }
 });

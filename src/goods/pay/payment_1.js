@@ -4,7 +4,7 @@ import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, Text
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/payment_2";
+import { styles } from "../../styles/payment_1";
 
 class Payment extends Component {
     constructor(props) {

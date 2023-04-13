@@ -13,10 +13,10 @@ import Indicator from '../../util/indicator';
 class SearchAddress extends Component {
     constructor(props) {
         super(props);
-        this.countPerPage=6;
+        this.countPerPage=5;
         this.state = {
             addressContents:[],
-            commonContents:[],
+            //commonContents:[],
             searchText: "",
             searchViewVisible:false,
             emptyListViewVisible:false,
@@ -33,20 +33,30 @@ class SearchAddress extends Component {
             alert("주소를 입력해주세요");
         }
         else{
-            this.setState({page:1,searchViewVisible:true},()=>this.goGetAddress(this.state.page))
-            //this.setState({searchViewVisible:true});
+            this.setState({page:1},()=>this.goGetAddress(this.state.page))
             Keyboard.dismiss();
         }
     }
     goGetAddress=(page)=>{
-        this.setState({indicator:true})
+        
         this.callGetAddressAPI(page).then((response) => {
-            this.setState({ addressContents: response.results.juso,commonContents: response.results.common,totalCount:response.results.common.totalCount,indicator:false,emptyListViewVisible:false }
-                ,()=>{
+            console.log(response)
+            if(response.results.common.errorMessage=="정상"){
+                this.setState({indicator:true})
+                this.setState({ addressContents: response.results.juso, /* commonContents: response.results.common, */
+                    totalCount:response.results.common.totalCount,
+                    indicator:false,
+                    searchViewVisible:true,
+                    emptyListViewVisible:false },()=>{
                     if(this.state.addressContents.length==0){
                         this.setState({emptyListViewVisible:true})
                     }
                 });
+            }
+            else{
+                alert(response.results.common.errorMessage);
+            }
+            
         });
     }
 
@@ -87,18 +97,19 @@ class SearchAddress extends Component {
                <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                    {this.state.emptyListViewVisible && <>
+                    {this.state.emptyListViewVisible &&
                         <View style={{justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
                         <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
                         <Text style={{marginTop:'5%'}}>검색 결과가 없습니다</Text>
-                        </View>
-                    </>}
-                    {this.state.searchViewVisible?
-                       
+                        </View>}
+                    {this.state.searchViewVisible && this.state.emptyListViewVisible==false&&
                         <FlatList
-                        style={{borderColor:'#909098', borderLeftWidth:1,borderTopWidth:1,borderRightWidth:1}}
+                        style={{borderColor:'#909098', borderLeftWidth:1,borderRightWidth:1,borderBottomWidth:1}}
                         data={this.state.addressContents}
-                        renderItem={({item,index})=><AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener}/>}/> :
+                        renderItem={({item,index})=><AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener}/>}/> 
+                        }
+
+                    {this.state.searchViewVisible==false && 
                         <>
                         <Text style={styles.title}>TIP</Text>
                         <Text style={styles.text}>도로명, 건물명, 지번 중 선택하여</Text>
@@ -110,6 +121,7 @@ class SearchAddress extends Component {
                    
                </View>
                 {this.state.searchViewVisible&&this.state.emptyListViewVisible==false&&
+                <>
                 <View style={styles.page_view}>
                     <View style={styles.row_layout}>
                         <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
@@ -121,7 +133,7 @@ class SearchAddress extends Component {
                             <PageIcon name="rightsquareo" size={30} color="light grey" />
                         </TouchableOpacity>
                     </View>
-                </View>}
+                </View></>}
             </View>
         );
     }
