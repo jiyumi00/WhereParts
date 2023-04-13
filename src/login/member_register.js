@@ -43,6 +43,7 @@ class Login extends Component {
         //console.log("nextPage",this.nextPage);
         const date = parseInt(Date.now() / 1000);
         console.log("date", date);
+        
     }
 
     //자동로그인
@@ -50,13 +51,14 @@ class Login extends Component {
         SplashScreen.hide();
         //퍼미션 설정되었는지 확인
         this.focusListener = this.props.navigation.addListener('focus', () => {
-            this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false,})})
+            this.onValueChange();
+            this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false}) 
+        })
         this.requestPermission();
         this.goLoginType();
         //알림메시지 처리
         this.handleFCMMessage();
     }
-
     componentWillUnmount () {
         this.focusListener()
     }
@@ -99,7 +101,7 @@ class Login extends Component {
     }
 
     goLoginType() {
-        FunctionUtil.getLoginType().then((response) => {
+        FunctionUtil.getLoginType().then((response) => {  
             console.log('login info ', response);
             if (response.detailLogin == 1) {
                 // 자동로그인
@@ -116,6 +118,14 @@ class Login extends Component {
                     if (success == false) { //회원정보가 없을 경우
                         Alert.alert('아이디 비밀번호를 확인해주세요', '',);
                         return;
+                    } 
+                    else if (Session.getPageInfoItem() != null) {
+                        if (Session.getNextPage() == "BuyList") {
+                            this.props.navigation.navigate(Session.getNextPage());
+                        }
+                        else if (Session.getNextPage() == "SalesList") {
+                            this.props.navigation.navigate(Session.getNextPage());
+                        }
                     }
                     else {
                         this.props.navigation.navigate(this.nextPage);
@@ -137,21 +147,24 @@ class Login extends Component {
             detailLogin: this.getDetailLogin(),
             isAutoLogin: false,
         }
-
         FunctionUtil.goLogin(loginInfo).then((success) => {
             console.log("success", success);
-            console.log("session value", Session.getItem());
+            console.log("session value", Session.getUserInfoItem());
             console.log("isLoggedin", Session.isLoggedin());
             if (success == false) { //회원정보가 없을 경우
                 Alert.alert('아이디 비밀번호를 확인해주세요', '',);
                 return;
             }
+            else if (Session.getPageInfoItem() != null) {
+                if (Session.getNextPage() == "BuyList") {
+                    this.props.navigation.navigate(Session.getNextPage());
+                }
+                else if (Session.getNextPage() == "SalesList") {
+                    this.props.navigation.navigate(Session.getNextPage());
+                }
+            }
             else {
                 this.props.navigation.navigate(this.nextPage);
-                /* console.log("session value", Session.getItem());
-                FunctionUtil.loginInfo().then((response) => {
-                    console.log("async value", response);
-                }); */
             }
         });
     }
@@ -211,7 +224,6 @@ class Login extends Component {
         this.callSetReadNotiAPI(message.data.id).then((response) => {
             console.log(response);
         });
-
         if (message.data.kind == "buy")
             this.props.navigation.navigate("BuyList");
         else if (message.data.kind == "sell")
@@ -224,7 +236,6 @@ class Login extends Component {
         });
         const isLoggedin = Session.isLoggedin();
         console.log("loginvalid 값 =", isLoggedin);
-
         if (isLoggedin == true) {
             if (message.data.kind == "buy")
                 this.props.navigation.navigate("BuyList");
@@ -239,7 +250,7 @@ class Login extends Component {
     handleFCMMessage = () => {
         //Foreground 상태에서 알림이 오면 Alert 창 보여줌
         const unsubscribe = messaging().onMessage(async remoteMessage => {
-            console.log('백그라운드 상태에서 알림을 받았습니다.');
+            console.log('foreground 상태에서 알림을 받았습니다.');
             Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body, [
                 { text: '취소', onPress: () => { } },
                 { text: '확인', onPress: () => this.foreGroundNotiOkButtonClicked(remoteMessage) }],

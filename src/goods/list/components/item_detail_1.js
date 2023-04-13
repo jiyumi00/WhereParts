@@ -15,7 +15,6 @@ import TabIcon from 'react-native-vector-icons/Entypo';
 
 import Constant from '../../../util/constatnt_variables';
 import WebServiceManager from '../../../util/webservice_manager';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Session from '../../../util/session';
 
@@ -27,7 +26,7 @@ export default class DetailItemView extends Component {
 
         this.goodsID = this.props.route.params.goodsID;
         this.sellerID = this.props.route.params.sellerID;
-        this.userID = Session.getValue('id');
+        this.userID =  Session.getUserID();
 
         this.state = {
             images: [],

@@ -3,10 +3,9 @@ import { View, Text, ScrollView, TouchableOpacity, NativeModules,Pressable, Text
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
-import FunctionUtil from '../../util/libraries_function';
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/payment";
-import Icon from 'react-native-vector-icons/AntDesign';
+
 class Payment extends Component {
     constructor(props) {
         super(props);
@@ -215,94 +214,91 @@ class Payment extends Component {
         return (
             <View style={template.total_container}>
                 <ScrollView style={template.ScrollView}>
-                    <View style={styles.container}>
+                    <View style={template.container}>
                         <View style={styles.indexView}>
-                            <View style={styles.itemTopView}>
-                                <Text style={styles.indexText}>{this.item.name}</Text>
+                        <Text style={styles.indexText}>주문상품</Text>
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{ width: 85, height: 75 }}>
+                                        <Image
+                                            source={{ uri: this.state.imageURL }}
+                                            style={styles.productImage} />
+                                </View>
+                                <View style={{flexDirection:'column'}}>
+                                    <Text> 주문번호 : {this.state.orderNo}</Text>
+                                    <Text> 상품명 : {this.item.name}</Text>
+                                    <Text> 품번 : {this.item.number}</Text>
+                                    <Text> 구매가능 수량 : {this.item.quantity}개{"\n"}</Text>
+                                    <Text style={styles.priceText}> {this.item.price*this.state.quantity}원</Text>
+                                </View>
+                                
                             </View>
-                            <View style={styles.itemBodyView}>
-                                <View style={styles.imageView}>
-                                    <Image
-                                        source={{ uri: this.state.imageURL }}
-                                        style={styles.productImage} />
-                                </View>
-                                <View style={styles.itemInfoView}>
-                                  <Text> 주문번호 | <Text style={{fontSize:15,color:'black'}}>{this.state.orderNo}</Text></Text>
-                                  <Text> 품번 |  <Text style={{fontSize:15,color:'blue'}}>{this.item.number}</Text></Text>
-                                    <Text> 구매가능 수량 | <Text style={{fontSize:15,color:'black'}}>{this.item.quantity}개</Text></Text>
-                                </View>
-                            </View>
-                            <View style={styles.itemBottomView}>
-                                <View style={{flex:1,justifyContent:'center'}}>
-                                <Text style={styles.priceText}> {FunctionUtil.getPrice(this.item.price*this.state.quantity)}원 /<Text style={{fontSize:14,color:'gray'}}>{FunctionUtil.getPrice(this.item.price)}원</Text></Text> 
-                                </View>
-                                <View style={{flex:1,alignItems:'flex-end'}}>
-                                    <View style={styles.selectQuantityView}>
-                                        <TouchableOpacity onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
-                                            <Icon name="minus" size={15} color="black" />
-                                        </TouchableOpacity>
+                           
+                            <View style={{flexDirection:'row',}}>
+                               
+                                <View style={styles.selectQuantityView}>
+                                    <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
+                                        <Text style={styles.quantityItemText}>-</Text>
+                                    </Pressable>
 
-                                        <View style={[styles.quantityItem, styles.quantityCount]}>
-                                            <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
-                                        </View>
-
-                                        <TouchableOpacity onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
-                                            <Icon name="plus" size={15} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={[styles.quantityItem, styles.quantityCount]}>
+                                        <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
                                     </View>
+
+                                    <Pressable onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
+                                        <Text style={styles.quantityItemText}>+</Text>
+                                    </Pressable>
                                 </View>
-                            </View>
-                                                  
+                            </View>                                                
                         </View>
 
                        
                         {/* 주소 */}
-                       
-                        <View style={styles.deliverView}>
-                            <Text style={styles.title}>배송지 정보</Text>
+                        <View style={styles.container}>
+                            <View style={styles.deliverView}>
+                                <Text style={styles.title}>배송지 정보</Text>
+                                <TextInput style={styles.textInput}
+                                    ref={(c) => { this.buyerName = c; }}
+                                    returnKeyType = "next"
+                                    onSubmitEditing={() => { this.buyerTel.focus(); }}
+                                    placeholder="주문자 이름을 입력하세요"
+                                    onChangeText={(value) => this.onValueChange({ buyerName: value })}
+                                    //onEndEditing={(event)=> this.onValueChange()}
+                                    value={this.state.buyerName} />
+                                <TextInput style={styles.textInput}
+                                    ref={(c) => { this.buyerTel = c; }}
+                                    returnKeyType = "next"
+                                    placeholder="휴대폰 번호를 입력하세요"
+                                    onChangeText={(value) => this.onValueChange({ buyerTel: value })}
+                                    //onEndEditing={(event)=> this.onValueChange()}
+                                    value={this.state.buyerTel} />
+                            </View>
+                            <Text style={styles.title}>주소</Text>
+                            <View style={styles.rowLayout}>
+                                <View style={styles.number_text}>
+                                    <Text style={styles.text}>{this.state.zipNo}</Text>
+                                </View>
+
+                                <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
+                                    <Text style={styles.btn_text}>우편번호 찾기</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.address_text}>
+                                <Text style={styles.text}>{this.state.roadAddr}</Text>
+                            </View>
+
                             <TextInput style={styles.textInput}
-                                ref={(c) => { this.buyerName = c; }}
-                                returnKeyType = "next"
-                                onSubmitEditing={() => { this.buyerTel.focus(); }}
-                                placeholder="주문자 이름을 입력하세요"
-                                onChangeText={(value) => this.onValueChange({ buyerName: value })}
+                                placeholder="상세 주소를 입력하세요"
+                                onChangeText={(value) => this.onValueChange({ detailAddress: value })}
                                 //onEndEditing={(event)=> this.onValueChange()}
-                                value={this.state.buyerName} />
+                                value={this.state.detailAddress} />
+
                             <TextInput style={styles.textInput}
-                                ref={(c) => { this.buyerTel = c; }}
-                                returnKeyType = "next"
-                                placeholder="휴대폰 번호를 입력하세요"
-                                onChangeText={(value) => this.onValueChange({ buyerTel: value })}
-                                //onEndEditing={(event)=> this.onValueChange()}
-                                value={this.state.buyerTel} />
+                                placeholder="배송요청사항"
+                                onChangeText={(value) => this.setState({ bigo: value })}
+                                value={this.state.bigo} />
                         </View>
-                        <Text style={styles.title}>주소</Text>
-                        <View style={styles.rowLayout}>
-                            
-                            <TouchableOpacity activeOpacity={0.8} style={styles.number_text}  onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})} >
-                                <Text style={styles.text}>{this.state.zipNo}</Text>
-                            </TouchableOpacity>
-                            
-                            <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", {addressListener:this.getAddressInfo})}>
-                                <Text style={styles.btn_text}>우편번호 찾기</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.address_text}>
-                            <Text style={styles.text}>{this.state.roadAddr}</Text>
-                        </View>
-
-                        <TextInput style={styles.textInput}
-                            placeholder="상세 주소를 입력하세요"
-                            onChangeText={(value) => this.onValueChange({ detailAddress: value })}
-                            //onEndEditing={(event)=> this.onValueChange()}
-                            value={this.state.detailAddress} />
-
-                        <TextInput style={styles.textInput}
-                            placeholder="배송요청사항"
-                            onChangeText={(value) => this.setState({ bigo: value })}
-                            value={this.state.bigo} />
-                                   
+                                             
                     </View>
                 </ScrollView>
                 {

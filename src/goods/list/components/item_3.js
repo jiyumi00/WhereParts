@@ -42,6 +42,11 @@ export default class ListItem extends PureComponent {
         this.props.navigation.push('GoodsDetail',{goodsID:this.item.id, sellerID:this.item.userID, distance:this.item.distance, refresh:this.props.refreshListener});
     }
 
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.item.number });
+    }
+
     render() {
         const item = this.props.item;
         return (       
@@ -51,15 +56,17 @@ export default class ListItem extends PureComponent {
                         <Text style={styles.itemName_text}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
                     </View>
                     <View style={styles.productTop_view}>
-                        <View style={{borderWidth:0, width:(ScreenWidth/6.5), height: (ScreenWidth/6.5),}}>
+                        <View style={styles.productImage_view}>
                             <Image
                                 source={{ uri: this.state.imageURI }}
                                 style={styles.product_image} />
                         </View>
-                        <View style={[styles.productInfoRight_view,{borderWidth:0, height: (ScreenWidth/6.5), paddingLeft:25}]}>
+                        <View style={styles.productInfoRight_view}>
                             <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
-                            <Text style={[styles.itemDetail_text,{fontSize:10,color:'blue'}]}>{item.number.length > 15 ? `${item.number.slice(0, 15)}...` : item.number}</Text>
-                            <Text style={[styles.itemDetail_text, { color: '#EE636A',fontSize:10 }]}>{item.distance}km</Text>
+                            <TouchableOpacity style={{width:'100%'}} onPress={this.goGoodsNumberWebView}>
+                                <Text style={[styles.itemDetail_text,{color:'blue'}]}>{item.number.length > 14 ? `${item.number.slice(0, 14)}...` : item.number}</Text>
+                            </TouchableOpacity>
+                            <Text style={[styles.itemDetail_text, { fontSize:10, color: '#EE636A'}]}>{item.distance}km</Text>
                         </View>
                     </View>
                 </View>

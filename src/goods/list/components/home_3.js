@@ -26,7 +26,7 @@ class Home extends Component {
         super(props);
         this.contents = [];  //모든 users값 가져오는 것
         this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
-        this.userID = Session.getValue('id');
+        this.userID = Session.getUserID();
 
         //안드로이드에서 정의한 모듈 가져옴
         const { ImageModule } = NativeModules;
@@ -48,7 +48,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.goGetGoods(Session.getValue('id'));
+        this.goGetGoods(Session.getUserID());
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 
@@ -232,7 +232,7 @@ class Home extends Component {
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1,backgroundColor: '#FFFF',  }}>
+                <View style={{ flex: 1,backgroundColor: '#FFFF', paddingHorizontal:'2%' }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
                         numColumns={2}
@@ -258,7 +258,6 @@ class Home extends Component {
                                     </View>
                                     내가 찾는 부품 
                                 </Text>
-                               
                             </View>
                             <View style={{paddingLeft:'5%'}}>
                                 <Text style={[styles.titleBold_text]}>
@@ -269,11 +268,10 @@ class Home extends Component {
                                 </Text>
                             </View>
                         </View>
-                       
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row', marginTop: '7%', marginBottom: '2%' }}>
+                        <View style={{ flexDirection: 'row', marginTop: '5%', marginBottom: '3%' }}>
                             <View style={styles.searchSection}>
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
@@ -285,7 +283,7 @@ class Home extends Component {
                                 />
                             </View>
                             {/* 카메라로 품번검색 */}
-                            <View >
+                            <View>
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
@@ -293,12 +291,12 @@ class Home extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: 'white', marginTop:'2%',}}>
                             <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ color: 'black' }}>총 상품개수 : </Text>
                                 <Text style={{ color: '#113AE2' }}>{this.state.goodsQuantity}</Text><Text style={{ color: 'black' }}>개</Text>
                             </View>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end',alignItems:'center', height:40}}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', height:40}}>
                                 <Picker
                                     style={{ width: 150 }}
                                     selectedValue={this.state.sortedData}
@@ -307,15 +305,6 @@ class Home extends Component {
                                     {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
                                 </Picker>
                             </View>
-                            {/*   <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
-                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
-                                        <Text style={styles.sortBar_text}> 최신순  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
-                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
-                                    <Text style={styles.sortBar_text}> 가나다순</Text>
-                                </TouchableOpacity>  */}
-
                         </View>
                     </Animated.View>      
                 </View>

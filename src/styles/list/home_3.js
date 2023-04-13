@@ -10,18 +10,15 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     width: ScreenWidth,
     height: 200,
     paddingTop:'8%',
-   
     backgroundColor: '#0066FF',
     position: 'absolute',
   },
   title_view: { 
     marginTop:"5%",
-   
   },
   
   row_title_view:{
     //borderWidth:1,
-   
     width:'60%',
     paddingLeft:'5%',
     marginBottom:'3%',
@@ -63,7 +60,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     position: 'absolute',
     alignItems: 'center',
     backgroundColor: "#0066FF",
-  
   },
   searchSection:{
     borderWidth:1,
@@ -75,7 +71,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    
   },
   search_input: { //Home TextInput 안에 글씨
     flex:1,
@@ -99,8 +94,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     backgroundColor: 'white',
     width:"100%",
     paddingVertical:"1%",
-  
-    
     flexDirection:'row',
     paddingTop:5
   },
@@ -114,26 +107,29 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   
 //list
 listItem_view: { //공통부분
+    width:ScreenWidth/2.2,
     borderWidth:1.5,
     borderRadius:10,
     borderColor:'#D9D9D9',
-    marginLeft:10,
-    width:ScreenWidth/2.2,
+    padding:'3%',
     marginBottom:'5%',
-    paddingHorizontal:10,
-    //paddingVertical:3
+    marginLeft:'3%',
   },
   productTop_view:{
+    //borderWidth:1,
     flexDirection:'row',
-    //borderBottomWidth:1,
     borderColor:'#D9D9D9',
     paddingBottom:8,
-    paddingTop:5,
+    paddingTop:10,
+  },
+  productImage_view: {
+    width: ScreenWidth / 6.5,
+    height: ScreenWidth / 6.5,
   },
   product_image: {
     flex:1,
-    width:(ScreenWidth/6.5),
-    height: (ScreenWidth/6.5),
+    width:ScreenWidth/6.5,
+    height: ScreenWidth/6.5,
     borderRadius:10,
   },
   
@@ -144,28 +140,26 @@ listItem_view: { //공통부분
     borderColor:'#D9D9D9',
   },
   productInfoRight_view:{
+    flex:1,
+    height: ScreenWidth/6.5,
     alignItems:'flex-end',
     justifyContent:'flex-end',
     paddingVertical:3,
-    height:(ScreenWidth/5.5),
-    //flex:1,
   },
   itemDetail_text:{
-    fontsize:12,
+    fontSize:12,
     fontFamily:'200',
-    color:'#0066FF'
+    color:'#0066FF',
+    textAlign:'right',
   },
   itemName_text: {
     fontSize: 14,
-    //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   },
   itemPrice_text:{
     fontSize: 14,
-    //fontWeight: 'bold',
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   }
- 
 });

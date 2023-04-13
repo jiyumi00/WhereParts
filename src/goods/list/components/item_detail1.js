@@ -11,6 +11,8 @@ import { styles } from "../../../styles/list/home_item_detail1";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import QuantityEditIcon from 'react-native-vector-icons/Feather';
+
 //import Certified from '../../../images/icon/certified-icon/certified_1-removebg-preview.png';
 //import Certified from '../../../images/icon/certified-icon/certified_2-removebg-preview.png';
 //import Certified from '../../../images/icon/certified-icon/certified_3-removebg-preview.png';
@@ -19,8 +21,8 @@ import Certified from '../../../images/icon/certified-icon/certified_4-removebg-
 
 import Constant from '../../../util/constatnt_variables';
 import Session from '../../../util/session';
+import FunctionUtil from '../../../util/libraries_function';
 import WebServiceManager from '../../../util/webservice_manager';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class DetailItemView1 extends Component {
     constructor(props) {
@@ -31,7 +33,7 @@ export default class DetailItemView1 extends Component {
         this.goodsID = this.props.route.params.goodsID;
         this.sellerID = this.props.route.params.sellerID;
         this.distance = this.props.route.params.distance;
-        this.userID = Session.getValue('id');
+        this.userID = Session.getUserID();
 
         this.state = {
             images: [],
@@ -354,7 +356,7 @@ export default class DetailItemView1 extends Component {
     //수정, 삭제, 숨김
     async callUpdateGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/UpdateGoods", "post");
-        
+        const price = parseInt(this.state.price.toString().replace(/,/g,''));
         const editItem = {
             id:this.goodsID,
             quantity:this.state.quantity,
@@ -369,7 +371,7 @@ export default class DetailItemView1 extends Component {
             id: editItem.id, 
             quantity: editItem.quantity, 
             quality: editItem.quality,
-            price: editItem.price, 
+            price: editItem.price.replace(/,/g,''), 
             genuine: editItem.genuine, 
             spec: editItem.spec, 
             hashTag: editItem.hashTag,
@@ -432,7 +434,7 @@ export default class DetailItemView1 extends Component {
     render() {
         //const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
         // 값 변환
-        const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const renderPrice = FunctionUtil.getPrice(this.state.price);
 
         return (
             <View style={styles.itemDetail_view}>
@@ -442,25 +444,25 @@ export default class DetailItemView1 extends Component {
                             {this.state.editGoodsViewVisible ?
                                 <>
                                     <TouchableOpacity onPress={this.editCancelButtonClicked} >
-                                        <Text style={[styles.text,{color:'blue'}]}>수정취소  </Text>
+                                        <Text style={[styles.text,{fontSize:15, color:'blue'}]}>수정취소     </Text>
                                     </TouchableOpacity >
                                 </> :
                                 <>
                                     <TouchableOpacity onPress={this.editButtonClicked} >
-                                        <Text style={[styles.text,{color:'blue'}]}>수정    </Text>
+                                        <Text style={[styles.text,{fontSize:15, color:'blue'}]}>수정       </Text>
                                     </TouchableOpacity >
                                 </>}
                             <TouchableOpacity onPress={this.removeButtonClicked}>
-                                <Text style={[styles.text,{color:'blue'}]}>삭제   </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>삭제      </Text>
                             </TouchableOpacity>
 
                             {this.state.item.valid==1 && 
                                 <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
-                                <Text style={[styles.text,{color:'blue'}]}>숨김    </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>숨김      </Text>
                             </TouchableOpacity>}
                             {this.state.item.valid==0 && 
                             <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
-                                <Text style={[styles.text,{color:'blue'}]}>숨김해제    </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>숨김해제    </Text>
                             </TouchableOpacity>}
                         </>}
                 </View>
@@ -524,9 +526,7 @@ export default class DetailItemView1 extends Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                         <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                            <Text style={[styles.text, { color: 'blue' }]}>
-                                                {this.state.item.number}
-                                            </Text>
+                                            <Text style={[styles.text, { color: 'blue' }]}>{this.state.item.number}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -535,7 +535,7 @@ export default class DetailItemView1 extends Component {
                                         {/* 제품 상태 */}
                                         {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                             <View style={styles.toggleDetailItemTItle}>
-                                                <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                                <Text style={[styles.text, { fontSize: 14, color: '#949CA1'}]}>
                                                     제품 상태
                                                 </Text>
                                             </View>
@@ -587,7 +587,7 @@ export default class DetailItemView1 extends Component {
                                 <View style={styles.remaining_view}>
                                     {this.state.quantity == 0 ?
                                         <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
-                                        <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
+                                        <Text style={[styles.text, { fontSize: 14 }]}>{this.state.quantity}개 남음</Text>}
                                 </View>
                             </View>}
                         </View>
@@ -636,11 +636,9 @@ export default class DetailItemView1 extends Component {
                             {this.state.editGoodsViewVisible && <View style={{ flexDirection: 'row',width:'100%', marginTop: 12 }}>
                                 {/* 금액 수정 */}
                                 <View style={{flex:2, flexDirection:'row'}}>
-                                    <View style={[styles.editGoodsPrice_input,]}>
-                                        <TextInput style={[styles.text, { fontSize: 18,}]}
-                                            onChangeText={(value) => this.onValueChange({ price: value })}>
-                                            {this.state.price}</TextInput>
-                                    </View>
+                                    <TextInput style={[styles.editGoodsPrice_input]}
+                                        onChangeText={(value) => this.onValueChange({ price: value })}>
+                                        {renderPrice}</TextInput>                                  
                                     <View style={{ marginLeft: 2, justifyContent: 'center' }}>
                                         <Text style={styles.detailUnit_text}>원</Text>
                                     </View>
@@ -651,7 +649,8 @@ export default class DetailItemView1 extends Component {
                                     <View style={styles.selectQuantity_view}>
                                         <View style={styles.quantity_button}>
                                             <Pressable onPress={() => this.editMinus(this.state.quantity)}>
-                                                <Text style={[styles.text, { fontSize: 20, }]}>-</Text>
+                                                {/* <Text style={[styles.text, { fontSize: 27, }]}>-</Text> */}
+                                                <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
                                             </Pressable>
                                         </View>
                                         <View style={[styles.quantity_button, styles.quantityCount]}>
@@ -659,7 +658,8 @@ export default class DetailItemView1 extends Component {
                                         </View>
                                         <View style={styles.quantity_button}>
                                             <Pressable onPress={() => this.editPlus(this.state.quantity)}>
-                                                <Text style={[styles.text, { fontSize: 18, }]}>+</Text>
+                                                {/* <Text style={[styles.text, {fontSize: 18,}]}>+</Text> */}
+                                                <QuantityEditIcon name='plus' color='black' size={15}></QuantityEditIcon>
                                             </Pressable>
                                         </View>
                                     </View>
@@ -705,7 +705,7 @@ export default class DetailItemView1 extends Component {
 
                             {/* 제품 상태 수정 */}
 
-                            {this.state.editGoodsViewVisible && <View style={[styles.toggleDetailItem]}>
+                            {this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
                                 <View style={styles.toggleDetailItemTItle}>
                                     <Text style={styles.toggleDetailItemTItleText}>
                                         제품 상태
@@ -735,7 +735,7 @@ export default class DetailItemView1 extends Component {
                                         </View>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={[styles.status_item]}>
+                                <View style={[styles.status_item,{alignItems:'flex-start'}]}>
                                     <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck}>
                                         <View style={styles.genuine_row}>
                                             <IconRadio name={this.state.genuine == 2 ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
@@ -778,11 +778,9 @@ export default class DetailItemView1 extends Component {
                                         <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
                                     </TouchableOpacity>
                                 </View>
-
                                 <View style={styles.price_view}>
                                     <Text style={[styles.text, { fontSize: 22,color:'blue' }]}>{renderPrice}<Text style={[styles.detailUnit_text,{color:'blue'}]}>원</Text></Text>
                                 </View>
-
                                 <View style={styles.buy_view}>
                                     <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                         <Text style={styles.buyButton_text}>구매하기</Text>

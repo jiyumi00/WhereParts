@@ -54,7 +54,7 @@ class EditProfile extends Component {
 
     componentDidMount() {
         FunctionUtil.loginInfo().then((value) => {
-            this.loginInfo = { companyNo: value.companyNo, passwd: value.passwd,userID:Session.getValue('id') }
+            this.loginInfo = { companyNo: value.companyNo, passwd: value.passwd,userID:Session.getUserID() }
             this.setState({ companyNo: value.companyNo })
             this.callGetCompanyImage(this.loginInfo).then((response) => {
                 let reader = new FileReader();

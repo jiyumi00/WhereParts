@@ -10,13 +10,12 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import EmptyListView from '../../util/empty_list_view';
 
-import DetailItemView from "../../goods/list/components/item_detail";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Session from '../../util/session';
 
 class PickList extends Component {
     constructor(props) {
         super(props);
-        this.userID=""
+        this.userID=Session.getUserID()
         this.state={
             wishContent:[],
 
@@ -28,11 +27,9 @@ class PickList extends Component {
         this.goGetWish();
     }
     goGetWish=()=>{
-        this.getUserID().then(()=>{
             this.callGetWishAPI().then((response) => { 
                 this.setState({wishContent:response},()=>{this.handleEmptyListView()})
              });         
-        } )
     }
 
     handleEmptyListView=()=>{
@@ -45,16 +42,6 @@ class PickList extends Component {
         }
     }
 
-    async getUserID(){
-        let obj=await AsyncStorage.getItem('obj')
-        let parsed=JSON.parse(obj);
-        if(obj!==null){
-            this.userID=parsed.id;
-        }
-        else{
-            return false;
-        }
-    }
     //등록된 상품 리스트 API
     async callGetWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetWishList?user_id="+this.userID);
@@ -84,7 +71,7 @@ export default PickList;
 class ListItem extends Component {
     constructor(props) {
         super(props);
-        this.id="";
+        this.id=Session.getUserID();
         this.item=this.props.item;
         this.state = {
             imageURI: null,
@@ -102,7 +89,6 @@ class ListItem extends Component {
 
             } //끝까지 다 읽었으면 
         });
-        this.getUserID().then(()=>{
             this.callGetWishAPI().then((response) => { 
                 for(let i=0;i<response.length;i++){
                     if(this.item.id==response[i].id){ 
@@ -110,18 +96,6 @@ class ListItem extends Component {
                     }
                 }
              });
-             
-        } )
-    }
-    async getUserID(){
-        let obj=await AsyncStorage.getItem('obj')
-        let parsed=JSON.parse(obj);
-        if(obj!==null){
-            this.id=parsed.id;
-        }
-        else{
-            return false;
-        }
     }
     
     handleDetailViewModal=()=> {

@@ -26,18 +26,22 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "lightgray",
-    padding: 10
+    padding: 10,
+    marginTop:10,
+  },
+  orderGoodsDetailText: {
+    fontSize: 14,
+    color: 'black',
   },
   priceText:{
     fontSize: 18,
-    color:'black' 
+    color:'black',
   },
   paymentButton:{
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
     width: "auto",
-    borderRadius: 5,
     backgroundColor: '#0066FF', 
   },
   goListButton:{
@@ -48,19 +52,19 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#0066FF',
   },
+
   //수량디자인
   selectQuantityView: {
-    marginLeft:"60%",
     width:"auto",
     borderRadius: 6,
     borderColor: '#D4D4D4',
     borderWidth: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    //alignItems:'flex-end'
   },
   quantityItemText: {
     fontFamily: 'Pretendard-Medium',
-    fontSize: 15,
+    fontSize: 18,
     color: '#000',
   },
   quantityItem: {
@@ -79,6 +83,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   //pay_complete
   goodsInfoView:{
     height:'30%',
@@ -87,6 +92,7 @@ export const styles = StyleSheet.create({
   payInfoView:{
     flex:2,
   },
+
   //address
   total_container: {
     flex: 1,
@@ -96,12 +102,11 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 30,
-    //marginLeft:30,
-    //marginRight:30,
   },
   rowLayout: {
     flex: 1,
     flexDirection: 'row',
+    //borderWidth:1,
   },
   textInput: {
     backgroundColor: '#F1F1F3',
@@ -109,8 +114,8 @@ export const styles = StyleSheet.create({
     marginRight: 15,
     paddingHorizontal: 10,
 
-    height: 55,
-    width: "96%",
+    height: 45,
+    width: "100%",
     borderRadius: 10,
     borderColor: '#F1F1F3',
     borderWidth: 1,
@@ -125,8 +130,9 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    width: 130,
-    height: 55,
+    //borderWidth:1,
+    width: '36%',
+    height: 45,
     backgroundColor: "black",
     alignItems: 'center',
     justifyContent: 'center',
@@ -145,13 +151,13 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   number_text: {
-
-    width: '55%',
+    //borderWidth:1,
+    width: '60%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "#F1F1F3",
     borderRadius: 10,
-    height: 55,
+    height: 45,
     marginBottom: 15,
     marginRight: 15,
 
@@ -161,8 +167,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: "#F1F1F3",
     borderRadius: 10,
-    height: 55,
-    width: "96%",
+    height: 45,
+    width: "100%",
     marginBottom: 15,
   },
   deliverView:{
@@ -174,8 +180,8 @@ export const styles = StyleSheet.create({
   productImage: {
     flex: 1,
     //margin: 5,
-    width: 75,
-    height: 65,
+    //width: 75,
+    //height: 65,
     borderRadius: 6,
   },
 })

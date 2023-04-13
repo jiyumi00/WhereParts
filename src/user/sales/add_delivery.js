@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, NativeModules,Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, NativeModules } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
@@ -9,9 +9,7 @@ import IconCamera from 'react-native-vector-icons/Feather';
 
 import Constant from "../../util/constatnt_variables";
 import WebServiceManager from "../../util/webservice_manager";
-import FunctionUtil from '../../util/libraries_function';
-const ScreenHeight=Dimensions.get('window').height;
-const ScreenWidth=Dimensions.get('window').width;
+
 class AddDelivery extends Component {
     constructor(props) {
         super(props);
@@ -146,23 +144,23 @@ class AddDelivery extends Component {
     
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address } = this.state.sellDetailInfo;
-        
         return (
 
             <View style={styles.total_container}>
                 <ScrollView>
                     <View style={styles.topContainer}>
-                        <View style={{ flexDirection: "row" }} >
-                            <View style={styles.imageView}>
-                                <Image
-                                    source={{ uri: this.state.imageURL }}
-                                    style={styles.productImage} />
-                            </View>
-                            <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:1, }}>
-                                <Text style={styles.itemNameText}>{goodsName}</Text>
-                                <Text style={styles.itemNumberText}>{goodsNo}</Text>
-                                <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(`${price}`)}<Text style={[styles.text, { fontSize: 12 }]}>{"원/" + quantity + "개"}</Text></Text>
-                                <Text style={styles.itemRegisterDateText}>{orderingDate.slice(0, 10)}</Text>
+                        <View style={{ padding: "5%" }}>
+                            <Text>{"주문일 " + orderingDate.slice(2, 10)}</Text>
+                            <View style={{ flexDirection: "row" }} >
+                                <View style={{ width: 85, height: 75 }}>
+                                    <Image
+                                        source={{ uri: this.state.imageURL }}
+                                        style={styles.productImage} />
+                                </View>
+                                <View style={{ justifyContent: "center" }}>
+                                    <Text style={[styles.text, { fontSize: 18, fontWeight: "bold" }]}>{goodsName}<Text style={[styles.text, { fontSize: 12 }]}>{"  " + goodsNo}</Text></Text>
+                                    <Text style={[styles.text, { fontSize: 18, marginTop: 10 }]}>{price}<Text style={[styles.text, { fontSize: 12 }]}>{"/" + quantity + "개"}</Text></Text>
+                                </View>
                             </View>
                         </View>
                     </View>

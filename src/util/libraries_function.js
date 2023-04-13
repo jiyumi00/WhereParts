@@ -45,7 +45,7 @@ export default class FunctionUtil {
                     companyAddress: response.companyAddress,
                     isLoggedin: true
                 }
-                Session.setItem(userInfo);
+                Session.setUserInfoItem(userInfo);
                 
                 if (loginInfo.isAutoLogin == false && loginInfo.detailLogin == 1) {
                     const firedDate = {
@@ -85,6 +85,7 @@ export default class FunctionUtil {
     }
 
     static getPrice(data) {
+        data = data.toString().replace(/,/g,'');
         return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 }

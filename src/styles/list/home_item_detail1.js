@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   text: { //공통
     //fontFamily: 'Pretendard-SemiBold',
     fontSize: 12,
-    color: 'black'
+    color: '#000'
   },
   /* 상품 상세보기 */
   itemDetail_view: {
@@ -42,7 +42,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     backgroundColor: 'white',
   },
   //이미지 
-
   goodsImage_view: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -118,7 +117,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     //alignItems:'center',
   },
   selectQuantity_view: {
-    height: 42,
+    height: 45,
     width:36*3,
     borderRadius: 6,
     borderColor: '#D4D4D4',
@@ -152,7 +151,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   toggleDetailItem: {
     marginVertical: 3,
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    //flexWrap: 'wrap',
   },
   toggleDetailItemTItle: {
     justifyContent: 'center',
@@ -229,20 +228,20 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   // Detail 안에서의 수정한 View style------------------------------------------------------------------------------------------------
   //가격 수정 view style
   editGoodsPrice_input: {
+    fontSize:18,
     backgroundColor: 'white',
     height: 45,
     width: "60%",
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 2,
-    alignItems:'flex-end',
-    justifyContent:'center',
+    textAlign:'right',
   },
   editGoodsQuality: {
     justifyContent: 'center',
     backgroundColor: 'white',
     height: 40,
-    width: "72%",
+    width: "80%",
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 2,
@@ -253,7 +252,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginBottom: 10
   },
   status_item: {
-    flex: 1.5,
+    width:100,
     alignItems: 'center',
   },
   genuine_row: {

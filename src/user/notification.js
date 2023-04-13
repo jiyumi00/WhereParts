@@ -15,7 +15,7 @@ export default class Notification extends Component {
     constructor(props) {
         super(props);
         this.contents=[];
-        this.userID=Session.getValue('id')
+        this.userID=Session.getUserID()
 
         this.state = {
             notiContents: [],

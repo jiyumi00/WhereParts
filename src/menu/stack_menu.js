@@ -5,9 +5,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //마이페이지
 import MyPage from "../user/mypage";
-import SalesList from "../user/sales/sales_list";
-import BuyList from "../user/buy/buy_list";
-import PickList from "../user/buy/pick_list";
+
+//import SalesList from "../user/sales/sales_list";
+import SalesList from "../user/sales/sales_list_1";
+
+//import BuyList from "../user/buy/buy_list";
+import BuyList from "../user/buy/buy_list_1";
+
+//import PickList from "../user/buy/pick_list";
+import PickList from "../user/buy/pick_list_1";
+
 import AddDelivery from "../user/sales/add_delivery";
 import DeliveryDetail from "../user/buy/delivery_detail";
 //경로를 위한
@@ -17,7 +24,10 @@ import GalleryX from "../util/gallery_x";
 import GoodsImageCamera from "../goods/register/components/camera_goods_image";
 //import SearchWebView from "../goods/list/components/web_view";
 import GoogleWebView from "../util/google_web_view";
-import Payment from "../goods/pay/payment";
+
+//import Payment from "../goods/pay/payment";
+import Payment from "../goods/pay/payment_1";
+
 import PayComplete from "../goods/pay/pay_complete";
 
 //import GoodsDetail from "../goods/list/components/item_detail";
@@ -85,9 +95,9 @@ class Stack extends Component {
                 <NativeStack.Screen name="EditProfile" component={EditProfile}
                     options={{ title: "" }}/>
                 <NativeStack.Screen name="SalesList" component={SalesList}
-                    options={{ title: "판매 내역" }}/>
+                    options={{ title: "판매 내역",headerBackVisible:false }}/>
                 <NativeStack.Screen name="BuyList" component={BuyList}
-                    options={{ title: "구매 내역" }} />
+                    options={{ title: "구매 내역",headerBackVisible:false}} />
                 <NativeStack.Screen name="PickList" component={PickList}
                     options={{ title: "관심 목록" }} />
                 <NativeStack.Screen name="AddDelivery" component={AddDelivery}

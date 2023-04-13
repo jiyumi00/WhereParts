@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet,Dimensions } from 'react-native';
+const ScreenHeight=Dimensions.get('window').height;
+const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({
     goodsContent: {
         position: 'relative',
@@ -22,13 +23,10 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
       },
       productView: {
-        flex:2,
+        //borderWidth:1,
+        paddingBottom:'2%',
         flexDirection: 'row',
         alignItems: 'center',
-        //borderBottomColor:'#D1D1D1',
-        //borderBottomWidth:1,
-        paddingBottom:10,
-       // borderWidth:1,
       },
       productButtonView:{
         height:35,
@@ -52,32 +50,21 @@ export const styles = StyleSheet.create({
         alignItems:'center'
       },
       productImageView: {
-        
-        //borderWidth: 1,
-        borderColor: '#ABABAB',
-        borderStyle: 'solid',
-        overflow: 'hidden',
+        width:ScreenWidth/5,
+        height:ScreenWidth/5,
       },
       productImage: {
         flex:1,
-        margin:5,
-        width: 80,
-        height: 80,
-        borderRadius: 6,
-        
+        borderRadius:6,
       },
       productInfo: {
         flex:3,
-        height:70,
         flexDirection:'row',
-        marginLeft:10,
-        marginTop:5,
-        marginBottom:5,
-        marginRight:15,
+        borderWidth:1,
       },
       productInfoLeft:{
         flex:4,
-        height:70,
+        paddingHorizontal:'2%',
         //borderWidth:1,
       },
       productInfoRight:{
@@ -102,26 +89,28 @@ export const styles = StyleSheet.create({
       // item 글자 디자인
       itemNumberText: {
         fontSize: 15,
+        color:'blue',
         fontFamily: 'Pretendard-SemiBold',
       },
      
       itemNameText: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 17,
+        //fontWeight: 'bold',
         fontFamily: 'Pretendard-Medium',
-        color: '#000000',
+        color: '#000000', 
       },
       itemRegisterDateText:{
-        fontSize: 15,
+        fontSize: 14,
+        color:'black'
       },
       itemDistanceText:{
-        fontSize: 15,
+        fontSize: 14,
         color:'#EE636A',
      
       },
       itemPriceText: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 15,
+        //fontWeight: 'bold',
         fontFamily: 'Pretendard-SemiBold',
         color: '#000000',
       },
