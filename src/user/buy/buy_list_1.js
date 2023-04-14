@@ -121,6 +121,10 @@ class ListItem extends Component {
     goOrderDetailScreen = () => {
         this.props.navigation.navigate('OrderDetail', { orderID: this.orderID })
     }
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.props.item.goodsNo });
+    }
 
 
     orderCompleteButtonClick = () => {
@@ -175,7 +179,7 @@ class ListItem extends Component {
                             </View>
                             <View style={styles.productInfoLeft}>
                                 <Text style={styles.itemNameText}>{goodsName}</Text>
-                                <Text style={styles.itemNumberText}>{goodsNo}</Text>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}>{goodsNo}</Text></TouchableOpacity>
                                 <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(total)}{"원"} <Text style={styles.text}> / {quantity}개 </Text></Text>
                                 <Text>주문일 <Text style={styles.itemRegisterDateText}>{orderingDate.slice(2, 10)}</Text> </Text>
                             </View>

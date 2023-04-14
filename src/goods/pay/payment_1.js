@@ -3,10 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, NativeModules, Pressable, Tex
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
-import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/payment_1";
 import FunctionUtil from '../../util/libraries_function';
 
+import { template } from "../../styles/template/page_style";
+import { styles } from "../../styles/payment_1";
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
 class Payment extends Component {

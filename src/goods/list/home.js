@@ -124,22 +124,26 @@ class Home extends Component {
         this.setState({ isRefresh: false })
     }
 
-    listSort=(value)=>{      
+    listSort=(value)=>{     
         if(value==1){
-           this.setState({ indicator: true });
             const sortedData = this.state.goodsContent.sort((a, b) => {
                 return new Date(b.registerDate) - new Date(a.registerDate);
             });
-            this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
-            this.setState({ indicator: false });
+            this.setState({ goodsContent: sortedData, indicator:false},()=>{this.handleEmptyListView()});
         }
-        else if(value==3){
-            this.setState({ indicator: true });
+        else if(value==2){
+            this.setState({indicator:true})
+            const sortedData=this.state.goodsContent.sort((a,b)=>{
+                return a.distance-b.distance;
+            })
+            this.setState({goodsContent:sortedData,indicator:false},()=>{this.handleEmptyListView()});
+        }
+        else{
+            this.setState({indicator:true})
             const sortedData = this.state.goodsContent.sort((a, b) => {
                 return a.name.localeCompare(b.name);
             })
-            this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
-            this.setState({ indicator: false });
+            this.setState({ goodsContent: sortedData,indicator:false },()=>{this.handleEmptyListView()});
         }
     }
 
@@ -283,7 +287,7 @@ class Home extends Component {
                                 <Picker
                                     style={{ width: 150 }}
                                     selectedValue={this.state.sortedData}
-                                    onValueChange={(value, index) => { this.setState({ sortedData: value, }, () => this.listSort(value)) }}
+                                    onValueChange={(value, index) => { this.setState({ sortedData: value }, () => this.listSort(value)) }}
                                     mode={'dropdown'}>
                                     {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
                                 </Picker>

@@ -13,14 +13,14 @@ export const styles = StyleSheet.create({
     position:'absolute',
     width:'100%',
     paddingHorizontal:'4%',
-    paddingVertical:'5%'
+    paddingTop:'5%'
     //borderWidth:1,
    },
    content_view:{
     position:'absolute',
     width:'100%',
     height:ScreenHeight*0.65,
-    top:ScreenHeight*0.13,
+    top:ScreenHeight*0.12,
     //borderWidth:1,
     paddingHorizontal:'5%',
    
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
    page_view:{
     position:'absolute',
     width:'100%',
-    top:ScreenHeight*0.8
+    top:ScreenHeight*0.83
     //borderWidth:1,
    },
    input:{
@@ -88,7 +88,10 @@ export const styles = StyleSheet.create({
 
   outputStyle:{
     borderColor:'#909098',
-    borderTopWidth:1,
+    borderTopWidth:0.5,
+    borderLeftWidth:1,
+    borderBottomWidth:0.5,
+    borderRightWidth:1,
     //height: 107,
     paddingHorizontal:'2%',
     paddingVertical:'2%',

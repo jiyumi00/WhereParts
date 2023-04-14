@@ -150,20 +150,20 @@ class AddDelivery extends Component {
     }
     
     render() {
-        const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address, zipCode } = this.state.sellDetailInfo;
+        const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total,payKind, payBank, address, zipCode } = this.state.sellDetailInfo;
         
         return (
 
             <View style={styles.total_container}>
                 <ScrollView>
                     <View style={styles.topContainer}>
-                        <View style={{ flexDirection: "row" }} >
+                        <View style={{ flexDirection: "row",}} >
                             <View style={styles.imageView}>
                                 <Image
                                     source={{ uri: this.state.imageURL }}
                                     style={styles.productImage} />
                             </View>
-                            <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:1, }}>
+                            <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:3, }}>
                                 <Text style={styles.itemNameText}>{goodsName}</Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                 <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호: </Text>{goodsNo}</Text>
@@ -176,10 +176,10 @@ class AddDelivery extends Component {
                     <View style={styles.bodyContainer}>
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>결제정보</Text>
                         <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "2%", marginBottom: 20 }}>
-                            <Text style={[styles.text]}>{"총 결제금액: " + FunctionUtil.getPrice(`${total}`+"원")}</Text>
-                            <Text style={[styles.text]}>{"결제수단: 카드"}</Text>
-                            <Text style={[styles.text]}>{"결제사: " + payBank}</Text>
-                            <Text style={[styles.text]}>{"결제일시: " + days[0]}</Text>
+                            <Text style={[styles.text]}><Text style={{color:'grey',fontSize:15}}>총 결제금액: </Text>{FunctionUtil.getPrice(`${total}`+"원")}</Text>
+                            <Text style={[styles.text]}><Text style={{color:'grey',fontSize:15}}>결제수단: </Text>{payKind}</Text>
+                            <Text style={[styles.text]}><Text style={{color:'grey',fontSize:15}}>결제사: </Text>{payBank}</Text>
+                            <Text style={[styles.text]}><Text style={{color:'grey',fontSize:15}}>결제일시: </Text>{days[0]}</Text>
                         </View>
 
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>받는사람</Text>

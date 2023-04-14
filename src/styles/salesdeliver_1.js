@@ -86,8 +86,8 @@ export const styles = StyleSheet.create({
         color: "white",
     },
     imageView:{
-        width:ScreenWidth/5,
-        height:ScreenWidth/5,
+        //borderWidth:1,
+        flex:1,
     },
    // item 글자 디자인
   itemNumberText: {

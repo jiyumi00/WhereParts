@@ -37,7 +37,6 @@ class SearchAddress extends Component {
         }
     }
     goGetAddress = (page) => {
-
         this.callGetAddressAPI(page).then((response) => {
             console.log(response)
             if (response.results.common.errorMessage == "정상") {
@@ -105,7 +104,7 @@ class SearchAddress extends Component {
                         </View>}
                     {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
                         <FlatList
-                            style={{ borderColor: '#909098', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1 }}
+                            style={{ borderColor: '#909098', }}
                             data={this.state.addressContents}
                             renderItem={({ item, index }) => <AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener} />} />
                     }
