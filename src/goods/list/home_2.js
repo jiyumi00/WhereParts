@@ -5,19 +5,19 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
-import FunctionUtil from '../../../util/libraries_function';
+import FunctionUtil from '../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
-import Indicator from '../../../util/indicator';
-import Constant from "../../../util/constatnt_variables";
-import Session from '../../../util/session';
-import WebServiceManager from "../../../util/webservice_manager";
-import EmptyListView from '../../../util/empty_list_view';
-import { styles } from "../../../styles/list/home";
+import Indicator from '../../util/indicator';
+import Constant from "../../util/constatnt_variables";
+import Session from '../../util/session';
+import WebServiceManager from "../../util/webservice_manager";
+import EmptyListView from '../../util/empty_list_view';
+import { styles } from "../../styles/list/home_2";
 
 import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
-import ListItem from './item';
+import ListItem from './item_2';
 
 //import { SearchWebView } from "./web_view";
 
@@ -93,6 +93,7 @@ class Home extends Component {
         this.callPartsNoAPI(imageURI).then((response) => {
             if (response.success === "1") {
                 const partsNo = response.texts[0].replaceAll(" ", "");
+
                 this.search(partsNo);
             }
             else {
@@ -122,7 +123,8 @@ class Home extends Component {
         this.setState({ isRefresh: false })
     }
 
-    listSort=(value)=>{      
+    listSort=(value)=>{
+       
         if(value==1){
            this.setState({ indicator: true });
             const sortedData = this.state.goodsContent.sort((a, b) => {
@@ -138,7 +140,8 @@ class Home extends Component {
             })
             this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
             this.setState({ indicator: false });
-        }     
+        }
+        
     }
    /*  dateSort = () => { //최신순
         this.setState({ indicator: true });
@@ -159,7 +162,8 @@ class Home extends Component {
         })
         this.setState({ goodsContent: sortedData },()=>{this.handleEmptyListView()});
         this.setState({ indicator: false });
-    }  */
+    }
+ */
     handleEmptyListView=()=>{
         if(this.state.goodsContent.length==0){
             this.setState({emptyListViewVisible:0});
@@ -229,20 +233,20 @@ class Home extends Component {
         console.log('sortKiond',this.state.sortedData)
         return (
             <>
+              
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1,backgroundColor: '#FFFF', paddingHorizontal:'2%' }}>
+                <View style={{ flex: 1,backgroundColor: '#FFFF', paddingHorizontal:'5%', }}>
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
-                        numColumns={2}
-                        horizontal={false}
+                        
                         renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
                         refreshing={this.state.isRefresh} //새로고침
                         onRefresh={this.goGetGoods}
                         scrollEventThrottle={16}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 10 }}
+                        contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 30 }}
                         onScroll={Animated.event(
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                             { useNativeDriver: true })}
@@ -251,13 +255,15 @@ class Home extends Component {
 
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={styles.title_view}>
+
                             <View style={styles.row_title_view}>
                                 <Text style={[styles.title_text,{fontSize:25,}]}>
                                     <View style={{width:50,height:50,backgroundColor:'#D6DFF5', borderRadius:40,}}>
-                                        <CarIcon name="car-wrench" size={50} color="#193067" /> 
+                                    <CarIcon name="car-wrench" size={50} color="#193067" /> 
                                     </View>
                                     내가 찾는 부품 
                                 </Text>
+                               
                             </View>
                             <View style={{paddingLeft:'5%'}}>
                                 <Text style={[styles.titleBold_text]}>
@@ -268,10 +274,11 @@ class Home extends Component {
                                 </Text>
                             </View>
                         </View>
+                       
                     </Animated.View>
 
                     <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row', marginTop: '5%', marginBottom: '3%' }}>
+                        <View style={{ flexDirection: 'row', marginTop: '5%',marginBottom:'2%' }}>
                             <View style={styles.searchSection}>
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
@@ -281,32 +288,47 @@ class Home extends Component {
                                     style={styles.search_input}
                                     value={this.state.number}
                                 />
+                                {/* 카메라로 검색 */}
+
                             </View>
-                            {/* 카메라로 품번검색 */}
-                            <View>
+                            <View >
                                 <TouchableOpacity
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
                                     <CameraIcon name="camera" size={25} color="#193067" />
                                 </TouchableOpacity>
                             </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', backgroundColor: 'white', marginTop:'2%',}}>
-                            <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: 'black' }}>총 상품개수 : </Text>
-                                <Text style={{ color: '#113AE2' }}>{this.state.goodsQuantity}</Text><Text style={{ color: 'black' }}>개</Text>
                             </View>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', height:40}}>
+                            <View style={{flexDirection:'row', backgroundColor:'white'}}>
+                            <View style={{flex:1,marginLeft:'5%',flexDirection:'row', alignItems:'center'}}>
+                                <Text style={{color:'black'}}>총 상품개수 : </Text>
+                                <Text style={{color:'#113AE2'}}>{this.state.goodsQuantity}</Text><Text style={{color:'black'}}>개</Text>
+                               
+                            </View>
+                            <View style={{flex:1,flexDirection:'row', justifyContent:'flex-end'}}>
                                 <Picker
-                                    style={{ width: 150 }}
-                                    selectedValue={this.state.sortedData}
-                                    onValueChange={(value, index) => { this.setState({ sortedData: value, }, () => this.listSort(value)) }}
-                                    mode={'dropdown'}>
-                                    {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
-                                </Picker>
+                                        style={{width:150,}}
+                                        selectedValue={this.state.sortedData}
+                                        onValueChange={(value,index)=>{this.setState({sortedData:value, },()=>this.listSort(value))}}>
+                                        {this.sortKind.map((item,i)=><Picker.Item label={item} key={i} value={i+1}/>)}
+                                  </Picker>
                             </View>
-                        </View>
-                    </Animated.View>      
+                                  
+                                 
+                              {/*   <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.dateSort}>
+                                    <Icon name={this.state.recentRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'} />
+                                        <Text style={styles.sortBar_text}> 최신순  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.row_view} activeOpacity={0.8} onPress={this.abcSort}>
+                                    <Icon name={this.state.abcRadioButtonChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'blue'}  />
+                                    <Text style={styles.sortBar_text}> 가나다순</Text>
+                                </TouchableOpacity>  */}
+                         
+                            </View>
+                        
+                     
+                    </Animated.View>
+                    
                 </View>
             </>
         );

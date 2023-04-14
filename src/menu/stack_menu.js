@@ -31,22 +31,21 @@ import Gallery from "../goods/register/components/gallery";
 import GalleryX from "../util/gallery_x";
 import GoodsImageCamera from "../goods/register/components/camera_goods_image";
 import GoogleWebView from "../util/google_web_view";
-//import SearchWebView from "../goods/list/components/web_view";
+//import SearchWebView from "../goods/list/web_view";
 
 //결제창
-//import Payment from "../goods/pay/payment_1";
-import Payment from "../goods/pay/payment";
+//import Payment from "../goods/pay/payment";
+import Payment from "../goods/pay/payment_1";
 //결제완료
 import PayComplete from "../goods/pay/pay_complete";
 
 //상품상세
-import GoodsDetail from "../goods/list/components/item_detail";
-//import GoodsDetail from "../goods/list/components/item_detail_1";
-//import GoodsDetail from "../goods/list/components/item_detail_2";
+import GoodsDetail from "../goods/list/item_detail";
+//import GoodsDetail from "../goods/list/item_detail_1";
+//import GoodsDetail from "../goods/list/item_detail_2";
 
 import OrderDetail from "../user/buy/order_detail";
 import EditProfile from "../user/buy/edit_profile";
-
 
 //로그인 경로
 import Login from "../login/member_register";

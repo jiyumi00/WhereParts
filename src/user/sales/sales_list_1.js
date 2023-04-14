@@ -10,7 +10,7 @@ import FunctionUtil from '../../util/libraries_function';
 import EmptyListView from '../../util/empty_list_view';
 import Session from '../../util/session';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import DetailItemView from "../../goods/list/components/item_detail";
+import DetailItemView from "../../goods/list/item_detail";
 import { color } from 'react-native-reanimated';
 
 
@@ -24,7 +24,7 @@ export default class SalesDetails extends Component {
             salesContents: [],
             soldoutContents: [],
 
-            saleState: 3,
+            saleState: 1,
 
             isRefresh: false,
 
@@ -130,7 +130,7 @@ export default class SalesDetails extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
-                    <View style={[styles.salesdetailsheader,{flexDirection:'column',alignItems:'flex-end'}]}>
+                    <View style={[styles.salesdetailsheader, { flexDirection: 'column', alignItems: 'flex-end' }]}>
                         {/* <Text style={styles.headertext}> 나의 판매내역</Text> */}
                         <Icon name="account-circle" size={60} color={'lightgrey'}></Icon>
                         {/* <Text style={[styles.headertext,{fontSize:15}]}>인제정비</Text> */}
@@ -198,6 +198,10 @@ class SaleListItem extends PureComponent {
     handleDetailViewModal = () => {
         this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID, refresh: this.props.refreshListener });
     }
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.props.item.number });
+    }
 
     async callGetGoodsImageAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.props.id + "&position=1");
@@ -212,7 +216,7 @@ class SaleListItem extends PureComponent {
             <>
                 <TouchableOpacity onPress={this.handleDetailViewModal}>
                     <View style={styles.product}>
-                        <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row',paddingBottom:'2%' }}>
+                        <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row', paddingBottom: '2%' }}>
                             <View style={{ flex: 1, alignItems: 'flex-start' }}>
                                 <Text style={styles.itemNameText}>{item.name}</Text>
                             </View>
@@ -220,17 +224,17 @@ class SaleListItem extends PureComponent {
                                 {item.valid == 0 && <Text style={{ fontSize: 14 }}>숨김</Text>}
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', flex: 5, paddingTop: '3%',paddingBottom:'2%' }}>
+                        <View style={{ flexDirection: 'row', flex: 5, paddingTop: '3%', paddingBottom: '2%' }}>
                             <View style={styles.imageView}>
                                 <Image
                                     source={{ uri: this.state.imageURL }}
                                     style={styles.productImage} />
                             </View>
-                            <View style={[styles.productInfo,{paddingLeft:'2%',alignItems:'flex-end',justifyContent:'flex-end'}]}>
+                            <View style={[styles.productInfo, { paddingLeft: '2%', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
                                 {/*  <Text style={styles.itemNameText}>{item.name}</Text> */}
-                                <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호 : </Text>{item.number}</Text>
-                                <Text style={styles.itemPriceText}><Text style={{color:'grey',fontSize:15}}>가격/수량 : </Text>{FunctionUtil.getPrice(item.price)}<Text style={{ fontSize: 15, color: 'black' }}>원 / {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemRegisterDateText}><Text style={{color:'grey',fontSize:15}}>등록일 : </Text>{item.registerDate.slice(0,10)}</Text>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}><Text style={{ color: 'grey', fontSize: 15 }}>부품번호 : </Text>{item.number}</Text></TouchableOpacity>
+                                <Text style={styles.itemPriceText}><Text style={{ color: 'grey', fontSize: 15 }}>가격/수량 : </Text>{FunctionUtil.getPrice(item.price)}<Text style={{ fontSize: 15, color: 'black' }}>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>등록일 : </Text>{item.registerDate.slice(0, 10)}</Text>
                             </View>
                         </View>
                     </View>
@@ -265,6 +269,12 @@ class SoldOutListItem extends PureComponent {
         const logisInfo = { code: "04", invoice: "651969374875" };
         this.props.navigation.navigate('DeliveryDetail', { logisInfo: logisInfo });
     }
+
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.props.item.goodsNo });
+    }
+
     async callGetGoodsImageAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsImage?id=" + this.props.id + "&position=1");
         let response = await manager.start();
@@ -278,21 +288,25 @@ class SoldOutListItem extends PureComponent {
         return (
             <>
                 <View style={[styles.product, { flexDirection: 'column' }]}>
-                    <View style={{ paddingBottom: '2%', borderBottomWidth:1,borderColor:'#E9E9E9',flexDirection:'row' }}>
-                        <View style={{flex:1, alignItems:'flex-start'}}>
+                    <View style={{ paddingBottom: '2%', borderBottomWidth: 1, borderColor: '#E9E9E9', flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'flex-start' }}>
                             <Text style={styles.itemNameText}>{item.goodsName}</Text>
                         </View>
-                        <View style={{flex:1, alignItems:'flex-end'}}>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <Text style={{ fontSize: 16, color: 'black' }}>{item.quantity}{"개"}</Text>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', paddingBottom: '2%', paddingTop:'2%' }}>
+                    <View style={{ flexDirection: 'row', paddingBottom: '2%', paddingTop: '2%' }}>
                         {item.status != 3 && <>
                             <View style={styles.productInfo}>
-                                <Text style={{fontSize:16,fontFamily: 'Pretendard-Medium',color:'black'}}><Text style={{color:'grey',fontSize:15}}>주문번호: </Text>{item.orderNo}</Text>
-                                <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호: </Text>{item.goodsNo}</Text>
-                                <Text style={styles.itemPriceText}><Text style={{color:'grey',fontSize:15}}>결제: </Text>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>카드</Text></Text>
-                                <Text style={styles.itemRegisterDateText}><Text style={{color:'grey',fontSize:15}}>주문일: </Text>{item.orderingDate.slice(0, 10)}</Text>
+                                <Text style={{ fontSize: 16, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호: </Text>{item.orderNo}</Text>                               
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                    <Text style={[styles.itemNumberText, { color: 'grey', fontSize: 15, }]}>부품번호:
+                                        <Text style={{ color: 'blue' }}>{item.goodsNo}</Text>
+                                    </Text>
+                                </TouchableOpacity>   
+                                <Text style={styles.itemPriceText}><Text style={{ color: 'grey', fontSize: 15 }}>결제: </Text>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>카드</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>주문일: </Text>{item.orderingDate.slice(0, 10)}</Text>
                             </View>
                         </>}
 
@@ -303,14 +317,14 @@ class SoldOutListItem extends PureComponent {
                         </View>
 
                         {item.status == 3 && <>
-                            <View style={[styles.productInfo, { flexDirection: 'column', alignItems:'flex-end',justifyContent:'flex-end' }]}>
-                                <View style={{flex:1}}>
-                                    <Text style={{fontSize:15,fontFamily: 'Pretendard-Medium',color:'black'}}><Text style={{color:'grey',fontSize:15}}>주문번호:</Text>{item.orderNo}</Text>
+                            <View style={[styles.productInfo, { flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
+                                <View style={{ flex: 1 }}>
+                                    <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호:</Text>{item.orderNo}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flex: 1, alignItems: 'flex-end', borderRightWidth: 1, borderColor: 'grey', paddingRight: '3%' }}>
                                         <Text style={[styles.itemNameText, { fontSize: 15 }]}>{item.goodsName}</Text>
-                                        <Text style={styles.itemNumberText}>{item.goodsNo}</Text>
+                                        <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}>{item.goodsNo}</Text></TouchableOpacity>
                                         <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>{item.payKind}</Text></Text>
                                     </View>
                                     <View style={{ alignItems: 'flex-end', marginLeft: '3%' }}>
@@ -318,11 +332,11 @@ class SoldOutListItem extends PureComponent {
                                         <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>배송:</Text> {item.days[1].slice(0, 10)}</Text>
                                         <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>완료:</Text> {item.days[2].slice(0, 10)}</Text>
                                     </View>
-                                </View> 
+                                </View>
                             </View>
                         </>}
-                        
-                        
+
+
                     </View>
                     {item.status == 1 && <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
                         <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>

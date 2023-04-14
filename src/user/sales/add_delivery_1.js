@@ -10,8 +10,10 @@ import IconCamera from 'react-native-vector-icons/Feather';
 import Constant from "../../util/constatnt_variables";
 import WebServiceManager from "../../util/webservice_manager";
 import FunctionUtil from '../../util/libraries_function';
+
 const ScreenHeight=Dimensions.get('window').height;
 const ScreenWidth=Dimensions.get('window').width;
+
 class AddDelivery extends Component {
     constructor(props) {
         super(props);
@@ -88,7 +90,10 @@ class AddDelivery extends Component {
             });
         });
     }
-
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.state.sellDetailInfo.goodsNo });
+    }
     onValueChange=(value)=>{
         this.setState(value,()=>{
             let isValidForm = true;
@@ -160,7 +165,9 @@ class AddDelivery extends Component {
                             </View>
                             <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:1, }}>
                                 <Text style={styles.itemNameText}>{goodsName}</Text>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                 <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호: </Text>{goodsNo}</Text>
+                                </TouchableOpacity>
                                 <Text style={styles.itemPriceText}><Text style={{color:'grey',fontSize:15}}>가격: </Text>{FunctionUtil.getPrice(`${price}`)}<Text style={[styles.text, { fontSize: 15 }]}>{"원/" + quantity + "개"}</Text></Text>
                                 <Text style={styles.itemRegisterDateText}><Text style={{color:'grey',fontSize:15}}>주문일: </Text>{orderingDate.slice(0, 10)}</Text>
                             </View>
@@ -168,19 +175,18 @@ class AddDelivery extends Component {
                     </View>
                     <View style={styles.bodyContainer}>
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>결제정보</Text>
-                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "3%", marginBottom: 20 }}>
-                            <Text style={[styles.text, { paddingTop: "2%" }]}>{"총 결제금액 : " + total}</Text>
-                            <Text style={[styles.text, { paddingTop: "2%" }]}>{"결제수단 : 카드"}</Text>
-                            <Text style={[styles.text, { paddingTop: "2%" }]}>{"결제사 : " + payBank}</Text>
-                            <Text style={[styles.text, { paddingTop: "2%" }]}>{"결제일시 : " + days[0]}</Text>
+                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "2%", marginBottom: 20 }}>
+                            <Text style={[styles.text]}>{"총 결제금액: " + FunctionUtil.getPrice(`${total}`+"원")}</Text>
+                            <Text style={[styles.text]}>{"결제수단: 카드"}</Text>
+                            <Text style={[styles.text]}>{"결제사: " + payBank}</Text>
+                            <Text style={[styles.text]}>{"결제일시: " + days[0]}</Text>
                         </View>
 
                         <Text style={{ paddingLeft: 5, paddingBottom: 5 }}>받는사람</Text>
-                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "3%", marginBottom: 20 }}>
+                        <View style={{ borderWidth: 2, borderRadius: 12, borderColor: "lightgrey", padding: "2%", marginBottom: 20 }}>
                             <Text style={[styles.text, { fontSize: 17, fontWeight: "bold" }]}>{buyerName}</Text>
-                            <Text style={styles.text}>{zipCode}</Text>
-                            <Text style={[styles.text, { paddingTop: "2%" }]}>{address}</Text>
                             <Text style={styles.text}>{buyerTel.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</Text>
+                            <Text style={[styles.text]}>{zipCode}/{address}</Text>
                         </View>
 
                         <View style={styles.textInput}>

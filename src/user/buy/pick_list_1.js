@@ -159,7 +159,7 @@ class ListItem extends Component {
                         <View style={styles.productInfoRight_view}>
                             <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                             <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                <Text style={styles.itemNumber_text}>{item.number.length > 14 ? `${item.number.slice(0, 14)}...` : item.number}</Text>
+                                <Text style={styles.itemNumber_text}>{item.number.length > 13 ? `${item.number.slice(0, 13)}...` : item.number}</Text>
                             </TouchableOpacity>
                             <Text style={styles.itemDistance_text}>{item.distance}km</Text>
                         </View>

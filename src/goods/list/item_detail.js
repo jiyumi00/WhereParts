@@ -7,18 +7,24 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import { styles } from "../../../styles/list/home_item_detail_2";
+import { styles } from "../../styles/list/home_item_detail";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import Certified from '../../../images/icon/certified-icon/certified_1-removebg-preview.png';
+//import Certified from '../../../images/icon/certified-icon/certified_2-removebg-preview.png';
+//import Certified from '../../../images/icon/certified-icon/certified_3-removebg-preview.png';
+import Certified from '../../images/icon/certified-icon/certified_4-removebg-preview_resize.png';
+//import Certified from '../../../images/icon/certified-icon/certified_5-removebg-preview.png';
 
-import Session from '../../../util/session';
+import Constant from '../../util/constatnt_variables';
+import Session from '../../util/session';
+import FunctionUtil from '../../util/libraries_function';
+import WebServiceManager from '../../util/webservice_manager';
 
-export default class DetailItemView extends Component {
+export default class DetailItemView1 extends Component {
     constructor(props) {
         super(props);
         this.hashTagRef = React.createRef();
@@ -26,6 +32,7 @@ export default class DetailItemView extends Component {
 
         this.goodsID = this.props.route.params.goodsID;
         this.sellerID = this.props.route.params.sellerID;
+        this.distance = this.props.route.params.distance;
         this.userID = Session.getUserID();
 
         this.state = {
@@ -39,6 +46,7 @@ export default class DetailItemView extends Component {
             quality: 1, // 상품상태
             genuine:1,
             editSpec:"",
+            registerDate:"",
 
             dipsbuttonclicked: false,//찜하기
             editGoodsViewVisible: false,
@@ -78,6 +86,7 @@ export default class DetailItemView extends Component {
                 quantity: response.quantity, 
                 quality: response.quality,
                 genuine: response.genuine,
+                registerDate:response.registerDate,
             });
             console.log(response);
 
@@ -270,7 +279,7 @@ export default class DetailItemView extends Component {
         this.hashTagRef.clear();
     }
 
-    //해시태그 삭제할 때
+    // 해시태그 삭제할 때
     hashTagRemove = (index) => {
         this.onValueChange({hashTag: this.state.hashTag.filter((_, indexNum) => indexNum !== index)});
     }
@@ -347,12 +356,13 @@ export default class DetailItemView extends Component {
     //수정, 삭제, 숨김
     async callUpdateGoodsAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/UpdateGoods", "post");
+        const price = parseInt(this.state.price.toString().replace(/,/g,''));
         
         const editItem = {
             id:this.goodsID,
             quantity:this.state.quantity,
             quality:this.state.quality,
-            price:this.state.price,
+            price:price,
             genuine:this.state.genuine,
             spec:this.state.editSpec,
             hashTag:this.state.hashTag.toString(),
@@ -362,7 +372,7 @@ export default class DetailItemView extends Component {
             id: editItem.id, 
             quantity: editItem.quantity, 
             quality: editItem.quality,
-            price: editItem.price, 
+            price: editItem.price,
             genuine: editItem.genuine, 
             spec: editItem.spec, 
             hashTag: editItem.hashTag,
@@ -425,10 +435,9 @@ export default class DetailItemView extends Component {
     render() {
         //const { name, number,quantity,spec, price,genuine, hashTag, quality, valid } = this.state.item;
         // 값 변환
-        const renderPrice = this.state.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const renderPrice = FunctionUtil.getPrice(this.state.price);
 
         return (
-
             <View style={styles.itemDetail_view}>
                 <View style={styles.tabBar_view}>
                     {this.state.editVisible &&
@@ -436,29 +445,27 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible ?
                                 <>
                                     <TouchableOpacity onPress={this.editCancelButtonClicked} >
-                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정취소  </Text>
+                                        <Text style={[styles.text,{fontSize:15, color:'blue'}]}>수정취소     </Text>
                                     </TouchableOpacity >
                                 </> :
                                 <>
                                     <TouchableOpacity onPress={this.editButtonClicked} >
-                                        <Text style={[styles.text,{color:'#808e9b'}]}>수정    </Text>
+                                        <Text style={[styles.text,{fontSize:15, color:'blue'}]}>수정       </Text>
                                     </TouchableOpacity >
                                 </>}
                             <TouchableOpacity onPress={this.removeButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>삭제    </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>삭제      </Text>
                             </TouchableOpacity>
 
                             {this.state.item.valid==1 && 
                                 <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김    </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>숨김      </Text>
                             </TouchableOpacity>}
                             {this.state.item.valid==0 && 
                             <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
-                                <Text style={[styles.text,{color:'#808e9b'}]}>숨김해제    </Text>
+                                <Text style={[styles.text,{fontSize:15, color:'blue'}]}>숨김해제    </Text>
                             </TouchableOpacity>}
                         </>}
-
-
                 </View>
 
                 <View style={styles.itemInfo_view}>
@@ -470,15 +477,14 @@ export default class DetailItemView extends Component {
                                     data={this.state.images}
                                     showPagination={true}
                                     onPaginationSelectedIndex={true}
-                                    paginationActiveColor='blue'
+                                    paginationActiveColor='black'
                                     paginationStyleItem={{ width: 10, height: 10 }}
-                                    paginationStyleItemActive={{ width: 15, height: 10 }}
+                                    paginationStyleItemActive={{ width: 10, height: 10 }}
                                     renderItem={item => (
                                         <ImageView image={item.item} index={item.index} handleModal={this.handleModal} />
                                     )}
                                     horizontal={true}
                                 />
-                                
                             </View>
                         </View>
                         
@@ -497,140 +503,175 @@ export default class DetailItemView extends Component {
                         {/*  상품 디테일 */}
                         <View style={styles.productInfo_view}>
                             {/* 인증 마크 => TODO 인증 업체일 경우에만 뜨도록 설정 */}
-                            <View style={styles.certificationMark_view}>
-                                <Text style={styles.certificationMark_text}>인증업체</Text>
+                            <View style={[styles.certificationMark_view]}>
+                                {/* <Text style={styles.certificationMark_text}>인증업체</Text> */}
+                                <Image source={Certified} style={{width:20,height:30}}/>
                             </View>
 
                             {/* 부품 번호 & 부품이름 */}
                             <View style={styles.goodsName_view}>
-                                <Text style={[styles.text, { fontSize: 24, }]}>
+                                <Text style={[styles.text, { fontSize: 25 }]}>
                                     {this.state.item.name}
                                 </Text>
-                                <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                    <Text style={[styles.text, { paddingLeft: '5%', color: 'blue' }]}>
-                                        {this.state.item.number}
-                                    </Text>
-                                </TouchableOpacity>
                             </View>
 
-                            {/* 금액 */}
-                            <View style={styles.detailPrice_view}>
-                                {!this.state.editGoodsViewVisible &&
-                                    <Text style={[styles.text, { fontSize: 22, }]}>{renderPrice}</Text>
-                                }
+                            {!this.state.editGoodsViewVisible && <View style={{flexDirection:'column'}}>
+                                <View style={{flexDirection:'row'}}>
+                                    <View style={{ flex: 1 }}>
+                                        {/* 등록 일자 */}
+                                        {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
+                                            <Text style={styles.text}>
+                                                {this.state.item.registerDate}
+                                            </Text>
+                                        </View>}
+                                    </View>
+                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                        <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                            <Text style={[styles.text, { color: 'blue' }]}>{this.state.item.number}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <View style={{ flex: 1 }}>
+                                        {/* 제품 상태 */}
+                                        {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
+                                            <View style={styles.toggleDetailItemTItle}>
+                                                <Text style={[styles.text, { fontSize: 14, color: '#949CA1'}]}>
+                                                    제품 상태
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.text}>
+                                                    {this.qulityValueText(this.state.quality)}
+                                                </Text>
+                                            </View>
+                                        </View>}
+                                    </View>
+                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                        {/* 남은 수량 */}
+                                        <View style={styles.remaining_view}>
+                                            {this.state.quantity == 0 ?
+                                                <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
+                                                <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>}
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <View style={{flex:1}}>
+                                        {/*정품 비정품*/}
+                                        {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
+                                            <View style={styles.toggleDetailItemTItle}>
+                                                <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>정품 유무</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.text}>
+                                                    {this.genuineValueText(this.state.genuine)}
+                                                </Text>
+                                            </View>
+                                        </View>}
+                                    </View>
+                                    <View style={{flex:1,alignItems:'flex-end'}}>
+                                        <Text style={[styles.distance_text, { color: '#EE636A' }]}>{this.distance}km</Text>
+                                    </View>
+                                </View>
+                            </View>}
 
+                            {this.state.editGoodsViewVisible && <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                    <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                        <Text style={[styles.text, { color: 'blue' }]}>
+                                            {this.state.item.number}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {/* 남은 수량 */}
+                                <View style={styles.remaining_view}>
+                                    {this.state.quantity == 0 ?
+                                        <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
+                                        <Text style={[styles.text, { fontSize: 14 }]}>{this.state.quantity}개 남음</Text>}
+                                </View>
+                            </View>}
+                        </View>
+                        {/* 토글 디테일 */}
+                        <View style={styles.toggleDetail_view}>
+                            {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
+                                <View style={styles.toggleDetailItemTItle}>
+                                    <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                        판매자글
+                                    </Text>
+                                </View>
+                                {/* TODO 추가 하기 */}
+                                <Text style={styles.text}>
+                                    {this.state.editSpec}
+                                </Text>
+                            </View>}
+
+                            {/*해시태그*/}
+                            {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
+                                <View style={styles.toggleDetailItemValue}>
+                                    <Text style={styles.toggleDetailItemValueText}>
+                                        {!this.state.editGoodsViewVisible && <View style={styles.detailHashTags_view}>
+                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
+                                                검색어
+                                            </Text>
+                                            <View style={{flexDirection:'row'}}>
+                                                {this.state.hashTag.map((tag, index) => (
+                                                    <View style={{ marginRight: 8, }} key={index}>
+                                                        <Text style={styles.text}>#{tag}</Text>
+                                                    </View>
+                                                ))}
+                                            </View>
+                                            
+                                            {/* {this.state.hashTag.map((tag, index) => (
+                                                <View style={[styles.tagStyle_view, { backgroundColor: 'white', borderWidth: 1, borderColor: '#949CA1' }]} key={index}>
+                                                    <Text style={styles.text}>#{tag}</Text>
+                                                </View>
+                                            ))} */}
+                                        </View>}
+                                    </Text>
+                                </View>
+                            </View>}
+
+                            {/* 수정 모아보기 */}
+                            {/* 금액, 수량 수정 */}
+                            {this.state.editGoodsViewVisible && <View style={{ flexDirection: 'row',width:'100%', marginTop: 12 }}>
                                 {/* 금액 수정 */}
-                                {this.state.editGoodsViewVisible && <View style={styles.editGoodsPrice_input}>
-                                    <TextInput style={[styles.text, { fontSize: 22, }]}
+                                <View style={{flex:2, flexDirection:'row'}}>
+                                    <TextInput style={[styles.editGoodsPrice_input]}
                                         onChangeText={(value) => this.onValueChange({ price: value })}>
-                                            {this.state.price}</TextInput>
-                                </View>}
-
-                                {/* 단위 */}
-                                <View style={{ marginLeft: 2, }}>
-                                    <Text style={styles.detailUnit_text}>원</Text>
+                                        {renderPrice}</TextInput>                                  
+                                    <View style={{ marginLeft: 2, justifyContent: 'center' }}>
+                                        <Text style={styles.detailUnit_text}>원</Text>
+                                    </View>
                                 </View>
 
-                                {/* 구매 수량 선택 => TODO 여러 개일 경우에만 보이도록*/}
-                                <View style={{ marginLeft: 'auto', }}>
-                                    {/* 남은 수량 */}
-                                    <View style={styles.remaining_view}>
-                                        {this.state.quantity==0 ?
-                                        <Text style={[styles.text, { fontSize: 13, color: '#EE636A', }]}>구매할 수 없습니다</Text>:
-                                        <Text style={[styles.text, { fontSize: 13, color: '#949CA1', }]}>{this.state.quantity}개 남음</Text>}
-                                    </View>
-
-                                    {/* 남은수량 수정 */}
-                                    {this.state.editGoodsViewVisible && <View style={styles.selectQuantity_view}>
-                                        <Pressable onPress={() => this.editMinus(this.state.quantity)} style={styles.quantity_button}>
-                                            <Text style={[styles.text, { fontSize: 18, }]}>-</Text>
-                                        </Pressable>
-
+                                {/* 남은수량 수정 */}
+                                <View style={{flex:1, alignItems:'flex-end'}}>
+                                    <View style={styles.selectQuantity_view}>
+                                        <View style={styles.quantity_button}>
+                                            <Pressable onPress={() => this.editMinus(this.state.quantity)}>
+                                                {/* <Text style={[styles.text, { fontSize: 27, }]}>-</Text> */}
+                                                <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
+                                            </Pressable>
+                                        </View>
                                         <View style={[styles.quantity_button, styles.quantityCount]}>
                                             <Text style={[styles.text, { fontSize: 18, }]}>{this.state.quantity}</Text>
                                         </View>
-
-                                        <Pressable onPress={() => this.editPlus(this.state.quantity)} style={styles.quantity_button}>
-                                            <Text style={[styles.text, { fontSize: 18, }]}>+</Text>
-                                        </Pressable>
-                                    </View>}
+                                        <View style={styles.quantity_button}>
+                                            <Pressable onPress={() => this.editPlus(this.state.quantity)}>
+                                                {/* <Text style={[styles.text, {fontSize: 18,}]}>+</Text> */}
+                                                <QuantityEditIcon name='plus' color='black' size={15}></QuantityEditIcon>
+                                            </Pressable>
+                                        </View>
+                                    </View>
                                 </View>
-                            </View>
-                        </View>
+                            </View>}
 
-                        {/* 토글 디테일 */}
-                        <View style={styles.toggleDetail_view}>
-                            <View style={styles.toggleDetailTitle_view}>
-                                <Text style={[styles.text, { fontSize: 16, }]}>상품 정보</Text>
-                            </View>
-                        
-                                    {/*해시태그*/}
-                                    {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
-                                        <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
-                                                해시 태그
-                                            </Text>
-                                        </View>
-                                        <View style={styles.toggleDetailItemValue}>
-                                            <Text style={styles.toggleDetailItemValueText}>
-                                                {!this.state.editGoodsViewVisible && <View style={styles.detailHashTags_view}>
-                                                    {this.state.hashTag.map((tag, index) => (
-                                                        <View style={{ marginRight: 8, }} key={index}>
-                                                            <Text style={styles.text}>#{tag}</Text>
-                                                        </View>
-                                                    ))}
-                                                </View>}
-                                            </Text>
-                                        </View>
-                                    </View>}
-
-                                    {/* 제품 상태 */}
-                                    {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
-                                        <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
-                                                제품 상태
-                                            </Text>
-                                        </View>
-                                        <View>
-                                            <Text style={styles.text}>
-                                                {this.qulityValueText(this.state.quality)}
-                                            </Text>
-                                        </View>
-                                    </View>}
-
-                                    {/*정품 비정품*/}
-                                    {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailItem}>
-                                        <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>정품 유무</Text>
-                                        </View>
-                                        <View>
-                                            <Text style={styles.text}>
-                                                {this.genuineValueText(this.state.genuine)}
-                                            </Text>
-                                        </View>
-                                    </View>}
-
-                                    {!this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
-                                        <View style={styles.toggleDetailItemTItle}>
-                                            <Text style={[styles.text, { fontSize: 14, color: '#949CA1', }]}>
-                                                상품 설명
-                                            </Text>
-                                        </View>
-                                        {/* TODO 추가 하기 */}
-                                        <Text style={styles.text}>
-                                            {this.state.editSpec}
-                                        </Text>
-                                    </View>}
-                               
-
-                            {/* 수정 모아보기 */}
                             {/* 해시 태그 리스트 수정 */}
-
                             {this.state.editGoodsViewVisible && <View style={{ marginTop: 10, }}>
-
                                 < View style={styles.hashTag_input}>
                                     <View style={styles.textLayout_view}>
-                                        <Text>키워드
+                                        <Text>검색어
                                             {this.state.hashTagError == false ? (
                                                 <Text style={styles.errorMessage_text}>
                                                     * 1 - 7개 입력
@@ -640,13 +681,13 @@ export default class DetailItemView extends Component {
                                         <TextInput
                                             ref={(c) => { this.hashTagRef = c; }}
                                             returnKeyType="next"
-                                            onSubmitEditing={()=>this.addTag()}
+                                            onSubmitEditing={() => this.addTag()}
                                             onChangeText={(value) => this.hashTagOnChangeText(value)}
                                             value={this.state.tagName}
                                         />
                                     </View>
                                     <View style={styles.btnLayout_view}>
-                                        <TouchableOpacity style={styles.tag_button} onPress={()=>this.addTag()}>
+                                        <TouchableOpacity style={styles.tag_button} onPress={() => this.addTag()}>
                                             <Text>추가</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -660,7 +701,8 @@ export default class DetailItemView extends Component {
                                             </TouchableOpacity>
                                         </View>
                                     )}
-                                </View></View>}
+                                </View>
+                            </View>}
 
                             {/* 제품 상태 수정 */}
 
@@ -679,26 +721,28 @@ export default class DetailItemView extends Component {
                                 </View>
                             </View>}
 
-
-
                             {/*정품 비정품 수정*/}
                             {this.state.editGoodsViewVisible && <View style={styles.genuine_view}>
                                 <View style={styles.toggleDetailItemTItle}>
                                     <Text style={styles.toggleDetailItemTItleText}>정품 유무</Text>
                                 </View>
-                                <View style={styles.status_item}>
+                                <View style={[styles.status_item,{alignItems:'flex-start'}]}>
                                     <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck}>
                                         <View style={styles.genuine_row}>
-                                            <IconRadio name={this.state.genuine==1? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
-                                            <Text style={styles.text} > 정품</Text>
+                                            <IconRadio name={this.state.genuine == 1 ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
+                                            <View style={{ justifyContent: 'center' }}>
+                                                <Text style={styles.text} > 정품</Text>
+                                            </View>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={styles.status_item}>
+                                <View style={[styles.status_item,{alignItems:'flex-start'}]}>
                                     <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck}>
                                         <View style={styles.genuine_row}>
-                                            <IconRadio name={this.state.genuine==2 ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
-                                            <Text style={styles.text}> 비정품</Text>
+                                            <IconRadio name={this.state.genuine == 2 ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
+                                            <View style={{ justifyContent: 'center' }}>
+                                                <Text style={styles.text}> 비정품</Text>
+                                            </View>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -711,7 +755,7 @@ export default class DetailItemView extends Component {
                             {this.state.editGoodsViewVisible && <View style={styles.toggleDetailTextArea}>
                                 <View style={styles.toggleDetailItemTItle}>
                                     <Text style={styles.toggleDetailItemTItleText}>
-                                        상품 설명
+                                        판매자글
                                     </Text>
                                 </View>
                                 <View style={styles.editGoodsExplainInput_view}>
@@ -728,36 +772,41 @@ export default class DetailItemView extends Component {
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {(this.state.buyVisible&&this.state.quantity!=0)  &&
-                            <View style={styles.pick_view}>
-                                <TouchableOpacity style={styles.pick_button} onPress={this.dipsButtonClicked}>
-                                    <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
-                                </TouchableOpacity>
-                            </View>}
-                        <View style={styles.buy_view}>
-                            {(this.state.buyVisible&&this.state.quantity!=0)  &&
-                                <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
-                                    <Text style={styles.buyButton_text}>구매하기</Text>
-                                </TouchableOpacity>}
-                            {/* 수정완료 버튼 */}
-                            {this.state.editGoodsViewVisible &&
-                            <>
-                            {this.state.validForm ? 
-                            (<TouchableOpacity onPress={this.editCompleteButtonClicked} style={styles.buy_button}>
-                                <Text style={styles.buyButton_text}>수정완료</Text>
-                            </TouchableOpacity>)
-                            :(<TouchableOpacity style={[styles.buy_button, {backgroundColor: "#C9CCD1"}]}>
-                                <Text style={styles.buyButton_text}>수정완료</Text>
-                            </TouchableOpacity>)}
-                            </>
-                            }
-                        </View>
-
+                        {(this.state.buyVisible && this.state.quantity != 0) &&
+                            <View style={{width:"100%",flexDirection:'row',}}>
+                                <View style={styles.pick_view}>
+                                    <TouchableOpacity style={[styles.pick_button,{width:"100%",height:"100%"}]} onPress={this.dipsButtonClicked}>
+                                        <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.price_view}>
+                                    <Text style={[styles.text, { fontSize: 22,color:'blue' }]}>{renderPrice}<Text style={[styles.detailUnit_text,{color:'blue'}]}>원</Text></Text>
+                                </View>
+                                <View style={styles.buy_view}>
+                                    <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
+                                        <Text style={styles.buyButton_text}>구매하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        }
+                        {!this.state.editGoodsViewVisible && !this.state.buyVisible &&
+                            <Text style={[styles.text, { fontSize: 22, color:'blue'}]}>{renderPrice}<Text style={[styles.detailUnit_text,{color:'blue'}]}>원</Text></Text>
+                        }
+                        {/* 수정완료 버튼 */}
+                        {this.state.editGoodsViewVisible &&
+                            <View style={styles.edit_button_view}>
+                                {this.state.validForm ?
+                                    (<TouchableOpacity onPress={this.editCompleteButtonClicked} style={styles.buy_button}>
+                                        <Text style={styles.buyButton_text}>수정완료</Text>
+                                    </TouchableOpacity>)
+                                    : (<TouchableOpacity style={[styles.buy_button, { backgroundColor: "#C9CCD1" }]}>
+                                        <Text style={styles.buyButton_text}>수정완료</Text>
+                                    </TouchableOpacity>)}
+                            </View>
+                        }
                     </View>
-
                 </View>
             </View>
-
         )
     }
 }

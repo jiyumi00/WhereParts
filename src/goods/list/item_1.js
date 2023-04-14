@@ -1,11 +1,11 @@
 import React, { Component , PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity,} from 'react-native';
 
-import { styles } from "../../../styles/list/home_1";
+import { styles } from "../../styles/list/home_1";
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
-import FunctionUtil from '../../../util/libraries_function';
+import Constant from '../../util/constatnt_variables';
+import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 
 export default class ListItem extends PureComponent {
     constructor(props) {
@@ -57,7 +57,6 @@ export default class ListItem extends PureComponent {
                         <Text style={styles.itemName_text}>{item.name.length>9?`${item.name.slice(0,9)}...`:item.name}</Text>
                         <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                         <Text style={styles.itemDetail_text}>{item.number}</Text>
-                       
                     </View>
                 </View>
                

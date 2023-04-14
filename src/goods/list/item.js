@@ -1,11 +1,11 @@
 import React, { Component , PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity,Dimensions} from 'react-native';
 
-import { styles } from "../../../styles/list/home";
+import { styles } from "../../styles/list/home";
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
-import FunctionUtil from '../../../util/libraries_function';
+import Constant from '../../util/constatnt_variables';
+import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 
 const ScreenHeight=Dimensions.get('window').height;
 const ScreenWidth=Dimensions.get('window').width;
@@ -70,7 +70,7 @@ export default class ListItem extends PureComponent {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>  
+            </TouchableOpacity>
         );
     }
 }

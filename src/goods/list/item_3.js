@@ -1,11 +1,11 @@
 import React, { Component , PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity,} from 'react-native';
 
-import { styles } from "../../../styles/list/home_2";
+import { styles } from "../../styles/list/home_3";
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
-import FunctionUtil from '../../../util/libraries_function';
+import Constant from '../../util/constatnt_variables';
+import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 
 export default class ListItem extends PureComponent {
     constructor(props) {
@@ -49,18 +49,21 @@ export default class ListItem extends PureComponent {
                         <Image
                             source={{ uri: this.state.imageURI }}
                             style={styles.product_image}/>
-                        <View style={{top:-10,left:-10,position:'absolute',backgroundColor:'white',borderRadius:10,borderWidth:1,borderColor:'#E3E3E3'}}>
-                        <Text style={[styles.itemDetail_text,{color:'#0066FF'}]}>{item.distance}km</Text> 
-                        </View>
                     </View>
-                    
                     <View style={styles.productInfo_view}>
                         <View style={styles.productInfoLeft_view}>
                             <Text style={styles.itemName_text}>{item.name}</Text>
-                            <Text style={[styles.itemName_text,{fontSize:16,fontWeight:'bold'}]}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
-                            <Text style={styles.itemDetail_text}>{item.registerDate.slice(2,10)}</Text>
+                            <Text style={styles.itemName_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
+                            <Text style={styles.itemDetail_text}>{item.number}</Text>
                         </View>
-                      
+                        <View style={styles.productInfoRight_view}>
+                            <View style={{flex:1,justifyContent:'flex-start'}}>
+                                <Text style={[styles.itemDetail_text,{color:'#EE636A'}]}>{item.distance}km</Text> 
+                            </View>
+                            <View style={{flex:1,justifyContent:'flex-end'}}>
+                               {/*  <Text style={styles.itemDetail_text}>{item.registerDate.slice(2,10)}</Text> */}
+                            </View>
+                        </View>
                     </View>
 
                 </View>

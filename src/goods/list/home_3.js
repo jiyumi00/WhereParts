@@ -5,22 +5,21 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
-import FunctionUtil from '../../../util/libraries_function';
+import FunctionUtil from '../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
-import Indicator from '../../../util/indicator';
-import Constant from "../../../util/constatnt_variables";
-import Session from '../../../util/session';
-import WebServiceManager from "../../../util/webservice_manager";
-import EmptyListView from '../../../util/empty_list_view';
-import Sessions from '../../../util/session';
-import { styles } from "../../../styles/list/home_4";
+import Indicator from '../../util/indicator';
+import Constant from "../../util/constatnt_variables";
+import Session from '../../util/session';
+import WebServiceManager from "../../util/webservice_manager";
+import EmptyListView from '../../util/empty_list_view';
+import { styles } from "../../styles/list/home_3";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ListItem from './item_4';
+import ListItem from './item_3';
 
 //import { SearchWebView } from "./web_view";
 
-class Home1 extends Component {
+class Home extends Component {
     constructor(props) {
         super(props);
         this.contents = [];  //모든 users값 가져오는 것
@@ -218,7 +217,6 @@ class Home1 extends Component {
                     {this.state.emptyListViewVisible==1 && <Animated.FlatList
                         data={this.state.goodsContent}
                         renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
-                        numColumns={2}
                         refreshing={this.state.isRefresh} //새로고침
                         onRefresh={this.goGetGoods}
                         scrollEventThrottle={16}
@@ -232,6 +230,7 @@ class Home1 extends Component {
                     <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={{ width: "100%", height: "100%" }}>
                             <View style={styles.title_view}>
+
                                 <View style={styles.row_view}>
                                     <Text style={[styles.title_text, styles.titleBold_text]}>
                                         손쉽게 검색
@@ -247,6 +246,7 @@ class Home1 extends Component {
                                     <Text style={[styles.title_text, styles.titleRegular_text]}>
                                         까지 바로!
                                     </Text>
+
                                 </View>
                                 <Text style={styles.description_text}>
                                     원하는 키워드, 품번 사진으로 {'\n'} 바로 검색 가능합니다.
@@ -274,11 +274,10 @@ class Home1 extends Component {
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
                                     <Image
-                                        source={require('../../../images/icon/camera-icon/camera-icon.png')}
+                                        source={require('../../images/icon/camera-icon/camera-icon.png')}
                                     />
                                 </TouchableOpacity>
                             </View>
-
                         </View>
                         <View style={styles.sortBar_view}>
                             <View style={{flex:1,marginLeft:'5%',flexDirection:'row'}}>
@@ -302,4 +301,4 @@ class Home1 extends Component {
     }
 }
 
-export default Home1;
+export default Home;

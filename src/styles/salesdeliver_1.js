@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     //아이템 상세내역
     topContainer:{
         borderWidth:1, 
-        padding:'5%',
+        padding:'4%',
         flex:2.5,
         flexDirection:"column",
         backgroundColor:'#FFFF',
@@ -37,13 +37,11 @@ export const styles = StyleSheet.create({
         flex:7,
         marginTop:'2%',
         marginBottom:'5%',
-        padding:20,
+        padding:'4%',
         //borderWidth:1,
         backgroundColor:'white',
-        
     },
     textInput: {
-       
         backgroundColor: 'white',
         marginBottom: 20,
         paddingHorizontal: 20,
@@ -70,10 +68,6 @@ export const styles = StyleSheet.create({
         marginTop:5,
     },
 
-
-
-
-
     //배송완료 버튼
     bottomContainer:{
         flex:1,
@@ -92,8 +86,8 @@ export const styles = StyleSheet.create({
         color: "white",
     },
     imageView:{
-        width:ScreenWidth/6.5,
-        height:ScreenWidth/6.5,
+        width:ScreenWidth/5,
+        height:ScreenWidth/5,
     },
    // item 글자 디자인
   itemNumberText: {

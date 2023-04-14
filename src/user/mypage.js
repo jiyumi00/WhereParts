@@ -166,8 +166,6 @@ class MyPage extends Component {
         </View>
 
       </>
-
-
     );
   }
 

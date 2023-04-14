@@ -7,16 +7,16 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import { styles } from "../../../styles/list/home_item_detail_1";
+import { styles } from "../../styles/list/home_item_detail_1";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabIcon from 'react-native-vector-icons/Entypo';
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
+import Constant from '../../util/constatnt_variables';
+import WebServiceManager from '../../util/webservice_manager';
 
-import Session from '../../../util/session';
+import Session from '../../util/session';
 
 export default class DetailItemView extends Component {
     constructor(props) {
@@ -461,8 +461,6 @@ export default class DetailItemView extends Component {
                                     <Text style={[styles.text, { color: '#808e9b' }]}>숨김해제    </Text>
                                 </TouchableOpacity>}
                         </>}
-
-
                 </View>
 
                 <View style={styles.itemInfo_view}>

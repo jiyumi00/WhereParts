@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
    content_view:{
     position:'absolute',
     width:'100%',
+    height:ScreenHeight*0.65,
     top:ScreenHeight*0.13,
     //borderWidth:1,
     paddingHorizontal:'5%',
@@ -27,7 +28,7 @@ export const styles = StyleSheet.create({
    page_view:{
     position:'absolute',
     width:'100%',
-    bottom:'6%',
+    top:ScreenHeight*0.8
     //borderWidth:1,
    },
    input:{
@@ -39,7 +40,6 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     height: 45,
     paddingHorizontal:'2%',
-          
   },
   row_layout: {
     flexDirection: 'row',

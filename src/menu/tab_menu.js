@@ -5,11 +5,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // 경로를 위한 import
 
 //홈
-import Home from '../goods/list/components/home';
-//import Home from '../goods/list/components/home_1';
-//import Home from '../goods/list/components/home_2';
-//import Home from '../goods/list/components/home_3';
-//import Home from '../goods/list/components/home_4';
+import Home from '../goods/list/home';
+//import Home from '../goods/list/home_1';
+//import Home from '../goods/list/home_2';
+//import Home from '../goods/list/home_3';
+//import Home from '../goods/list/home_4';
 
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';

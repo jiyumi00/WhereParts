@@ -1,11 +1,11 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity, } from 'react-native';
 
-import { styles } from "../../../styles/list/home_4";
+import { styles } from "../../styles/list/home_4";
 
-import Constant from '../../../util/constatnt_variables';
-import WebServiceManager from '../../../util/webservice_manager';
-import FunctionUtil from '../../../util/libraries_function';
+import Constant from '../../util/constatnt_variables';
+import WebServiceManager from '../../util/webservice_manager';
+import FunctionUtil from '../../util/libraries_function';
 
 export default class ListItem extends PureComponent {
     constructor(props) {

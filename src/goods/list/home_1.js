@@ -16,7 +16,7 @@ import { styles } from "../../styles/list/home_1";
 
 import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ListItem from './components/item_1';
+import ListItem from './item_1';
 
 //import { SearchWebView } from "./web_view";
 
@@ -43,7 +43,6 @@ class Home extends Component {
             quality: 1,
             sortedData:1,
         };
-        console.log("Session",Session.isLoggedin());
     }
 
     componentDidMount() {
@@ -298,7 +297,7 @@ class Home extends Component {
                                     style={styles.cameraSearch_button}
                                     onPress={this.goCameraButtonClicked}>
                                     <Image
-                                        source={require('../../../images/icon/camera-icon/camera-icon.png')}
+                                        source={require('../../images/icon/camera-icon/camera-icon.png')}
                                     />
                                 </TouchableOpacity>
                             </View>
