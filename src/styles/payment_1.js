@@ -3,6 +3,65 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
+  //View
+  //주문상품
+  orderItem_view:{
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "lightgray",
+    padding: 10,
+    marginTop:10,
+  },
+  orderItemBody_view:{
+    flexDirection: 'row', 
+    paddingVertical:'2%',
+    borderWidth:0, 
+    borderBottomWidth:1, 
+    borderColor:'#D9D9D9',
+    //marginVertical:'2%'
+  },
+  productImage: {
+    flex: 1,
+    borderRadius: 6,
+  },
+  orderInfo_view:{
+    flexDirection: 'column',
+    alignItems:'flex-end',
+    flex:4,
+  },
+
+  orderItemBottom_view:{
+    flexDirection: 'row',
+  },
+  itemPrive_view:{
+    justifyContent:'center',
+    flex:1
+  },
+  itemQuantity_view:{
+    width:"auto",
+    borderRadius: 6,
+    borderColor: '#D4D4D4',
+    borderWidth: 1,
+    flexDirection: 'row',
+    //alignItems:'flex-end'
+  },
+  
+  //배송지 정보
+
+  //주소
+
+  //Text
+  goodsName_text: {
+    fontSize: 16,
+    color: 'black',
+    borderBottomWidth : 1,
+    paddingBottom:3, 
+    borderColor:'#D9D9D9'
+  },
+  price_text:{
+    fontSize: 18,
+    color:'black',
+  },
   buyButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -22,21 +81,9 @@ export const styles = StyleSheet.create({
     fontWeight: "bold", 
     color: 'black' 
   },
-  indexView:{
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "lightgray",
-    padding: 10,
-    marginTop:10,
-  },
-  orderGoodsDetailText: {
-    fontSize: 14,
-    color: 'black',
-  },
-  priceText:{
-    fontSize: 18,
-    color:'black',
-  },
+
+ 
+
   paymentButton:{
     justifyContent: 'center',
     alignItems: 'center',
@@ -53,15 +100,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#0066FF',
   },
 
-  //수량디자인
-  selectQuantityView: {
-    width:"auto",
-    borderRadius: 6,
-    borderColor: '#D4D4D4',
-    borderWidth: 1,
-    flexDirection: 'row',
-    //alignItems:'flex-end'
-  },
+
   quantityItemText: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 18,
@@ -177,11 +216,5 @@ export const styles = StyleSheet.create({
     borderBottomWidth:1,
     borderColor:'lightgray',
   },
-  productImage: {
-    flex: 1,
-    //margin: 5,
-    //width: 75,
-    //height: 65,
-    borderRadius: 6,
-  },
+
 })

@@ -21,25 +21,22 @@ class Payment extends Component {
 
         this.state = {
             imageURL: null,
-            zipNo: "",
-            roadAddr: "",
-            validForm: false,
-            detailAddress: '',
-
-            quantity: 1,
-            paymentMethod: 1,
             buyerName: "",
             buyerTel: "",
+            zipNo: "",
+            roadAddr: "",
             address: "",
+            detailAddress: '',
             bigo: "",
+            validForm: false,
+            
+            quantity: 1,
+            paymentMethod: 1,
             orderNo: null
         }
     }
 
     componentDidMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
-
         console.log('item=', this.item);
         this.callGetGoodsImageAPI(this.item.id).then((response) => {
             let reader = new FileReader();
@@ -61,20 +58,6 @@ class Payment extends Component {
         });
     }
 
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-    }
-
-    keyboardDidShow = () => {
-        console.log('Keyboard Shown');
-    }
-
-    keyboardDidHide = () => {
-        console.log('Keyboard Hide');
-        this.onValueChange();
-    }
 
     countPlus = () => {
         if (this.state.quantity > 0 && this.state.quantity < this.item.quantity)
@@ -91,20 +74,13 @@ class Payment extends Component {
     }
 
     getAddressInfo = (zipNo, roadAddr) => {
-        /*this.addressInfoRender(zipNo,roadAddr).then(this.onValueChange);*/
         this.onValueChange({ zipNo: zipNo, roadAddr: roadAddr });
     }
-
-    /*async addressInfoRender(zipNo, roadAddr){
-        this.setState({zipNo:zipNo, roadAddr:roadAddr});
-    }*/
 
     onValueChange = (value) => {
         this.setState(value, () => {
             let isValidForm = true;
 
-            console.log("zipNo", this.state.zipNo.trim().length);
-            console.log("roadAddr", this.state.roadAddr.trim().length);
             //주문자
             if (this.state.buyerName.length == 0) {
                 isValidForm = false;
@@ -125,7 +101,6 @@ class Payment extends Component {
             if (this.state.detailAddress.length == 0) {
                 isValidForm = false;
             }
-
             this.setState({ validForm: isValidForm });
         });
     }
@@ -225,38 +200,35 @@ class Payment extends Component {
             <View style={template.total_container}>
                 <ScrollView>
                     <View style={{marginHorizontal:'4%'}}>
-                        <View style={styles.indexView}>
-                            {/* <Text style={styles.indexText}>주문상품</Text> */}
-                            <Text style={[styles.orderGoodsDetailText,{fontSize:16,borderBottomWidth : 1,paddingBottom:3, borderColor:'#D9D9D9'}]}>{this.item.name}</Text>
-                            <View style={{ flexDirection: 'row', borderWidth:0, marginVertical:15, borderBottomWidth:1, paddingBottom:8, borderColor:'#D9D9D9'}}>
-                                <View style={{ width: '18%', height: "100%",borderWidth:0 }}>
+                        <View style={styles.orderItem_view}>
+                            <Text style={styles.goodsName_text}>{this.item.name}</Text>
+                            <View style={styles.orderItemBody_view}>
+                                <View style={{ flex:1}}>
                                     <Image
                                         source={{ uri: this.state.imageURL }}
                                         style={styles.productImage} />
                                 </View>
-                                <View style={{ flexDirection: 'column',alignItems:'flex-end',width:'82%',borderWidth:0 }}>
-                                    <Text style={styles.orderGoodsDetailText}> 주문번호 : {this.state.orderNo}</Text>
+                                <View style={styles.orderInfo_view}>
+                                    <Text>주문번호 : <Text style={{color:'black'}}>{this.state.orderNo}</Text></Text>
                                     <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                        <Text style={[styles.orderGoodsDetailText,{color:'blue'}]}>{this.item.number}</Text>
+                                        <Text style={{color:'blue'}}>{this.item.number}</Text>
                                     </TouchableOpacity>
-                                    <Text style={styles.orderGoodsDetailText}> 구매가능 수량 : {this.item.quantity}개</Text>
+                                    <Text>구매가능 수량 : <Text style={{color:'black'}}>{this.item.quantity}개</Text></Text>
                                 </View>
                             </View>
 
-                            <View style={{ flexDirection: 'row', borderWidth:0, }}>                               
-                                <View style={{borderWidth:0, justifyContent:'center',flex:1}}>
-                                    <Text style={styles.priceText}>총액 : {renderTotalPirce}원</Text>
+                            <View style={styles.orderItemBottom_view}>                               
+                                <View style={styles.itemPrive_view}>
+                                    <Text style={styles.price_text}>총액 : {renderTotalPirce}원</Text>
                                 </View>
-                                <View style={[styles.selectQuantityView]}>
+                                <View style={styles.itemQuantity_view}>
                                     <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
-                                        {/* <Text style={[styles.quantityItemText, { fontSize: 24 }]}>-</Text> */}
                                         <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
                                     </Pressable>
                                     <View style={[styles.quantityItem, styles.quantityCount]}>
                                         <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
                                     </View>
                                     <Pressable onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
-                                        {/* <Text style={styles.quantityItemText}>+</Text> */}
                                         <QuantityEditIcon name='plus' color='black' size={15}></QuantityEditIcon>
                                     </Pressable>
                                 </View>   
