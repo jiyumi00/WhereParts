@@ -237,7 +237,7 @@ class Payment extends Component {
 
                         {/* 주소 */}
                         <View style={styles.container}>
-                            <View style={styles.deliverView}>
+                            <View style={styles.deliver_view}>
                                 <Text style={styles.title}>배송지 정보</Text>
                                 <TextInput style={styles.textInput}
                                     ref={(c) => { this.buyerName = c; }}

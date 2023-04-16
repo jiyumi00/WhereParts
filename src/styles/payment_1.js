@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "lightgray",
-    padding: 10,
+    paddingHorizontal:10,
     marginTop:10,
   },
   orderItemBody_view:{
@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
 
   orderItemBottom_view:{
     flexDirection: 'row',
+    paddingVertical:'2%',
   },
   itemPrive_view:{
     justifyContent:'center',
@@ -43,13 +44,10 @@ export const styles = StyleSheet.create({
     borderColor: '#D4D4D4',
     borderWidth: 1,
     flexDirection: 'row',
-    //alignItems:'flex-end'
+   justifyContent:'center'
   },
   
-  //배송지 정보
-
-  //주소
-
+ 
   //Text
   goodsName_text: {
     fontSize: 16,
@@ -62,26 +60,12 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color:'black',
   },
-  buyButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: 200,
-    borderRadius: 5,
-    backgroundColor: '#0066FF',
-  },
+
   buyButtonText: {
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 18,
     color: '#FFF',
   },
-  indexText:{
-    fontSize: 16, 
-    marginBottom:'3%',
-    fontWeight: "bold", 
-    color: 'black' 
-  },
-
  
 
   paymentButton:{
@@ -91,14 +75,7 @@ export const styles = StyleSheet.create({
     width: "auto",
     backgroundColor: '#0066FF', 
   },
-  goListButton:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: "48%",
-    borderRadius: 5,
-    backgroundColor: '#0066FF',
-  },
+
 
 
   quantityItemText: {
@@ -117,11 +94,6 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
   },
-  buttonView:{
-    flexDirection:'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 
   //pay_complete
   goodsInfoView:{
@@ -133,11 +105,7 @@ export const styles = StyleSheet.create({
   },
 
   //address
-  total_container: {
-    flex: 1,
-    backgroundColor: 'white',
-
-  },
+ 
   container: {
     flex: 1,
     marginTop: 30,
@@ -210,7 +178,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 15,
   },
-  deliverView:{
+  deliver_view:{
     marginBottom:20,
     paddingBottom:10,
     borderBottomWidth:1,
