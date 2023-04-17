@@ -115,7 +115,7 @@ class OrderDetail extends Component {
                                 </View>
                                 <View style={{ width: '70%' }}>
                                     <TouchableOpacity onPress={this.goReceiptWebView}>
-                                        <Text style={styles.text_info}>확인하기</Text>
+                                        <Text style={[styles.text_info,{color:'blue'}]}>확인하기</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

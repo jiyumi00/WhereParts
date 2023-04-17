@@ -59,6 +59,7 @@ class PayComplete extends Component {
         const { orderNo, goodsName, goodsNo, 
                 quantity, payBank, total, address,
                 buyerName, buyerTel,zipCode } = this.state.item;
+                console.log(this.state.item)
         return (
             <View style={template.total_container}>
                 <ScrollView>

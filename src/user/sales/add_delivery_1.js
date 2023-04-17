@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, NativeModules,Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, NativeModules,Dimensions,BackHandler } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
@@ -43,8 +43,11 @@ class AddDelivery extends Component {
                 }
             });
         })
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
-
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
     goCameraButtonClicked = () => {
         this.props.navigation.push("PartsNoCamera", { onResultListener: this.goInvoiceNo });
     }
@@ -148,7 +151,11 @@ class AddDelivery extends Component {
         if (response.ok)
             return response.json();
     }
-    
+     //뒤로가기 했을 때 앱 종료
+     backPressed = () => {
+        this.props.navigation.pop();
+        return true;
+    }
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total,payKind, payBank, address, zipCode } = this.state.sellDetailInfo;
         

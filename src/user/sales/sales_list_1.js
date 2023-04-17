@@ -122,7 +122,7 @@ export default class SalesDetails extends Component {
     //뒤로가기 했을 때 앱 종료
     backPressed = () => {
         this.props.navigation.pop();
-       this.props.navigation.push('TabHome', { initialTabMenu: "MyPage" });
+        this.props.navigation.push('TabHome', { initialTabMenu: "MyPage" });
         return true;
     }
     render() {
@@ -338,7 +338,8 @@ class SoldOutListItem extends PureComponent {
 
 
                     </View>
-                    {item.status == 1 && <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
+                    {item.status == 1 && 
+                    <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
                         <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
                     </TouchableOpacity>}
 

@@ -36,7 +36,7 @@ export default class BuyList extends Component {
 
     backPressed = () => {
         this.props.navigation.pop();
-        this.props.navigation.push('TabHome',{initialTabMenu:"MyPage"});
+        //this.props.navigation.push('TabHome',{initialTabMenu:"MyPage"});
         return true;
     }
 
