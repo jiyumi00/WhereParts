@@ -88,9 +88,9 @@ export const styles = StyleSheet.create({
 
   outputStyle:{
     borderColor:'#909098',
-    borderTopWidth:0.5,
+    borderTopWidth:1,
     borderLeftWidth:1,
-    borderBottomWidth:0.5,
+    borderBottomWidth:1,
     borderRightWidth:1,
     //height: 107,
     paddingHorizontal:'2%',

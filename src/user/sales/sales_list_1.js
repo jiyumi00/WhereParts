@@ -122,7 +122,7 @@ export default class SalesDetails extends Component {
     //뒤로가기 했을 때 앱 종료
     backPressed = () => {
         this.props.navigation.pop();
-        this.props.navigation.push('TabHome', { initialTabMenu: "MyPage" });
+       this.props.navigation.push('TabHome', { initialTabMenu: "MyPage" });
         return true;
     }
     render() {

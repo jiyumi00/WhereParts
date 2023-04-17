@@ -97,18 +97,7 @@ class SearchAddress extends Component {
                     <Modal transparent={true} visible={this.state.indicator}>
                         <Indicator />
                     </Modal>
-                    {this.state.emptyListViewVisible &&
-                        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: '5%' }}>
-                            <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
-                            <Text style={{ marginTop: '5%' }}>검색 결과가 없습니다</Text>
-                        </View>}
-                    {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
-                        <FlatList
-                            style={{ borderColor: '#909098', }}
-                            data={this.state.addressContents}
-                            renderItem={({ item, index }) => <AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener} />} />
-                    }
-
+                    {/*    초기화면 */}
                     {this.state.searchViewVisible == false &&
                         <>
                             <Text style={styles.title}>TIP</Text>
@@ -118,22 +107,39 @@ class SearchAddress extends Component {
                             <Text style={styles.content}> 동/읍/면/리 + 번지 <Text style={styles.content2}> 예) 역삼동 737</Text> </Text>
                             <Text style={styles.content}> 건물명, 아파트명  <Text style={styles.content2}> 예) 삼성동 힐스테이트</Text></Text>
                         </>}
+                    
+                    {/* 검색결과가 없을 때 */}
+                    {this.state.emptyListViewVisible &&
+                        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: '5%' }}>
+                            <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
+                            <Text style={{ marginTop: '5%' }}>검색 결과가 없습니다</Text>
+                        </View>}
 
+
+                    {/* 검색결과 리스트 */}
+                    {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
+                        <FlatList
+                            style={{ borderColor: '#909098', }}
+                            data={this.state.addressContents}
+                            renderItem={({ item, index }) => <AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener} />} />
+                    }
                 </View>
+
+                {/* 페이지 부분 */}
                 {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
                     <>
-                        <View style={styles.page_view}>
-                            <View style={styles.row_layout}>
-                                <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
-                                    <PageIcon name="leftsquareo" size={30} color="light grey" />
-                                </TouchableOpacity>
+                    <View style={styles.page_view}>
+                        <View style={styles.row_layout}>
+                            <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
+                                <PageIcon name="leftsquareo" size={30} color="light grey" />
+                            </TouchableOpacity>
 
-                                <Text style={styles.text}>   <Text style={[styles.text, { color: 'blue' }]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount / this.countPerPage)}   </Text>
-                                <TouchableOpacity onPress={this.pageUpClicked} activeOpacity={0.8}>
-                                    <PageIcon name="rightsquareo" size={30} color="light grey" />
-                                </TouchableOpacity>
-                            </View>
-                        </View></>}
+                            <Text style={styles.text}>   <Text style={[styles.text, { color: 'blue' }]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount / this.countPerPage)}   </Text>
+                            <TouchableOpacity onPress={this.pageUpClicked} activeOpacity={0.8}>
+                                <PageIcon name="rightsquareo" size={30} color="light grey" />
+                            </TouchableOpacity>
+                        </View>
+                    </View></>}
             </View>
         );
     }

@@ -199,9 +199,9 @@ class Payment extends Component {
         return (
             <View style={template.total_container}>
                 <ScrollView>
-                    <View style={{marginHorizontal:'4%'}}>
+                    <View style={{marginHorizontal:'4%', marginVertical:'2%'}}>
                         <View style={styles.orderItem_view}>
-                            <Text style={styles.goodsName_text}>{this.item.name}</Text>
+                            <Text style={[styles.text.goodsName_text,{paddingTop:'1%'}]}>{this.item.name}</Text>
                             <View style={styles.orderItemBody_view}>
                                 <View style={{ flex:1}}>
                                     <Image
@@ -219,16 +219,16 @@ class Payment extends Component {
 
                             <View style={styles.orderItemBottom_view}>                               
                                 <View style={styles.itemPrive_view}>
-                                    <Text style={styles.price_text}>총액 : {renderTotalPirce}원</Text>
+                                    <Text style={styles.text.price_text}>총액 : {renderTotalPirce}원</Text>
                                 </View>
                                 <View style={styles.itemQuantity_view}>
-                                    <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantityItem}>
+                                    <Pressable onPress={() => this.countMinus(this.state.quantity)} style={styles.quantity_btn}>
                                         <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
                                     </Pressable>
-                                    <View style={[styles.quantityItem, styles.quantityCount]}>
-                                        <Text style={styles.quantityItemText}>{this.state.quantity}</Text>
+                                    <View style={[styles.quantity_btn, styles.quantityCount]}>
+                                        <Text style={styles.text.quantityItemText}>{this.state.quantity}</Text>
                                     </View>
-                                    <Pressable onPress={() => this.countPlus(this.state.quantity)} style={styles.quantityItem}>
+                                    <Pressable onPress={() => this.countPlus(this.state.quantity)} style={styles.quantity_btn}>
                                         <QuantityEditIcon name='plus' color='black' size={15}></QuantityEditIcon>
                                     </Pressable>
                                 </View>   
@@ -238,7 +238,7 @@ class Payment extends Component {
                         {/* 주소 */}
                         <View style={styles.container}>
                             <View style={styles.deliver_view}>
-                                <Text style={styles.title}>배송지 정보</Text>
+                                <Text style={styles.text.title}>배송지 정보</Text>
                                 <TextInput style={styles.textInput}
                                     ref={(c) => { this.buyerName = c; }}
                                     returnKeyType="next"
@@ -253,19 +253,19 @@ class Payment extends Component {
                                     onChangeText={(value) => this.onValueChange({ buyerTel: value })}
                                     value={this.state.buyerTel} />
                             </View>
-                            <Text style={styles.title}>주소</Text>
+                            <Text style={styles.text.title}>주소</Text>
                             <View style={styles.rowLayout}>
-                                <TouchableOpacity style={styles.number_text} onPress={()=>this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
-                                    <Text style={[styles.text]}>{this.state.zipNo}</Text>
+                                <TouchableOpacity style={styles.text.number_text} onPress={()=>this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
+                                    <Text style={[styles.text,{ marginLeft: 10,marginRight: 10,}]}>{this.state.zipNo}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={() => this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
-                                    <Text style={styles.btn_text}>우편번호 찾기</Text>
+                                <TouchableOpacity activeOpacity={0.8} style={styles.address_btn} onPress={() => this.props.navigation.navigate("SearchAddress", { addressListener: this.getAddressInfo })}>
+                                    <Text style={styles.text.btn_text}>우편번호 찾기</Text>
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={styles.address_text}>
-                                <Text style={[styles.text]}>{this.state.roadAddr}</Text>
+                            <View style={styles.address_view}>
+                                <Text style={[styles.text,{ marginLeft: 10, marginRight: 10,}]}>{this.state.roadAddr}</Text>
                             </View>
 
                             <TextInput style={styles.textInput}
@@ -284,8 +284,8 @@ class Payment extends Component {
                 </ScrollView>
                 {
                     this.state.validForm ?
-                        (<TouchableOpacity style={styles.paymentButton} onPress={this.paymentButtonClicked}><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
-                        : (<TouchableOpacity style={[styles.paymentButton, { backgroundColor: "#C9CCD1" }]} ><Text style={styles.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                        (<TouchableOpacity style={styles.payment_btn} onPress={this.paymentButtonClicked}><Text style={styles.text.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                        : (<TouchableOpacity style={[styles.payment_btn, { backgroundColor: "#C9CCD1" }]} ><Text style={styles.text.buyButtonText}>결제하기</Text></TouchableOpacity>)
                 }
             </View>
         );

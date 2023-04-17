@@ -47,43 +47,94 @@ export const styles = StyleSheet.create({
    justifyContent:'center'
   },
   
- 
+  address_view: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    backgroundColor: "#F1F1F3",
+    borderRadius: 10,
+    height: 45,
+    width: "100%",
+    marginBottom: 15,
+  },
   //Text
-  goodsName_text: {
-    fontSize: 16,
-    color: 'black',
-    borderBottomWidth : 1,
-    paddingBottom:3, 
-    borderColor:'#D9D9D9'
-  },
-  price_text:{
-    fontSize: 18,
-    color:'black',
+
+
+  text: {
+    fontFamily: "Cochin",
+    fontSize: 15,
+    color: "black",
+
+    goodsName_text: {
+      fontSize: 16,
+      color: 'black',
+      borderBottomWidth : 1,
+      paddingBottom:3, 
+      borderColor:'#D9D9D9'
+    },
+    price_text:{
+      fontSize: 18,
+      color:'black',
+    },
+  
+    buyButtonText: {
+      fontFamily: 'Pretendard-SemiBold',
+      fontSize: 18,
+      color: '#FFF',
+    },
+    number_text: {
+      //borderWidth:1,
+      width: '60%',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      backgroundColor: "#F1F1F3",
+      borderRadius: 10,
+      height: 45,
+      marginBottom: 15,
+      marginRight: 15,
+  
+    },
+   
+    title: {
+      fontFamily: "Cochin",
+      fontSize: 18,
+      fontWeight:"bold",
+      color: "black",
+      marginBottom: 15,
+    },
+    quantityItemText: {
+      fontFamily: 'Pretendard-Medium',
+      fontSize: 18,
+      color: '#000',
+    },
+    btn_text: {
+      fontFamily: "Cochin",
+      fontSize: 15,
+      color: "white",
+    },
   },
 
-  buyButtonText: {
-    fontFamily: 'Pretendard-SemiBold',
-    fontSize: 18,
-    color: '#FFF',
-  },
  
 
-  paymentButton:{
+  //btn
+  payment_btn:{
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
     width: "auto",
     backgroundColor: '#0066FF', 
   },
-
-
-
-  quantityItemText: {
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 18,
-    color: '#000',
+  address_btn: {
+    //borderWidth:1,
+    width: '36%',
+    height: 45,
+    backgroundColor: "black",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
   },
-  quantityItem: {
+
+ 
+  quantity_btn: {
     width: 36,
     height: 36,
     justifyContent: 'center',
@@ -128,56 +179,12 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
-  title: {
-    fontFamily: "Cochin",
-    fontSize: 18,
-    fontWeight:"bold",
-    color: "black",
-    marginBottom: 15,
-  },
+  
 
-  btn: {
-    //borderWidth:1,
-    width: '36%',
-    height: 45,
-    backgroundColor: "black",
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 15,
-  },
-  btn_text: {
-    fontFamily: "Cochin",
-    fontSize: 15,
-    color: "white",
-  },
-  text: {
-    fontFamily: "Cochin",
-    fontSize: 15,
-    color: "black",
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  number_text: {
-    //borderWidth:1,
-    width: '60%',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
-    borderRadius: 10,
-    height: 45,
-    marginBottom: 15,
-    marginRight: 15,
-
-  },
-  address_text: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
-    borderRadius: 10,
-    height: 45,
-    width: "100%",
-    marginBottom: 15,
-  },
+ 
+ 
+ 
+ 
   deliver_view:{
     marginBottom:20,
     paddingBottom:10,
