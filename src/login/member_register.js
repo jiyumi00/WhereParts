@@ -106,7 +106,7 @@ class Login extends Component {
                         return;
                     } 
                     else if (Session.getPageInfoItem() != null) {
-                        this.props.navigation.navigate(Session.getNextPage());
+                        this.props.navigation.navigate(Session.getNextPage(),{ saleState: 2 });
                     }
                     else {
                         this.props.navigation.navigate('TabHome');
@@ -138,7 +138,7 @@ class Login extends Component {
                 return;
             }
             else if (Session.getPageInfoItem() != null) {
-                this.props.navigation.navigate(Session.getNextPage());
+                this.props.navigation.navigate(Session.getNextPage(),{ saleState: 2 });
             }
             else {
                 this.props.navigation.navigate('TabHome');

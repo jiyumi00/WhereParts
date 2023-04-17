@@ -163,10 +163,8 @@ export const styles = StyleSheet.create({
   textDetailInput: {
     backgroundColor: 'white',
     marginBottom: 15,
-    //marginTop: 10,
     paddingHorizontal: 10,
-    //paddingVertical: 10,
-    height: 140,
+    height: 100,
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 1.5,

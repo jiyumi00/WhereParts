@@ -576,9 +576,9 @@ class AddGoods extends Component {
                                 <View style={styles.textDetailInput}>
                                     <Text>판매자 글</Text>
                                     <TextInput
+                                        style={{padding:0,flex:1}}
                                         multiline={true}
                                         onChangeText={(value) => this.setState({ spec: value })}
-                                        //onEndEditing={(event) => this.onValueChange()}
                                     />
                                 </View>
                             </View>
