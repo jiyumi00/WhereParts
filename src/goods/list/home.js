@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import {
     ScrollView, Pressable, TextInput, ImageBackground, View, Text,
-    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules
+    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules,
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -19,13 +19,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
 import ListItem from './item';
 
-//import { SearchWebView } from "./web_view";
-
 class Home extends Component {
     constructor(props) {
         super(props);
         this.contents = [];  //모든 users값 가져오는 것
-        this.AnimatedHeaderValue = new Animated.Value(0); // Animated 기준값(0,0)
+        this.AnimatedHeaderValue = new Animated.Value(0);
         this.userID = Session.getUserID();
 
         //안드로이드에서 정의한 모듈 가져옴
@@ -34,7 +32,7 @@ class Home extends Component {
         this.sortKind=["최신순","거리순","가나다순"];
         this.state = {
             isRefresh: false,
-            emptyListViewVisible:1,
+            emptyListViewVisible:false,
             goodsContent: [],
             indicator: false,
             recentRadioButtonChecked: true,
@@ -44,21 +42,18 @@ class Home extends Component {
             quality: 1,
             sortedData:1,
         };
-        console.log("Session",Session.isLoggedin());
     }
 
     componentDidMount() {
         this.goGetGoods(Session.getUserID());
-        console.log('home didmount');
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 
     componentWillUnmount() {
-        console.log('home willmount');
         BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
 
-    //부품 검색
+    // 부품 검색
     search = (value) => {
         console.log('selected data: ', value);
         this.setState({
@@ -67,7 +62,7 @@ class Home extends Component {
         this.setState({ goodsContent: this.dataFiltering(value) },()=>{this.handleEmptyListView()})
     };
 
-    //필터링 (부품번호, 부품명 동시 검색)
+    // 필터링 (부품번호, 부품명 동시 검색)
     dataFiltering = (value) => {
         let goodsContent = this.contents;
         goodsContent = goodsContent.filter((content) => {
@@ -85,7 +80,7 @@ class Home extends Component {
         return goodsContent;
     }
 
-    // 품번인식 카메라로 이동 goCameraButtonClicked
+    // 품번인식 카메라로 이동
     goCameraButtonClicked = () => {
         this.props.navigation.push("PartsNoCamera", { onResultListener: this.goPartsNo });
     }
@@ -110,7 +105,7 @@ class Home extends Component {
         });
     }
 
-    //부품 목록 호출 메서드
+    // 부품 목록 호출 메서드
     goGetGoods = () => {
         console.log('refresh_home');
         this.setState({ indicator: true });
@@ -124,36 +119,32 @@ class Home extends Component {
         this.setState({ isRefresh: false })
     }
 
-    listSort=(value)=>{     
-        if(value==1){
-            const sortedData = this.state.goodsContent.sort((a, b) => {
-                return new Date(b.registerDate) - new Date(a.registerDate);
-            });
-            this.setState({ goodsContent: sortedData, indicator:false},()=>{this.handleEmptyListView()});
-        }
-        else if(value==2){
-            this.setState({indicator:true})
-            const sortedData=this.state.goodsContent.sort((a,b)=>{
-                return a.distance-b.distance;
-            })
-            this.setState({goodsContent:sortedData,indicator:false},()=>{this.handleEmptyListView()});
-        }
-        else{
-            this.setState({indicator:true})
-            const sortedData = this.state.goodsContent.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-            })
-            this.setState({ goodsContent: sortedData,indicator:false },()=>{this.handleEmptyListView()});
-        }
+    // 리스트 정렬, 1:최신순, 2:거리순, 3:가나다순
+    listSort = (value) => {
+        this.setState({ indicator: true }, () => {
+            if (value == 1) {
+                const sortedData = this.state.goodsContent.sort((a, b) => {
+                    return new Date(b.registerDate) - new Date(a.registerDate);
+                });
+                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
+            }
+            else if (value == 2) {
+                const sortedData = this.state.goodsContent.sort((a, b) => {
+                    return a.distance - b.distance;
+                })
+                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
+            }
+            else {
+                const sortedData = this.state.goodsContent.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                })
+                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
+            }
+        });
     }
 
     handleEmptyListView=()=>{
-        if(this.state.goodsContent.length==0){
-            this.setState({emptyListViewVisible:0});
-        }
-        else{
-            this.setState({emptyListViewVisible:1});
-        }
+       this.setState({emptyListViewVisible : this.state.goodsContent.length == 0 ? true : false});
     }
 
     //Web Service 시작
@@ -213,14 +204,16 @@ class Home extends Component {
                 outputRange: [Header_Maximum_Height, 0],
                 extrapolate: 'clamp'
             });
-        console.log('sortKiond',this.state.sortedData)
+
+        console.log('sortKind',this.state.sortedData);
+
         return (
             <>
                 <Modal transparent={true} visible={this.state.indicator}>
                     <Indicator />
                 </Modal>
-                <View style={{ flex: 1, backgroundColor: '#FFFF', paddingHorizontal:'2%' }}>
-                    {this.state.emptyListViewVisible==1 && <Animated.FlatList
+                <View style={styles.home_total_view}>
+                    {this.state.emptyListViewVisible==false && <Animated.FlatList
                         data={this.state.goodsContent}
                         numColumns={2}
                         horizontal={false}
@@ -234,60 +227,61 @@ class Home extends Component {
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                             { useNativeDriver: true })}
                         />}
-                    {this.state.emptyListViewVisible==0 && <EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} />}
+                    {this.state.emptyListViewVisible==true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
 
-                    <Animated.View style={[styles.homeTop_view, { transform: [{ translateY: renderHeader }] }]}>
-                        <View style={styles.title_view}>
-                            <View style={styles.row_title_view}>
-                                <Text style={[styles.title_text,{fontSize:25,}]}>
-                                    <View style={{width:50,height:50,backgroundColor:'#D6DFF5', borderRadius:40,}}>
+                    {/* 화면 상단 제목 부분 */}
+                    <Animated.View style={[styles.home_title_view, { transform: [{ translateY: renderHeader }] }]}>
+                        <View style={styles.title_total_view}>
+                            <View style={styles.main_title_view}>
+                                <Text style={styles.main_title_text}>
+                                    <View style={styles.carIcon_view}>
                                         <CarIcon name="car-wrench" size={50} color="#193067" /> 
                                     </View>
-                                    내가 찾는 부품 
+                                    내가 찾는 부품
                                 </Text>
                             </View>
-                            <View style={{paddingLeft:'5%'}}>
-                                <Text style={[styles.titleBold_text]}>
+                            <View style={styles.sub_title_view}>
+                                <Text style={styles.sub_title_text}>
                                     손쉽게 검색하고
                                 </Text>
-                                <Text style={[styles.titleBold_text]}>
-                                    판매/ 구매까지 바로!
+                                <Text style={styles.sub_title_text}>
+                                    판매/구매까지 바로!
                                 </Text>
                             </View>
                         </View>
                     </Animated.View>
 
-                    <Animated.View style={[styles.searchBar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={{ flexDirection: 'row', marginTop: '5%', marginBottom: '3%' }}>
-                            <View style={styles.searchSection}>
+                    <Animated.View style={[styles.home_searchbar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
+                        <View style={styles.search_section_view}>
+                            <View style={styles.searchbar_view}>
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요."
                                     placeholderTextColor="light grey"
-                                    style={styles.search_input}
+                                    style={styles.search_input_text}
                                     value={this.state.number}
                                 />
                             </View>
-                            {/* 카메라로 품번검색 */}
+                            {/* 카메라로 부품번호 검색 */}
                             <View>
                                 <TouchableOpacity
-                                    style={styles.cameraSearch_button}
+                                    style={styles.camera_search_button}
                                     onPress={this.goCameraButtonClicked}>
                                     <CameraIcon name="camera" size={25} color="#193067" />
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', backgroundColor: 'white', marginTop:'2%',}}>
-                            <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={styles.sort_section_view}>
+                            <View style={styles.goods_total_quantity_view}>
                                 <Text style={{ color: 'black' }}>총 상품개수 : </Text>
                                 <Text style={{ color: '#113AE2' }}>{this.state.goodsQuantity}</Text><Text style={{ color: 'black' }}>개</Text>
                             </View>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', height:40}}>
+                            <View style={styles.sort_dropdown_view}>
                                 <Picker
-                                    style={{ width: 150 }}
+                                    style={styles.sort_dropdown_view.dropdown_width}
                                     selectedValue={this.state.sortedData}
-                                    onValueChange={(value, index) => { this.setState({ sortedData: value }, () => this.listSort(value)) }}
+                                    onValueChange={(value, index) => { this.setState({ sortedData: value, }, () => this.listSort(value)) }}
                                     mode={'dropdown'}>
                                     {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
                                 </Picker>

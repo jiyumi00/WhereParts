@@ -31,7 +31,7 @@ import Gallery from "../goods/register/components/gallery";
 import GalleryX from "../util/gallery_x";
 import GoodsImageCamera from "../goods/register/components/camera_goods_image";
 import GoogleWebView from "../util/google_web_view";
-//import SearchWebView from "../goods/list/web_view";
+//import SearchWebView from "../goods/list/components/web_view";
 
 //결제창
 //import Payment from "../goods/pay/payment";
@@ -41,25 +41,23 @@ import PayComplete from "../goods/pay/pay_complete";
 
 //상품상세
 import GoodsDetail from "../goods/list/item_detail";
-//import GoodsDetail from "../goods/list/item_detail_1";
-//import GoodsDetail from "../goods/list/item_detail_2";
+//import GoodsDetail from "../goods/list/components/item_detail_1";
+//import GoodsDetail from "../goods/list/components/item_detail_2";
 
 import OrderDetail from "../user/buy/order_detail";
 import EditProfile from "../user/buy/edit_profile";
 
+
 //로그인 경로
 import Login from "../login/member_register";
 import SignUp from "../login/signup";
-import CompanyGallery from "../login/gallery_company";
-import BusinessCardCamera from "../login/camera_business_card";
-import BusinessCardGallery from "../login/gallery_business_card";
-import CompanyCamera from "../login/camera_company";
+import SignUpGallery from "../login/gallery";
+import SignUpCamera from "../login/camera";
 import PartsNoCamera from "../goods/register/components/camera_goods_no";
 
 //주소검색
 import Address from "../goods/pay/address";
 import SearchAddress from "../goods/pay/address_search";
-import FunctionUtil from "../util/libraries_function";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -90,12 +88,8 @@ class Stack extends Component {
                     options={{ headerShown: false }} />
                 <NativeStack.Screen name="SignUp" component={SignUp} 
                      initialParams={{ companyNoImageURL: [],cardImageURL:[],companyNo:"" }} options={{ title: " " }} />
-                <NativeStack.Screen name="CompanyGallery" component={CompanyGallery}/>
-                <NativeStack.Screen name="BusinessCardCamera" component={BusinessCardCamera}
-                    options={{ title: "명함" }} />
-                <NativeStack.Screen name="BusinessCardGallery" component={BusinessCardGallery}/>
-                <NativeStack.Screen name="CompanyCamera" component={CompanyCamera}
-                    options={{ title: "사업자 등록증" }} />
+                <NativeStack.Screen name="SignUpGallery" component={SignUpGallery} options={{ title: "사진선택" }}/>
+                <NativeStack.Screen name="SignUpCamera" component={SignUpCamera} options={{ title: "사진촬영" }} />
                 <NativeStack.Screen name="PartsNoCamera" component={PartsNoCamera}
                     options={{ title: "" }} />
 

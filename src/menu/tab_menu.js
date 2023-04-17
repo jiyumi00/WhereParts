@@ -13,7 +13,6 @@ import Home from '../goods/list/home';
 
 import AddGoods from '../goods/register/components/add_goods';
 import MyPage from '../user/mypage';
-import ShopHistory from '../user/shophistory';
 import Notification from '../user/notification';
 
 const Tab = createBottomTabNavigator(); // Tab 일 경우

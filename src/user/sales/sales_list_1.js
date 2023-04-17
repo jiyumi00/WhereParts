@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, Modal, ImageBackground, BackHandler, ViewComponent } from 'react-native';
 
-import { styles } from "../../styles/saleslist_1";
+import { styles } from "../../styles/sales/saleslist_1";
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
@@ -10,6 +10,7 @@ import FunctionUtil from '../../util/libraries_function';
 import EmptyListView from '../../util/empty_list_view';
 import Session from '../../util/session';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconMark from 'react-native-vector-icons/FontAwesome5';
 import DetailItemView from "../../goods/list/item_detail";
 import { color } from 'react-native-reanimated';
 
@@ -24,7 +25,7 @@ export default class SalesDetails extends Component {
             salesContents: [],
             soldoutContents: [],
 
-            saleState: 1,
+            saleState:1,
 
             isRefresh: false,
 
@@ -130,10 +131,9 @@ export default class SalesDetails extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
-                    <View style={[styles.salesdetailsheader, { flexDirection: 'column', alignItems: 'flex-end' }]}>
-                        {/* <Text style={styles.headertext}> 나의 판매내역</Text> */}
-                        <Icon name="account-circle" size={60} color={'lightgrey'}></Icon>
-                        {/* <Text style={[styles.headertext,{fontSize:15}]}>인제정비</Text> */}
+                    <View style={[styles.salesdetailsheader, { flexDirection: 'column', alignItems: 'flex-start', }]}>
+                        <Text><IconMark name="pen" color={'#14127D'} size={15}/> 건수: <Text style={{color:'black'}}> 24건     </Text>
+                        <IconMark name="coins" color={'#14127D'} size={15}/><Text> 판매금액: <Text style={{color:'black'}}> 1,300,000</Text></Text></Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%", }}>
                         <View style={{ borderBottomWidth: this.state.saleState == 1 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
@@ -232,9 +232,9 @@ class SaleListItem extends PureComponent {
                             </View>
                             <View style={[styles.productInfo, { paddingLeft: '2%', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
                                 {/*  <Text style={styles.itemNameText}>{item.name}</Text> */}
-                                <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}><Text style={{ color: 'grey', fontSize: 15 }}>부품번호 : </Text>{item.number}</Text></TouchableOpacity>
-                                <Text style={styles.itemPriceText}><Text style={{ color: 'grey', fontSize: 15 }}>가격/수량 : </Text>{FunctionUtil.getPrice(item.price)}<Text style={{ fontSize: 15, color: 'black' }}>원 / {item.quantity}{"개"}</Text></Text>
-                                <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>등록일 : </Text>{item.registerDate.slice(0, 10)}</Text>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}><Text style={{ color: 'grey'}}>부품번호 : </Text>{item.number}</Text></TouchableOpacity>
+                                <Text style={styles.itemPriceText}><Text style={{ color: 'grey'}}>가격/수량 : </Text>{FunctionUtil.getPrice(item.price)}<Text>원 / {item.quantity}{"개"}</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey'}}>등록일 : </Text>{item.registerDate.slice(0, 10)}</Text>
                             </View>
                         </View>
                     </View>
@@ -299,7 +299,7 @@ class SoldOutListItem extends PureComponent {
                     <View style={{ flexDirection: 'row', paddingBottom: '2%', paddingTop: '2%' }}>
                         {item.status != 3 && <>
                             <View style={styles.productInfo}>
-                                <Text style={{ fontSize: 16, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호: </Text>{item.orderNo}</Text>                               
+                                <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호: </Text>{item.orderNo}</Text>                               
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                     <Text style={[styles.itemNumberText, { color: 'grey', fontSize: 15, }]}>부품번호:
                                         <Text style={{ color: 'blue' }}>{item.goodsNo}</Text>
@@ -318,19 +318,19 @@ class SoldOutListItem extends PureComponent {
 
                         {item.status == 3 && <>
                             <View style={[styles.productInfo, { flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호:</Text>{item.orderNo}</Text>
+                                <View style={{ flex: 1, alignItems:'flex-end' }}>
+                                    <Text style={{ fontSize: 14, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey'}}>주문번호: </Text> {item.orderNo}</Text>
+                                    <Text style={[styles.itemRegisterDateText,{fontSize:14}]}><Text style={{ color: 'grey' }}>주문: </Text> {item.days[0].slice(0, 10)}</Text>
+                                    <Text style={[styles.itemPriceText,{fontSize:14}]}><Text style={{ color: 'grey'}}>결제:</Text> {FunctionUtil.getPrice(item.price * item.quantity)}원/<Text>{item.payKind}</Text></Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flex: 1, alignItems: 'flex-end', borderRightWidth: 1, borderColor: 'grey', paddingRight: '3%' }}>
-                                        <Text style={[styles.itemNameText, { fontSize: 15 }]}>{item.goodsName}</Text>
-                                        <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}>{item.goodsNo}</Text></TouchableOpacity>
-                                        <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>{item.payKind}</Text></Text>
+                                    <View style={{ flex: 1, alignItems: 'flex-end',  borderColor: 'grey', paddingRight: '1%' }}>
+                                    <Text style={[styles.itemRegisterDateText,{fontSize:14}]}><Text style={{ color: 'grey'}}>배송/완료: </Text>{item.days[1].slice(0, 10)} /</Text>
+                                      {/*   <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}>{item.goodsNo}</Text></TouchableOpacity> */}
+                                        
                                     </View>
-                                    <View style={{ alignItems: 'flex-end', marginLeft: '3%' }}>
-                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>주문:</Text> {item.days[0].slice(0, 10)}</Text>
-                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>배송:</Text> {item.days[1].slice(0, 10)}</Text>
-                                        <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>완료:</Text> {item.days[2].slice(0, 10)}</Text>
+                                    <View style={{ alignItems: 'flex-end', }}>
+                                        <Text style={[styles.itemRegisterDateText,{fontSize:14}]}>{item.days[2].slice(0, 10)}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -338,8 +338,7 @@ class SoldOutListItem extends PureComponent {
 
 
                     </View>
-                    {item.status == 1 && 
-                    <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
+                    {item.status == 1 && <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
                         <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
                     </TouchableOpacity>}
 

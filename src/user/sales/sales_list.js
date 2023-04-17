@@ -1,14 +1,14 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, Modal,BackHandler } from 'react-native';
 
-import { styles } from "../../styles/saleslist";
+import { styles } from "../../styles/sales/saleslist";
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import EmptyListView from '../../util/empty_list_view';
 import Session from '../../util/session';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import DetailItemView from "../../goods/list/components/item_detail";
+import DetailItemView from "../../goods/list/item_detail";
 
 
 export default class SalesDetails extends Component {

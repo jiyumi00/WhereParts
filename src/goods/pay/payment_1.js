@@ -6,7 +6,7 @@ import WebServiceManager from '../../util/webservice_manager';
 import FunctionUtil from '../../util/libraries_function';
 
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/payment_1";
+import { styles } from "../../styles/pay/payment_1";
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
 class Payment extends Component {

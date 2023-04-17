@@ -5,6 +5,7 @@ const ScreenWidth=Dimensions.get('window').width;
 export const styles = StyleSheet.create({
     total_container:{
         flex:1,
+        backgroundColor:'white'
     },
     rowLayout: {
         flex: 1,
@@ -16,17 +17,16 @@ export const styles = StyleSheet.create({
         color: "black",
     },
     productImage: {
-        flex: 1,
+/*         flex: 1, */
         //margin: 5,
-       /*  width: ScreenWidth/6,
-        height:  ScreenWidth/6, */
+        width: ScreenWidth/4.5,
+        height:  ScreenWidth/4.5,
         borderRadius: 6,
       },
     //아이템 상세내역
     topContainer:{
         borderWidth:1, 
         padding:'4%',
-        flex:2.5,
         flexDirection:"column",
         backgroundColor:'#FFFF',
         borderColor: '#D1D1D1',
@@ -34,11 +34,9 @@ export const styles = StyleSheet.create({
 
     //배송선택
     bodyContainer:{
-        flex:7,
         marginTop:'2%',
         marginBottom:'5%',
         padding:'4%',
-        //borderWidth:1,
         backgroundColor:'white',
     },
     textInput: {
@@ -91,7 +89,7 @@ export const styles = StyleSheet.create({
     },
    // item 글자 디자인
   itemNumberText: {
-    fontSize: 13,
+    fontSize: 15,
     color:'blue',
     fontFamily: 'Pretendard-SemiBold',
   },
@@ -103,7 +101,7 @@ export const styles = StyleSheet.create({
     color: '#000000', 
   },
   itemRegisterDateText: {
-    fontSize: 14,
+    fontSize: 15,
     color:'black'
   },
   itemDistanceText: {

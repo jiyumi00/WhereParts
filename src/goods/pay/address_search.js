@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Keyboard, Modal } from 'react-native';
 
-import { styles } from "../../styles/address_search";
+import { styles } from "../../styles/pay/address_search";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import EmptyIcon from 'react-native-vector-icons/SimpleLineIcons';

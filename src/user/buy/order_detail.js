@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useValue } from 'react-native-reanimated';
-import { styles } from "../../styles/order_detail";
+import { styles } from "../../styles/buy/order_detail";
 import { template } from "../../styles/template/page_style";
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
@@ -47,7 +47,7 @@ class OrderDetail extends Component {
                 <ScrollView >
                     <View style={styles.dateInfo_view}>
                         <Text style={styles.text_info}>{orderingDate}</Text>
-                        <Text style={styles.text}>주문번호: {id}</Text>
+                        <Text style={styles.text}>주문번호: {orderNo}</Text>
                     </View>
                     <View style={styles.payInfo_view}>
                         <View style={styles.payInfoTitle_view}>
@@ -90,7 +90,7 @@ class OrderDetail extends Component {
                                     <Text style={styles.text}>결제수단</Text>
                                 </View>
                                 <View style={{ width: '70%' }}>
-                                    <Text style={styles.text_info}>{payKind == 1 && "신용카드"} ({payBank})</Text>
+                                    <Text style={styles.text_info}>{payKind} ({payBank})</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row' }}>

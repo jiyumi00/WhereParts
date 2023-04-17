@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+
   //View
   row_view: {
     flex: 1,
@@ -110,7 +111,7 @@ export const styles = StyleSheet.create({
     fontFamily: "Cochin",
     fontSize: 13,
     color: "gray",
-    marginBottom: 15
+    marginBottom: 5
   },
   errormessage_text: {
     fontSize: 13,
@@ -121,8 +122,8 @@ export const styles = StyleSheet.create({
     fontFamily: "Cochin",
     fontSize: 17,
     color: "black",
-    marginBottom: 15,
-    marginTop: 15,
+    marginBottom: 10,
+    marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -131,44 +132,44 @@ export const styles = StyleSheet.create({
   product_textInput: {
     backgroundColor: 'white',
     marginBottom: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    height: 70,
+    paddingHorizontal: 10,
+    //paddingVertical: 5,
+    height: 55,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
   sales_quantity_textInput: { // 판매개수
-    flex: 2,
+    backgroundColor: "white",
+    width:'13%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "white",
     borderColor: '#D1D1D1',
     borderWidth: 2,
     borderRadius: 10,
-    height: 55,
+    height: 35,
   },
   status_textInput: {
     backgroundColor: 'white',
     marginBottom: 20,
     marginTop: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    height: 75,
+    paddingHorizontal: 10,
+    //paddingVertical: 10,
+    height: 60,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
   textDetailInput: {
     backgroundColor: 'white',
-    marginBottom: 50,
-    marginTop: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginBottom: 15,
+    //marginTop: 10,
+    paddingHorizontal: 10,
+    //paddingVertical: 10,
     height: 140,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
 
   //버튼 모으기
@@ -183,8 +184,8 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   add_btn: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     backgroundColor: "black",
     alignItems: 'center',
     justifyContent: 'center',

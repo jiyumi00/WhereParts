@@ -6,9 +6,10 @@ import Constant from '../util/constatnt_variables';
 import WebServiceManager from '../util/webservice_manager';
 import EmptyListView from '../util/empty_list_view';
 import CircleIcon from 'react-native-vector-icons/FontAwesome';
+import DeleteIcon from 'react-native-vector-icons/MaterialIcons'
 
 import { template } from "../styles/template/page_style";
-import { styles } from '../styles/notice';
+import { styles } from '../styles/notification';
 import Session from '../util/session';
 
 export default class Notification extends Component {
@@ -111,7 +112,7 @@ export default class Notification extends Component {
         return (
             <View style={template.total_container}>
                 <View style={[template.container,{marginTop:15,marginLeft:10,marginRight:10}]}>
-                    <View style={{ flexDirection: 'row', width: "100%", marginBottom:10 }}>
+                    <View style={styles.productTop_view}>
                         <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>
                             <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
                         </View>
@@ -191,23 +192,25 @@ class ItemList extends PureComponent {
             <>
                 <TouchableOpacity onPress={()=>this.itemClicked()}>
                     <View style={styles.product}>
-                        <View style={{flexDirection:'row',width:"100%"}}>
-                            <View style={{flex:2,alignItems:'center',justifyContent:'center',marginLeft:7}}>
-                                <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{position:'absolute',paddingTop:10}} />
+                        <View style={[styles.listItem_view,{ flex:1}]}>
+                            <View style={styles.circleIcon_view}>
+                                <CircleIcon name="circle-thin" size={60} color="#0066FF" style={{ position: 'absolute', paddingTop: 10 }} />
                                 {/* buy, sell 판별하여 text 표시 */}
-                                <Text style={{ color: "#0066FF", paddingTop: 10, fontWeight: 'bold', fontSize: 16 }}>{kind=='buy' ? '구매':'판매'}</Text>           
+                                <Text style={styles.itemkind_text}>{kind == 'buy' ? '구매' : '판매'}</Text>
                             </View>
-                            <View style={{flex:8,paddingTop:5,paddingLeft:10}}>
-                                <Text style={{fontSize:15,fontWeight:'bold', color:'black'}}>
-                                    <Text style={{fontSize:12}}>{todate}</Text>
+                            <View style={styles.itemDetail_view}>
+                                <Text style={styles.itemDetail_text}>
+                                    <Text style={{ fontSize: 12 }}>{todate}</Text>
                                     {/* 읽었는지 읽지 않았는지 판별하여 text 표시 */}
-                                    <Text style={{color:'red'}}>{reading==0 ? '  new':null}</Text>
+                                    <Text style={{ color: 'red' }}>{reading == 0 ? '  new' : null}</Text>
                                 </Text>
-                                <Text style={{color:'black'}}>{body}</Text>
+                                <Text style={{ color: 'black' }}>{body}</Text>
                             </View>
-                            <TouchableOpacity onPress={this.deleteButtonClicked}>
-                                <Text>삭제</Text>
-                            </TouchableOpacity>
+                            <View style={{ position: 'absolute',marginLeft:"95%" }}>
+                                <TouchableOpacity onPress={this.deleteButtonClicked}>
+                                    <DeleteIcon name="close" size={20} color="#0066FF" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </TouchableOpacity>

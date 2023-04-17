@@ -1,5 +1,4 @@
-/*
-{userInfo:{
+/*{userInfo:{
     id: "1234567890",
     companyName: "인제정비",
     companyAddress: "인제로 인제대학교",
@@ -9,8 +8,7 @@ pageInfo:{
     prevPage:"BuyList",
     nextPage:"MyPage"
     }
-}
-*/
+}*/
 export default class Session {
     static #items={};
     
@@ -42,7 +40,10 @@ export default class Session {
     }
 
     static isLoggedin() {
-        return Session.#items['userInfo'].isLoggedin;
+        if (Session.#items.hasOwnProperty('userInfo'))
+            return Session.#items['userInfo'].isLoggedin;
+        else
+            return false;
     }
 
     static getUserID() {
@@ -56,8 +57,4 @@ export default class Session {
     static getPrevPage() {
         return Session.#items['pageInfo'].prevPage;
     }    
-
-/*     static setNextPage(value) {
-        Session.#items['pageInfo'].nextPage = value;
-    } */
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, BackHandler, TouchableOpacity } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/payment";
+import { styles } from "../../styles/pay/payment";
 import WebServiceManager from '../../util/webservice_manager';
 import Constant from '../../util/constatnt_variables';
 
@@ -59,7 +59,6 @@ class PayComplete extends Component {
         const { orderNo, goodsName, goodsNo, 
                 quantity, payBank, total, address,
                 buyerName, buyerTel,zipCode } = this.state.item;
-                console.log(this.state.item)
         return (
             <View style={template.total_container}>
                 <ScrollView>

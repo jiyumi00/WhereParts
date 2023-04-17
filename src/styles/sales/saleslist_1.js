@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: "5%",
     paddingVertical:'2%',
-    paddingHorizontal:'2%'
+    paddingHorizontal:'4%'
   },
   headertext: {
     fontSize: 18,
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
    // alignItems: 'center',
     borderWidth:2,
     borderColor:'#E9E9E9',
-    marginBottom:"2%",
+   
     paddingVertical:"2%",
     borderRadius:10,
     backgroundColor: '#FFF',
@@ -118,6 +118,7 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     //fontWeight: 'bold',
     fontFamily: 'Pretendard-SemiBold',
-    color: '#000000',
+    fontWeight:'600',
+    color: 'black',
   },
 });

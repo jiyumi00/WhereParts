@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 import {View, Text, TextInput,ScrollView, TouchableOpacity,Linking } from 'react-native';
-import { styles } from "../../styles/address";
+import { styles } from "../../styles/pay/address";
 
 class Address extends Component {
     constructor(props) {

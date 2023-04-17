@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View,Text,ScrollView,TouchableOpacity,Modal,FlatList,Image } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
-import {styles} from "../../styles/picklist_1";
+import {styles} from "../../styles/buy/picklist_1";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -155,7 +155,6 @@ class ListItem extends Component {
                                 source={{ uri: this.state.imageURI }}
                                 style={styles.productImage} />
                         </View>
-
                         <View style={styles.productInfoRight_view}>
                             <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                             <TouchableOpacity onPress={this.goGoodsNumberWebView}>

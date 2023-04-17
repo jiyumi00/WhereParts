@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, FlatList, Image, Alert,BackHandler } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/buylist";
+import { styles } from "../../styles/buy/buylist";
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import Session from '../../util/session';

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Alert, Nati
 
 import { Picker } from '@react-native-picker/picker';
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/salesdeliver";
+import { styles } from "../../styles/sales/salesdeliver";
 
 import IconCamera from 'react-native-vector-icons/Feather';
 

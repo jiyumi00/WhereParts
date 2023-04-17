@@ -178,12 +178,6 @@ export const styles = StyleSheet.create({
     borderColor: '#F1F1F3',
     borderWidth: 1,
   },
-
-  
-
- 
- 
- 
  
   deliver_view:{
     marginBottom:20,
@@ -191,5 +185,4 @@ export const styles = StyleSheet.create({
     borderBottomWidth:1,
     borderColor:'lightgray',
   },
-
 })

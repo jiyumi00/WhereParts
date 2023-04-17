@@ -1,7 +1,7 @@
 import React, { Component , PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity,Dimensions} from 'react-native';
 
-import { styles } from "../../styles/list/home";
+import { styles } from "../../styles/buy/picklist_1";
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
@@ -51,22 +51,25 @@ export default class ListItem extends PureComponent {
         const item = this.props.item;
         return (       
             <TouchableOpacity onPress={this.goGoodsDetailScreen}>
-                <View style={styles.listItem_view}>
-                    <View style={styles.productInfoLeft_view}>
-                        <Text style={styles.itemName_text}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
+                <View style={styles.item_view}>
+                    <View style={styles.listTop_view}>
+                        <View style={{ alignItems: 'flex-start' }}>
+                            <Text style={styles.itemName_text}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
+                        </View>
                     </View>
-                    <View style={styles.productTop_view}>
+
+                    <View style={styles.listBottom_view}>
                         <View style={styles.productImage_view}>
                             <Image
                                 source={{ uri: this.state.imageURI }}
-                                style={styles.product_image} />
+                                style={styles.productImage} />
                         </View>
                         <View style={styles.productInfoRight_view}>
                             <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
-                            <TouchableOpacity style={{width:'100%'}} onPress={this.goGoodsNumberWebView}>
-                                <Text style={[styles.itemDetail_text,{color:'blue'}]}>{item.number.length > 14 ? `${item.number.slice(0, 14)}...` : item.number}</Text>
+                            <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                <Text style={styles.itemNumber_text}>{item.number.length > 13 ? `${item.number.slice(0, 13)}...` : item.number}</Text>
                             </TouchableOpacity>
-                            <Text style={[styles.itemDetail_text, { fontSize:10, color: '#EE636A'}]}>{item.distance}km</Text>
+                            <Text style={styles.itemDistance_text}>{item.distance}km</Text>
                         </View>
                     </View>
                 </View>

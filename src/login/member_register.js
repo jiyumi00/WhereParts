@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid, Keyboard } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid } from 'react-native';
 
 import { styles } from "../styles/login/login";
-
 import Constant from "../util/constatnt_variables";
 import WebServiceManager from "../util/webservice_manager";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import SplashScreen from 'react-native-splash-screen';
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 
@@ -30,20 +28,8 @@ class Login extends Component {
 
             autoLoginChecked: false,
             rememberIdChecked: false,
-
             loginValid: false,
-        }
-
-        this.nextPage = 'TabHome';
-        if (this.props.route.params != null) {
-            const params = this.props.route.params;
-            if (params.hasOwnProperty('nextPage'))
-                this.nextPage = params.nextPage;
-        }
-        //console.log("nextPage",this.nextPage);
-        const date = parseInt(Date.now() / 1000);
-        console.log("date", date);
-        
+        }     
     }
 
     //자동로그인
@@ -135,6 +121,7 @@ class Login extends Component {
     }
 
     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
+
         const loginInfo = {
             companyNo: this.state.companyNo,
             passwd: this.state.passwd,
@@ -210,30 +197,49 @@ class Login extends Component {
     }
 
     backGroundNotiOkButtonClicked = (message) => {
-        console.log('[notiOkButtonClicked 실행]')
-        this.callSetReadNotiAPI(message.data.id).then((response) => {
-            console.log(response);
-        });
-        if (message.data.kind == "buy")
-            this.props.navigation.navigate("BuyList");
-        else if (message.data.kind == "sell")
-            this.props.navigation.navigate("SalesList", { saleState: 2 });
-    }
-
-    foreGroundNotiOkButtonClicked = (message) => {
-        this.callSetReadNotiAPI(message.data.id).then((response) => {
-            console.log(response);
-        });
         const isLoggedin = Session.isLoggedin();
-        console.log("loginvalid 값 =", isLoggedin);
+        this.callSetReadNotiAPI(message.data.id).then((response) => {
+            console.log(response);
+        });
         if (isLoggedin == true) {
             if (message.data.kind == "buy")
                 this.props.navigation.navigate("BuyList");
             else if (message.data.kind == "sell")
                 this.props.navigation.navigate("SalesList", { saleState: 2 });
         }
-        else
-            return;
+        else {
+            if (message.data.kind == "buy") {
+                let pageInfo = { prevPage: "MyPage", nextPage: "BuyList" }
+                Session.setPageInfoItem(pageInfo);
+            }
+            else if (message.data.kind == "sell") {
+                pageInfo = { prevPage: "MyPage", nextPage: "SalesList" }
+                Session.setPageInfoItem(pageInfo);
+            }
+        }
+    }
+
+    foreGroundNotiOkButtonClicked = (message) => {
+        const isLoggedin = Session.isLoggedin();
+        this.callSetReadNotiAPI(message.data.id).then((response) => {
+            console.log(response);
+        });
+        if (isLoggedin == true) {
+            if (message.data.kind == "buy")
+                this.props.navigation.navigate("BuyList");
+            else if (message.data.kind == "sell")
+                this.props.navigation.navigate("SalesList", { saleState: 2 });
+        }
+        else {
+            if (message.data.kind == "buy") {
+                let pageInfo = { prevPage: "MyPage", nextPage: "BuyList" }
+                Session.setPageInfoItem(pageInfo);
+            }
+            else if (message.data.kind == "sell") {
+                pageInfo = { prevPage: "MyPage", nextPage: "SalesList" }
+                Session.setPageInfoItem(pageInfo);
+            }
+        }
     }
 
     //알림이 올 경우 
@@ -251,7 +257,7 @@ class Login extends Component {
 
         //Background 상태에서 알림창을 클릭한 경우 해당 페이지로 이동         
         messaging().onNotificationOpenedApp(remoteMessage => {
-            console.log('Notification caused app to open from background state:', remoteMessage.notification);
+            console.log('Notification caused app to open from background state:', remoteMessage);
             this.backGroundNotiOkButtonClicked(remoteMessage);
         });
     }

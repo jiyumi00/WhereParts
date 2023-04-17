@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontSize: 12,
     color: '#000'
   },
-  /* 상품 상세보기 */
+  // 상품 상세보기
   itemDetail_view: {
     width: "100%",
     height: "100%",
@@ -64,7 +64,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     borderRadius: 10,
     height: "100%",
     width: "100%",
-    //borderWidth:1,
     marginVertical: "3%",
   },
   //상품 설명 부분
@@ -73,15 +72,11 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginHorizontal: '5%',
     paddingBottom: 20,
     paddingTop: 15,
-    //padding: 20,
     borderColor: '#E6E6E6',
     borderBottomWidth: 1,
   },
   //인증업체
   certificationMark_view: {
-    //width: 64,
-    //backgroundColor: '#E8EEF0',
-    //borderRadius: 4,
     height:15,
     marginBottom: 10,
   },
@@ -101,7 +96,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   detailPrice_view: {
     marginTop: 3,
     flexDirection: 'column',
-    //alignItems: 'flex-end',
   },
   detailUnit_text: {
     fontFamily: 'Pretendard-Regular',
@@ -110,11 +104,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     lineHeight: 28,
   },
   remaining_view: {
-    //marginLeft: 'auto',
-    //marginBottom: 5,
-    //paddingTop:15,
-    //flexDirection: 'row',
-    //alignItems:'center',
   },
   selectQuantity_view: {
     height: 45,
@@ -140,24 +129,21 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   // 상품 정보///////////////////////////////////////////////////////
   toggleDetail_view: {
     paddingVertical: 10,
-    //paddingHorizontal:30,
     marginHorizontal: '5%'
   },
   toggleDetailTitle_view: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    //marginBottom: 7,
   },
   toggleDetailItem: {
     marginVertical: 3,
     flexDirection: 'row',
-    //flexWrap: 'wrap',
   },
-  toggleDetailItemTItle: {
+  toggle_detail_item_title_view: {
     justifyContent: 'center',
     width: 75,
   },
-  toggleDetailItemTItleText: {
+  toggle_detail_item_title_text: {
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     color: '#949CA1',
@@ -171,7 +157,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginTop: 15,
     flexDirection: 'column',
     flexWrap: 'wrap',
-    //borderWidth:1,
   },
   tabBarBottom_view: {
     flexDirection: 'row',
@@ -180,8 +165,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     borderColor: '#E4E4E4',
     borderWidth: 1,
     height: 50,
-    //width:"100%",
-    //paddingHorizontal:20,
   },
   pick_view: {
     flex: 2
@@ -201,12 +184,10 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     alignItems: 'center',
   },
   buy_button: {
-    //borderWidth:1,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
     width: "100%",
-    //borderRadius:5,
     backgroundColor: '#0066FF',
   },
   buyButton_text: {
@@ -216,8 +197,6 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   pick_button: {
     backgroundColor: "white",
-    //marginRight:10,
-    //marginHorizontal:30,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -225,9 +204,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     fontsize: 15,
     fontFamily: 'Pretendard-SemiBold'
   },
-  // Detail 안에서의 수정한 View style------------------------------------------------------------------------------------------------
-  //가격 수정 view style
-  editGoodsPrice_input: {
+  // Detail 안에서의 수정한 View style//////////////////////////////////////
+  editGoodsPrice_input: {  //가격 수정 view style
     fontSize:18,
     backgroundColor: 'white',
     height: 45,
@@ -260,8 +238,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  // 상세설명 수정 view style
-  editGoodsExplainInput_view: {
+  editGoodsExplainInput_view: {  // 상세설명 수정 view style
     marginTop: 10,
     backgroundColor: 'white',
     width: "100%",
@@ -269,8 +246,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     borderColor: '#D1D1D1',
     borderWidth: 2,
   },
-  // 해쉬태그 수정 view style
-  hashTag_input: {
+  hashTag_input: {  // 해쉬태그 수정 view style
     backgroundColor: 'white',
     marginBottom: 15,
     paddingLeft: 20,

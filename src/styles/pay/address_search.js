@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     width:ScreenWidth,
     height:ScreenHeight,
     backgroundColor:'white',
-    
     //borderWidth:1,
    },
    search_view:{
@@ -84,7 +83,6 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     color: "#9595E9",
   },
-
 
   outputStyle:{
     borderColor:'#909098',

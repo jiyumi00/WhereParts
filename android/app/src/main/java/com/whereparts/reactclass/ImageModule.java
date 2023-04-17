@@ -7,6 +7,7 @@ import android.util.Base64;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -95,14 +96,30 @@ public class ImageModule extends ReactContextBaseJavaModule {
 
     //sampleSize에 따라 사진 축소...1/size 로..
     @ReactMethod
-    public void getReduceImageUri(String uri, int size, Callback failedCallback, Callback successCallback) {
+    public void getReduceImageUri(String uri, int size, Promise promise) {
         try {
             Bitmap bitmap = CameraXImageUtil.getBitmap(this.getBinaryImage(uri));
             Bitmap reducedBitmap = CameraXImageUtil.resizeBitmap(bitmap,size);
             byte[] byteImage = CameraXImageUtil.getBytesImage(reducedBitmap);
-            successCallback.invoke(this.getStoredImageUri(byteImage).toString());
+            promise.resolve(this.getStoredImageUri(byteImage).toString());
         }catch(Exception e) {
-            failedCallback.invoke("error");
+            promise.reject("error",e);
+        }
+    }
+
+    @ReactMethod
+    public void getReduceImageUris(ReadableArray uris, int size, Promise promise) {
+        try{
+            WritableArray resizedURIs = Arguments.createArray();
+            for(int i=0;i<uris.size();i++) {
+                Bitmap bitmap = CameraXImageUtil.getBitmap(this.getBinaryImage(uris.getString(i)));
+                Bitmap reducedBitmap = CameraXImageUtil.resizeBitmap(bitmap,size);
+                byte[] byteImage = CameraXImageUtil.getBytesImage(reducedBitmap);
+                resizedURIs.pushString(this.getStoredImageUri(byteImage).toString());
+            }
+            promise.resolve(resizedURIs);
+        }catch(Exception e) {
+            promise.reject("error",e);
         }
     }
 
