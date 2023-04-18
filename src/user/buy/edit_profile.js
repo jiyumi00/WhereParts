@@ -6,6 +6,7 @@ import {
 
 import { styles } from "../../styles/login/edit_profile";
 
+import ImageSelectorPopup from '../../util/popup_image_selector';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
@@ -32,7 +33,7 @@ class EditProfile extends Component {
 
         this.state = {
             validForm: false, //유효성
-            modal: true,
+            passwdConfirmModal: true,
             passwderror: false,
 
             confirmPasswd: '',
@@ -48,7 +49,7 @@ class EditProfile extends Component {
             companyNoImageURL: null, //사업자등록증 사진
             cardImageURL: null, //명함 사진
 
-            editprofileModal: true,//취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
+            editprofileModal: false,//취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
         }
     }
 
@@ -101,7 +102,7 @@ class EditProfile extends Component {
     //현재비밀번호 확인버튼 클릭 시
     passwdOkButtonClicked = () => {
         if (this.state.confirmPasswd === this.loginInfo.passwd)
-            this.setState({modal: !this.state.modal, passwderror: false, editprofileModal: false});
+            this.setState({passwdConfirmModal: !this.state.passwdConfirmModal, passwderror: false, editprofileModal: true});
         else
             this.setState({ passwderror: true })
     }
@@ -146,12 +147,14 @@ class EditProfile extends Component {
     }
 
     // 명함 카메라로 이동
-    goPhotoCameraScreen = () => {
-        this.props.navigation.navigate('BusinessCardCamera', { onResultListener: this.cardImageInfo });
+    goNamecardCameraScreen=()=>{
+        this.setState({cardPopupMenuVisible:false});
+        this.props.navigation.navigate('SignUpCamera',{onResultListener: this.cardImageInfo, cutImageStyle:"nameCard"});
     }
     // 명함 갤러리로 이동
-    goPhotoGalleryScreen = () => {
-        this.props.navigation.navigate('BusinessCardGallery', { onResultListener: this.cardImageInfo })
+    goNamecardGalleryScreen = () => { 
+        this.setState({cardPopupMenuVisible:false}); 
+        this.props.navigation.navigate('SignUpGallery', {onResultListener: this.cardImageInfo});
     }
     //명함 사진 삭제 함수
     photoRemoveClicked = () => {
@@ -212,7 +215,7 @@ class EditProfile extends Component {
                 {/*비밀번호 확인 후 내정보 접근 modal*/}
                 <Modal
                     transparent={false}
-                    visible={this.state.modal}
+                    visible={this.state.passwdConfirmModal}
                     onRequestClose={()=>this.props.navigation.pop()}
                 >
                     <ScrollView>
@@ -251,7 +254,8 @@ class EditProfile extends Component {
 
                     </ScrollView>
                 </Modal>
-                {(this.state.editprofileModal == false) &&
+                {/*비밀번호 확인이 완료 되었으면 내정보 수정*/}
+                {(this.state.editprofileModal == true) &&
                     <View style={styles.total_container}>
                         <ScrollView
                             onScroll={event => {
@@ -278,13 +282,13 @@ class EditProfile extends Component {
                                             {this.state.cardImageURL == "" ?
                                                 (<TouchableOpacity style={styles.imageRegister_btn} onPress={() => this.setState({ cardPopupMenuVisible: true })}>
                                                     <IconCamera name="image-inverted" size={60}></IconCamera>
-                                                </TouchableOpacity>) : (<TouchableOpacity style={styles.imageRegister_btn} onPress={this.cardImageModal}>
+                                                </TouchableOpacity>) :
+                                                (<TouchableOpacity style={styles.imageRegister_btn} onPress={this.cardImageModal}>
                                                     <Image source={{ uri: this.state.cardImageURL }} style={styles.imageRegister_image_view} />
                                                     <TouchableOpacity style={styles.imageDelete_btn} onPress={this.photoRemoveClicked}>
                                                         <IconDelete name="close-circle" color="black" size={27}></IconDelete>
                                                     </TouchableOpacity>
-                                                </TouchableOpacity>)
-                                            }
+                                                </TouchableOpacity>)}
                                         </View>
                                     </View>
                                 </View>
@@ -295,9 +299,7 @@ class EditProfile extends Component {
                                     onRequestClose={() => this.setState({ cardImageDetailVisible: false })}
                                 >
                                     <View style={[styles.total_container, { alignItems: 'center', justifyContent: 'center' }]}>
-
                                         <Image source={{ uri: this.state.cardImageURL }} style={{ width: "80%", height: "80%" }} />
-
                                     </View>
                                 </Modal>
 
@@ -307,22 +309,8 @@ class EditProfile extends Component {
                                     onRequestClose={() => this.setState({ companyImageDetailVisible: false })}
                                 >
                                     <View style={[styles.total_container, { alignItems: 'center', justifyContent: 'center' }]}>
-
                                         <Image source={{ uri: this.state.companyNoImageURL }} style={{ width: "80%", height: "80%" }} />
-
                                     </View>
-                                </Modal>
-
-                                {/*명함모달*/}
-                                <Modal
-                                    animationType='fade'
-                                    transparent={true}
-                                    visible={this.state.cardPopupMenuVisible}
-                                    onRequestClose={() => this.setState({ cardPopupMenuVisible: false })}
-                                >
-                                    <PopupMenu x={this.modalPhotoCameraX} y={this.modalPhotoCameraY}
-                                        closeModal={() => this.setState({ cardPopupMenuVisible: false })}
-                                        goCamera={this.goPhotoCameraScreen} goGallery={this.goPhotoGalleryScreen} />
                                 </Modal>
 
                                 <View style={styles.textInputLayout_view}>
@@ -358,6 +346,14 @@ class EditProfile extends Component {
                                         </Text>
                                     ) : null}
                                 </View>
+                                {/*명함모달*/}
+                                {this.state.cardPopupMenuVisible &&
+                                    <ImageSelectorPopup x={this.modalPhotoCameraX} y={this.modalPhotoCameraY}
+                                        closeCameraPopupMenu={() => this.setState({ cardPopupMenuVisible: false })}
+                                        goCameraScreen={this.goNamecardCameraScreen}
+                                        goGalleryScreen={this.goNamecardGalleryScreen} 
+                                    />
+                                }
                             </View>
                         </ScrollView>
                         {this.state.validForm ?

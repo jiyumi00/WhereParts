@@ -41,7 +41,7 @@ class MyPage extends Component {
         const newObj = {
           companyNo: response.companyNo,
           passwd: response.passwd,
-          detailLogin: 0
+          detailLogin: 1,
         };
         AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
       }

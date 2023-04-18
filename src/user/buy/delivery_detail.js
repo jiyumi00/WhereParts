@@ -11,11 +11,12 @@ export default class LogisWeb extends Component {
         this.invoice=this.props.route.params.logisInfo.invoice;
     }
     componentDidMount(){
-        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
+
     backPressed = () => {
         this.props.navigation.pop();
         return true;

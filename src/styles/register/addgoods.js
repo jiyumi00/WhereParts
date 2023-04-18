@@ -137,7 +137,7 @@ export const styles = StyleSheet.create({
     height: 55,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 1.5,
+    borderWidth: 1,
   },
   sales_quantity_textInput: { // 판매개수
     backgroundColor: "white",
@@ -145,7 +145,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: '#D1D1D1',
-    borderWidth: 2,
+    borderWidth: 0.7,
     borderRadius: 10,
     height: 35,
   },
@@ -158,7 +158,7 @@ export const styles = StyleSheet.create({
     height: 60,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 1.5,
+    borderWidth: 1,
   },
   textDetailInput: {
     backgroundColor: 'white',
@@ -167,7 +167,7 @@ export const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     borderColor: '#D1D1D1',
-    borderWidth: 1.5,
+    borderWidth: 1,
   },
 
   //버튼 모으기

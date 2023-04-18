@@ -476,7 +476,7 @@ class AddGoods extends Component {
                                     </View>
                                     
                                     <View style={[styles.center_view,{alignItems:'flex-end',marginRight:'2%'}]}>
-                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn, {width:35,height:35, backgroundColor: 'white', borderWidth: 2, borderColor: '#D1D1D1' }]} onPress={this.minusNum}>
+                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn, styless.addgoods_quantity_btn]} onPress={this.minusNum}>
                                             <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
                                     </View>
@@ -484,7 +484,7 @@ class AddGoods extends Component {
                                         <Text>{this.state.quantity}</Text>
                                     </View>
                                     <View style={[styles.center_view,{alignItems:'flex-start',marginLeft:'2%'}]}>
-                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn, {width:35,height:35, backgroundColor: 'white', borderWidth: 2, borderColor: '#D1D1D1' }]} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}>
+                                        <TouchableOpacity activeOpacity={0.8} style={[styles.add_btn, styless.addgoods_quantity_btn]}>
                                             <QuantityEditIcon name='plus' color='black' size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
                                     </View>
@@ -641,6 +641,13 @@ export const styless = StyleSheet.create({
         fontSize:15,
         height:30,
         padding:0
+    },
+    addgoods_quantity_btn:{
+        width:35,
+        height:35, 
+        backgroundColor: 'white', 
+        borderWidth: 0.7, 
+        borderColor: '#D1D1D1' 
     }
 });
 

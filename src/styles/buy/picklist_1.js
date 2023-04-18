@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
     },
     itemDistance_text: {
         fontSize: 10,
-        color: '#EE636A',
+        color: '#FF7566',
     },
     itemRegisterDate_text: {
         fontSize: 15

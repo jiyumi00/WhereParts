@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   home_title_view: {
     width: ScreenWidth,
     height: 200,
-    paddingTop: '8%',
+    paddingTop: '6%',
     backgroundColor: '#0066FF',
     position: 'absolute',
   },
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginTop: "5%",
   },
   main_title_view: {
-    width: '60%',
+    width: '100%',
     paddingLeft: '5%',
     marginBottom: '3%',
   },
@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   //검색창
   search_section_view:{
     flexDirection: 'row',
-    marginTop: '5%',
+    marginTop: '6%',
     marginBottom: '3%' 
   },
   searchbar_view: {

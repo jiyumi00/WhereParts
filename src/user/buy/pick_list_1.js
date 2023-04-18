@@ -5,6 +5,8 @@ import { template } from "../../styles/template/page_style";
 import {styles} from "../../styles/buy/picklist_1";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapIcon from 'react-native-vector-icons/FontAwesome5';
+//import MapIcon from 'react-native-vector-icons/Feather';
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
@@ -160,7 +162,7 @@ class ListItem extends Component {
                             <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                 <Text style={styles.itemNumber_text}>{item.number.length > 13 ? `${item.number.slice(0, 13)}...` : item.number}</Text>
                             </TouchableOpacity>
-                            <Text style={styles.itemDistance_text}>{item.distance}km</Text>
+                            <Text style={styles.itemDistance_text}><MapIcon name='map-marker-alt' color='#FF7566' size={11}></MapIcon> {item.distance}km</Text>
                         </View>
                     </View>
                 </View>

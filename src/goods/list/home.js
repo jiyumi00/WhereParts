@@ -77,6 +77,8 @@ class Home extends Component {
                     return true;*/
             }
         });
+        this.AnimatedHeaderValue.setValue(0);
+        
         return goodsContent;
     }
 
@@ -232,7 +234,7 @@ class Home extends Component {
                     {/* 화면 상단 제목 부분 */}
                     <Animated.View style={[styles.home_title_view, { transform: [{ translateY: renderHeader }] }]}>
                         <View style={styles.title_total_view}>
-                            <View style={styles.main_title_view}>
+                            <View style={[styles.main_title_view]}>
                                 <Text style={styles.main_title_text}>
                                     <View style={styles.carIcon_view}>
                                         <CarIcon name="car-wrench" size={50} color="#193067" /> 
@@ -240,7 +242,7 @@ class Home extends Component {
                                     내가 찾는 부품
                                 </Text>
                             </View>
-                            <View style={styles.sub_title_view}>
+                            <View style={[styles.sub_title_view]}>
                                 <Text style={styles.sub_title_text}>
                                     손쉽게 검색하고
                                 </Text>
