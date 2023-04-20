@@ -196,7 +196,7 @@ class SaleListItem extends PureComponent {
     }
 
     handleDetailViewModal = () => {
-        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID,  distance:this.props.item.distance, refresh: this.props.refreshListener });
+        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID,distance:this.props.item.distance, refresh: this.props.refreshListener });
     }
     //부품번호에 대한 Goodle 검색창 보이기(Web View)
     goGoodsNumberWebView = () => {

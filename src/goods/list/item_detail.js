@@ -11,6 +11,7 @@ import { styles } from "../../styles/list/home_item_detail";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
 //import Certified from '../../../images/icon/certified-icon/certified_1-removebg-preview.png';
@@ -569,7 +570,7 @@ export default class DetailItemView extends Component {
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                        <Text style={[styles.distance_text, { color: '#EE636A' }]}>{this.distance}km</Text>
+                                        <Text style={[styles.distance_text, { color: '#EE636A' }]}><MapIcon2 name='map-marker-alt' color='#EE636A' size={13}></MapIcon2> {this.distance}km</Text>
                                     </View>
                                 </View>
                             </View>}

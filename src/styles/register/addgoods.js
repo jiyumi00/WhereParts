@@ -1,7 +1,31 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-
+  addgoods_total_view:{
+    flex: 1,
+    backgroundColor: '#FFFF',
+    paddingHorizontal: '4%',
+},
+/* addgoods_content_view:{
+    borderWidth: 1, 
+    borderRadius: 15, 
+    borderColor:'#D1D1D1',
+    paddingHorizontal: '2%', 
+    paddingVertical:'2%',
+    marginBottom: '2%',
+}, */
+addgoods_textInput_style:{
+    fontSize:15,
+    height:30,
+    padding:0
+},
+addgoods_quantity_btn:{
+    width:35,
+    height:35, 
+    backgroundColor: 'white', 
+    borderWidth: 0.7, 
+    borderColor: '#D1D1D1' 
+},
   //View
   row_view: {
     flex: 1,
@@ -129,16 +153,15 @@ export const styles = StyleSheet.create({
   },
 
   //textInput 모으기
-  product_textInput: {
+ /*  product_textInput: {
     backgroundColor: 'white',
     marginBottom: 15,
     paddingHorizontal: 10,
-    //paddingVertical: 5,
     height: 55,
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 1,
-  },
+  }, */
   sales_quantity_textInput: { // 판매개수
     backgroundColor: "white",
     width:'13%',
