@@ -21,7 +21,7 @@ class Gallery extends Component {
 
     render() {
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <GalleryX autoClose={false} max={5 - this.props.route.params.imageLength} onResultListener={(uris) => this.onResultListener(uris)} navigation={this.props.navigation} />
             </View>
         )

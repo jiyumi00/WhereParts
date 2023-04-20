@@ -110,7 +110,7 @@ export default class Notification extends Component {
 
     render() {
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <View style={[template.container,{marginTop:15,marginLeft:10,marginRight:10}]}>
                     <View style={styles.productTop_view}>
                         <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>

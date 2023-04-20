@@ -60,7 +60,7 @@ class PayComplete extends Component {
                 quantity, payBank, total, address,
                 buyerName, buyerTel,zipCode } = this.state.item;
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <ScrollView>
                     <View style={template.container}>
                         <Text>결제가 완료되었습니다</Text>

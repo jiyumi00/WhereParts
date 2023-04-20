@@ -5,8 +5,7 @@ import {
 } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
-import { styles } from "../../../styles/register/addgoods";
-import { styles1 } from "../../../styles/template/text_style";
+//import { styles } from "../../../styles/register/addgoods";
 import { template,colors } from "../../../styles/template/page_style";
 
 
@@ -25,6 +24,7 @@ import GalleryX from '../../../util/gallery_x';
 import { parse } from '@babel/core';
 import Session from '../../../util/session';
 import FunctionUtil from '../../../util/libraries_function';
+import { color } from 'react-native-reanimated';
 
 class AddGoods extends Component {
 
@@ -387,7 +387,7 @@ class AddGoods extends Component {
     render() {
         return (
             <>
-                <View style={template.total_container}>
+                <View style={template.baseContainer}>
                     <ScrollView
                         onScroll={event => {
                             this.getViewSize(event.nativeEvent.contentOffset.y);
@@ -395,17 +395,17 @@ class AddGoods extends Component {
                         showsVerticalScrollIndicator={false}>
                         <View style={template.container}>
                             {/*상품 이미지 등록을 위한 버튼 */}
-                            <View style={[template.largeBox,{borderColor:colors.medium}]}>
+                            <View style={[template.roundedBox]}>
                                 <Text style={template.largeText}>사진등록</Text>
                                 <View style={{flexDirection:'row'}}>
                                     <IconMark name="exclamationcircleo" size={15}></IconMark>
-                                    <Text style={template.contentText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다 </Text>
+                                    <Text style={template.contentTitleText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다 </Text>
                                 </View>
                                 <View style={{marginBottom: '2%', flexDirection:'row' }}>
                                     <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
-                                        <TouchableOpacity style={styles.camera_btn} onPress={this.cameraButtonClicked}>
-                                            <IconCamera name="camera" size={30} color={'black'}></IconCamera>
-                                            <Text><Text style={{ color: "#0076D1" }}>{this.state.imageURIs.length}</Text>/{this.#imageLength}</Text>
+                                        <TouchableOpacity style={inStyle.cameraButton} onPress={this.cameraButtonClicked}>
+                                            <IconCamera name="camera" size={30} color={colors.dark}></IconCamera>
+                                            <Text><Text style={{ color: colors.main }}>{this.state.imageURIs.length}</Text>/{this.#imageLength}</Text>
                                         </TouchableOpacity>
                                     </View>
 
@@ -418,15 +418,15 @@ class AddGoods extends Component {
                             </View>
 
                             {/* 상품정보 부분 */}
-                            <View style={template.largeBox}>
+                            <View style={template.roundedBox}>
                                 <Text style={[template.largeText,{marginBottom:'2%'}]}>상품 정보</Text>
                                 {/*부품번호 */}
-                                <View style={[template.smallBox,{paddingVertical:'0%'}]}>
+                                <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
                                     <View style={{flexDirection:'row'}}>
                                         <View style={{flex:6}}>
-                                            <Text style={template.contentText}>부품번호</Text>
+                                            <Text style={template.contentTitleText}>부품번호</Text>
                                             <TextInput
-                                                style={styles.addgoods_textInput_style}
+                                                style={template.inputText}
                                                 ref={(c) => { this.numberRef = c; }}
                                                 returnKeyType="next"
                                                 onSubmitEditing={() => { this.nameRef.focus(); }}
@@ -435,18 +435,18 @@ class AddGoods extends Component {
                                             />
                                         </View>
                                         <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                                            <TouchableOpacity style={styles.add_btn} onPress={this.goDetectPartsNoCamera} >
-                                                <IconCamera name="camera" size={25} color={'white'}></IconCamera>
+                                            <TouchableOpacity style={template.smallButton} onPress={this.goDetectPartsNoCamera} >
+                                                <IconCamera name="camera" size={25} color={colors.white}></IconCamera>
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                 </View>
 
                                 {/* 제목*/}
-                                <View style={[template.smallBox,{paddingVertical:'0%'}]}>
-                                    <Text style={template.contentText}>상품명</Text>
+                                <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
+                                    <Text style={template.contentTitleText}>상품명</Text>
                                     <TextInput
-                                        style={styles.addgoods_textInput_style}
+                                        style={template.inputText}
                                         ref={(c) => { this.nameRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={() => { this.priceRef.focus(); }}
@@ -455,25 +455,25 @@ class AddGoods extends Component {
                                 </View>
 
                                 {/* 판매금액 */}
-                                <View style={[template.smallBox,{paddingVertical:'0%'}]}>
-                                    <Text style={template.contentText}>판매 금액 (개당)</Text>
+                                <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
+                                    <Text style={template.contentTitleText}>판매 금액 (개당)</Text>
                                     <View style={{ flexDirection: 'row',alignItems:'center' }}>
                                         <TextInput
-                                            style={[template.textInputText, {width:"95%", textAlign: 'right'}]}
+                                            style={[template.inputText, {width:"95%", textAlign: 'right'}]}
                                             ref={(c) => { this.priceRef = c; }}
                                             onSubmitEditing={() => { this.hashTagRef.focus(); }}
                                             keyboardType="number-pad"
                                             onChangeText={(value) => this.onValueChange({ price: value })}
                                         >{FunctionUtil.getPrice(this.state.price)}</TextInput>
                                         <View>
-                                            <Text style={[template.samllText,{color:colors.dark}]}>원</Text>
+                                            <Text style={[template.smallText,{color:colors.dark}]}>원</Text>
                                         </View>
                                     </View>
                                 </View>
 
                                 {/* 판매수량 */}
-                                <View style={[template.smallBox, { flexDirection: 'row',flex:1,alignItems:'center' }]}>
-                                    <Text style={template.contentText}>판매 수량</Text>
+                                <View style={[template.roundedBox, { flexDirection: 'row',flex:1,alignItems:'center' }]}>
+                                    <Text style={template.contentTitleText}>판매 수량</Text>
                                     <View style={inStyle.countingBoxWrap}>
                                         <View style={inStyle.countingBox}>
                                             <TouchableOpacity activeOpacity={0.8} onPress={this.minusNum} >
@@ -492,38 +492,33 @@ class AddGoods extends Component {
                                 </View>
                             </View>
 
-                            <View style={template.largeBox}>
+                            <View style={template.roundedBox}>
                                 <Text style={[template.largeText]}>기타 정보</Text>
                                  {/*정품/비정품*/}
-                                <View style={[template.smallBox, { flexDirection: 'row', flex: 1, alignItems: 'center' }]}>
-                                    <Text style={template.contentText}>정품 인증</Text>
+                                <View style={[template.roundedBox, { flexDirection: 'row', flex: 1, alignItems: 'center' }]}>
+                                    <Text style={template.contentTitleText}>정품 인증</Text>
                                     <View style={{paddingLeft:'10%'}}>
-                                        <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck}>
-                                            <View style={styles.row_view}>
+                                        <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck} style={{flexDirection:'row'}}>
                                                 <IconRadio name={this.state.check_genuine ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
                                                 <View style={{ justifyContent: 'center' }}>
-                                                    <Text style={[template.contentText,{color:colors.dark}]}>{this.genuineValueText[0]}</Text>
+                                                    <Text style={[template.contentText]}>{this.genuineValueText[0]}</Text>
                                                 </View>
-                                            </View>
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{paddingLeft:'5%'}}>
-                                        <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck}>
-                                            <View style={styles.row_view}>
-                                                <IconRadio name={this.state.check_non_genuine ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
-                                                <View style={{ justifyContent: 'center' }}>
-                                                    <Text style={[template.contentText,{color:colors.dark}]}> {this.genuineValueText[1]}</Text>
-                                                </View>
+                                        <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck}  style={{flexDirection:'row'}}>
+                                            <IconRadio name={this.state.check_non_genuine ? "check-box" : "check-box-outline-blank"} size={30} color={'black'} />
+                                            <View style={{ justifyContent: 'center' }}>
+                                                <Text style={[template.contentText]}> {this.genuineValueText[1]}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
 
                                 </View>
                                 {/*상품상태*/}
-                                <View style={[template.smallBox,{paddingVertical:'0%'}]}>
-                                    <Text style={template.contentText}>상품상태</Text>
+                                <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
+                                    <Text style={template.contentTitleText}>상품상태</Text>
                                     <Picker
-                                        style={{height:40,}}
                                         selectedValue={this.state.quality}
                                         onValueChange={(value, index) => { this.setState({ quality: value }) }}>
                                         {this.qualityValueText.map((item,i)=><Picker.Item label={item} key={i} value={i+1} />)}
@@ -533,17 +528,17 @@ class AddGoods extends Component {
                                
 
                                 {/* 검색어 */}
-                                <View style={[template.smallBox,{paddingVertical:'0%', flexDirection:'row'}]}> 
+                                <View style={[template.roundedBox,{paddingVertical:'0%', flexDirection:'row'}]}> 
                                     <View style={{flex:6}}>
-                                        <Text style={template.contentText}>검색어(최대7개)
+                                        <Text style={template.contentTitleText}>검색어(최대7개)
                                             {this.state.hashTagError == false ? (
-                                                <Text style={[template.contentText,{color:colors.red}]}>
+                                                <Text style={[template.contentTitleText,{color:colors.red}]}>
                                                         * 1 - 7개 입력
                                                 </Text>
                                             ) : null}
                                         </Text>
                                         <TextInput
-                                            style={styles.addgoods_textInput_style}
+                                            style={template.inputText}
                                             ref={(c) => { this.hashTagRef = c; }}
                                             returnKeyType="next"
                                             onSubmitEditing={this.addHashTag}
@@ -552,7 +547,7 @@ class AddGoods extends Component {
                                         />
                                     </View>
                                     <View style={{flex:1, alignItems:'center',justifyContent:'center'}}>
-                                        <TouchableOpacity style={[styles.add_btn,{backgroundColor: "#F1F1F3"}]} onPress={this.addHashTag}>
+                                        <TouchableOpacity style={[template.smallButton,{backgroundColor:colors.light_btn}]} onPress={this.addHashTag}>
                                             <Text>추가</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -571,10 +566,10 @@ class AddGoods extends Component {
                                 </View>
 
                                 {/* 상세내용*/}
-                                <View style={[template.smallBox,{paddingVertical:'0%'}]}>
-                                    <Text style={template.contentText}>판매자 글</Text>
+                                <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
+                                    <Text style={template.contentTitleText}>판매자 글</Text>
                                     <TextInput
-                                        style={{padding:0,height:100}}
+                                         style={[template.inputText,{height:100}]}
                                         multiline={true}
                                         onChangeText={(value) => this.setState({ spec: value })}
                                     />
@@ -586,10 +581,10 @@ class AddGoods extends Component {
                         {/* 상품 등록하기 버튼 부분*/}
                         {this.state.addGoodsButtonVisible ?
                             (<TouchableOpacity activeOpacity={0.8} style={template.activeButton} onPress={()=>this.setConfirmModal(true)}>
-                                <Text style={template.btnText}>상품등록하기</Text>
+                                <Text style={template.buttonText}>상품등록하기</Text>
                             </TouchableOpacity>)
-                            : (<TouchableOpacity activeOpacity={0.8} style={[template.activeButton,{backgroundColor:colors.light}]}>
-                                <Text style={template.btnText}>상품등록하기</Text>
+                            : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
+                                <Text style={template.buttonText}>상품등록하기</Text>
                             </TouchableOpacity>)}
 
 
@@ -632,8 +627,8 @@ class SmallImageViewer extends Component {
     renderItem=(item)=> {
         return(
             <TouchableOpacity onPress={()=>this.props.largeImageModal(item.index)} >
-                <Image source={{ uri: item.item }} style={styles.image_view}/>
-                <View style={styles.imageDelete_view}>
+                <Image source={{ uri: item.item }} style={inStyle.cameraButton}/>
+                <View style={inStyle.imageDeleteView}>
                     <TouchableOpacity onPress={()=>this.props.removeImage(item.index)}>
                         <IconDelete name="close-circle" color="black" size={23}></IconDelete>
                     </TouchableOpacity>
@@ -663,9 +658,9 @@ class LargeImageViewer extends Component {
 
     renderItem=(item)=> {
         return (
-            <TouchableOpacity style={styles.modal_view} >
-            <View style={[styles.center_view,{marginTop:100}]}>
-                <ImageBackground source={{ uri: item.item }} style={styles.image_modal_view}>
+            <TouchableOpacity>
+            <View style={{flex:1,alignItems:'center',justifyContent:'center',marginTop:10}}>
+                <ImageBackground source={{ uri: item.item }} style={[inStyle.imageModalView,{justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
                     <TouchableOpacity onPress={() => this.props.removeImage(item.index)}>
                         <IconDelete name="close" color="black" size={50}></IconDelete>
                     </TouchableOpacity>
@@ -678,7 +673,7 @@ class LargeImageViewer extends Component {
         return (
             <Modal visible={true}>
                 <Button title="Back" onPress={this.props.closeModal} />
-                <View style={styles.background_view}>
+                <View style={[template.total_container,{backgroundColor:colors.dark}]}>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         data={this.props.items}
@@ -706,33 +701,33 @@ class ConfirmModal extends Component {
         return (
             <>
                 <Modal animationType='slide' transparent={true} visible={true}>
-                    <View style={[styles.center_view,{marginTop:22}]}>
-                        <View style={styles.modal_search_view}>
-                            <Text style={{fontFamily: 'Pretendard-SemiBold',fontSize: 20,color:'black'}}>등 록 확 인{"\n"}</Text>
+                    <View style={{alignItems:'center',justifyContent:'center',flex:1}}>
+                        <View style={inStyle.confirmModalView}>
+                            <Text style={template.largeText}>등 록 확 인{"\n"}</Text>
 
                             <View style={{flexDirection:'row', marginBottom:'13%'}}>
                                 <View style={{flex:1}}>
-                                    <Text style={[styles.modal_text,]}>품        명</Text>
-                                    <Text style={[styles.modal_text,]}>부품번호</Text>
-                                    <Text style={[styles.modal_text,]}>가        격</Text>
-                                    <Text style={[styles.modal_text,]}>판매개수</Text>
-                                    <Text style={[styles.modal_text,]}>상품상태</Text>
-                                    <Text style={[styles.modal_text,]}>정품/비정품</Text>            
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>품        명</Text>
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>부품번호</Text>
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>가        격</Text>
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>판매개수</Text>
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>상품상태</Text>
+                                    <Text style={[template.smallText,{marginBottom:'3%'}]}>정품/비정품</Text>            
                                 </View>
                                 <View style={{flex:1}}>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{name.length>7 ? `${name.slice(0,7)}...`:name}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{number.length>9 ? `${number.slice(0,9)}...`:number}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{price}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{quantity}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.qualityValueText[quality-1]}</Text>
-                                    <Text style={[styles.modal_text,{color:'black'}]}>{this.genuineValueText[genuine-1]}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{name.length>7 ? `${name.slice(0,7)}...`:name}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{number.length>9 ? `${number.slice(0,9)}...`:number}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{price}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{quantity}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{this.qualityValueText[quality-1]}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{this.genuineValueText[genuine-1]}</Text>
                                 </View>
                             </View>
 
-                            <Text style={[styles.modal_text,{color:'black'}]}>{" 등록 하시겠습니까? "}</Text>
+                            <Text style={[template.smallText,{color:colors.dark}]}>{" 등록 하시겠습니까? "}</Text>
                             <View style={{flexDirection:'row', marginVertical:'3%'}}>
-                                <TouchableOpacity style={styles.modal_button} onPress={()=>this.props.confirmModalVisible()}><Text style={{color:'black'}}>취소</Text></TouchableOpacity>
-                                <TouchableOpacity style={[styles.modal_button,{backgroundColor:'#1E90FF'}]} onPress={()=>this.props.okButtonListener()}><Text style={{color:'white'}}>확인</Text></TouchableOpacity>
+                                <TouchableOpacity style={inStyle.confirmButton} onPress={()=>this.props.confirmModalVisible()}><Text style={{color:colors.dark}}>취소</Text></TouchableOpacity>
+                                <TouchableOpacity style={[inStyle.confirmButton,{backgroundColor:colors.main}]} onPress={()=>this.props.okButtonListener()}><Text style={{color:colors.white}}>확인</Text></TouchableOpacity>
                             </View>                      
                         </View>
                     </View>
@@ -746,7 +741,7 @@ export default AddGoods;
 
 const inStyle = StyleSheet.create({
     hashTagView: [
-        template.smallBox,
+        template.roundedBox,
         {
             marginTop: '0%',
             paddingLeft: 10,
@@ -755,13 +750,13 @@ const inStyle = StyleSheet.create({
             marginRight: 10,
             marginBottom: '2%',
             borderRadius: 30,
-            backgroundColor: "#E9E9F1",
+            backgroundColor: colors.light_btn,
             justifyContent: 'center',
             alignItems: 'center',
         }
     ],
     countingBox: [
-        template.smallBox,
+        template.roundedBox,
         {
             width: '17%',
             height: '100%',
@@ -769,13 +764,11 @@ const inStyle = StyleSheet.create({
             justifyContent: 'center',
             paddingHorizontal:'0%',
             marginTop:'0%',
-            marginRight:'2%'
-
-            
+            marginRight:'2%'  
         }
     ],
     countingBoxWrap: [
-        template.smallBox,
+        template.roundedBox,
         {
             alignItems: 'center',
             justifyContent:'center',
@@ -783,12 +776,54 @@ const inStyle = StyleSheet.create({
             paddingVertical:'0%',
             flexDirection:'row',
             borderWidth:0
-
-            
         }
-    ]
+    ],
+    //Button
+    cameraButton:[
+        template.smallButton,
+        {
+            width: 60,
+            height: 60,
+            backgroundColor: colors.light_btn,
+            marginTop:10,
+    }],
 
-        
+    
+    //imageModal
+    imageModalView:{
+        flex: 1,
+        width: 390,
+        height: 580,
+        margin: 5,
+    },
+    imageDeleteView:{
+        top: -2,
+        right: -1,
+        position: 'absolute',
+    },
 
-      
+    //confirmModal
+    confirmModalView:{
+        height: '55%',
+        width: '75%',
+        margin: 20,
+        backgroundColor:colors.white,
+        borderColor:colors.light,
+        borderWidth:1,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',  
+    },
+    confirmButton:{
+        borderWidth:1,
+        borderColor:colors.light,
+        borderRadius:10,
+        width:'30%',
+        height:'45%',
+        marginHorizontal:'3%',
+        marginVertical:'2%',
+        alignItems:'center',
+        justifyContent:'center',
+    }
+
 }); 

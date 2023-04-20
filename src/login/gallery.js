@@ -18,7 +18,7 @@ class SignUpGallery extends Component {
 
     render() {
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <GalleryX autoClose={true} onResultListener={(uris)=>this.onResultListener(uris)} navigation={this.props.navigation} />                                          
             </View>
         )

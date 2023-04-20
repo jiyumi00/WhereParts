@@ -197,7 +197,7 @@ class Payment extends Component {
         let renderTotalPirce = FunctionUtil.getPrice(this.item.price*this.state.quantity);
 
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <ScrollView>
                     <View style={{marginHorizontal:'4%', marginVertical:'2%'}}>
                         <View style={styles.orderItem_view}>

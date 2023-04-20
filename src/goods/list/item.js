@@ -1,7 +1,8 @@
 import React, { Component , PureComponent } from 'react';
-import { View, Text, Image, TouchableOpacity,Dimensions} from 'react-native';
+import { View, Text, Image, TouchableOpacity,Dimensions,StyleSheet} from 'react-native';
 
-import { styles } from "../../styles/buy/picklist_1";
+//import { styles } from "../../styles/buy/picklist_1";
+import { template,colors } from '../../styles/template/page_style';
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
@@ -54,25 +55,23 @@ export default class ListItem extends PureComponent {
         const item = this.props.item;
         return (       
             <TouchableOpacity onPress={this.goGoodsDetailScreen}>
-                <View style={styles.item_view}>
-                    <View style={styles.listTop_view}>
+                <View style={inStyle.itemView}>
+                    <View style={template.layoutBox}>
                         <View style={{ alignItems: 'flex-start' }}>
-                            <Text style={styles.itemName_text}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
+                            <Text style={template.contentText}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
                         </View>
                     </View>
-
-                    <View style={styles.listBottom_view}>
-                        <View style={styles.productImage_view}>
-                            <Image
-                                source={{ uri: this.state.imageURI }}
-                                style={styles.productImage} />
-                        </View>
-                        <View style={styles.productInfoRight_view}>
-                            <Text style={styles.itemPrice_text}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
+                    <View style={[template.line,{marginBottom:'2%'}]}/>
+                    <View style={[template.layoutBox,{flexDirection:'row'}]}>
+                        <Image
+                            source={{ uri: this.state.imageURI }}
+                            style={template.imageView} />
+                        <View style={inStyle.itemInfoView}>
+                            <Text style={template.contentText}>{FunctionUtil.getPrice(item.price)}{"원"}</Text>
                             <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                <Text style={styles.itemNumber_text}>{item.number.length > 13 ? `${item.number.slice(0, 13)}...` : item.number}</Text>
+                                <Text style={template.itemNumberText}>{item.number.length > 10 ? `${item.number.slice(0, 10)}...` : item.number}</Text>
                             </TouchableOpacity>
-                            <Text style={styles.itemDistance_text}><MapIcon2 name='map-marker-alt' color='#EE636A' size={10}></MapIcon2> {item.distance}km</Text>
+                            <Text style={template.itemDistanceText}><MapIcon2 name='map-marker-alt' color={colors.red} size={10}></MapIcon2>  {item.distance}km</Text>
                         </View>
                     </View>
                 </View>
@@ -80,3 +79,23 @@ export default class ListItem extends PureComponent {
         );
     }
 }
+
+const inStyle=StyleSheet.create({
+    itemView:[
+        template.roundedBox,
+        {
+            width: ScreenWidth / 2.2,
+            marginLeft:'3%',
+            marginVertical:'5%',
+        }
+    ],
+    itemInfoView:[
+        template.layoutBox,
+        {
+            flex:1,
+            alignItems:'flex-end',
+            justifyContent:'flex-end',
+        }
+    ]
+    
+})

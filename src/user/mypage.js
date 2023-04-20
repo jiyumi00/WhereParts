@@ -86,7 +86,7 @@ class MyPage extends Component {
     return (
       <>
 
-        <View style={template.total_container}>
+        <View style={template.baseContainer}>
 
           {/*내정보 */}
           <View style={styles.viewHeaderLayout}>

@@ -212,7 +212,7 @@ class Payment extends Component {
     render() {
      
         return (
-            <View style={template.total_container}>
+            <View style={template.baseContainer}>
                 <ScrollView style={template.ScrollView}>
                     <View style={template.container}>
                         <View style={styles.indexView}>
