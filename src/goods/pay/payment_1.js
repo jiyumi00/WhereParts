@@ -201,7 +201,7 @@ class Payment extends Component {
                 <ScrollView>
                     <View style={{marginHorizontal:'4%', marginVertical:'2%'}}>
                         <View style={styles.orderItem_view}>
-                            <Text style={[styles.text.goodsName_text,{paddingTop:'1%'}]}>{this.item.name}</Text>
+                            <Text style={[styles.text.goodsName_text,{paddingTop:'1%'}]}>{this.item.name.length > 20 ? `${this.item.name.slice(0, 20)}...` : this.item.name}</Text>
                             <View style={styles.orderItemBody_view}>
                                 <View style={{ flex:1}}>
                                     <Image

@@ -477,7 +477,7 @@ class AddGoods extends Component {
                                     <View style={inStyle.countingBoxWrap}>
                                         <View style={inStyle.countingBox}>
                                             <TouchableOpacity activeOpacity={0.8} onPress={this.minusNum} >
-                                                <QuantityEditIcon name='minus' color='black' size={15} style={{ alignItems: 'center' }}></QuantityEditIcon>
+                                                <QuantityEditIcon name='minus' color='black' size={15}></QuantityEditIcon>
                                             </TouchableOpacity>
                                         </View>
                                         <View style={inStyle.countingBox}>
@@ -717,7 +717,7 @@ class ConfirmModal extends Component {
                                 <View style={{flex:1}}>
                                     <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{name.length>7 ? `${name.slice(0,7)}...`:name}</Text>
                                     <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{number.length>9 ? `${number.slice(0,9)}...`:number}</Text>
-                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{price}</Text>
+                                    <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{FunctionUtil.getPrice(price)}</Text>
                                     <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{quantity}</Text>
                                     <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{this.qualityValueText[quality-1]}</Text>
                                     <Text style={[template.smallText,{color:colors.dark,marginBottom:'3%'}]}>{this.genuineValueText[genuine-1]}</Text>
@@ -764,7 +764,8 @@ const inStyle = StyleSheet.create({
             justifyContent: 'center',
             paddingHorizontal:'0%',
             marginTop:'0%',
-            marginRight:'2%'  
+            marginRight:'2%',
+            marginBottom:'0%',
         }
     ],
     countingBoxWrap: [
@@ -773,9 +774,10 @@ const inStyle = StyleSheet.create({
             alignItems: 'center',
             justifyContent:'center',
             paddingHorizontal:'0%',
-            paddingVertical:'0%',
+            paddingVertical:'1%',
+            marginBottom:'0%',
             flexDirection:'row',
-            borderWidth:0
+            borderWidth:0,
         }
     ],
     //Button
@@ -786,6 +788,7 @@ const inStyle = StyleSheet.create({
             height: 60,
             backgroundColor: colors.light_btn,
             marginTop:10,
+            marginRight:5,
     }],
 
     

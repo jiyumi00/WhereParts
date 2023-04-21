@@ -80,11 +80,11 @@ class AddDelivery extends Component {
         this.callDetectInvoiceNoAPI(imageURI).then((response) => {
             if (response.success === "1") {
                 const invoiceNo = response.texts[0].replaceAll(" ", "");
-                this.setState({ invoiceNo: invoiceNo });
+                this.onValueChange({ invoiceNo: invoiceNo });
             }
             else {
                 Alert.alert('송장번호 인식', '송장번호를 인식하지 못했습니다. 직접 입력하세요', [
-                    { text: '확인', onPress: () => { this.setState({ invoiceNo: "" }) } }]);
+                    { text: '확인', onPress: () => { this.onValueChange({ invoiceNo: "" });} }]);
             }
             const { ImageModule } = NativeModules;
             ImageModule.deleteImage(imageURI, (imageURI) => {
@@ -158,7 +158,7 @@ class AddDelivery extends Component {
     }
     render() {
         const { days, orderingDate, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, payBank, address, zipCode } = this.state.sellDetailInfo;
-        
+        console.log('goodsName',`${goodsName}`.length);
         return (
 
             <View style={styles.total_container}>
@@ -170,8 +170,8 @@ class AddDelivery extends Component {
                                     source={{ uri: this.state.imageURL }}
                                     style={styles.productImage} />
                             </View>
-                            <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:1, }}>
-                                <Text style={styles.itemNameText}>{goodsName}</Text>
+                            <View style={{ justifyContent: "center", paddingHorizontal:'2%',alignItems:'flex-end', flex:3}}>
+                                <Text style={styles.itemNameText}>{`${goodsName}`.length> 15 ? `${goodsName.slice(0, 15)}...` : goodsName}</Text>
                                 <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                     <Text style={styles.itemNumberText}><Text style={{color:'grey',fontSize:15}}>부품번호: </Text>{goodsNo}</Text>
                                 </TouchableOpacity>

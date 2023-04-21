@@ -43,7 +43,7 @@ export default class ListItem extends PureComponent {
     }
 
     goGoodsDetailScreen=()=> {
-        this.props.navigation.push('GoodsDetail',{goodsID:this.item.id, sellerID:this.item.userID, distance:this.item.distance, refresh:this.props.refreshListener});
+        this.props.navigation.push('GoodsDetail',{goodsID:this.item.id, sellerID:this.item.userID, refresh:this.props.refreshListener});
     }
 
     //부품번호에 대한 Goodle 검색창 보이기(Web View)
@@ -58,7 +58,7 @@ export default class ListItem extends PureComponent {
                 <View style={inStyle.itemView}>
                     <View style={template.layoutBox}>
                         <View style={{ alignItems: 'flex-start' }}>
-                            <Text style={template.contentText}>{item.name.length > 15 ? `${item.name.slice(0, 15)}...` : item.name}</Text>
+                            <Text style={template.contentText}>{item.name.length > 13 ? `${item.name.slice(0, 13)}...` : item.name}</Text>
                         </View>
                     </View>
                     <View style={[template.line,{marginBottom:'2%'}]}/>

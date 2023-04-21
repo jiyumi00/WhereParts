@@ -140,7 +140,7 @@ export default class SalesDetails extends Component {
                             <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 2 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>배송입력할 상품</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>판매현황</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 3 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
                             <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
@@ -196,7 +196,7 @@ class SaleListItem extends PureComponent {
     }
 
     handleDetailViewModal = () => {
-        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID,distance:this.props.item.distance, refresh: this.props.refreshListener });
+        this.props.navigation.navigate('GoodsDetail', { goodsID: this.props.item.id, sellerID: this.props.item.userID,refresh: this.props.refreshListener });
     }
     //부품번호에 대한 Goodle 검색창 보이기(Web View)
     goGoodsNumberWebView = () => {
@@ -217,8 +217,8 @@ class SaleListItem extends PureComponent {
                 <TouchableOpacity onPress={this.handleDetailViewModal}>
                     <View style={styles.product}>
                         <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row', paddingBottom: '2%' }}>
-                            <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                <Text style={styles.itemNameText}>{item.name}</Text>
+                            <View style={{ flex: 3, alignItems: 'flex-start' }}>
+                                <Text style={styles.itemNameText}>{item.name.length > 20 ? `${item.name.slice(0, 20)}...` : item.name}</Text>
                             </View>
                             <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                 {item.valid == 0 && <Text style={{ fontSize: 14 }}>숨김</Text>}
@@ -289,8 +289,8 @@ class SoldOutListItem extends PureComponent {
             <>
                 <View style={[styles.product, { flexDirection: 'column' }]}>
                     <View style={{ paddingBottom: '2%', borderBottomWidth: 1, borderColor: '#E9E9E9', flexDirection: 'row' }}>
-                        <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Text style={styles.itemNameText}>{item.goodsName}</Text>
+                        <View style={{ flex: 3, alignItems: 'flex-start' }}>
+                            <Text style={styles.itemNameText}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <Text style={{ fontSize: 16, color: 'black' }}>{item.quantity}{"개"}</Text>

@@ -33,7 +33,6 @@ export default class DetailItemView extends Component {
 
         this.goodsID = this.props.route.params.goodsID;
         this.sellerID = this.props.route.params.sellerID;
-        this.distance = this.props.route.params.distance;
         this.userID = Session.getUserID();
 
         this.state = {
@@ -350,7 +349,7 @@ export default class DetailItemView extends Component {
     }
     // 상품 상세 정보
     async callGetGoodsDetailAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsDetail?id=" + this.goodsID);
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetGoodsDetail?login_id=" + this.userID+"&id="+this.goodsID);
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -550,7 +549,7 @@ export default class DetailItemView extends Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end'}}>
                                         {/* 남은 수량 */}
-                                        {this.state.quantity == 0 ?
+                                        {this.state.quantity == 0 || this.state.item.removeFlag==1 || this.state.item.valid==0?
                                             <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
                                             <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>}
                                     </View>
@@ -570,7 +569,7 @@ export default class DetailItemView extends Component {
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                        <Text style={[styles.distance_text, { color: '#EE636A' }]}><MapIcon2 name='map-marker-alt' color='#EE636A' size={13}></MapIcon2> {this.distance}km</Text>
+                                        <Text style={[styles.distance_text, { color: '#EE636A' }]}><MapIcon2 name='map-marker-alt' color='#EE636A' size={13}></MapIcon2>  {this.state.item.distance}km</Text>
                                     </View>
                                 </View>
                             </View>}
@@ -584,7 +583,7 @@ export default class DetailItemView extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 {/* 남은 수량 */}
-                                {this.state.quantity == 0 ?
+                                {this.state.quantity == 0?
                                     <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
                                     <Text style={[styles.text, { fontSize: 14 }]}>{this.state.quantity}개 남음</Text>}
                             </View>}
@@ -756,7 +755,7 @@ export default class DetailItemView extends Component {
 
                     <View style={styles.tabBarBottom_view}>
                         {/*찜하기 버튼*/}
-                        {(this.state.buyVisible && this.state.quantity != 0) &&
+                        {(this.state.buyVisible && this.state.quantity != 0 && this.state.item.removeFlag ==0 && this.state.item.valid==1) &&
                             <View style={{ width: "100%", flexDirection: 'row', }}>
                                 <View style={styles.pick_view}>
                                     <TouchableOpacity style={[styles.pick_button, { width: "100%", height: "100%" }]} onPress={this.dipsButtonClicked}>

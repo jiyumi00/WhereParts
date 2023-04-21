@@ -1,5 +1,5 @@
 export default class Constant {
-    static serviceURL = "http://203.241.251.177/wparts";
+    static serviceURL = "http://203.241.251.177/rwparts";
     static externalServiceURL = "http://lab.pyunhan.co.kr";
     static asyncFiredTerm = 60*60*24;
     static deliveryApiKey="3LJ8cI2G0mSsKhGzRgAWCw";

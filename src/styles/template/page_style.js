@@ -49,6 +49,11 @@ export const template= StyleSheet.create({
     },
 
      //Text
+     titleText:{
+        fontSize:25,
+        color:colors.dark,
+        fontWeight:'bold'
+     },
     largeText: {
         fontSize: 17,
         color: colors.dark,

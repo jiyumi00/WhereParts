@@ -7,6 +7,7 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
+import EmptyListView from '../../util/empty_list_view';
 
 export default class BuyList extends Component {
     constructor(props) {
@@ -173,10 +174,10 @@ class ListItem extends Component {
                         </View> */}
                        
                         <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row', paddingBottom: '2%' }}>
-                            <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                <Text style={styles.itemNameText}>{goodsName}</Text>
+                            <View style={{ flex: 3, alignItems: 'flex-start' }}>
+                                <Text style={styles.itemNameText}>{goodsName.length > 20 ? `${goodsName.slice(0, 20)}...` : goodsName}</Text>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                            <View style={{ flex: 1, alignItems: 'flex-end',}}>
                                 <Text style={[styles.itemNameText, { color: '#EE636A',fontSize:14 }]}>{this.goodsStatusText(status)}</Text>
                             </View>
                         </View>

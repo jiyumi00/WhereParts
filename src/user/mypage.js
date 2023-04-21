@@ -7,10 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconLeaf from 'react-native-vector-icons/FontAwesome';
 import IconList from 'react-native-vector-icons/Feather'
-import { ScrollView } from 'react-native-gesture-handler';
-import WebServiceManager from '../util/webservice_manager';
-import Constant from '../util/constatnt_variables';
-
+import Session from '../util/session';
 import FunctionUtil from '../util/libraries_function';
 
 
@@ -83,6 +80,7 @@ class MyPage extends Component {
   }
 
   render() {
+    const {companyName,companyAddress} = Session.getUserInfoItem();
     return (
       <>
 
@@ -92,10 +90,9 @@ class MyPage extends Component {
           <View style={styles.viewHeaderLayout}>
             <View style={styles.container}>
               <View style={styles.item1}>
-                <Text style={styles.name_text}>엠카즈 정비소</Text>
+                <Text style={styles.name_text}>{companyName}</Text>
                 <TouchableOpacity onPress={this.goEditProfileScreen}><Text style={styles.number_text}>{this.state.companyNo}</Text></TouchableOpacity>
-                <Text>부산광역시 해운대구 우동 128,</Text>
-                <Text>(가나다빌딩, 1005호)</Text>
+                <Text>{companyAddress}</Text>
               </View>
 
               <View style={styles.item2}>

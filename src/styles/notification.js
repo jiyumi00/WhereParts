@@ -10,15 +10,15 @@ export const styles = StyleSheet.create({
   },
   product: {
     flex: 1,
-    height: 75,
+    //height: 80,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#E9E9E9',
     marginTop: "2%",
-    paddingBottom: "2%",
     borderRadius: 10,
     backgroundColor: '#FFF',
+    paddingVertical:'2%'
   },
   productTop_view: {
     flexDirection: 'row',
@@ -31,23 +31,33 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   circleIcon_view: {
-    flex: 2, alignItems: 'center', justifyContent: 'center', marginLeft: 7
+    flex: 2,
+    alignItems: 'center', 
+    justifyContent: 'center', 
+  },
+  itemkind_view:{
+    width:50,
+    height:50,
+    justifyContent:'center',
+    alignItems:'center', 
+    borderWidth:3,
+    borderRadius:100, 
+    borderColor:'#0066FF',
+    //margin:'3%',
   },
   itemkind_text: {
     color: "#0066FF",
-    paddingTop: 10,
     fontWeight: 'bold',
     fontSize: 16
   },
   itemDetail_view: {
     flex: 8,
-    paddingTop: 5,
-    paddingLeft: 10,
     justifyContent:'center'
   },
   itemDetail_text: {
     fontSize: 15,
     fontWeight: 'bold',
     color: 'black'
-  }
+  },
+
 });

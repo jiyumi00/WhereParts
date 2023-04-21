@@ -123,26 +123,25 @@ class Home extends Component {
 
     // 리스트 정렬, 1:최신순, 2:거리순, 3:가나다순
     listSort = (value) => {
-        this.setState({ indicator: true }, () => {
-            if (value == 1) {
-                const sortedData = this.state.goodsContent.sort((a, b) => {
-                    return new Date(b.registerDate) - new Date(a.registerDate);
-                });
-                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
-            }
-            else if (value == 2) {
-                const sortedData = this.state.goodsContent.sort((a, b) => {
-                    return a.distance - b.distance;
-                })
-                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
-            }
-            else {
-                const sortedData = this.state.goodsContent.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                })
-                this.setState({ goodsContent: sortedData, indicator: false }, () => { this.handleEmptyListView() });
-            }
-        });
+        this.setState({ indicator: true });
+        console.log('listSort indicator', value)
+        if (value == 1) {
+            this.setState({ goodsContent: this.contents }, () => { this.handleEmptyListView() });
+        }
+        else if (value == 2) {
+            const sortedData = this.state.goodsContent.sort((a, b) => {
+                return a.distance - b.distance;
+            })
+            this.setState({ goodsContent: sortedData }, () => { this.handleEmptyListView() });
+        }
+        else {
+            const sortedData = this.state.goodsContent.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            })
+            this.setState({ goodsContent: sortedData }, () => { this.handleEmptyListView() });
+        }
+
+        this.setState({indicator: false});
     }
 
     handleEmptyListView=()=>{
@@ -208,6 +207,7 @@ class Home extends Component {
             });
 
         console.log('sortKind',this.state.sortedData);
+        console.log('indicator',this.state.indicator);
 
         return (
             <>

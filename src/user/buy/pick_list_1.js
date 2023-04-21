@@ -97,7 +97,7 @@ class ListItem extends Component {
     }
     
     handleDetailViewModal=()=> {
-        this.props.navigation.navigate('GoodsDetail', { goodsID:this.item.id, sellerID:this.item.userID, distance:this.item.distance, pickRefreshListener:this.props.pickRefreshListener });
+        this.props.navigation.navigate('GoodsDetail', { goodsID:this.item.id, sellerID:this.item.userID,pickRefreshListener:this.props.pickRefreshListener });
     }
 
     goGoodsNumberWebView = () => {
