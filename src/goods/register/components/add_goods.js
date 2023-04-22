@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Button, Text, View, TouchableOpacity, TextInput, 
-    Image, ImageBackground, Modal, Alert, BackHandler, NativeModules, Keyboard, StyleSheet,
+    Image, ImageBackground, Modal, Alert,  NativeModules, Keyboard, StyleSheet,
 } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
@@ -20,11 +20,10 @@ import { Picker } from '@react-native-picker/picker';
 import Constant from "../../../util/constatnt_variables";
 import WebServiceManager from "../../../util/webservice_manager";
 import ImageSelectorPopup from '../../../util/popup_image_selector';
-import GalleryX from '../../../util/gallery_x';
-import { parse } from '@babel/core';
+
 import Session from '../../../util/session';
 import FunctionUtil from '../../../util/libraries_function';
-import { color } from 'react-native-reanimated';
+
 
 class AddGoods extends Component {
 

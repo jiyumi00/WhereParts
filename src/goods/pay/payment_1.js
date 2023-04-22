@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, NativeModules, Pressable, TextInput, Image, Keyboard, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, NativeModules, Pressable, TextInput, Image,  Alert } from 'react-native';
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';

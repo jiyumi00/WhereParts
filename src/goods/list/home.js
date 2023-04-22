@@ -1,11 +1,9 @@
 import React, { Component, PureComponent } from 'react';
 import {
-    ScrollView, Pressable, TextInput, ImageBackground, View, Text,
-    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules,
+   TextInput, View, Text,
+     TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules,
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 
-import FunctionUtil from '../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../util/indicator';
 import Constant from "../../util/constatnt_variables";

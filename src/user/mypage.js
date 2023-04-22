@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
+import { Text, View, TouchableOpacity,  Alert, BackHandler } from 'react-native';
 import { template } from "../styles/template/page_style";
 import { styles } from "../styles/mypage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
