@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useValue } from 'react-native-reanimated';
+
 import { styles } from "../../styles/buy/order_detail";
 import { template } from "../../styles/template/page_style";
 import Constant from '../../util/constatnt_variables';
