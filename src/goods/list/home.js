@@ -1,9 +1,11 @@
 import React, { Component, PureComponent } from 'react';
 import {
-   TextInput, View, Text,
-     TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules,
+    ScrollView, Pressable, TextInput, ImageBackground, View, Text,
+    Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules, SafeAreaView,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
+import FunctionUtil from '../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../util/indicator';
 import Constant from "../../util/constatnt_variables";
@@ -16,11 +18,13 @@ import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
 import ListItem from './item';
+import { template } from '../../styles/template/page_style';
+//import { template } from '@babel/core';
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.contents = [];  //모든 users값 가져오는 것
+        this.contents = [];  //최초 가져온 상품 리스트
         this.AnimatedHeaderValue = new Animated.Value(0);
         this.userID = Session.getUserID();
 
@@ -28,7 +32,9 @@ class Home extends Component {
         const { ImageModule } = NativeModules;
         this.imageModule = ImageModule;
         this.sortKind=["최신순","거리순","가나다순"];
+
         this.state = {
+            searchKeyWord:'',
             isRefresh: false,
             emptyListViewVisible:false,
             goodsContent: [],
@@ -38,7 +44,7 @@ class Home extends Component {
 
             goodsQuantity: null,
             quality: 1,
-            sortedData:1,
+            sortedKind:0,
         };
     }
 
@@ -54,29 +60,27 @@ class Home extends Component {
     // 부품 검색
     search = (value) => {
         console.log('selected data: ', value);
-        this.setState({
-            number: value,
-        });
-        this.setState({ goodsContent: this.dataFiltering(value) },()=>{this.handleEmptyListView()})
+        this.setState({searchKeyWord: value});
+        this.setState({ goodsContent: this.dataFiltering(value)});
     };
 
     // 필터링 (부품번호, 부품명 동시 검색)
     dataFiltering = (value) => {
         let goodsContent = this.contents;
         goodsContent = goodsContent.filter((content) => {
-            if (value === '')
+            if (value == '')
                 return true;
             else {
-                if (content.number === value)
+                if (content.number == value)
                     return true;
-                if (content.name.includes(value))
+                if (content.name.toLowerCase().includes(value.toLowerCase()))
                     return true;
-                /*if(content.hashTag.includes(value))
-                    return true;*/
+                if(content.hashTag.toLowerCase().includes(value.toLowerCase()))
+                    return true;
             }
         });
         this.AnimatedHeaderValue.setValue(0);
-        
+        this.setState({goodsQuantity:goodsContent.length});
         return goodsContent;
     }
 
@@ -94,7 +98,7 @@ class Home extends Component {
             }
             else {
                 Alert.alert('부품번호 인식', '부품번호를 인식하지 못했습니다. 직접 입력하세요', [
-                    { text: '확인', onPress: () => { this.setState({ number: "" }) } }]);
+                    { text: '확인', onPress: () => { this.setState({ searchKeyWord: "" }) } }]);
             }
 
             this.imageModule.deleteImage(imageURI, (imageURI) => {
@@ -111,35 +115,39 @@ class Home extends Component {
         this.setState({ indicator: true });
         this.callGetGoodsAPI().then((response) => {
             this.contents = response;
-            const goodsQuantity = Object.keys(response).length;
-            console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
-            this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity },()=>{this.handleEmptyListView()});
+            const goodsQuantity = response.length;
+            //console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
+            this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity });
         });
-        console.log('refresh success')
+        //console.log('refresh success')
         this.setState({ isRefresh: false })
     }
 
     // 리스트 정렬, 1:최신순, 2:거리순, 3:가나다순
-    listSort = (value) => {
-        this.setState({ indicator: true });
-        console.log('listSort indicator', value)
-        if (value == 1) {
-            this.setState({ goodsContent: this.contents }, () => { this.handleEmptyListView() });
-        }
-        else if (value == 2) {
-            const sortedData = this.state.goodsContent.sort((a, b) => {
-                return a.distance - b.distance;
-            })
-            this.setState({ goodsContent: sortedData }, () => { this.handleEmptyListView() });
-        }
-        else {
-            const sortedData = this.state.goodsContent.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-            })
-            this.setState({ goodsContent: sortedData }, () => { this.handleEmptyListView() });
-        }
-
-        this.setState({indicator: false});
+    dataSorting = (sortedKind) => {
+        console.log('list Sort sortedKind = ',this.state.sortedKind);
+        this.setState({sortedKind:sortedKind});
+        this.setState({indicator:true});
+        setTimeout(()=> {
+            let sortedData=[];
+            if (sortedKind == 0) {
+                sortedData = this.state.goodsContent.sort((a,b) => {
+                    return b.id - a.id;
+                })
+            }
+            else if (sortedKind == 1) {
+                sortedData = this.state.goodsContent.sort((a, b) => {
+                    return a.distance - b.distance;
+                })
+            }
+            else {
+                sortedData = this.state.goodsContent.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                })
+            }
+            this.setState({goodsContent:sortedData});
+            this.setState({ indicator: false });
+        },0);
     }
 
     handleEmptyListView=()=>{
@@ -204,14 +212,13 @@ class Home extends Component {
                 extrapolate: 'clamp'
             });
 
-        console.log('sortKind',this.state.sortedData);
+        console.log('sortKind',this.state.sortedKind);
         console.log('indicator',this.state.indicator);
 
         return (
-            <>
-                <Modal transparent={true} visible={this.state.indicator}>
-                    <Indicator />
-                </Modal>
+            <SafeAreaView style={template.baseContainer}>
+                {this.state.indicator && <Indicator/>}
+                
                 <View style={styles.home_total_view}>
                     {this.state.emptyListViewVisible==false && <Animated.FlatList
                         data={this.state.goodsContent}
@@ -227,7 +234,7 @@ class Home extends Component {
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                             { useNativeDriver: true })}
                         />}
-                    {this.state.emptyListViewVisible==true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
+                    {this.state.goodsContent.length==0 && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
 
                     {/* 화면 상단 제목 부분 */}
                     <Animated.View style={[styles.home_title_view, { transform: [{ translateY: renderHeader }] }]}>
@@ -257,10 +264,10 @@ class Home extends Component {
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
-                                    placeholder="검색어를 입력해주세요."
+                                    placeholder="검색어를 입력해주세요.(카메라 가능)"
                                     placeholderTextColor="light grey"
                                     style={styles.search_input_text}
-                                    value={this.state.number}
+                                    value={this.state.searchKeyWord}
                                 />
                             </View>
                             {/* 카메라로 부품번호 검색 */}
@@ -280,16 +287,16 @@ class Home extends Component {
                             <View style={styles.sort_dropdown_view}>
                                 <Picker
                                     style={styles.sort_dropdown_view.dropdown_width}
-                                    selectedValue={this.state.sortedData}
-                                    onValueChange={(value, index) => { this.setState({ sortedData: value, }, () => this.listSort(value)) }}
+                                    selectedValue={this.state.sortedKind}
+                                    onValueChange={(value, index) => this.dataSorting(value)}
                                     mode={'dropdown'}>
-                                    {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
+                                    {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i} />)}
                                 </Picker>
                             </View>
                         </View>
                     </Animated.View>      
                 </View>
-            </>
+            </SafeAreaView>
         );
     }
 }

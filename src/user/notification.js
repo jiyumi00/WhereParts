@@ -5,7 +5,7 @@ import Constant from '../util/constatnt_variables';
 
 import WebServiceManager from '../util/webservice_manager';
 import EmptyListView from '../util/empty_list_view';
-
+import CircleIcon from 'react-native-vector-icons/FontAwesome';
 import DeleteIcon from 'react-native-vector-icons/MaterialIcons'
 
 import { template } from "../styles/template/page_style";

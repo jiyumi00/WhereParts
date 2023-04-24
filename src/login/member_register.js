@@ -129,6 +129,8 @@ class Login extends Component {
             detailLogin: this.getDetailLogin(),
             isAutoLogin: false,
         }
+
+        console.log('loginInfo=',loginInfo);
         FunctionUtil.goLogin(loginInfo).then((success) => {
             console.log("success", success);
             console.log("session value", Session.getUserInfoItem());

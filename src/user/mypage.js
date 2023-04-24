@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity,  Alert, BackHandler } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
 import { template } from "../styles/template/page_style";
 import { styles } from "../styles/mypage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,12 +23,13 @@ class MyPage extends Component {
 
   componentDidMount() {
     FunctionUtil.loginInfo().then((value) => {
+      console.log('mypage ',value)
       let companyNo = value.companyNo;
       this.setState({ companyNo: companyNo.slice(0, 3) + "-" + companyNo.slice(3, 5) + "-" + companyNo.slice(5, 10) });
     });
   }
 
-  logout = async () => {
+  logout() {
     FunctionUtil.getLoginType().then((response) => {
       console.log('login info ', response);
       const detailLogin = response.detailLogin;
@@ -51,7 +52,7 @@ class MyPage extends Component {
         AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
         console.log('logout async detail 2', newObj);
       }
-      this.goExitApp();
+      BackHandler.exitApp();
     });}
 
 
@@ -67,13 +68,14 @@ class MyPage extends Component {
   goEditProfileScreen = () => {
     this.props.navigation.navigate('EditProfile');
   }
-  goExitApp() {
+
+  goExitApp=()=> {
     Alert.alert(
       '주의',
       '로그아웃하고 앱을 종료합니다.',
       [
-        { text: '취소', onPress: () => { return false; } },
-        { text: '확인', onPress: () => BackHandler.exitApp() },
+        { text: '취소', onPress: () => { } },
+        { text: '확인', onPress: () => {this.logout()}},
       ],
       { cancelable: false });
     return true;
@@ -155,7 +157,7 @@ class MyPage extends Component {
 
           {/*로그아웃 */}
           <View style={styles.viewBottomLayout}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.btn_logout} onPress={this.logout}>
+            <TouchableOpacity activeOpacity={0.8} style={styles.btn_logout} onPress={this.goExitApp}>
               <Text style={styles.btn_logout_text}>로그아웃</Text>
             </TouchableOpacity>
           </View>

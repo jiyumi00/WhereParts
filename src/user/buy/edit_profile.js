@@ -29,11 +29,11 @@ class EditProfile extends Component {
         this.modalPhotoCameraX = null;
         this.modalPhotoCameraY = null;
 
-        this.loginInfo = { companyNo: null, passwd: null, userID: null }
+        this.loginInfo = { }
 
         this.state = {
             validForm: false, //유효성
-            passwderror: false,
+            passwdError: false, //현재 비밀번호를 입력해야 정보수정을 할 수 있음. 현재 비밀번호 입력이 틀렸을 경우 true
 
             confirmPasswd: '',
 
@@ -41,33 +41,36 @@ class EditProfile extends Component {
             passwd: '',
             passwordok: '',
 
-            cardPopupMenuVisible: false,  //명함 팝업메뉴
+            cardPopupMenuVisible: false,  //명함 이미지 선택을 위한 팝업메뉴
             cardImageDetailVisible: false, //명함 자세히
             companyImageDetailVisible: false, //사업자등록증 자세히
 
-            companyNoImageURL: null, //사업자등록증 사진
-            cardImageURL: null, //명함 사진
-            passwdConfirmModal: true,
-            editprofileModal: false,//취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
+            companyNoImageURI: null,    //사업자등록증 사진
+            cardImageURI: null,         //명함 사진
+            passwdConfirmModal: true,   //정보수정을 위한 패스워드 입력 창 on/off
+            editProfileModal: false,    //취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
+
+            //newCardImage:false        //새롭게 명함 이미지를 선택했을 경우 true (이미지 사이즈 줄이고 넣을거냐? 현재 사용하지 않음)
         }
     }
 
     componentDidMount() {
         FunctionUtil.loginInfo().then((value) => {
+            //const loginInfo = {companyNo:value.companyNo, passwd:value.passwd, userID:Session.getUserID()};
             this.loginInfo = { companyNo: value.companyNo, passwd: value.passwd, userID: Session.getUserID() }
-            this.setState({ companyNo: value.companyNo })
-            this.callGetCompanyImage(this.loginInfo).then((response) => {
+            this.setState({ companyNo: this.loginInfo.companyNo });
+            this.callGetCompanyImage().then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
                 reader.onloadend = () => {
-                    this.setState({ companyNoImageURL: reader.result });
+                    this.setState({ companyNoImageURI: reader.result });
                 }
             });
-            this.callGetcardImage(this.loginInfo).then((response) => {
+            this.callGetcardImage().then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
                 reader.onloadend = () => {
-                    this.setState({ cardImageURL: reader.result });
+                    this.setState({ cardImageURI: reader.result });
                 }
             });
         });
@@ -75,10 +78,10 @@ class EditProfile extends Component {
     }
 
     //사업자등록증 사진을 가져오는 API
-    async callGetCompanyImage(loginInfo) {
+    async callGetCompanyImage() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyImage", "post");
         manager.addFormData("data", {
-            userID: loginInfo.userID, passwd: loginInfo.passwd, id: loginInfo.userID
+            userID: this.loginInfo.userID, passwd: this.loginInfo.passwd, id: this.loginInfo.userID
         });//열람하고자 하는 id
         let response = await manager.start();
         if (response.ok) {
@@ -87,10 +90,10 @@ class EditProfile extends Component {
     }
 
     //명함 사진을 가져오는 API
-    async callGetcardImage(loginInfo) {
+    async callGetcardImage() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetNamecardImage", "post");
         manager.addFormData("data", {
-            userID: loginInfo.userID, passwd: loginInfo.passwd, id: loginInfo.userID
+            userID: this.loginInfo.userID, passwd: this.loginInfo.passwd, id: this.loginInfo.userID
         });
         let response = await manager.start();
         if (response.ok) {
@@ -101,14 +104,14 @@ class EditProfile extends Component {
     //현재비밀번호 확인버튼 클릭 시
     passwdOkButtonClicked = () => {
         if (this.state.confirmPasswd === this.loginInfo.passwd)
-            this.setState({ passwdConfirmModal: !this.state.passwdConfirmModal, passwderror: false, editprofileModal: true });
+            this.setState({ passwdConfirmModal: false, passwdError: false, editProfileModal: true });
         else
-            this.setState({ passwderror: true })
+            this.setState({ passwdError: true })
     }
 
 
     //수정완료 버튼을 눌렀을 때
-    goImageUpload = () => {
+    goModifyUser = () => {
         this.callModifyUserAPI().then((response) => {
             console.log('response message =', response);
             if (this.state.passwd !== this.state.passwordok)
@@ -130,10 +133,10 @@ class EditProfile extends Component {
 
     //명함사진과 비밀번호를 수정하는 API
     async callModifyUserAPI() {
-        let manager = new WebServiceManager("http://203.241.251.177/wparts/ModifyUser", "post");
+        let manager = new WebServiceManager(Constant.serviceURL+"/ModifyUser", "post");
         const formData = { userID: this.loginInfo.userID, passwd: this.state.passwd };
         manager.addFormData("data", formData);
-        manager.addBinaryData("file1", { uri: this.state.cardImageURL, type: "image/jpeg", name: "file1" });
+        manager.addBinaryData("file1", { uri: this.state.cardImageURI, type: "image/jpeg", name: "file1" });
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -141,7 +144,7 @@ class EditProfile extends Component {
 
     //명함 사진 URL
     cardImageInfo = (cardImageURI) => {
-        this.setState({ cardImageURL: cardImageURI });
+        this.setState({ cardImageURI: cardImageURI });
         this.onValueChange();
     }
 
@@ -156,8 +159,8 @@ class EditProfile extends Component {
         this.props.navigation.navigate('SignUpGallery', { onResultListener: this.cardImageInfo });
     }
     //명함 사진 삭제 함수
-    photoRemoveClicked = () => {
-        this.setState({ cardImageURL: "" });
+    removeCardImageClicked = () => {
+        this.setState({ cardImageURI: "" });
         this.onValueChange();
     }
 
@@ -178,10 +181,10 @@ class EditProfile extends Component {
             if (this.state.passwd == this.state.passwordok) {
                 this.setState({ passwderror: false });
             }
-            if (this.state.cardImageURL == "") {
+            if (this.state.cardImageURI == "") {
                 isValidForm = false;
             }
-            console.log("imageLength", this.imageLength);
+            //console.log("imageLength", this.imageLength);
             this.setState({ validForm: isValidForm });
         })
 
@@ -197,15 +200,11 @@ class EditProfile extends Component {
 
     //명함 자세히보기
     cardImageModal = () => {
-        this.setState({
-            cardImageDetailVisible: !this.state.cardImageDetailVisible
-        });
+        this.setState({cardImageDetailVisible: !this.state.cardImageDetailVisible});
     }
     //사업자등록증 사진 자세히보기 
     companyImageModal = () => {
-        this.setState({
-            companyImageDetailVisible: !this.state.companyImageDetailVisible
-        });
+        this.setState({companyImageDetailVisible: !this.state.companyImageDetailVisible});
     }
 
     render() {
@@ -233,9 +232,9 @@ class EditProfile extends Component {
                                         value={this.state.confirmPasswd}
                                     />
                                 </View>
-                                {this.state.passwderror == true ? (
+                                {this.state.passwdError ? (
                                     <Text style={[template.contentText, { marginBottom: '-5%', color: "#FD9C91" }]}>
-                                        * 비밀번호를 정확하게 입력해주세요.
+                                        * 비밀번호가 틀렸습니다.
                                     </Text>
                                 ) : null}
                                 <View style={{ flexDirection: 'row', marginTop: "7%" }}>
@@ -243,7 +242,6 @@ class EditProfile extends Component {
                                         <Text style={template.buttonText}>취소</Text></TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.8} style={[inStyle.passwdConfirmButton, { marginLeft: "2%" }]} onPress={this.passwdOkButtonClicked}>
                                         <Text style={template.buttonText}>확인</Text></TouchableOpacity>
-
                                 </View>
                             </View>
                             <Text></Text><Text></Text><Text></Text>
@@ -251,8 +249,9 @@ class EditProfile extends Component {
 
                     </ScrollView>
                 </Modal>
+
                 {/*비밀번호 확인이 완료 되었으면 내정보 수정*/}
-                {(this.state.editprofileModal == true) &&
+                {this.state.editProfileModal &&
                     <View style={template.baseContainer}>
                         <ScrollView
                             onScroll={event => {
@@ -269,20 +268,20 @@ class EditProfile extends Component {
                                 <View style={{alignItems:'center',marginRight:30}}>
                                     <Text style={[template.titleText,{fontSize:15}]}>사업자 등록증</Text>
                                     <TouchableOpacity onPress={this.companyImageModal}>
-                                        <Image source={{ uri: this.state.companyNoImageURL }} style={inStyle.imageButton} />
+                                        <Image source={{ uri: this.state.companyNoImageURI }} style={inStyle.imageButton} />
                                     </TouchableOpacity>
                                 </View>
                                 {/*명함 사진*/}
                                 <View style={{alignItems:'center'}}>
                                     <Text style={[template.titleText,{fontSize:15}]}>명함</Text>
                                     <View onLayout={(event) => { this.getViewSize(event) }} ref={this.photoCameraIcon}>
-                                        {this.state.cardImageURL == "" ?
+                                        {this.state.cardImageURI == "" ?
                                             (<TouchableOpacity style={inStyle.imageButton} onPress={() => this.setState({ cardPopupMenuVisible: true })}>
                                                 <IconCamera name="image-inverted" size={60}></IconCamera>
                                             </TouchableOpacity>) :
                                             (<TouchableOpacity onPress={this.cardImageModal}>
-                                                <Image source={{ uri: this.state.cardImageURL }} style={inStyle.imageButton} />
-                                                <TouchableOpacity style={{top:-15,right:-15,position:'absolute'}} onPress={this.photoRemoveClicked}>
+                                                <Image source={{ uri: this.state.cardImageURI }} style={inStyle.imageButton} />
+                                                <TouchableOpacity style={{top:-15,right:-15,position:'absolute'}} onPress={this.removeCardImageClicked}>
                                                     <IconDelete name="close-circle" color="black" size={27}></IconDelete>
                                                 </TouchableOpacity>
                                             </TouchableOpacity>)}
@@ -293,20 +292,18 @@ class EditProfile extends Component {
                             {/*명함 사진 자세히보기*/}
                             <Modal
                                 visible={this.state.cardImageDetailVisible}
-                                onRequestClose={() => this.setState({ cardImageDetailVisible: false })}
-                            >
+                                onRequestClose={this.cardImageModal}>
                                 <View style={[template.baseContainer,{alignItems: 'center', justifyContent: 'center' }]}>
-                                    <Image source={{ uri: this.state.cardImageURL }} style={{ width: "80%", height: "80%" }} />
+                                    <Image source={{ uri: this.state.cardImageURI }} style={{ width: "80%", height: "80%" }} />
                                 </View>
                             </Modal>
 
                             {/*사업자등록증 사진 자세히보기*/}
                             <Modal
                                 visible={this.state.companyImageDetailVisible}
-                                onRequestClose={() => this.setState({ companyImageDetailVisible: false })}
-                            >
+                                onRequestClose={this.companyImageModal}>
                                 <View style={[template.baseContainer,{alignItems: 'center', justifyContent: 'center' }]}>
-                                    <Image source={{ uri: this.state.companyNoImageURL }} style={{ width: "80%", height: "80%" }} />
+                                    <Image source={{ uri: this.state.companyNoImageURI }} style={{ width: "80%", height: "80%" }} />
                                 </View>
                             </Modal>
 
@@ -337,7 +334,7 @@ class EditProfile extends Component {
                                         secureTextEntry={true}
                                     />
                                 </View>
-                                {this.state.passwderror == true ? (
+                                {this.state.passwdError == true ? (
                                     <Text style={[template.contentText, { color: "#FD9C91" }]}>
                                         * 비밀번호를 정확하게 입력해주세요.
                                     </Text>
@@ -354,7 +351,7 @@ class EditProfile extends Component {
 
                         </ScrollView>
                         {this.state.validForm ?
-                            (<TouchableOpacity onPress={this.goImageUpload} activeOpacity={0.8} style={template.activeButton}>
+                            (<TouchableOpacity onPress={this.goModifyUser} activeOpacity={0.8} style={template.activeButton}>
                                 <Text style={template.buttonText}>수정완료</Text></TouchableOpacity>)
                             : (<TouchableOpacity activeOpacity={0.8} style={ template.inActiveButton}>
                                 <Text style={template.buttonText}>수정완료</Text>

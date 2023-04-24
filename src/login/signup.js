@@ -124,7 +124,6 @@ class SignUp extends Component {
 
     //사업자 등록증 이미지로 텍스트 분석하여 상호, 사업자번호, 소재지 가져오기 
     async callCompanyInfoAPI(imageData) {
-        console.log('indeicator ',this.state.indicator)
         let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
         manager.addBinaryData("file", imageData);
         let response = await manager.start();
@@ -187,7 +186,7 @@ class SignUp extends Component {
                     { text: '확인', onPress: () => {this.setState({companyNo:"",companyName:"",companyAddress:""})}}]);
             }
             else
-                this.setState({companyNo:response.no,companyName:response.name,companyAddress:response.address});
+                this.setState({companyNo:response.no.replaceAll("-",""),companyName:response.name,companyAddress:response.address});
             this.onValueChange();
         }); 
     }
@@ -311,7 +310,7 @@ class SignUp extends Component {
                                         returnKeyType="next"
                                         onSubmitEditing={()=>{this.passwordRef.focus();}}
                                         onChangeText={(value) => this.onValueChange({companyNo: value})}
-                                        value={this.state.companyNo.replaceAll('-','')}
+                                        value={this.state.companyNo}
                                     />
                                 </View>
                               

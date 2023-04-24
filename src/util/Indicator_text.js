@@ -11,9 +11,9 @@ class IndicatorText extends Component{
     render(){
         return (
             <Modal animationType='fade' transparent={true} visible={true}>
-                <View style={styles2.container}>
-                    <View style={styles2.box}>
-                        <Text style={styles2.text}>{this.text}</Text>
+                <View style={inStyle.container}>
+                    <View style={inStyle.box}>
+                        <Text style={inStyle.text}>{this.text}</Text>
                     </View>
                 </View>
             </Modal>
@@ -21,31 +21,7 @@ class IndicatorText extends Component{
     }
 } 
 
-const styles = StyleSheet.create({
-    container :{
-        flex : 1,
-        alignItems:"center",
-        justifyContent :"flex-end",
-    },
-
-    box: {
-        width:'70%',
-        height:'5%',
-        marginBottom:"20%",
-        backgroundColor:"lightgrey",
-        borderRadius:15,
-        justifyContent:'center',
-    },
-
-    text:{
-        fontSize:15,
-        color:'black',
-        textAlign:'center',
-    }
-    
-})
-
-const styles2 = StyleSheet.create({
+const inStyle = StyleSheet.create({
     container :{
         flex : 1,
         alignItems:"center",

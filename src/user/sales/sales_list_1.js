@@ -31,6 +31,9 @@ export default class SalesDetails extends Component {
 
             emptySaleListViewVisible: false,
             emptySoldOutListViewVisible: false,
+
+            totalPrice:0,
+            totalCount:0
         };
     }
 
@@ -59,9 +62,19 @@ export default class SalesDetails extends Component {
     }
     goGetSells = () => {
         //console.log("refresh sell");
+        const currentSaleState=this.state.saleState;
         this.callGetSellsAPI().then((response) => {
             this.contents = response;
-            this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) });
+            let totalPrice=0;
+            let totalCount=0;
+            this.contents.forEach(element => {
+                if(element.status==3) {
+                    totalPrice=totalPrice+element.total;
+                    totalCount++;
+                }
+            });
+            this.setState({totalPrice:totalPrice,totalCount:totalCount});
+            this.setState({ soldoutContents: this.dataFiltering(currentSaleState)});
         })
     }
 
@@ -90,20 +103,14 @@ export default class SalesDetails extends Component {
             Promise.reject(response);
     }
 
-    saleBarClicked = () => { //판매중
-        this.setState({ saleState: 1 });
+    listKindClicked = (value) => { //배송정보입력
+        //this.setState({ saleState: 2 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
+        this.setState({ saleState:value, soldoutContents: this.dataFiltering(value)});
     }
 
-    shippingBarClicked = () => { //배송정보입력
-        this.setState({ saleState: 2 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
-    }
-
-    soldoutBarClicked = () => { //판매완료
-        this.setState({ saleState: 3 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
-    }
-    dataFiltering() {
+    dataFiltering(value) {
         let filteredContents = this.contents;
-        if (this.state.saleState == 3) {
+        if (value == 3) {
             filteredContents = filteredContents.filter((content) => {
                 if (content.status == 3) {
                     return true;
@@ -132,18 +139,18 @@ export default class SalesDetails extends Component {
             <View style={{ flex: 1 }}>
                 <View style={styles.wrap}>
                     <View style={[styles.salesdetailsheader, { flexDirection: 'column', alignItems: 'flex-start', }]}>
-                        <Text><IconMark name="pen" color={'#14127D'} size={15}/> 건수: <Text style={{color:'black'}}> 24건     </Text>
-                        <IconMark name="coins" color={'#14127D'} size={15}/><Text> 판매금액: <Text style={{color:'black'}}> 1,300,000</Text></Text></Text>
+                        <Text><IconMark name="pen" color={'#14127D'} size={15}/> 건수: <Text style={{color:'black'}}> {this.state.totalCount}건       </Text>
+                        <IconMark name="coins" color={'#14127D'} size={15}/><Text> 판매금액: <Text style={{color:'black'}}> {FunctionUtil.getPrice(this.state.totalPrice)}원</Text></Text></Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%", }}>
                         <View style={{ borderBottomWidth: this.state.saleState == 1 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.setState({saleState:1})}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 2 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>판매현황</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.listKindClicked(2)}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>판매현황</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 3 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.listKindClicked(3)}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>

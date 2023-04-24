@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,  TouchableOpacity,  FlatList, Image, Alert,BackHandler } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, FlatList, Image, Alert,BackHandler } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/buy/buylist_1";

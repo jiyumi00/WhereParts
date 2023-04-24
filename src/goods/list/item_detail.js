@@ -583,7 +583,7 @@ export default class DetailItemView extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 {/* 남은 수량 */}
-                                {this.state.quantity == 0?
+                                {this.state.quantity <= 0 ?
                                     <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
                                     <Text style={[styles.text, { fontSize: 14 }]}>{this.state.quantity}개 남음</Text>}
                             </View>}
