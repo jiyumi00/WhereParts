@@ -16,8 +16,10 @@ export default class BuyList extends Component {
         this.userID=Session.getUserID();
         this.state = {
             buyContents: [],
+            buyContentsLength:1,
             isRefresh: false,
-            emptyListViewVisible:false,
+            buyContentsLength:1,
+            //emptyListViewVisible:false,
         }
     }
 
@@ -43,22 +45,9 @@ export default class BuyList extends Component {
 
     goGetGoods = () => {
         this.callGetGoodsAPI().then((response) => {
-            this.setState({ buyContents: response })
-            if(response.length==0){
-                this.setState({emptyListViewVisible:true})
-            }
+            this.setState({ buyContents: response, /* emptyListViewVisible:response.length==0?true:false  */ buyContentsLength:response.length})
         });
     }
-        
-/*     handleEmptyListView=()=>{  
-        if(this.state.buyContents.length==0){
-            this.setState({emptyListViewVisible:true});
-        }
-        else{
-            this.setState({emptyListViewVisible:false});
-        }
-    }  */
-    
     //등록된 상품 리스트 API
     async callGetGoodsAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetOrders?id=" + this.userID);
@@ -72,14 +61,14 @@ export default class BuyList extends Component {
     render() {
         return (
             <View style={{ flex: 1, marginBottom: 10, }}>
-                {this.state.emptyListViewVisible==false && (<FlatList
+                {this.state.buyContentsLength!=0 && (<FlatList
                     data={this.state.buyContents}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refresh={this.goGetGoods} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.emptyListViewVisible==true &&<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />}
+                {this.state.buyContentsLength==0&&<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />}
             </View>
         );
     }

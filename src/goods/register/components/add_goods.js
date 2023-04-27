@@ -727,8 +727,8 @@ class ConfirmModal extends Component {
         const {name,number,price,quantity,quality,genuine} = this.props.item;
         return (
             <>
-                <Modal animationType='slide' transparent={true} visible={true}>
-                    <View style={{alignItems:'center',justifyContent:'center',flex:1}}>
+                <Modal animationType='slide' transparent={true} visible={true} >
+                    <View style={{alignItems:'center',justifyContent:'center',flex:1,backgroundColor: 'rgba(52, 52, 52, 0.5)' }}>
                         <View style={inStyle.confirmModalView}>
                             <Text style={template.largeText}>등 록 확 인{"\n"}</Text>
 
@@ -840,7 +840,7 @@ const inStyle = StyleSheet.create({
         height: '55%',
         width: '75%',
         margin: 20,
-        backgroundColor:colors.white,
+        backgroundColor: colors.white,
         borderColor:colors.light,
         borderWidth:1,
         borderRadius: 20,

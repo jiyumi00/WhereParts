@@ -89,8 +89,8 @@ export default class DetailItemView extends Component {
             });
             console.log(response);
 
-            //올린사람만 수정하기
-            if (this.userID == this.sellerID) { // 휴대폰 vs 서버 userID 비교
+            //user와 seller 구분
+            if (this.userID == this.sellerID) { 
                 this.setState({ editVisible: true })
             }
             else { //구매가능
@@ -549,9 +549,14 @@ export default class DetailItemView extends Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end'}}>
                                         {/* 남은 수량 */}
-                                        {this.state.quantity == 0 || this.state.item.removeFlag==1 || this.state.item.valid==0?
+                                       {this.state.buyVisible ? <>
+                                        {this.state.quantity == 0 || this.state.item.removeFlag==1 || this.state.item.valid==0? 
                                             <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
                                             <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>}
+                                       </>: <>
+                                       <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>
+                                       </>}
+                                       
                                     </View>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>

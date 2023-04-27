@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View,Text,ScrollView,TouchableOpacity,Modal,FlatList,Image } from 'react-native';
+import { View,Text,TouchableOpacity,FlatList,Image } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
 import {styles} from "../../styles/buy/picklist_1";
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-//import MapIcon from 'react-native-vector-icons/Feather';
-import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
+import MapIcon from 'react-native-vector-icons/FontAwesome5';
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import EmptyListView from '../../util/empty_list_view';
@@ -21,8 +20,10 @@ class PickList extends Component {
         this.userID = Session.getUserID();
         this.state={
             wishContent:[],
+            wishContentLength:1,
             isRefresh:false,
-            emptyListViewVisible:false,
+            //emptyListViewVisible:false, 
+
         }
     }
     componentDidMount() {
@@ -30,17 +31,9 @@ class PickList extends Component {
     }
     goGetWish=()=>{
         this.callGetWishAPI().then((response) => { 
-            this.setState({wishContent:response})
-            if(response.length==0){
-                this.setState({emptyListViewVisible:true})
-            }
+            this.setState({wishContent:response , /* emptyListViewVisible:response.length==0?true:false */ wishContentLength:response.length})
          });  
     }
-
-    /* handleEmptyListView = () => {
-        this.setState({emptyListViewVisible: this.state.wishContent.length == 0 ? true : false});
-    }
- */
     //등록된 상품 리스트 API
     async callGetWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetWishList?user_id="+this.userID);
@@ -51,16 +44,18 @@ class PickList extends Component {
             Promise.reject(response);
     }
    
+
     render() {
         return (
            <View style={styles.total_container}>
-                {this.state.emptyListViewVisible==false && (<FlatList
+                {this.state.wishContentLength!=0 && (<FlatList
+                    showsVerticalScrollIndicator={false}
                     numColumns={2} 
                     data={this.state.wishContent}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} pickRefreshListener={this.goGetWish}/>}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.emptyListViewVisible == true && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetWish} />)}
+                {this.state.wishContentLength==0&& (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetWish} />)}
            </View>
         );
     }
@@ -75,7 +70,7 @@ class ListItem extends Component {
         this.item=this.props.item;
         this.state = {
             imageURI: null,
-            dipsbuttonclicked:false,
+            dipsbuttonclicked:false, //찜 버튼 on/off
         };
     }
 
@@ -87,7 +82,7 @@ class ListItem extends Component {
                 this.setState({ imageURI: reader.result }) //base64를 imageURI에 집어넣어준다
             } //끝까지 다 읽었으면 
         });
-
+        //찜 on/off 표시
         this.callGetWishAPI().then((response) => { 
             for(let i=0;i<response.length;i++){
                 if(this.item.id==response[i].id){ 
@@ -97,18 +92,19 @@ class ListItem extends Component {
          });
     }
     
-    handleDetailViewModal=()=> {
+    //상품 상세보기로 이동
+    goGoodsDetailScreen=()=> {
         this.props.navigation.navigate('GoodsDetail', { goodsID:this.item.id, sellerID:this.item.userID,pickRefreshListener:this.props.pickRefreshListener });
     }
-
+    //부품번호 WebView로 이동
     goGoodsNumberWebView = () => {
         this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.item.number });
     }
    
+    //찜 버튼 클릭했을 때 - 찜 제거하기
     dipsButtonClicked=()=>{
         this.callRemoveWishAPI().then((response)=>{
-            console.log(response);
-            this.props.pickRefreshListener();
+            this.props.pickRefreshListener(); //찜 버튼 해제 했을 때 다시 refresh
         })
     }
     
@@ -126,7 +122,6 @@ class ListItem extends Component {
         else
             Promise.reject(response);
     }
-    
     async callRemoveWishAPI(){
         let manager = new WebServiceManager(Constant.serviceURL+"/RemoveWishList?user_id="+this.userID+"&goods_id="+this.item.id)
         let response = await manager.start();
@@ -138,7 +133,7 @@ class ListItem extends Component {
     render() {
         const item = this.props.item;
         return ( 
-            <TouchableOpacity onPress={this.handleDetailViewModal}>
+            <TouchableOpacity onPress={this.goGoodsDetailScreen}>
                 <View style={styles.item_view}>
                     <View style={styles.listTop_view}>
                         <View style={{ alignItems: 'flex-start' }}>
@@ -162,7 +157,7 @@ class ListItem extends Component {
                             <TouchableOpacity onPress={this.goGoodsNumberWebView}>
                                 <Text style={styles.itemNumber_text}>{item.number.length > 13 ? `${item.number.slice(0, 13)}...` : item.number}</Text>
                             </TouchableOpacity>
-                            <Text style={styles.itemDistance_text}><MapIcon2 name='map-marker-alt' color='#EE636A' size={10}></MapIcon2> {item.distance}km</Text>
+                            <Text style={styles.itemDistance_text}><MapIcon name='map-marker-alt' color='#EE636A' size={10}></MapIcon> {item.distance}km</Text>
                         </View>
                     </View>
                 </View>

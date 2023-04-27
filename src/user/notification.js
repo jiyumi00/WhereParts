@@ -24,7 +24,8 @@ export default class Notification extends Component {
             unReadNotiesButton: false, // 미확인알림 선택 여부
 
             isRefresh:false,
-            emptyListViewVisible:1,
+            notiContentsLength:1
+            //emptyListViewVisible:false,
         }
     }
 
@@ -36,17 +37,13 @@ export default class Notification extends Component {
             this.callGetNotiesAPI().then((response) => {
                 console.log('noti data',response);
                 this.contents=response;
-                this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()});
+                this.setState({notiContents:this.dataFiltering(), /* emptyListViewVisible:response.length==0?true:false */ notiContentsLength:response.length});
+                console.log('noti',this.state.notiContents)
             });
     }
 
     handleEmptyListView=()=>{
-        if(this.state.notiContents.length==0){
-            this.setState({emptyListViewVisible:0});
-        }
-        else{
-            this.setState({emptyListViewVisible:1});
-        }
+        this.setState({emptyListViewVisible:this.state.notiContents.length==0 ?true:false})
     }
 
     //사용자 id값에 해당하는 모든 알림 받아오기 API
@@ -71,7 +68,7 @@ export default class Notification extends Component {
 
     //전체 알림 리스트 
     allNotiesClicked = () => {
-        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
+        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering(),},()=>{this.handleEmptyListView()})});
     }
 
     //읽지 않은 알림 리스트
@@ -120,14 +117,14 @@ export default class Notification extends Component {
                             <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    {this.state.emptyListViewVisible == 1 && (<FlatList
+                    {this.state.notiContentsLength !=0 && (<FlatList
                         data={this.state.notiContents}
                         renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} deleteItemListener={(id)=>this.deleteItemListener(id)}/>}
                         refreshing={this.state.isRefresh}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
                     />)}
-                    {this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
+                    {this.state.notiContentsLength==0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
                 </View>
             </View>
         );

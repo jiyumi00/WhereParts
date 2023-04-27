@@ -118,6 +118,7 @@ class Home extends Component {
             const goodsQuantity = response.length;
             //console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
             this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity });
+            this.setState({emptyListViewVisible:response.length==0 ? true:false})
         });
         //console.log('refresh success')
         this.setState({ isRefresh: false })
@@ -150,10 +151,7 @@ class Home extends Component {
         },0);
     }
 
-    handleEmptyListView=()=>{
-       this.setState({emptyListViewVisible : this.state.goodsContent.length == 0 ? true : false});
-    }
-
+  
     //Web Service 시작
     //사진으로부터 품번 인식 서비스 API
     async callPartsNoAPI(imageURI) {
@@ -234,7 +232,7 @@ class Home extends Component {
                             [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                             { useNativeDriver: true })}
                         />}
-                    {this.state.goodsContent.length==0 && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
+                    {this.state.emptyListViewVisible==true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
 
                     {/* 화면 상단 제목 부분 */}
                     <Animated.View style={[styles.home_title_view, { transform: [{ translateY: renderHeader }] }]}>
