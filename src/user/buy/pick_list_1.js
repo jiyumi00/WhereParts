@@ -21,7 +21,6 @@ class PickList extends Component {
         this.userID = Session.getUserID();
         this.state={
             wishContent:[],
-
             isRefresh:false,
             emptyListViewVisible:false,
         }
@@ -30,16 +29,18 @@ class PickList extends Component {
         this.goGetWish();
     }
     goGetWish=()=>{
-
         this.callGetWishAPI().then((response) => { 
-            this.setState({wishContent:response},()=>{this.handleEmptyListView()})
+            this.setState({wishContent:response})
+            if(response.length==0){
+                this.setState({emptyListViewVisible:true})
+            }
          });  
     }
 
-    handleEmptyListView = () => {
+    /* handleEmptyListView = () => {
         this.setState({emptyListViewVisible: this.state.wishContent.length == 0 ? true : false});
     }
-
+ */
     //등록된 상품 리스트 API
     async callGetWishAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetWishList?user_id="+this.userID);
