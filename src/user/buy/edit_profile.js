@@ -45,12 +45,12 @@ class EditProfile extends Component {
             cardImageDetailVisible: false, //명함 자세히
             companyImageDetailVisible: false, //사업자등록증 자세히
 
-            companyNoImageURI: null,    //사업자등록증 사진
-            cardImageURI: null,         //명함 사진
+            companyNoImageURI: null, //사업자등록증 사진
+            cardImageURI: null, //명함 사진
             passwdConfirmModal: true,   //정보수정을 위한 패스워드 입력 창 on/off
             editProfileModal: false,    //취소버튼 클릭 시 모달 뒤의 페이지가 보이는 현상을 수정하기 위해
 
-            //newCardImage:false        //새롭게 명함 이미지를 선택했을 경우 true (이미지 사이즈 줄이고 넣을거냐? 현재 사용하지 않음)
+            //newCardImage:false          //새롭게 명함 이미지를 선택했을 경우 true (이미지 사이즈 줄이고 넣을거냐? 현재 사용하지 않음)
         }
     }
 

@@ -5,7 +5,7 @@ class Indicator extends Component {
     render() {
         return (
             <Modal animationType='fade' transparent={true} visible={true}>
-                <View style={inStyle.container}>
+                <View style={styles.container}>
                     <ActivityIndicator size="large" color="#0066FF" />
                 </View>
             </Modal>
@@ -13,7 +13,7 @@ class Indicator extends Component {
     }
 }
 
-const inStyle = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center"

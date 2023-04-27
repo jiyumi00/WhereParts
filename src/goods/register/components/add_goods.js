@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
     Button, Text, View, TouchableOpacity, TextInput, 
-    Image, ImageBackground, Modal, Alert, BackHandler, NativeModules, Keyboard, StyleSheet,
+    Image, ImageBackground, Modal, Alert, BackHandler, NativeModules, Keyboard, StyleSheet, SafeAreaView,
+    Dimensions
 } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
@@ -83,6 +84,7 @@ class AddGoods extends Component {
             imageURIs: [],
         }
     }
+
 
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
@@ -654,38 +656,63 @@ class SmallImageViewer extends Component {
 class LargeImageViewer extends Component {
     constructor(props) {
         super(props);
+        this.currentImageIndex=this.props.startIndex;
     }
 
     renderItem=(item)=> {
         return (
-            <TouchableOpacity>
-            <View style={{flex:1,alignItems:'center',justifyContent:'center',marginTop:10}}>
-                <ImageBackground source={{ uri: item.item }} style={[inStyle.imageModalView,{justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
-                    <TouchableOpacity onPress={() => this.props.removeImage(item.index)}>
-                        <IconDelete name="close" color="black" size={50}></IconDelete>
+            <View style={inStyle.imageModalView}> 
+                <ImageBackground source={{ uri: item.item }} style={{flex:1,margin:10,alignItems:'flex-end'}}>
+                    {/* 마지막 이미지 삭제시 오류 발생하여 임시 삭제
+                    <TouchableOpacity >
+                        <IconDelete name="close" color="black" size={40}></IconDelete>
                     </TouchableOpacity>
+                    */}
                 </ImageBackground>
             </View>
-        </TouchableOpacity >)
+           
+        )
+    }
+
+    // FlatList에서 스크롤이 될때 현재 선택된 itemdml index를 얻어옴
+    //FlatList의 props에 onViewableItemsChanged와 viewabilityConfig를 추가해 주어야 함
+    imageItemChanged=(item)=> {
+        console.log('item changed = ',item.changed[0]);
+        this.currentImageIndex=item.changed[0].index;
+    }
+
+    removeImage=()=>{
+        this.props.removeImage(this.currentImageIndex);
+        this.props.closeModal();
     }
 
     render() {
         return (
-            <Modal visible={true}>
-                <Button title="Back" onPress={this.props.closeModal} />
-                <View style={[template.total_container,{backgroundColor:colors.dark}]}>
+            <Modal visible={true}>                
+                <SafeAreaView style={[template.baseContainer,{marginBottom:10}]}>               
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         data={this.props.items}
                         renderItem={(item) => this.renderItem(item)}
                         horizontal={true} // 가로정렬
                         initialScrollIndex={this.props.startIndex}
-                    />
-                </View>
+                        onViewableItemsChanged={(item)=> this.imageItemChanged(item)}
+                        viewabilityConfig={{waitForInteraction: true,itemVisiblePercentThreshold: 80}}
+                    />    
+                </SafeAreaView>     
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <TouchableOpacity style={[template.activeButton,{flex:1, marginRight:2}]} onPress={this.props.closeModal}>
+                        <Text style={template.buttonText}>닫기</Text>
+                    </TouchableOpacity>  
+                    <TouchableOpacity style={[template.activeButton,{flex:1}]} onPress={()=>this.removeImage()}>
+                        <Text style={template.buttonText}>이 사진 삭제</Text>
+                    </TouchableOpacity>  
+                </View>     
             </Modal>            
         )
     }
 }
+
 
 
 //상품등록 확인 페이지 팝업
@@ -738,6 +765,9 @@ class ConfirmModal extends Component {
 }
 
 export default AddGoods;
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 
 const inStyle = StyleSheet.create({
     hashTagView: [
@@ -794,10 +824,10 @@ const inStyle = StyleSheet.create({
     
     //imageModal
     imageModalView:{
-        flex: 1,
-        width: 390,
-        height: 580,
-        margin: 5,
+        //flex: 1,
+        width: ScreenWidth,
+        height: ScreenHeight,
+        //margin: 20,
     },
     imageDeleteView:{
         top: -2,

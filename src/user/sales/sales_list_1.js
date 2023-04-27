@@ -62,7 +62,6 @@ export default class SalesDetails extends Component {
     }
     goGetSells = () => {
         //console.log("refresh sell");
-        const currentSaleState=this.state.saleState;
         this.callGetSellsAPI().then((response) => {
             this.contents = response;
             let totalPrice=0;
@@ -74,7 +73,7 @@ export default class SalesDetails extends Component {
                 }
             });
             this.setState({totalPrice:totalPrice,totalCount:totalCount});
-            this.setState({ soldoutContents: this.dataFiltering(currentSaleState)});
+            this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) });
         })
     }
 
@@ -103,14 +102,21 @@ export default class SalesDetails extends Component {
             Promise.reject(response);
     }
 
-    listKindClicked = (value) => { //배송정보입력
-        //this.setState({ saleState: 2 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
-        this.setState({ saleState:value, soldoutContents: this.dataFiltering(value)});
+    saleBarClicked = () => { //판매중
+        this.setState({ saleState: 1 });
     }
 
-    dataFiltering(value) {
+    shippingBarClicked = () => { //배송정보입력
+        this.setState({ saleState: 2 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
+    }
+
+    soldoutBarClicked = () => { //판매완료
+        this.setState({ saleState: 3 }, () => { this.setState({ soldoutContents: this.dataFiltering() }, () => { this.handleEmptySoldOutListView(this.state.soldoutContents.length) }) });
+    }
+
+    dataFiltering() {
         let filteredContents = this.contents;
-        if (value == 3) {
+        if (this.state.saleState == 3) {
             filteredContents = filteredContents.filter((content) => {
                 if (content.status == 3) {
                     return true;
@@ -144,13 +150,13 @@ export default class SalesDetails extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', width: "100%", }}>
                         <View style={{ borderBottomWidth: this.state.saleState == 1 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={()=>this.setState({saleState:1})}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.saleBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 1 ? "#EE636A" : "black" }]}>나의상품</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 2 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={()=>this.listKindClicked(2)}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>판매현황</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.shippingBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 2 ? "#EE636A" : "black" }]}>판매현황</Text></TouchableOpacity>
                         </View>
                         <View style={{ borderBottomWidth: this.state.saleState == 3 ? 2 : 0, width: "33.3%", borderBottomColor: "#EE636A", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={()=>this.listKindClicked(3)}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={this.soldoutBarClicked}><Text style={[styles.slidertext, { color: this.state.saleState == 3 ? "#EE636A" : "black" }]}>판매완료</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>

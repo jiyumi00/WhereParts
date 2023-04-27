@@ -89,8 +89,14 @@ public class MediaUtil {
     public ArrayList<Uri> getImageContentUris() {
         Uri sourceUris=MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
 
-        String[] photoProjection = {MediaStore.Images.Media._ID,MediaStore.Images.Media.DISPLAY_NAME,MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(sourceUris,photoProjection,null,null,null);
+        String[] photoProjection = {
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.DATA
+        };
+
+        String sortOrder = MediaStore.Images.Media.DATE_TAKEN+" desc";
+        Cursor cursor = context.getContentResolver().query(sourceUris,photoProjection,null,null,sortOrder);
 
         ArrayList<Uri> albumList = new ArrayList<Uri>(); // Files에서 가져온 모든 데이터들의 content uri를 저장
         while(cursor.moveToNext()) {
