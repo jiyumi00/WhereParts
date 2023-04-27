@@ -20,9 +20,8 @@ class PickList extends Component {
         this.userID = Session.getUserID();
         this.state={
             wishContent:[],
-            wishContentLength:1,
             isRefresh:false,
-            //emptyListViewVisible:false, 
+            emptyListViewVisible:false, 
 
         }
     }
@@ -31,7 +30,7 @@ class PickList extends Component {
     }
     goGetWish=()=>{
         this.callGetWishAPI().then((response) => { 
-            this.setState({wishContent:response , /* emptyListViewVisible:response.length==0?true:false */ wishContentLength:response.length})
+            this.setState({wishContent:response , emptyListViewVisible:response.length==0?true:false })
          });  
     }
     //등록된 상품 리스트 API
@@ -48,14 +47,14 @@ class PickList extends Component {
     render() {
         return (
            <View style={styles.total_container}>
-                {this.state.wishContentLength!=0 && (<FlatList
+                {this.state.emptyListViewVisible==false &&(<FlatList
                     showsVerticalScrollIndicator={false}
                     numColumns={2} 
                     data={this.state.wishContent}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} pickRefreshListener={this.goGetWish}/>}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.wishContentLength==0&& (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetWish} />)}
+                {this.state.emptyListViewVisible &&(<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetWish} />)}
            </View>
         );
     }

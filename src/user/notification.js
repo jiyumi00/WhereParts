@@ -24,8 +24,8 @@ export default class Notification extends Component {
             unReadNotiesButton: false, // 미확인알림 선택 여부
 
             isRefresh:false,
-            notiContentsLength:1
-            //emptyListViewVisible:false,
+            notiContentsLength:1,
+            emptyListViewVisible:false,
         }
     }
 
@@ -37,7 +37,7 @@ export default class Notification extends Component {
             this.callGetNotiesAPI().then((response) => {
                 console.log('noti data',response);
                 this.contents=response;
-                this.setState({notiContents:this.dataFiltering(), /* emptyListViewVisible:response.length==0?true:false */ notiContentsLength:response.length});
+                this.setState({notiContents:this.dataFiltering(), emptyListViewVisible:response.length==0?true:false});
                 console.log('noti',this.state.notiContents)
             });
     }
@@ -117,14 +117,14 @@ export default class Notification extends Component {
                             <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    {this.state.notiContentsLength !=0 && (<FlatList
+                    {this.state.emptyListViewVisible==false&& (<FlatList
                         data={this.state.notiContents}
                         renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} deleteItemListener={(id)=>this.deleteItemListener(id)}/>}
                         refreshing={this.state.isRefresh}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
                     />)}
-                    {this.state.notiContentsLength==0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
+                    {this.state.emptyListViewVisible && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetNoties} />)}
                 </View>
             </View>
         );
