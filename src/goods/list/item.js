@@ -1,14 +1,13 @@
 import React, { Component , PureComponent } from 'react';
 import { View, Text, Image, TouchableOpacity,Dimensions,StyleSheet} from 'react-native';
 
-//import { styles } from "../../styles/buy/picklist_1";
 import { template,colors } from '../../styles/template/page_style';
 
 import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import FunctionUtil from '../../util/libraries_function';
 
-//import MapIcon from 'react-native-vector-icons/Feather';
+
 import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
 
 const ScreenHeight=Dimensions.get('window').height;
@@ -58,7 +57,7 @@ export default class ListItem extends PureComponent {
                 <View style={inStyle.itemView}>
                     <View style={template.layoutBox}>
                         <View style={{ alignItems: 'flex-start' }}>
-                            <Text style={template.contentText}>{item.name.length > 13 ? `${item.name.slice(0, 13)}...` : item.name}</Text>
+                            <Text style={template.contentText}>{item.name.length > 13 ? `${item.name.slice(0, 11)}...` : item.name}</Text>
                         </View>
                     </View>
                     <View style={[template.line,{marginBottom:'2%'}]}/>

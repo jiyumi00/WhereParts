@@ -11,7 +11,7 @@ import Home from '../goods/list/home';
 //import Home from '../goods/list/home_3';
 //import Home from '../goods/list/home_4';
 
-import AddGoods from '../goods/register/components/add_goods';
+import AddGoods from '../goods/register/add_goods';
 import MyPage from '../user/mypage';
 import Notification from '../user/notification';
 

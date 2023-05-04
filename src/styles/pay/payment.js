@@ -3,67 +3,138 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
-  buyButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: 200,
-    borderRadius: 5,
-    backgroundColor: '#0066FF',
-  },
-  buyButtonText: {
-    fontFamily: 'Pretendard-SemiBold',
-    fontSize: 18,
-    color: '#FFF',
-  },
-  indexText:{
-    fontSize: 16, 
-    marginBottom:'3%',
-    fontWeight: "bold", 
-    color: 'black' 
-  },
-  indexView:{
+  //View
+  //주문상품
+  orderItem_view:{
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "lightgray",
-    padding: 10
+    paddingHorizontal:10,
+    marginTop:10,
   },
-  priceText:{
-    fontSize: 18,
-    color:'black' 
+  orderItemBody_view:{
+    flexDirection: 'row', 
+    paddingVertical:'2%',
+    borderWidth:0, 
+    borderBottomWidth:1, 
+    borderColor:'#D9D9D9',
+    //marginVertical:'2%'
   },
-  paymentButton:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 50,
-    width: "auto",
-    borderRadius: 5,
-    backgroundColor: '#0066FF', 
+  productImage: {
+    flex: 1,
+    borderRadius: 6,
   },
-  goListButton:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: "48%",
-    borderRadius: 5,
-    backgroundColor: '#0066FF',
+  orderInfo_view:{
+    flexDirection: 'column',
+    alignItems:'flex-end',
+    flex:4,
   },
-  //수량디자인
-  selectQuantityView: {
-    marginLeft:"60%",
+
+  orderItemBottom_view:{
+    flexDirection: 'row',
+    paddingVertical:'2%',
+  },
+  itemPrive_view:{
+    justifyContent:'center',
+    flex:1
+  },
+  itemQuantity_view:{
     width:"auto",
     borderRadius: 6,
     borderColor: '#D4D4D4',
     borderWidth: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+   justifyContent:'center'
   },
-  quantityItemText: {
-    fontFamily: 'Pretendard-Medium',
+  
+  address_view: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    backgroundColor: "#F1F1F3",
+    borderRadius: 10,
+    height: 45,
+    width: "100%",
+    marginBottom: 15,
+  },
+  //Text
+
+
+  text: {
+    fontFamily: "Cochin",
     fontSize: 15,
-    color: '#000',
+    color: "black",
+
+    goodsName_text: {
+      fontSize: 16,
+      color: 'black',
+      borderBottomWidth : 1,
+      paddingBottom:3, 
+      borderColor:'#D9D9D9'
+    },
+    price_text:{
+      fontSize: 18,
+      color:'black',
+    },
+  
+    buyButtonText: {
+      fontFamily: 'Pretendard-SemiBold',
+      fontSize: 18,
+      color: '#FFF',
+    },
+    number_text: {
+      //borderWidth:1,
+      width: '60%',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      backgroundColor: "#F1F1F3",
+      borderRadius: 10,
+      height: 45,
+      marginBottom: 15,
+      marginRight: 15,
+  
+    },
+   
+    title: {
+      fontFamily: "Cochin",
+      fontSize: 18,
+      fontWeight:"bold",
+      color: "black",
+      marginBottom: 15,
+    },
+    quantityItemText: {
+      fontFamily: 'Pretendard-Medium',
+      fontSize: 18,
+      color: '#000',
+    },
+    btn_text: {
+      fontFamily: "Cochin",
+      fontSize: 15,
+      color: "white",
+    },
   },
-  quantityItem: {
+
+ 
+
+  //btn
+  payment_btn:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    width: "auto",
+    backgroundColor: '#0066FF', 
+  },
+  address_btn: {
+    //borderWidth:1,
+    width: '36%',
+    height: 45,
+    backgroundColor: "black",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+  },
+
+ 
+  quantity_btn: {
     width: 36,
     height: 36,
     justifyContent: 'center',
@@ -74,11 +145,7 @@ export const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
   },
-  buttonView:{
-    flexDirection:'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   //pay_complete
   goodsInfoView:{
     height:'30%',
@@ -87,21 +154,17 @@ export const styles = StyleSheet.create({
   payInfoView:{
     flex:2,
   },
-  //address
-  total_container: {
-    flex: 1,
-    backgroundColor: 'white',
 
-  },
+  //address
+ 
   container: {
     flex: 1,
     marginTop: 30,
-    //marginLeft:30,
-    //marginRight:30,
   },
   rowLayout: {
     flex: 1,
     flexDirection: 'row',
+    //borderWidth:1,
   },
   textInput: {
     backgroundColor: '#F1F1F3',
@@ -109,73 +172,17 @@ export const styles = StyleSheet.create({
     marginRight: 15,
     paddingHorizontal: 10,
 
-    height: 55,
-    width: "96%",
+    height: 45,
+    width: "100%",
     borderRadius: 10,
     borderColor: '#F1F1F3',
     borderWidth: 1,
   },
-
-  title: {
-    fontFamily: "Cochin",
-    fontSize: 18,
-    fontWeight:"bold",
-    color: "black",
-    marginBottom: 15,
-  },
-
-  btn: {
-    width: 130,
-    height: 55,
-    backgroundColor: "black",
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 15,
-  },
-  btn_text: {
-    fontFamily: "Cochin",
-    fontSize: 15,
-    color: "white",
-  },
-  text: {
-    fontFamily: "Cochin",
-    fontSize: 15,
-    color: "black",
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  number_text: {
-
-    width: '55%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
-    borderRadius: 10,
-    height: 55,
-    marginBottom: 15,
-    marginRight: 15,
-
-  },
-  address_text: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#F1F1F3",
-    borderRadius: 10,
-    height: 55,
-    width: "96%",
-    marginBottom: 15,
-  },
-  deliverView:{
+ 
+  deliver_view:{
     marginBottom:20,
     paddingBottom:10,
     borderBottomWidth:1,
     borderColor:'lightgray',
-  },
-  productImage: {
-    flex: 1,
-    //margin: 5,
-    width: 75,
-    height: 65,
-    borderRadius: 6,
   },
 })

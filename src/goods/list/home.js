@@ -3,9 +3,6 @@ import {
     ScrollView, Pressable, TextInput, ImageBackground, View, Text,
     Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules, SafeAreaView,
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-
-import FunctionUtil from '../../util/libraries_function';
 import { Picker } from '@react-native-picker/picker';
 import Indicator from '../../util/indicator';
 import Constant from "../../util/constatnt_variables";
@@ -49,7 +46,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.goGetGoods(Session.getUserID());
+        this.goGetGoods();
         BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
 

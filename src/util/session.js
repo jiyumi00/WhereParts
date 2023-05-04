@@ -11,6 +11,14 @@ pageInfo:{
 }*/
 export default class Session {
     static #items={};
+
+    static clear() {
+        Session.#items={};
+    }
+
+    static getAllItem() {
+        return Session.#items;
+    }
     
     static setItem(key,item) {
         Session.#items[key]=item;

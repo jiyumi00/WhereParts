@@ -9,7 +9,8 @@ import IconDelete from 'react-native-vector-icons/Ionicons';
 import Constant from "../util/constatnt_variables";
 import WebServiceManager from "../util/webservice_manager";
 import ImageSelectorPopup from '../util/popup_image_selector';
-import IndicatorText from '../util/Indicator_text';
+import IndicatorText from '../util/indicator_text';
+import Indicator from '../util/indicator';
 
 class SignUp extends Component {
 
@@ -39,8 +40,8 @@ class SignUp extends Component {
             cardPopupMenuVisible:false,   //명함 선택을 위한 팝업 on/off (카메라/갤러리)
             registerButtonVisible : false, //로그인 버튼 활성화 on/off  
 
-            indicator:false                 //이미지 분석중이란 Indicator 표시 여부 on/off
-            
+            textIndicator:false,                 //이미지 분석중이란 textIndicator 표시 여부 on/off
+            barIndicator:false                  //회원가입중 barIndicator 표시 여부 on/off            
         }
     }
 
@@ -80,8 +81,10 @@ class SignUp extends Component {
             Alert.alert("비밀번호가 일치하지 않습니다");
         }
         else {            
+            this.setState({barIndicator:true});
             this.callAddUserAPI().then((response) => {
                 console.log(response);
+                this.setState({barIndicator:false});
                 if (response.success == 0) {
                     Alert.alert("이미 있는 사업자번호입니다");
                 }
@@ -103,7 +106,7 @@ class SignUp extends Component {
     //서버에서 사업자 주소를 이용하여 위경도 값 추출하여 DB에 저장
     async callAddUserAPI() { 
         const userData={
-            companyNo:this.state.companyNo,
+            companyNo:this.state.companyNo.replace(/-/g, ''),
             companyName:this.state.companyName,
             companyAddress:this.state.companyAddress,
             passwd:this.state.passwd
@@ -116,16 +119,6 @@ class SignUp extends Component {
         manager.addBinaryData("file2", imageData[1]); //명함 이미지
         
         console.log(userData);
-        let response = await manager.start();
-        if (response.ok) {
-            return response.json();
-        }
-    }
-
-    //사업자 등록증 이미지로 텍스트 분석하여 상호, 사업자번호, 소재지 가져오기 
-    async callCompanyInfoAPI(imageData) {
-        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
-        manager.addBinaryData("file", imageData);
         let response = await manager.start();
         if (response.ok) {
             return response.json();
@@ -177,18 +170,28 @@ class SignUp extends Component {
             name: 'photo.jpg',
         }
         
-        this.setState({indicator:true});
+        this.setState({textIndicator:true});
         this.callCompanyInfoAPI(fileData).then((response) => {
-            this.setState({indicator:false});
+            this.setState({textIndicator:false});
             console.log("company info", response);
             if(response.success==0) {            
                 Alert.alert('사업자 인식', '사업자 등록번호를 인식하지 못했습니다. 직접 입력하세요', [
                     { text: '확인', onPress: () => {this.setState({companyNo:"",companyName:"",companyAddress:""})}}]);
             }
             else
-                this.setState({companyNo:response.no.replaceAll("-",""),companyName:response.name,companyAddress:response.address});
+                this.setState({companyNo:response.no,companyName:response.name,companyAddress:response.address});
             this.onValueChange();
         }); 
+    }
+
+    //사업자 등록증 이미지로 텍스트 분석하여 상호, 사업자번호, 소재지 가져오기 
+    async callCompanyInfoAPI(imageData) {
+        let manager = new WebServiceManager(Constant.serviceURL + "/GetCompanyInfo", "post");
+        manager.addBinaryData("file", imageData);
+        let response = await manager.start();
+        if (response.ok) {
+            return response.json();
+        }
     }
 
     
@@ -216,7 +219,7 @@ class SignUp extends Component {
         this.setState(value,()=>{
             let isValidForm=true;
       
-            if(this.state.companyNo.trim().length < 10) // 조건 필요시 추가
+            if(this.state.companyNo.trim().replaceAll("-","").length < 10) // 조건 필요시 추가
                 isValidForm=false;
             if(this.state.passwd.trim().length == 0)
                 isValidForm=false;     
@@ -309,7 +312,7 @@ class SignUp extends Component {
                                         ref={(c) => { this.regnumRef = c; }}
                                         returnKeyType="next"
                                         onSubmitEditing={()=>{this.passwordRef.focus();}}
-                                        onChangeText={(value) => this.onValueChange({companyNo: value})}
+                                        onChangeText={(value) => this.onValueChange({companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3")})}
                                         value={this.state.companyNo}
                                     />
                                 </View>
@@ -355,8 +358,10 @@ class SignUp extends Component {
                             goCameraScreen={this.goNamecardCameraScreen}
                             goGalleryScreen={this.goNamecardGalleryScreen} />}
 
-                        {/*이미지 분석중 Indicator 모달*/}
-                        {this.state.indicator && <IndicatorText text="사업자 등록증을 분석중입니다."/>}
+                        {/*이미지 분석중 Indicator모달*/}
+                        {this.state.textIndicator && <IndicatorText text="사업자 등록증을 분석중입니다."/>}
+                        {/*회원가입중중 Indicator 모달*/}
+                        {this.state.barIndicator && <Indicator/>}
 
                     </ScrollView>
                     {this.state.registerButtonVisible ? 

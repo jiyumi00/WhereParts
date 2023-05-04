@@ -1,14 +1,15 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Constant from '../util/constatnt_variables';
 
 import WebServiceManager from '../util/webservice_manager';
 import EmptyListView from '../util/empty_list_view';
+import Indicator from '../util/indicator';
 import CircleIcon from 'react-native-vector-icons/FontAwesome';
 import DeleteIcon from 'react-native-vector-icons/MaterialIcons'
 
-import { template } from "../styles/template/page_style";
+import { template, colors } from "../styles/template/page_style";
 import { styles } from '../styles/notification';
 import Session from '../util/session';
 
@@ -20,12 +21,11 @@ export default class Notification extends Component {
 
         this.state = {
             notiContents: [],
-            allNotiesButton: true, // 전체알림선택 여부
-            unReadNotiesButton: false, // 미확인알림 선택 여부
+            notiKind:1,             //모든알림인지 미확인알림인지 선택 1:모든알림, 2:미확인알림
 
             isRefresh:false,
-            notiContentsLength:1,
             emptyListViewVisible:false,
+            Indicator:false
         }
     }
 
@@ -33,17 +33,15 @@ export default class Notification extends Component {
         this.goGetNoties();
     }
 
+    //모든 알림 리스트 가져옴. this.contents에 할당
     goGetNoties=()=>{
-            this.callGetNotiesAPI().then((response) => {
-                console.log('noti data',response);
-                this.contents=response;
-                this.setState({notiContents:this.dataFiltering(), emptyListViewVisible:response.length==0?true:false});
-                console.log('noti',this.state.notiContents)
-            });
-    }
-
-    handleEmptyListView=()=>{
-        this.setState({emptyListViewVisible:this.state.notiContents.length==0 ?true:false})
+        this.setState({Indicator:true});
+        this.callGetNotiesAPI().then((response) => {
+            this.setState({Indicator:false});
+            this.contents=response;            
+            this.setState({notiContents:this.dataFiltering()});
+            //console.log('noti',this.state.notiContents)
+        });
     }
 
     //사용자 id값에 해당하는 모든 알림 받아오기 API
@@ -66,29 +64,29 @@ export default class Notification extends Component {
             Promise.reject(response); 
     }
 
-    //전체 알림 리스트 
-    allNotiesClicked = () => {
-        this.setState({allNotiesButton:true,unReadNotiesButton:false},()=>{this.setState({notiContents:this.dataFiltering(),},()=>{this.handleEmptyListView()})});
+    //모든알림/읽지않은 알림 선택
+    setNotiKind=(kind)=> {
+        this.setState({notiKind:kind},()=>this.setState({notiContents:this.dataFiltering()}));
     }
 
-    //읽지 않은 알림 리스트
-    unReadNotiesClicked = () => {
-        this.setState({allNotiesButton:false,unReadNotiesButton:true},()=>{this.setState({notiContents:this.dataFiltering()},()=>{this.handleEmptyListView()})});
-    }
 
     //필터링(reading=0 or reading=1, 읽지 않은 알람과 읽은 알람)
     dataFiltering() {
         let filteredContents = this.contents;
-        if(this.state.unReadNotiesButton==true) {
+        if(this.state.notiKind==2) {
             filteredContents = filteredContents.filter((content) => {
                 if(content.reading==0)
                     return true;
-            });
-        }          
-        return filteredContents;
+            });        
+        }
+        let visible=false;
+        if(filteredContents.length==0)
+            visible=true;    
+        this.setState({emptyListViewVisible:visible});
+        return filteredContents;    
     }
 
-    //리스트의 항목에서 삭제 버튼 클릭시
+    //리스트의 항목에서 삭제 버튼 클릭시 (서버API를 호출하고 로컬의 리스트를 삭제, 서버 API재 호출하지 않음)
     deleteItemListener(id) {
         console.log('delete ',id)
         this.callRemoveNotiAPI(id).then((response)=> {
@@ -110,17 +108,19 @@ export default class Notification extends Component {
             <View style={template.baseContainer}>
                 <View style={[template.container,{marginTop:15}]}>
                     <View style={styles.productTop_view}>
-                        <View style={{ borderBottomWidth: this.state.allNotiesButton ? 1 : 0, width: "50%", alignItems: 'center'}}>
-                            <TouchableOpacity onPress={this.allNotiesClicked}><Text style={[styles.slidertext, { color: this.state.allNotiesButton ? "#EE636A" : "black" }]}>전체알림</Text></TouchableOpacity>
+                        <View style={this.state.notiKind==1 ? inStyle.selectedBar : inStyle.deSelectedBar}>
+                            <TouchableOpacity onPress={()=>this.setNotiKind(1)}><Text style={this.state.notiKind==1 ? inStyle.selectedBarText : inStyle.deSelectedBarText}>전체알림</Text></TouchableOpacity>
                         </View>
-                        <View style={{ borderBottomWidth: this.state.unReadNotiesButton ? 1 : 0, width: "50%", alignItems: 'center' }}>
-                            <TouchableOpacity onPress={this.unReadNotiesClicked}><Text style={[styles.slidertext, { color: this.state.unReadNotiesButton ? "#EE636A" : "black" }]}>미확인알림</Text></TouchableOpacity>
+                        <View style={this.state.notiKind==2 ? inStyle.selectedBar : inStyle.deSelectedBar}>
+                            <TouchableOpacity onPress={()=>this.setNotiKind(2)}><Text style={this.state.notiKind==2 ? inStyle.selectedBarText : inStyle.deSelectedBarText}>미확인알림</Text></TouchableOpacity>
                         </View>
                     </View>
-                    {this.state.emptyListViewVisible==false&& (<FlatList
+                    {this.state.emptyListViewVisible==false && (
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
                         data={this.state.notiContents}
-                        renderItem={({ item, index }) => <ItemList navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} deleteItemListener={(id)=>this.deleteItemListener(id)}/>}
-                        refreshing={this.state.isRefresh}
+                        renderItem={({ item, index }) => <NotiListItem navigation={this.props.navigation} item={item} refreshListener={this.goGetNoties} deleteItemListener={(id)=>this.deleteItemListener(id)}/>}
+                        refreshing={false}
                         onRefresh={this.goGetNoties}
                         scrollEventThrottle={16}
                     />)}
@@ -130,8 +130,10 @@ export default class Notification extends Component {
         );
     }
 }
+
+
 //리스트에 표시된 각 항목 클래스
-class ItemList extends PureComponent {
+class NotiListItem extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -216,3 +218,45 @@ class ItemList extends PureComponent {
         );
     }
 }
+
+
+
+
+const inStyle = StyleSheet.create({
+    selectedBar:[
+        {
+            borderWidth:0,
+            borderBottomWidth:2,
+            width: "50%",
+            borderBottomColor: "#EE636A",
+            alignItems: 'center'
+        }
+    ],
+
+    deSelectedBar:[
+        {
+            borderWidth:0,
+            borderBottomWidth:0,
+            width: "50%",
+            borderBottomColor: "#EE636A",
+            alignItems: 'center'
+        }
+    ],
+
+    selectedBarText:[
+        template.largeText,
+        {
+            fontWeight: 'bold',
+            color: colors.red,
+            paddingBottom:10,
+        }
+    ],
+    deSelectedBarText:[
+        template.largeText,
+        {
+            fontWeight: 'bold',
+            color: colors.dark,
+            paddingBottom:10,
+        }
+    ]
+});

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, LogBox} from 'react-native';
 
-import CameraX from '../../../util/camera_x';
+import CameraX from '../../util/camera_x';
 
-import { styles } from "../../../styles/vision_camera_style";
+import { styles } from "../../styles/vision_camera_style";
 
 // 오류구문 무시
 LogBox.ignoreLogs([

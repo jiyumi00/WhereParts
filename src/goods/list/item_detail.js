@@ -14,11 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
-//import Certified from '../../../images/icon/certified-icon/certified_1-removebg-preview.png';
-//import Certified from '../../../images/icon/certified-icon/certified_2-removebg-preview.png';
-//import Certified from '../../../images/icon/certified-icon/certified_3-removebg-preview.png';
 import Certified from '../../images/icon/certified-icon/certified_4-removebg-preview_resize.png';
-//import Certified from '../../../images/icon/certified-icon/certified_5-removebg-preview.png';
 
 import Constant from '../../util/constatnt_variables';
 import Session from '../../util/session';

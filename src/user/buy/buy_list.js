@@ -7,22 +7,21 @@ import Constant from '../../util/constatnt_variables';
 import WebServiceManager from '../../util/webservice_manager';
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
-
+import EmptyListView from '../../util/empty_list_view';
 
 export default class BuyList extends Component {
     constructor(props) {
         super(props);
 
-        this.userID=0;
+        this.userID=Session.getUserID();
         this.state = {
             buyContents: [],
             isRefresh: false,
-            emptyListViewVisible:1,
+            emptyListViewVisible:false,
         }
     }
 
     componentDidMount() {
-        console.log("buylist sesseion = ",Session.isLoggedin())
         if(Session.isLoggedin()){
             this.userID = Session.getUserID();
             this.goGetGoods();
@@ -44,19 +43,9 @@ export default class BuyList extends Component {
 
     goGetGoods = () => {
         this.callGetGoodsAPI().then((response) => {
-            this.setState({ buyContents: response }, () => { this.handleEmptyListView() })
+            this.setState({ buyContents: response, emptyListViewVisible:response.length==0?true:false })
         });
     }
-
-    handleEmptyListView=()=>{
-        if(this.state.buyContents.length==0){
-            this.setState({emptyListViewVisible:0});
-        }
-        else{
-            this.setState({emptyListViewVisible:1});
-        }
-    }
-
     //등록된 상품 리스트 API
     async callGetGoodsAPI() {
         let manager = new WebServiceManager(Constant.serviceURL + "/GetOrders?id=" + this.userID);
@@ -70,14 +59,14 @@ export default class BuyList extends Component {
     render() {
         return (
             <View style={{ flex: 1, marginBottom: 10, }}>
-                {this.state.emptyListViewVisible==1 && (<FlatList
+                {this.state.emptyListViewVisible==false && (<FlatList
                     data={this.state.buyContents}
                     renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refresh={this.goGetGoods} />}
                     refreshing={this.state.isRefresh}
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                 />)}
-                {this.state.emptyListViewVisible == 0 && (<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />)}
+                {this.state.emptyListViewVisible&&<EmptyListView navigation={this.props.navigation} isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} />}
             </View>
         );
     }
@@ -123,6 +112,10 @@ class ListItem extends Component {
     goOrderDetailScreen = () => {
         this.props.navigation.navigate('OrderDetail', { orderID: this.orderID })
     }
+    //부품번호에 대한 Goodle 검색창 보이기(Web View)
+    goGoodsNumberWebView = () => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.props.item.goodsNo });
+    }
 
 
     orderCompleteButtonClick = () => {
@@ -166,45 +159,47 @@ class ListItem extends Component {
             <>
                 <View style={styles.itemView}>
                     <TouchableOpacity onPress={this.handleDetailViewModal}>
-                        <View style={styles.dateView}>
-                            <Text>주문일  </Text><Text style={styles.itemRegisterDateText}>{orderingDate.slice(2, 10)}</Text>
+                        {/* <View style={styles.dateView}>
+                            <Text style={styles.itemDistanceText}>{this.goodsStatusText(status)}</Text>
+                        </View> */}
+                       
+                        <View style={{ borderBottomColor: '#D1D1D1', borderBottomWidth: 1, flexDirection: 'row', paddingBottom: '2%' }}>
+                            <View style={{ flex: 3, alignItems: 'flex-start' }}>
+                                <Text style={styles.itemNameText}>{goodsName.length > 20 ? `${goodsName.slice(0, 20)}...` : goodsName}</Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end',}}>
+                                <Text style={[styles.itemNameText, { color: '#EE636A',fontSize:14 }]}>{this.goodsStatusText(status)}</Text>
+                            </View>
                         </View>
-                        <View style={styles.productView}>
-                            <View style={styles.productImageView}>
-
+                        <View style={{ flexDirection: 'row', flex: 5, paddingTop: '3%', paddingBottom: '3%' }}>
+                            <View style={styles.imageView}>
                                 <Image
                                     source={{ uri: this.state.imageURI }}
                                     style={styles.productImage} />
                             </View>
-                            <View style={styles.productInfo}>
-                                <View style={styles.productInfoLeft}>
-                                    <Text style={styles.itemNameText}>{goodsName}</Text>
-                                    <Text style={styles.itemPriceText}>{FunctionUtil.getPrice(total)}{"원"} <Text style={styles.text}> / {quantity}개 </Text></Text>
-                                    <Text style={styles.itemNumberText}>{goodsNo}</Text>
-                                </View>
-                                <View style={styles.productInfoRight}>
-                                    <View style={styles.productDistance}>
-                                        <Text style={styles.itemDistanceText}>{this.goodsStatusText(status)}</Text>
-                                    </View>
-
-                                </View>
+                            <View style={[styles.productInfo, { paddingLeft: '2%', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
+                                <TouchableOpacity onPress={this.goGoodsNumberWebView}><Text style={styles.itemNumberText}><Text style={{ color: 'grey' }}>부품번호 : </Text>{goodsNo}</Text></TouchableOpacity>
+                                <Text style={styles.itemPriceText}><Text style={{ color: 'grey' }}>가격/수량 : </Text>{FunctionUtil.getPrice(total)}<Text>원 / {quantity}개</Text></Text>
+                                <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey' }}>주문일 : </Text>{orderingDate.slice(2, 10)}</Text>
                             </View>
+
                         </View>
+            
                     </TouchableOpacity>
                     <View style={styles.productButtonView}>
-                        <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                        <View style={[styles.payInfoButtonView, { borderColor: 'blue',marginRight:'2%' }]}>
                             <TouchableOpacity onPress={this.goOrderDetailScreen}><Text style={{ color: 'blue' }}>주문상세</Text></TouchableOpacity>
                         </View>
                         {status != 1 &&
-                            <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                            <View style={[styles.payInfoButtonView, { borderColor: 'blue',marginRight:'2%'}]}>
                                 <TouchableOpacity onPress={this.goDeliveryDetailScreen}><Text style={{ color: 'blue' }}>배송조회</Text></TouchableOpacity>
                             </View>}
                         {status == 1 &&
-                            <View style={styles.payInfoButtonView}>
+                            <View style={[styles.payInfoButtonView,{marginRight:'2%' }]}>
                                 <TouchableOpacity><Text >배송조회</Text></TouchableOpacity>
                             </View>}
                         {status == 2 &&
-                            <View style={[styles.payInfoButtonView, { borderColor: 'blue' }]}>
+                            <View style={[styles.payInfoButtonView, { borderColor: 'blue'}]}>
                                 <TouchableOpacity onPress={this.orderCompleteButtonClick}><Text style={{ color: 'blue' }}>구매확정</Text></TouchableOpacity>
                             </View>}
                         {status != 2 &&

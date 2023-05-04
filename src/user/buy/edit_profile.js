@@ -36,8 +36,6 @@ class EditProfile extends Component {
             passwdError: false, //현재 비밀번호를 입력해야 정보수정을 할 수 있음. 현재 비밀번호 입력이 틀렸을 경우 true
 
             confirmPasswd: '',
-
-            companyNo: '',
             passwd: '',
             passwordok: '',
 
@@ -56,9 +54,7 @@ class EditProfile extends Component {
 
     componentDidMount() {
         FunctionUtil.loginInfo().then((value) => {
-            //const loginInfo = {companyNo:value.companyNo, passwd:value.passwd, userID:Session.getUserID()};
             this.loginInfo = { companyNo: value.companyNo, passwd: value.passwd, userID: Session.getUserID() }
-            this.setState({ companyNo: this.loginInfo.companyNo });
             this.callGetCompanyImage().then((response) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(response);
@@ -184,7 +180,6 @@ class EditProfile extends Component {
             if (this.state.cardImageURI == "") {
                 isValidForm = false;
             }
-            //console.log("imageLength", this.imageLength);
             this.setState({ validForm: isValidForm });
         })
 
@@ -193,7 +188,6 @@ class EditProfile extends Component {
         this.photoCameraIcon.current.measure((fx, fy, width, height, px, py) => {
             this.modalPhotoCameraX = px + width - (width);
             this.modalPhotoCameraY = py + height - (height / 10);
-            // console.log('location:',fx,fy,width,height,px,py)
         })
     }
 
@@ -217,9 +211,9 @@ class EditProfile extends Component {
                     onRequestClose={() => this.props.navigation.pop()}
                 >
                     <ScrollView>
-                        <View style={inStyle.roundedBoxWrap}>
+                        <View style={[inStyle.roundedBoxWrap,{paddingVertical:'6%'}]}>
                             <Text style={[template.titleText,{ color: '#4B89DC'}]}>비밀번호 확인</Text>
-                            <Text style={template.contentText}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
+                            <Text style={[template.contentText,{color:'#888888'}]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
 
                             <View style={[inStyle.roundedBoxWrap,{ paddingHorizontal: '0%'}]}>
                                 <View style={[template.roundedBox, { paddingVertical: '0%', borderWidth: 2 }]}>
@@ -261,7 +255,7 @@ class EditProfile extends Component {
 
                             <View style={inStyle.roundedBoxWrap}>
                                 <Text style={{fontSize:25,color:'black',fontWeight:'bold'}}>내정보 수정</Text>
-                                <Text style={template.contentText}>수정을 위해 아래의 항목을 첨부해주세요.</Text>
+                                <Text style={[template.contentText,{color:'#888888'}]}>수정을 위해 아래의 항목을 첨부해주세요.</Text>
                             </View>
                             <View style={[inStyle.roundedBoxWrap,{flexDirection:'row',justifyContent:'center'}]}>
                                 {/*사업자 등록증 사진*/}
@@ -307,10 +301,10 @@ class EditProfile extends Component {
                                 </View>
                             </Modal>
 
-                            <View style={[template.roundedBox,{paddingHorizontal:'3%',borderWidth:0,paddingVertical:'8%'}]}>
+                            <View style={[template.roundedBox,{paddingHorizontal:'5%',borderWidth:0,paddingVertical:'8%'}]}>
                                 <View style={inStyle.textInput}>
                                     <Text>사업자 등록번호</Text>
-                                    <Text style={[template.smallText,{marginTop:'2%'}]}>{this.state.companyNo.slice(0, 3)}-{this.state.companyNo.slice(3, 5)}-{this.state.companyNo.slice(5, 10)}</Text>
+                                    <Text style={[template.smallText,{marginTop:'2%'}]}>{this.loginInfo.companyNo.slice(0, 3)}-{this.loginInfo.companyNo.slice(3, 5)}-{this.loginInfo.companyNo.slice(5, 10)}</Text>
                                 </View>
 
                                 <View style={inStyle.textInput}>
@@ -362,11 +356,10 @@ class EditProfile extends Component {
         )
     }
 }
-
 export default EditProfile;
 
 const inStyle = StyleSheet.create({
-    roundedBoxWrap:[template.roundedBox, { borderWidth: 0, paddingHorizontal: '4%',paddingVertical:'4%' }],
+    roundedBoxWrap:[template.roundedBox, { borderWidth: 0, paddingHorizontal: '5%',paddingVertical:'3%' }],
     passwdConfirmButton: [
         template.roundedBox,
         {
@@ -391,6 +384,7 @@ const inStyle = StyleSheet.create({
             borderRadius: 10,
             borderColor: '#D1D1D1',
             borderWidth: 2,
+            
         }
     ],
     imageButton: {

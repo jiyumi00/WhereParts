@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 
-import { template } from "../../../styles/template/page_style";
-import { styles } from "../../../styles/gallery";
+import { template } from "../../styles/template/page_style";
+import { styles } from "../../styles/gallery";
 
-import GalleryX from '../../../util/gallery_x';
+import GalleryX from '../../util/gallery_x';
 
 
 class Gallery extends Component {

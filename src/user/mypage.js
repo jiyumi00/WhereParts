@@ -16,44 +16,17 @@ class MyPage extends Component {
     super(props);
     this.idRef = React.createRef();
     this.passwordRef = React.createRef();
-    this.state = {
-      companyNo: null,
-    }
   }
 
-  componentDidMount() {
-    FunctionUtil.loginInfo().then((value) => {
-      console.log('mypage ',value)
-      let companyNo = value.companyNo;
-      this.setState({ companyNo: companyNo.slice(0, 3) + "-" + companyNo.slice(3, 5) + "-" + companyNo.slice(5, 10) });
-    });
-  }
-
+  //현재 설정된 로그인관련 정보를 가져와 AsyncStorage에 저장하고 앱 종료
   logout() {
     FunctionUtil.getLoginType().then((response) => {
-      console.log('login info ', response);
-      const detailLogin = response.detailLogin;
-      if (detailLogin == 0)
-        AsyncStorage.clear();
-      else if (detailLogin == 1) { // 자동로그인일 경우 로그아웃 시에도 항상 자동로그인 (30일 후 자동로그아웃 될 수 있도록 구현)
-        const newObj = {
-          companyNo: response.companyNo,
-          passwd: response.passwd,
-          detailLogin: 1,
-        };
-        AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
-      }
-      else if (detailLogin == 2) {
-        const newObj = {
-          companyNo: response.companyNo,
-          passwd: '',
-          detailLogin: 2
-        };
-        AsyncStorage.setItem('userInfo', JSON.stringify(newObj));
-        console.log('logout async detail 2', newObj);
-      }
+      Session.clear();
+      //console.log('로그아웃 후 AsyncStorage에 저장할 값 = ', response);
+      //console.log('로그아웃 후 Session에 저장된 값 = ',Session.getAllItem());
+      AsyncStorage.setItem('userInfo', JSON.stringify(response));
       BackHandler.exitApp();
-    });}
+  });}
 
 
   goSalesListScreen = () => {
@@ -82,7 +55,8 @@ class MyPage extends Component {
   }
 
   render() {
-    const {companyName,companyAddress} = Session.getUserInfoItem();
+    const {companyName,companyAddress,companyNo} = Session.getUserInfoItem();
+    const displayCompanyNo = companyNo.slice(0, 3) + "-" + companyNo.slice(3, 5) + "-" + companyNo.slice(5, 10);
     return (
       <>
 
@@ -93,7 +67,7 @@ class MyPage extends Component {
             <View style={styles.container}>
               <View style={styles.item1}>
                 <Text style={styles.name_text}>{companyName}</Text>
-                <TouchableOpacity onPress={this.goEditProfileScreen}><Text style={styles.number_text}>{this.state.companyNo}</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.goEditProfileScreen}><Text style={styles.number_text}>{displayCompanyNo}</Text></TouchableOpacity>
                 <Text>{companyAddress}</Text>
               </View>
 

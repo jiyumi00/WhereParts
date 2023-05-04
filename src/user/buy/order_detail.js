@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity,BackHandler } from 'react-native';
 import { useValue } from 'react-native-reanimated';
 import { styles } from "../../styles/buy/order_detail";
 import { template } from "../../styles/template/page_style";
@@ -21,7 +21,12 @@ class OrderDetail extends Component {
             this.setState({ item: response, days: response.days });
             console.log(response);
         })
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
     }
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
+
 
     //웹뷰로 영수증 보기
     goReceiptWebView = () => {
@@ -37,7 +42,10 @@ class OrderDetail extends Component {
         else
             Promise.reject(response);
     }
-
+    backPressed = () => {
+        this.props.navigation.pop();
+        return true;
+    }
     render() {
         const { id, orderNo, goodsName, goodsNo, buyerName, buyerTel, quantity, price, total, orderingDate, payKind, payBank, address, status, days, invoiceName, invoiceNo } = this.state.item;
 

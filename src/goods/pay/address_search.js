@@ -13,15 +13,14 @@ import Indicator from '../../util/indicator';
 class SearchAddress extends Component {
     constructor(props) {
         super(props);
-        this.countPerPage = 20;
+        this.countPerPage = 10; // 한 페이지 당 보여지는 개수
         this.state = {
             addressContents: [],
-            //commonContents:[],
             searchText: "",
-            searchViewVisible: false,
-            emptyListViewVisible: false,
+            searchViewVisible: false, // 검색했을 경우 보여지는 View on/off
+            emptyListViewVisible: false, // 결과가 없을 때 View on/off
             page: 1,
-            totalCount: 0,
+            totalCount: 0, // 검색결과 총 개수
             indicator: false,
         }
     }
@@ -32,12 +31,12 @@ class SearchAddress extends Component {
             alert("주소를 입력해주세요");
         }
         else {
-            this.setState({ page: 1 }, () => this.goGetAddress(this.state.page))
+            this.setState({ page: 1 }, () => this.goGetAddress())
             Keyboard.dismiss();
         }
     }
-    goGetAddress = (page) => {
-        this.callGetAddressAPI(page).then((response) => {
+    goGetAddress = () => {
+        this.callGetAddressAPI().then((response) => {
             console.log(response)
             if (response.results.common.errorMessage == "정상") {
                 this.setState({ indicator: true })
@@ -60,16 +59,18 @@ class SearchAddress extends Component {
         });
     }
 
+    // 이전 페이지 버튼 클릭
     pageDownClicked = () => {
         if (this.state.page > 1)
-            this.setState({ page: this.state.page - 1 }, () => this.goGetAddress(this.state.page))
+            this.setState({ page: this.state.page - 1 }, () => this.goGetAddress())
     }
+    // 다음 페이지 버튼 클릭
     pageUpClicked = () => {
         if (this.state.page < (this.state.totalCount / this.countPerPage))
-            this.setState({ page: this.state.page + 1 }, () => this.goGetAddress(this.state.page))
+            this.setState({ page: this.state.page + 1 }, () => this.goGetAddress())
     }
     async callGetAddressAPI(page) {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -119,6 +120,7 @@ class SearchAddress extends Component {
                     {/* 검색결과 리스트 */}
                     {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
                         <FlatList
+                            showsVerticalScrollIndicator={false}
                             style={{ borderColor: '#909098', }}
                             data={this.state.addressContents}
                             renderItem={({ item, index }) => <AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener} />} />

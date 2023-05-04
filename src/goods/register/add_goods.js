@@ -6,10 +6,8 @@ import {
 } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
-//import { styles } from "../../../styles/register/addgoods";
-import { template,colors } from "../../../styles/template/page_style";
-
-
+import { template,colors } from "../../styles/template/page_style";
+ 
 import IconCamera from 'react-native-vector-icons/Feather';
 import IconMark from 'react-native-vector-icons/AntDesign';
 import IconDelete from 'react-native-vector-icons/Ionicons';
@@ -18,14 +16,14 @@ import IconPopup from 'react-native-vector-icons/EvilIcons';
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
 import { Picker } from '@react-native-picker/picker';
-import Constant from "../../../util/constatnt_variables";
-import WebServiceManager from "../../../util/webservice_manager";
-import ImageSelectorPopup from '../../../util/popup_image_selector';
-import GalleryX from '../../../util/gallery_x';
-import { parse } from '@babel/core';
-import Session from '../../../util/session';
-import FunctionUtil from '../../../util/libraries_function';
-import { color } from 'react-native-reanimated';
+import Constant from "../../util/constatnt_variables";
+import WebServiceManager from "../../util/webservice_manager";
+import ImageSelectorPopup from '../../util/popup_image_selector';
+import Indicator from '../../util/indicator';
+
+import Session from '../../util/session';
+import FunctionUtil from '../../util/libraries_function';
+
 
 class AddGoods extends Component {
 
@@ -79,6 +77,7 @@ class AddGoods extends Component {
 
             confirmModalVisible: false, // 상품등록 확인창 모달 on/off 
             largeImageModalVisible: false, // 이미지 크게보기 모달
+            indicator :false,
 
             selectedImageIndex: 0, // selectedImageIndex
             imageURIs: [],
@@ -100,10 +99,12 @@ class AddGoods extends Component {
     // 상품등록 확인창에서 확인버튼을 눌렀을 때 호출되는 함수(이미지들의 사이즈를 줄이고, AddGoodsAPI호출)
     goAddGoodsButtonClicked = () => { 
         this.setConfirmModal(false);
+        this.setState({indicator:true});
         this.getResizingImageDatas(this.state.imageURIs).then((imageDatas)=> {
             console.log('image data = ',imageDatas);            
             this.callAddGoodsAPI(imageDatas).then((response) => {
                 console.log(response);
+                this.setState({indicator:false});
                 if (response.success == 1) {                    
                     Alert.alert('알림','상품등록이 성공되었습니다', [
                         { text: '확인', onPress: () => { this.props.navigation.navigate("Home") } },
@@ -145,7 +146,7 @@ class AddGoods extends Component {
         return fileData;
     }
 
-    //여러개의 선택한 이미지 uri를 파라메터로 넘겨주고 해당사이즈만큼 줄인 이미지 uri를 받아옴
+    //여러개의 선택한 이미지 uri를 파라메터로 넘겨주고 해당사이즈만큼 줄인 이미지 uri를 받아옴 (4=1/4사이즈로 줄임)
     async getResizingImageUris(uris) {
         let resizedURI = await this.imageModule.getReduceImageUris(uris,4);
         return resizedURI;
@@ -398,10 +399,10 @@ class AddGoods extends Component {
                         <View style={template.container}>
                             {/*상품 이미지 등록을 위한 버튼 */}
                             <View style={[template.roundedBox]}>
-                                <Text style={template.largeText}>사진등록</Text>
+                                <Text style={template.largeText}>사진등록 (최소 1개)</Text>
                                 <View style={{flexDirection:'row'}}>
                                     <IconMark name="exclamationcircleo" size={15}></IconMark>
-                                    <Text style={template.contentTitleText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다 </Text>
+                                    <Text style={template.contentTitleText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다.</Text>
                                 </View>
                                 <View style={{marginBottom: '2%', flexDirection:'row' }}>
                                     <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
@@ -612,6 +613,9 @@ class AddGoods extends Component {
                                 item={this.state}  
                                 confirmModalVisible={()=>this.setConfirmModal(false)} 
                                 okButtonListener={this.goAddGoodsButtonClicked} />)}
+
+                        {/* 상품등록중 indicator*/}
+                        {this.state.indicator && <Indicator/>}
                     </ScrollView>
                 </View>
             </>

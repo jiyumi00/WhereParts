@@ -28,26 +28,30 @@ class Login extends Component {
 
             autoLoginChecked: false,
             rememberIdChecked: false,
-            loginValid: false,
+            loginValid: false
         }     
     }
 
     //자동로그인
     componentDidMount() {
         SplashScreen.hide();
-        //퍼미션 설정되었는지 확인
+        
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onValueChange();
             this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false}) 
-        })
+        });
+        //퍼미션 설정되었는지 확인
         this.requestPermission();
-        this.goLoginType();
+        //현재 설정된 로그인에 대한 정보 얻어와 실제 로그인 진행
+        this.autoLogin();
         //알림메시지 처리
         this.handleFCMMessage();
     }
+
     componentWillUnmount () {
-        this.focusListener()
+        this.focusListener();
     }
+
     async requestPermission() {
         try {
             const granted = await PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -86,55 +90,48 @@ class Login extends Component {
         }
     }
 
-    goLoginType() {
+    //AsyncStorage에 저장된 정보를 기반으로 어떻게 로그인할지 정하고 로그인 실행
+    autoLogin() {
         FunctionUtil.getLoginType().then((response) => {  
             console.log('login info ', response);
-            if (response.detailLogin == 1) {
-                // 자동로그인
+            const {companyNo,passwd,detailLogin} = response;
+            //자동로그인으로 설정된 경우
+            if (detailLogin == 1) {
                 this.setState({ autoLoginChecked: true });
                 const loginInfo = {
-                    companyNo: response.companyNo,
-                    passwd: response.passwd,
+                    companyNo: companyNo,
+                    passwd: passwd,
                     deviceToken: "",
-                    detailLogin: response.detailLogin,
-                    isAutoLogin: true,
+                    detailLogin:1,
+                    isAutoLogin:true
                 }
-                FunctionUtil.goLogin(loginInfo).then((success) => {
-                    console.log("success", success);
-                    if (success == false) { //회원정보가 없을 경우
-                        Alert.alert('아이디 비밀번호를 확인해주세요', '',);
-                        return;
-                    } 
-                    else if (Session.getPageInfoItem() != null) {
-                        this.props.navigation.navigate(Session.getNextPage(),{ saleState: 2 });
-                    }
-                    else {
-                        this.props.navigation.navigate('TabHome');
-                    }
-                });
+                this.login(loginInfo);
             }
+            //id저장이 선택된 경우
             else if (response.detailLogin == 2) {
                 // 패스워드만 입력
-                this.setState({ companyNo: response.companyNo, rememberIdChecked: true });
+                this.setState({ companyNo: companyNo, rememberIdChecked: true });
             }
         });
     }
 
     loginButtonClicked = () => { // 로그인 버튼 눌렀을 때 호출되는 함수
-
         const loginInfo = {
-            companyNo: this.state.companyNo,
+            companyNo: this.state.companyNo.replace(/-/g, ''),
             passwd: this.state.passwd,
             deviceToken: this.deviceToken,
-            detailLogin: this.getDetailLogin(),
-            isAutoLogin: false,
+            detailLogin:this.getDetailLogin(),
+            isAutoLogin:false
         }
+        this.login(loginInfo);
+    }
 
-        console.log('loginInfo=',loginInfo);
+    login(loginInfo){
+        //console.log('로그인 정보 =',loginInfo);
         FunctionUtil.goLogin(loginInfo).then((success) => {
-            console.log("success", success);
-            console.log("session value", Session.getUserInfoItem());
-            console.log("isLoggedin", Session.isLoggedin());
+            //console.log("로그인 성공 여부 = ", success);
+            //console.log("저장된 Session = ", Session.getUserInfoItem());
+            //console.log("로그인 되었는지 = ", Session.isLoggedin());
             if (success == false) { //회원정보가 없을 경우
                 Alert.alert('아이디 비밀번호를 확인해주세요', '',);
                 return;
@@ -175,7 +172,7 @@ class Login extends Component {
     onValueChange = (value) => {
         this.setState(value, () => {
             let isValidForm = true;
-            if (this.state.companyNo.trim().length < 10) { // 조건 필요시 추가
+            if (this.state.companyNo.replace(/-/g, '').trim().length < 10) { // 조건 필요시 추가
                 isValidForm = false;
             }
             if (this.state.passwd.trim().length == 0) {
@@ -280,8 +277,9 @@ class Login extends Component {
                                     <TextInput
                                         ref={(c) => { this.idRef = c; }}
                                         returnKeyType="next"
+                                        keyboardType="number-pad"
                                         onSubmitEditing={() => { this.passwordRef.focus(); }}
-                                        onChangeText={(value) => { this.onValueChange({ companyNo: value }); }}
+                                        onChangeText={(value) => { this.onValueChange({ companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3") })}}
                                         value={this.state.companyNo}
                                     />
                                 </View>
@@ -305,7 +303,7 @@ class Login extends Component {
                                         <Text style={[styles.default_text, styles.radio_btn_text]}> id기억  </Text>
                                     </TouchableOpacity>
                                 </View>
-                                <Text style={[styles.default_text, styles.login_guide_text]}>자동로그인 체크 이후에는 자동으로 로그인 됩니다.</Text>
+                                <Text style={[styles.default_text, styles.login_guide_text]}>자동로그인 체크 이후에는 보안을 위하여 7일간만 자동으로 로그인 됩니다.</Text>
 
                             </View>
                         </View>

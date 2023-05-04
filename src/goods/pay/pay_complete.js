@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, BackHandler, TouchableOpacity } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
-import { styles } from "../../styles/pay/payment";
+import { styles } from "../../styles/pay/pay_complete";
 import WebServiceManager from '../../util/webservice_manager';
 import Constant from '../../util/constatnt_variables';
 
