@@ -169,6 +169,15 @@ export const styles = StyleSheet.create({
         color:"black",
       },
 
+      topTextViewStyle:{
+        backgroundColor:'#0066FF',
+        borderRadius:30,
+        justifyContent:'center',
+        alignItems:'center',
+        paddingHorizontal:20,
+        paddingVertical:4,
+
+      }
 });
 
 export default styles;

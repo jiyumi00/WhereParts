@@ -38,7 +38,7 @@ export default class PartsNoCamera extends Component {
     render() {
         return(
             <View style={styles.container}>
-                <CameraX autoClose={true} blur={true} cameraBorder={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle} onCapturedListener={this.onCapturedListener} onCutImageListener={this.onCutImageListener} />
+                <CameraX autoClose={true} blur={true} cameraBorder={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle} onCapturedListener={this.onCapturedListener} onCutImageListener={this.onCutImageListener} setUpperText={true} setDownText={true}/>
             </View>
         );
     }
