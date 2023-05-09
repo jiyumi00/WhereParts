@@ -22,6 +22,7 @@ export default class SignUpCamera extends Component {
                 zIndex:2, 
                 borderColor:'white',
             };
+            this.text="사업자등록번호를 자동으로 인식해요.\n정확하게 인식됩니다"
         }
         //cut image가 명함일 경우
         else {
@@ -34,6 +35,7 @@ export default class SignUpCamera extends Component {
                 zIndex:2, 
                 borderColor:'white'
             };
+            this.text="명함을 자동으로 인식해요"
         }
     }
 
@@ -49,7 +51,8 @@ export default class SignUpCamera extends Component {
     render() {
         return(
             <View style={styles.container}>
-                <CameraX autoClose={true} blur={true} cameraBorder={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle}  onCapturedListener={this.onCapturedListener} onCutImageListener={this.onCutImageListener} setUpperText={true} />
+                <CameraX autoClose={true} blur={true} cameraBorder={true} navigation={this.props.navigation} cutImageStyle={this.cutImageStyle}  onCapturedListener={this.onCapturedListener} 
+                    onCutImageListener={this.onCutImageListener} upperText={"사각형 안에 맞춰주세요"} downText={this.text}/>
             </View>
         );
     }

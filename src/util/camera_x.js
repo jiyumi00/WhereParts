@@ -132,7 +132,7 @@ class CameraX extends Component {
                 this.setState({
                     //topTextView height:20, width:140 
                     topTextView: { top: (this.target.top -40), alignSelf:'center',  position: 'absolute', zIndex: 3 },
-                    bottomTextView:{top: (this.target.top +this.target.height+35), alignSelf:'center', color: "white", position: 'absolute', zIndex: 3 }
+                    bottomTextView:{top: (this.target.top +this.target.height+15), alignSelf:'center',  position: 'absolute', zIndex: 3,  }
                 });
 
                 // blur를 true로 받을 때
@@ -197,14 +197,17 @@ class CameraX extends Component {
                         }
 
                         {/* 전체화면에서 captured View만 있을 경우 */}
-                        {this.props.setUpperText==true &&this.props.hasOwnProperty("cutImageStyle") && this.props.hasOwnProperty("onCutImageListener") && this.state.capturedViewVisible==true &&<>
+                        {this.props.hasOwnProperty("upperText") &&this.props.hasOwnProperty("cutImageStyle") && this.props.hasOwnProperty("onCutImageListener") && this.state.capturedViewVisible==true &&<>
                             <View style={[this.state.topTextView,styles.topTextViewStyle]} /*ref={this.topTextView}*/>
-                                <Text style={{color:'white'}}>사각형안에 맞춰주세요</Text>
+                                <Text style={{color:'white'}}>{this.props.upperText}</Text>
                             </View>
                             </>
                         }
-                        {this.props.setDownText==true&&this.props.hasOwnProperty("cutImageStyle") && this.props.hasOwnProperty("onCutImageListener") && this.state.capturedViewVisible==true &&<>
-                          <Text style={this.state.bottomTextView} /*ref={this.topTextView}*/>부품번호를 자동으로 인식해요</Text>
+                        {this.props.hasOwnProperty("downText")&&this.props.hasOwnProperty("cutImageStyle") && this.props.hasOwnProperty("onCutImageListener") && this.state.capturedViewVisible==true &&<>
+                          <View style={this.state.bottomTextView}>
+                            <Text style={{color:'white',textAlign:'center'}} /*ref={this.topTextView}*/>{this.props.downText}</Text>
+                          </View>
+                          
                           </>
                       }
 
