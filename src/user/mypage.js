@@ -20,11 +20,12 @@ class MyPage extends Component {
 
   //현재 설정된 로그인관련 정보를 가져와 AsyncStorage에 저장하고 앱 종료
   logout() {
-    FunctionUtil.getLoginType().then((response) => {
+    FunctionUtil.getLoginType().then((loginInfo) => {
       Session.clear();
       //console.log('로그아웃 후 AsyncStorage에 저장할 값 = ', response);
       //console.log('로그아웃 후 Session에 저장된 값 = ',Session.getAllItem());
-      AsyncStorage.setItem('userInfo', JSON.stringify(response));
+      //userInfo를 암호화하여 AsyncStorage에 저장
+      AsyncStorage.setItem('userInfo', FunctionUtil.encrypt(loginInfo));
       BackHandler.exitApp();
   });}
 

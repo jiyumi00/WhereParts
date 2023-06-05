@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, Image, Platform, Pressable, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
+import { colors } from "../styles/template/page_style";
 // 경로를 위한 import
 
 //홈
@@ -44,13 +44,14 @@ class Tabs extends Component {
         screenOptions={{
           headerTitleAlign: 'center',
           headerShown: true,
-          tabBarActiveTintColor: '#0066FF',
-          tabBarInactiveTintColor: '#BCBFC4',
+          tabBarActiveTintColor:colors.main,
+          tabBarInactiveTintColor: colors.inActive,
           headerStyle: {
             backgroundColor: 'white',
           },
           headerTitleStyle: {
             color: '#1e272e',
+            fontWeight:'bold'
           },
           tabBarLabelStyle: {
             marginTop: -6,
@@ -60,7 +61,6 @@ class Tabs extends Component {
           tabBarItemStyle: {
             padding: 2,
           },
-          tabBarActiveBackgroundColor: '#F2F2F2',
           unmountOnBlur: Platform.OS === 'android' ? true : false,
         }}>
         <Tab.Screen
@@ -74,8 +74,8 @@ class Tabs extends Component {
                 <Image
                   source={
                     focused
-                      ? require('../images/tab/home-icon/home-icon-active.png')
-                      : require('../images/tab/home-icon/home-icon.png')
+                      ? require('../images/tab/home-icon/home-active.png')
+                      : require('../images/tab/home-icon/home.png')
                   }
                 />
               );
@@ -113,8 +113,8 @@ class Tabs extends Component {
                 <Image
                   source={
                     focused
-                      ? require('../images/tab/my-page-icon/my-page-icon-active.png')
-                      : require('../images/tab/my-page-icon/my-page-icon.png')
+                      ? require('../images/tab/my-page-icon/mypage-active.png')
+                      : require('../images/tab/my-page-icon/mypage.png')
                   }
                 />
               );
@@ -132,8 +132,8 @@ class Tabs extends Component {
                 <Image
                   source={
                     focused
-                      ? require('../images/tab/service-icon/service-icon-active.png')
-                      : require('../images/tab/service-icon/service-icon.png')
+                      ? require('../images/tab/notification-icon/notification-active.png')
+                      : require('../images/tab/notification-icon/notification.png')
                   }
                 />
               );
@@ -146,16 +146,17 @@ class Tabs extends Component {
           initialParams={{imageURLs: []}}
           options={{
             title: '상품 등록',
-            tabBarButton: props => {
+            tabBarIcon: ({focused}) => {
               return (
-                <Pressable {...props} style={styles.addGoods}>
-                  <Image
-                    source={require('../images/tab/add-goods-icon/add-goods-icon.png')}
-                  />
-                </Pressable>
+                <Image
+                  source={
+                    focused
+                      ? require('../images/tab/add-goods-icon/addgoods-active.png')
+                      : require('../images/tab/add-goods-icon/addgoods.png')
+                  }
+                />
               );
             },
-            tabBarHideOnKeyboard:true,
           }}
         />
       </Tab.Navigator>

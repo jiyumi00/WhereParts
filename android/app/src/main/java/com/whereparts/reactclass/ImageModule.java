@@ -123,13 +123,30 @@ public class ImageModule extends ReactContextBaseJavaModule {
         }
     }
 
-
-
+    @ReactMethod
+    public void storeImage(String uri, String folder, Callback failedCallback, Callback successCallback) {
+        try {
+            Bitmap bitmap = CameraXImageUtil.getBitmap(this.getBinaryImage(uri));
+            byte[] byteImage = CameraXImageUtil.getBytesImage(bitmap);
+            successCallback.invoke(this.getStoredImageUri(byteImage,folder).toString());
+        }catch(Exception e) {
+            failedCallback.invoke("error");
+        }
+    }
 
     //
     private Uri getStoredImageUri(byte[] data) throws Exception {
         MediaUtil mediaUtil = new MediaUtil(this.reactContext);
-        Uri targetUri = mediaUtil.storeToGallery("parts");
+        Uri targetUri = mediaUtil.storeToGallery("웨얼파츠");
+        FileOutputStream out = mediaUtil.getFileOutputStream(targetUri);
+        out.write(data);
+        out.flush();
+        return targetUri;
+    }
+
+    private Uri getStoredImageUri(byte[] data, String folder) throws Exception {
+        MediaUtil mediaUtil = new MediaUtil(this.reactContext);
+        Uri targetUri = mediaUtil.storeToGallery(folder);
         FileOutputStream out = mediaUtil.getFileOutputStream(targetUri);
         out.write(data);
         out.flush();

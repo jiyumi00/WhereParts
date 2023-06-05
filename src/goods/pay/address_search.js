@@ -9,6 +9,7 @@ import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
 
 import Indicator from '../../util/indicator';
+import Constant from '../../util/constatnt_variables';
 
 class SearchAddress extends Component {
     constructor(props) {
@@ -70,7 +71,7 @@ class SearchAddress extends Component {
             this.setState({ page: this.state.page + 1 }, () => this.goGetAddress())
     }
     async callGetAddressAPI(page) {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=devU01TX0FVVEgyMDIzMDIwOTE3MzczMjExMzQ5Njg=&currentPage=" + this.state.page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey="+Constant.addressSearchApiKey+"&currentPage=" + this.state.page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();

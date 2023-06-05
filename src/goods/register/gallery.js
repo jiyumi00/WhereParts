@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, BackHandler } from 'react-native';
 
 import { template } from "../../styles/template/page_style";
 import { styles } from "../../styles/gallery";
@@ -13,6 +13,21 @@ class Gallery extends Component {
         super(props);
 
         console.log('imageLength는?', this.props.route.params.imageLength);
+    }
+
+    componentDidMount() {
+        //BackHandler.addEventListener("hardwareBackPress", this.backPressed); //뒤로가기 이벤트
+    }
+
+    componentWillUnmount() {
+        //BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+    }
+
+    backPressed() {
+        console.log('gallery back pressed');
+        //this.setState({group:true});
+        //this.props.navigation.pop();
+        //return false;
     }
 
     onResultListener = (uris) => {

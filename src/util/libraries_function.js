@@ -1,8 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CryptoJS from "react-native-crypto-js";
+
 import WebServiceManager from "../util/webservice_manager";
 import Constant from "./constatnt_variables";
 import { useWindowDimensions } from "react-native";
 import Session from "./session";
+import { FullWindowOverlay } from "react-native-screens";
 
 export default class FunctionUtil {
     
@@ -14,7 +17,10 @@ export default class FunctionUtil {
         let value = { companyNo: "", passwd: "", detailLogin: 0};
 
         if (userInfo != null) {
-            const { companyNo, passwd, detailLogin } = JSON.parse(userInfo);
+            //암호화된 userInfo를 복호화하여 객체내용 읽음
+            //console.log('decrypt userInfo = ',FunctionUtil.decrypt(userInfo));
+            const { companyNo, passwd, detailLogin } = FunctionUtil.decrypt(userInfo);
+            
             if (detailLogin == 0) {//로그인 방법을 아무것도 선택하지 않았을 경우
                 value = { companyNo: "", passwd: "", detailLogin: 0};
             }
@@ -66,13 +72,14 @@ export default class FunctionUtil {
                     AsyncStorage.setItem('firedDateInfo', JSON.stringify(firedDate));
                 }
 
-                //현재 설정된 로그인 타입에 대한 정보를 AsyncStorage에 저장
+                //현재 설정된 로그인 타입에 대한 정보를 암호화 하여 AsyncStorage에 저장
                 userInfo = {
                     companyNo: response.companyNo,
                     passwd: response.passwd,
                     detailLogin: loginInfo.detailLogin,
                 }
-                AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+                //userInfo 객체를 암호화하여 AsyncStorage에 저장
+                AsyncStorage.setItem('userInfo', FunctionUtil.encrypt(userInfo));
                 return true;
             }
             return false;
@@ -93,8 +100,8 @@ export default class FunctionUtil {
 
     //AsyncStorage에 저장된 값 단순히 리턴
     static async loginInfo(){
-        const obj = await AsyncStorage.getItem('userInfo');
-        const { companyNo, passwd, detailLogin } = JSON.parse(obj);
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { companyNo, passwd, detailLogin } = FunctionUtil.decrypt(userInfo);
         value = { companyNo: companyNo, passwd: passwd, detailLogin: detailLogin };
         return value;
     }
@@ -103,5 +110,16 @@ export default class FunctionUtil {
     static getPrice(data) {
         data = data.toString().replace(/,/g,'');
         return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
+
+    //JSON객체를 암호화
+    static encrypt(object) {
+        return CryptoJS.AES.encrypt(JSON.stringify(object),"key wparts 1234").toString();
+    }
+
+    //암호화된 JSON객체를 복호화하고 JSON객체로 리턴
+    static decrypt(encryptedObject) {
+        const bytes = CryptoJS.AES.decrypt(encryptedObject,"key wparts 1234");
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     }
 }

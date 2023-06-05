@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     StyleSheet, View, Button, Text, Image, FlatList, TouchableOpacity,
-    ImageBackground, Modal, DeviceEventEmitter, BackHandler
+    ImageBackground, Modal, DeviceEventEmitter, BackHandler, NativeModules
 } from 'react-native';
 
 import CameraX from '../../util/camera_x';
@@ -36,6 +36,13 @@ class GoodsImageCamera extends Component {
 
     onCapturedListener=(uri)=> {
         console.log('original image : ',uri);
+        //촬영한 사진을 앨범에 저장
+        const { ImageModule } = NativeModules;
+        ImageModule.storeImage(uri,"웨얼파츠",(failed)=> {
+            console.log('사진저장 실패')
+        },(success)=> {
+            console.log('사진저장 성공',success);
+        })
         if (this.state.imageLength > 4) {
             alert('이미지는 최대 5장까지 선택할 수 있어요');
             return this.setState({ imageLength: this.state.imageLength })

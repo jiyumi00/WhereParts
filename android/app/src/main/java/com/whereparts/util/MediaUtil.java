@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class MediaUtil {
@@ -107,6 +108,38 @@ public class MediaUtil {
         return albumList;
     }
 
+    //갤러리에 저장된 모든 이미지를 폴더로 구분하여 URI 얻어옴(날짜 역순으로 정렬)
+    public HashMap<String,ArrayList<String>> getImageContentUrisGroup() {
+        Uri sourceUris=MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        String[] photoProjection = {
+                //"distinct "+MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                "distinct "+MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+        };
+        Cursor cursor = context.getContentResolver().query(sourceUris,photoProjection,null,null,null);
+
+        HashMap<String,ArrayList<String>> imageURIMap = new HashMap<>();
+        while(cursor.moveToNext()) {
+            String[] imageProjection={
+                    MediaStore.Images.Media._ID,
+                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            };
+            String where = MediaStore.Images.Media.BUCKET_DISPLAY_NAME+" = ?";
+            String[] args = {cursor.getString(0)};
+            String sortOrder = MediaStore.Images.Media.DATE_TAKEN+" desc";
+            Cursor imageCursor = context.getContentResolver().query(sourceUris,imageProjection,where,args,sortOrder);
+
+            ArrayList<String> imageURIs = new ArrayList<>();
+            while(imageCursor.moveToNext()) {
+                Uri imageURI = Uri.withAppendedPath(sourceUris,imageCursor.getString(0));
+                //Log.d("Media Util", "bucket name : " + cursor.getString(0));
+                //Log.d("Media Util", "image uri : " + imageURI.toString());
+                imageURIs.add(imageURI.toString());
+            }
+            imageURIMap.put(cursor.getString(0),imageURIs);
+        }
+        return imageURIMap;
+    }
+
     //카메라로 찍은 사진을 공용 갤러리의 지정한 폴더와 지정한 파일이름으로 저장
     public Uri storeToGallery(String folder, String filename) {
         Uri targetUri= MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL); // 갤러리에 복사하기 위한 content uri
@@ -134,7 +167,7 @@ public class MediaUtil {
     }
 
     public Uri storeToGallery(String folder) {
-        String filename= UUID.randomUUID().toString();
+        String filename= UUID.randomUUID().toString()+".jpg";
         return this.storeToGallery(folder,filename);
     }
 

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Alert, AppState } from 'react-native';
+import { Alert, AppState, BackHandler } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 
 import Stack from "./src/menu/stack_menu";
 import Session from "./src/util/session";
+import WebServiceManager from "./src/util/webservice_manager";
+import Constant from "./src/util/constatnt_variables";
 
 //FCM
 import messaging from '@react-native-firebase/messaging';
@@ -20,6 +22,7 @@ class App extends Component {
 
   componentDidMount() {
     this.handleFCMMessage();
+    this.goGetApiKeys();
     this.appStateSubscription = AppState.addEventListener('change', (nextAppState) => {
       if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
         console.log('App has come to the foreground!');
@@ -55,6 +58,37 @@ class App extends Component {
         }
       }
     });
+  }
+
+  //앱에서 필요한 API 키를 서버로부터 가져와 Constant에 저장
+  goGetApiKeys() {
+    this.callGetApiKeysAPI().then((response) => {
+      if(response.success==1) {
+        response.keys.forEach(element => {
+          if(element.name=="address")
+            Constant.addressSearchApiKey=element.key;
+          if(element.name=="logis")
+            Constant.deliveryApiKey=element.key;
+        });
+      }
+      else {
+        Alert.alert('오류','네트워크 오류입니다. 앱을 실행할 수 없습니다.',[
+          { text: '확인', onPress: () => { BackHandler.exitApp() } }
+        ]);
+      }
+      console.log("constant address = ",Constant.addressSearchApiKey);
+      console.log("constant delivery = ",Constant.deliveryApiKey);
+    });
+  }
+
+  //서버로부터 API 키를 가져오는 웹서비스
+  async callGetApiKeysAPI() {
+    let manager = new WebServiceManager(Constant.serviceURL + "/GetApiKeys");
+    let response = await manager.start();
+    if (response.ok)
+        return response.json();
+    else
+        Promise.reject(response);
   }
 
   render() {

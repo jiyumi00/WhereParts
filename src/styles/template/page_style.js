@@ -8,9 +8,11 @@ export const colors = {
     dark: '#000000',
     red:'#FF7E70',
     white:'#FFFFFF',
-    main:'#0066FF',
+    main:'#185FE0', //메인컬러 변경
+    inActive:'#BCBCBC',
     sub:'blue',
     light_btn:'#F1F1F3',
+    line:'#E6E6E6'
 }
 
 export const template= StyleSheet.create({
@@ -38,6 +40,10 @@ export const template= StyleSheet.create({
         paddingHorizontal: '2%', 
         paddingVertical:'2%',
         borderWidth:1,
+    },
+    lineBox:{
+        borderBottomWidth: 1, 
+        borderColor:colors.line,
     },
     roundedBox:{
         borderWidth: 1, 

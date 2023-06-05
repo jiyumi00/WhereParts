@@ -8,9 +8,12 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.whereparts.util.MediaUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class AlbumModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext reactContext;
@@ -34,6 +37,23 @@ public class AlbumModule extends ReactContextBaseJavaModule {
             for(Uri uri : images)
                 imageURIs.pushString(uri.toString());
             successCallback.invoke(imageURIs);
+        }catch(Exception e) {
+            failedCallback.invoke("error");
+        }
+    }
+
+    @ReactMethod
+    public void getAlbumUrisGroup(Callback failedCallback, Callback successCallback) {
+        try{
+            MediaUtil media = new MediaUtil(reactContext);
+            HashMap<String,ArrayList<String>> sourceMap = media.getImageContentUrisGroup();
+            Set<String> keys = sourceMap.keySet();
+            WritableMap imageMap = Arguments.createMap();
+            for(String key : keys) {
+                WritableArray uris = Arguments.fromList(sourceMap.get(key));
+                imageMap.putArray(key,uris);
+            }
+            successCallback.invoke(imageMap);
         }catch(Exception e) {
             failedCallback.invoke("error");
         }

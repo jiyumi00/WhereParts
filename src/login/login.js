@@ -10,6 +10,7 @@ import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import FunctionUtil from '../util/libraries_function';
 import Session from '../util/session';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Login extends Component {
 
@@ -40,6 +41,7 @@ class Login extends Component {
             this.onValueChange();
             this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false}) 
         });
+        //AsyncStorage.clear();
         //퍼미션 설정되었는지 확인
         this.requestPermission();
         //현재 설정된 로그인에 대한 정보 얻어와 실제 로그인 진행

@@ -88,12 +88,14 @@ class AddGoods extends Component {
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+        BackHandler.addEventListener("hardwareBackPress", this.backPressed);
 
         this.userID=Session.getUserID();
     }
     componentWillUnmount() {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
+        BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
     }
 
     // 상품등록 확인창에서 확인버튼을 눌렀을 때 호출되는 함수(이미지들의 사이즈를 줄이고, AddGoodsAPI호출)
@@ -126,10 +128,17 @@ class AddGoods extends Component {
 
     //여러개의 이미지 uri로 이미지 사이즈를 줄인 uri를 imageData 객체로 만듬
     async getResizingImageDatas(uris) {
+        
         let fileDatas = await this.getResizingImageUris(uris).then((resizedUris)=> {
             let fileDatas=[];
             for(let i=0;i<resizedUris.length;i++) {
                 fileDatas.push(this.getImageData(resizedUris[i]));
+                this.getImageInfo(uris[i]).then((response)=> {
+                    console.log('original image size = ',response.size);
+                })
+                this.getImageInfo(resizedUris[i]).then((response)=> {
+                    console.log('resized image size = ',response.size);
+                })
             }
             return fileDatas;
         });
@@ -148,7 +157,7 @@ class AddGoods extends Component {
 
     //여러개의 선택한 이미지 uri를 파라메터로 넘겨주고 해당사이즈만큼 줄인 이미지 uri를 받아옴 (4=1/4사이즈로 줄임)
     async getResizingImageUris(uris) {
-        let resizedURI = await this.imageModule.getReduceImageUris(uris,4);
+        let resizedURI = await this.imageModule.getReduceImageUris(uris,2);
         return resizedURI;
     }
 
@@ -398,12 +407,9 @@ class AddGoods extends Component {
                         showsVerticalScrollIndicator={false}>
                         <View style={template.container}>
                             {/*상품 이미지 등록을 위한 버튼 */}
-                            <View style={[template.roundedBox]}>
-                                <Text style={template.largeText}>사진등록 (최소 1개)</Text>
-                                <View style={{flexDirection:'row'}}>
-                                    <IconMark name="exclamationcircleo" size={15}></IconMark>
-                                    <Text style={template.contentTitleText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다.</Text>
-                                </View>
+                            <View style={[template.lineBox]}>
+                               
+                              
                                 <View style={{marginBottom: '2%', flexDirection:'row' }}>
                                     <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
                                         <TouchableOpacity style={inStyle.cameraButton} onPress={this.cameraButtonClicked}>
@@ -418,10 +424,14 @@ class AddGoods extends Component {
                                         largeImageModal={(index) => this.setLargeImageModal(index)}
                                         removeImage={(index) => this.removeImage(index)} />
                                 </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <IconMark name="exclamationcircleo" size={15}></IconMark>
+                                    <Text style={template.contentTitleText}>  등록한 첫번째 사진이 대표이미지로 등록됩니다.</Text>
+                                </View>
                             </View>
 
                             {/* 상품정보 부분 */}
-                            <View style={template.roundedBox}>
+                            <View style={template.lineBox}>
                                 <Text style={[template.largeText,{marginBottom:'2%'}]}>상품 정보</Text>
                                 {/*부품번호 */}
                                 <View style={[template.roundedBox,{paddingVertical:'0%'}]}>
@@ -495,7 +505,7 @@ class AddGoods extends Component {
                                 </View>
                             </View>
 
-                            <View style={template.roundedBox}>
+                            <View style={template.lineBox}>
                                 <Text style={[template.largeText]}>기타 정보</Text>
                                  {/*정품/비정품*/}
                                 <View style={[template.roundedBox, { flexDirection: 'row', flex: 1, alignItems: 'center' }]}>
