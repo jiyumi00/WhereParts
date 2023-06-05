@@ -3,16 +3,18 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const colors = {
-    light: '#C9CCD1',
-    medium: '#888888',
+    light: '#BCBCBC', //
+    
+    medium: '#7A7A7A',//
     dark: '#000000',
     red:'#FF7E70',
     white:'#FFFFFF',
     main:'#185FE0', //메인컬러 변경
     inActive:'#BCBCBC',
     sub:'blue',
-    light_btn:'#F1F1F3',
-    line:'#E6E6E6'
+    light_btn:'#F6F6F6',//
+    line:'#E6E6E6',
+   
 }
 
 export const template= StyleSheet.create({
@@ -27,6 +29,7 @@ export const template= StyleSheet.create({
 
     //Line
     line:{
+        
         borderWidth:0.5,
         width:'100%',
         borderColor:colors.light
@@ -42,18 +45,29 @@ export const template= StyleSheet.create({
         borderWidth:1,
     },
     lineBox:{
+        paddingHorizontal: '5%', 
+        paddingVertical:'3%',
         borderBottomWidth: 1, 
         borderColor:colors.line,
     },
     roundedBox:{
         borderWidth: 1, 
-        borderRadius: 10, 
+        borderRadius:10, 
         borderColor:colors.light,
         paddingHorizontal: '2%', 
         paddingVertical:'2%',
         marginBottom: '2%',
     },
-
+    //TextInput
+    textInput:{
+        justifyContent: 'center',
+        borderWidth: 1, 
+        borderRadius:10, 
+        borderColor:colors.light,
+        paddingHorizontal: '2%', 
+        height:40,
+        marginBottom: '2%',
+    },
      //Text
      titleText:{
         fontSize:25,
@@ -61,7 +75,7 @@ export const template= StyleSheet.create({
         fontWeight:'bold'
      },
     largeText: {
-        fontSize: 17,
+        fontSize: 16,
         color: colors.dark,
     },
     smallText: {
@@ -74,7 +88,7 @@ export const template= StyleSheet.create({
     },
     contentTitleText:{
         fontSize: 14,
-        color: colors.medium,
+        color: colors.dark,
     },
     itemNumberText:{
         fontSize:12,
@@ -85,12 +99,14 @@ export const template= StyleSheet.create({
         color:colors.red
     },
     buttonText:{ 
-        fontSize:17,
+        fontSize:21,
         color:colors.white,
+        fontWeight:'bold'
     },
     inputText:{
-        fontSize:15,
-        padding:0
+        fontSize:14,
+        padding:0,
+        color:'#7A7A7A'
     },
     
     //Button
@@ -102,7 +118,7 @@ export const template= StyleSheet.create({
     },
     inActiveButton:{
         height: 50,
-        backgroundColor: colors.light,
+        backgroundColor: '#F6F6F6',
         alignItems: 'center',
         justifyContent: 'center'
     },

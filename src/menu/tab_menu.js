@@ -48,6 +48,8 @@ class Tabs extends Component {
           tabBarInactiveTintColor: colors.inActive,
           headerStyle: {
             backgroundColor: 'white',
+            borderBottomColor:colors.line,
+            borderBottomWidth:1,
           },
           headerTitleStyle: {
             color: '#1e272e',
