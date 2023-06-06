@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     Button, Text, View, TouchableOpacity, TextInput,
     Image, ImageBackground, Modal, Alert, BackHandler, NativeModules, Keyboard, StyleSheet, SafeAreaView,
-    Dimensions
+    Dimensions,
 } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
@@ -70,6 +70,7 @@ class AddGoods extends Component {
 
             check_genuine: true,
             check_non_genuine: false,
+            
             allhashTag: "",
 
             addGoodsButtonVisible: false,  //상품등록 버튼 on/off 
@@ -279,7 +280,10 @@ class AddGoods extends Component {
     non_genuineCheck = () => {
         this.setState({ check_non_genuine: true, check_genuine: false, genuine: 2 });
     }
-
+    qualityCheck=(index)=>{
+        this.setState({quality:index, })
+        console.log('quality',index)
+    }
     //상품 등록 확인 모달 보임/숨김
     setConfirmModal = (value) => {
         this.setState({ confirmModalVisible: value });
@@ -412,12 +416,12 @@ class AddGoods extends Component {
                                 <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
                                     <TouchableOpacity style={inStyle.cameraButton} onPress={this.cameraButtonClicked}>
                                         <Image
-                                            style={{ width: 38, height: 27, marginBottom: 5 }}
+                                            style={{ width: 38, height: 27, marginBottom: '3%' }}
                                             source={
-                                                require('../../images/icon/camera-icon/camera.png')
+                                                require('../../images/camera/camera.png')
                                             }
                                         />
-                                        <Text><Text style={{ color: colors.main }}>{this.state.imageURIs.length}</Text>/{this.#imageLength}</Text>
+                                        <Text style={{ color: 'black' }}><Text style={{ color: colors.main }}>{this.state.imageURIs.length}</Text>/{this.#imageLength}</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -428,8 +432,8 @@ class AddGoods extends Component {
                                     removeImage={(index) => this.removeImage(index)} />
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <IconMark name="exclamationcircleo" size={15}></IconMark>
-                                <Text style={[template.contentTitleText, { color: colors.medium }]}>  등록한 첫번째 사진이 대표이미지로 등록됩니다.</Text>
+                                <IconMark name="exclamationcircleo" size={15} color={colors.dark}></IconMark>
+                                <Text style={[template.contentText, { color: colors.dark }]}>  등록한 첫번째 사진이 대표이미지로 등록됩니다.</Text>
                             </View>
                         </View>
 
@@ -447,15 +451,15 @@ class AddGoods extends Component {
                                         onChangeText={(value) => this.onValueChange({ number: value })}
                                         value={this.state.number} // 띄워지는값
                                         placeholder='부품번호'
-                                        placeholderTextColor={colors.medium}
+                                        placeholderTextColor={colors.dark}
                                     />
                                 </View>
-                                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', }}>
                                     <TouchableOpacity onPress={this.goDetectPartsNoCamera} >
                                         <Image
                                             style={{ width: 20, height: 14 }}
                                             source={
-                                                require('../../images/icon/camera-icon/camera.png')
+                                                require('../../images/camera/camera.png')
                                             }
                                         />
                                     </TouchableOpacity>
@@ -471,44 +475,45 @@ class AddGoods extends Component {
                                     onSubmitEditing={() => { this.priceRef.focus(); }}
                                     onChangeText={(value) => this.onValueChange({ name: value })}
                                     placeholder='상품명'
-                                    placeholderTextColor={colors.medium}
+                                    placeholderTextColor={colors.dark}
                                 />
                             </View>
 
                             {/* 판매금액 */}
                             <View style={[template.textInput, { paddingVertical: '0%', flexDirection: 'row', alignItems: 'center' }]}>
+                                <Text style={{ flex: 1, }}>판매 금액(개당)</Text>
                                 <TextInput
-                                    style={[template.inputText, { width: "95%", textAlign: 'right' }]}
+                                    style={[template.inputText, { flex: 1, textAlign: 'right', paddingRight: '2%' }]}
                                     ref={(c) => { this.priceRef = c; }}
                                     onSubmitEditing={() => { this.hashTagRef.focus(); }}
                                     keyboardType="number-pad"
                                     onChangeText={(value) => this.onValueChange({ price: value })}
                                     placeholder='판매 금액(개당)'
-                                    placeholderTextColor={colors.medium}
+                                    placeholderTextColor={colors.dark}
                                 >{FunctionUtil.getPrice(this.state.price)}</TextInput>
                                 <View>
-                                    <Text style={[template.smallText, { color: colors.dark }]}>원</Text>
+                                    <Text style={[template.smallText, { color: colors.black, fontWeight: 'bold' }]}>원</Text>
                                 </View>
 
                             </View>
 
                             {/* 판매수량 */}
                             <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-                                <View style={{ flex: 1, justifyContent: 'flex-start'}}>
-                                    <Text style={template.contentTitleText}>판매 수량</Text>
+                                <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                    <Text style={template.contentText}>판매 수량</Text>
                                 </View>
-                                <View style={{ flex: 1, justifyContent: 'flex-end',alignItems:'center', flexDirection: 'row' }}>
+                                <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
                                     <View style={inStyle.countingBox}>
                                         <TouchableOpacity activeOpacity={0.8} onPress={this.minusNum} >
-                                            <QuantityEditIcon name='minus' color='#BCBCBC' size={15}></QuantityEditIcon>
+                                            <QuantityEditIcon name='minus' color={colors.medium} size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[inStyle.countingBox,{width:34, height:34,borderColor:'black'}]}>
-                                        <Text style={template.contentTitleText}>{this.state.quantity}</Text>
+                                    <View style={[inStyle.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
+                                        <Text style={template.contentText}>{this.state.quantity}</Text>
                                     </View>
                                     <View style={inStyle.countingBox}>
                                         <TouchableOpacity activeOpacity={0.8} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}>
-                                            <QuantityEditIcon name='plus' color='#BCBCBC' size={15}></QuantityEditIcon>
+                                            <QuantityEditIcon name='plus' color={colors.medium} size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -519,18 +524,18 @@ class AddGoods extends Component {
                         <View style={template.lineBox}>
                             <Text style={[template.largeText, { marginBottom: '3%' }]}>기타 정보</Text>
                             {/*정품/비정품*/}
-                            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom:'2%' }}>
-                                <View style={{ flex:1,justifyContent:'flex-start'}}>
-                                    <Text style={template.contentTitleText}>정품 유무</Text>
+                            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
+                                <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                    <Text style={template.contentText}>정품 유무</Text>
                                 </View>
-                                <View style={{ flex:1,justifyContent:'flex-end',flexDirection:'row' }}>
+                                <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
                                     <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck} style={{ flexDirection: 'row' }}>
                                         <IconRadio name={this.state.check_genuine ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
                                         <View style={{ justifyContent: 'center' }}>
                                             <Text style={[template.contentText]}>{this.genuineValueText[0]}</Text>
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck} style={{ flexDirection: 'row',marginLeft:'4%' }}>
+                                    <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck} style={{ flexDirection: 'row', marginLeft: '5%' }}>
                                         <IconRadio name={this.state.check_non_genuine ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
                                         <View style={{ justifyContent: 'center' }}>
                                             <Text style={[template.contentText]}> {this.genuineValueText[1]}</Text>
@@ -540,20 +545,33 @@ class AddGoods extends Component {
 
                             </View>
                             {/*상품상태*/}
-                            <View style={{ paddingVertical: '0%' }}>
-                                <Text style={template.contentTitleText}>상품 상태</Text>
-                                <Picker
+                            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
+                                <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                    <Text style={template.contentText}>상품 상태</Text>
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
+                                    {this.qualityValueText.map((item, i) =>
+                                        <TouchableOpacity key={i} activeOpacity={0.8} onPress={()=>this.qualityCheck(i+1)} style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                                            <IconRadio name={this.state.quality==i+1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
+                                            <View style={{ justifyContent: 'center' }}>
+                                                <Text style={[template.contentText]}>{item}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                    )}
+                                </View>
+                                  {/*   <Picker
                                     selectedValue={this.state.quality}
                                     onValueChange={(value, index) => { this.setState({ quality: value }) }}>
                                     {this.qualityValueText.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
-                                </Picker>
+                                </Picker> */}
                             </View>
 
 
 
                             {/* 검색어 */}
-                            <View style={[template.textInput, { paddingVertical: '0%', flexDirection: 'row', alignItems:'center' }]}>
-                                <View style={{ flex: 7 }}> 
+                            <View style={[template.textInput, { flexDirection: 'row', alignItems: 'center' }]}>
+                                <View style={{ flex: 7 }}>
                                     <TextInput
                                         style={template.inputText}
                                         ref={(c) => { this.hashTagRef = c; }}
@@ -562,21 +580,21 @@ class AddGoods extends Component {
                                         onChangeText={(value) => this.hashTagOnChangeText(value)}
                                         value={this.state.tagName}
                                         placeholder='검색어(최대 7개)'
-                                        placeholderTextColor={colors.medium}
+                                        placeholderTextColor={colors.dark}
                                     />
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                     <TouchableOpacity onPress={this.addHashTag}>
-                                        <IconRadio name={"add-circle"} size={30} color={colors.medium} />
+                                        <IconRadio name={"add-circle"} size={30} color={colors.dark} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
 
                             {/* 키워드 뿌려주기 */}
-                            <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginTop: '2%' }}>
+                            <View style={{ flexWrap: 'wrap', flexDirection: 'row', }}>
                                 {this.state.hashTag.map((item, i) =>
                                     <View style={inStyle.hashTagView} key={i}>
-                                        <Text>#{item}</Text>
+                                        <Text style={template.contentText}>#{item}</Text>
                                         <TouchableOpacity onPress={() => this.removeHashTag(i)}>
                                             <IconPopup name="close" size={15} color="black" />
                                         </TouchableOpacity>
@@ -586,7 +604,7 @@ class AddGoods extends Component {
 
                             {/* 상세내용*/}
                             <View style={[template.roundedBox]}>
-                                <Text style={[template.contentTitleText,{color:colors.medium}]}>글쓰기</Text>
+                                <Text style={[template.contentText, { color: colors.dark }]}>글쓰기</Text>
                                 <TextInput
                                     style={[template.inputText, { height: 100 }]}
                                     multiline={true}
@@ -602,7 +620,7 @@ class AddGoods extends Component {
                                 <Text style={[template.buttonText]}>상품 등록</Text>
                             </TouchableOpacity>)
                             : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
-                                <Text style={[template.buttonText, { color: colors.light }]}>상품 등록</Text>
+                                <Text style={[template.buttonText, { color: colors.medium }]}>상품 등록</Text>
                             </TouchableOpacity>)}
 
 
@@ -792,28 +810,28 @@ const inStyle = StyleSheet.create({
     hashTagView: [
         template.roundedBox,
         {
-            marginTop: '0%',
+            paddingVertical: '1%',
             paddingLeft: 10,
             paddingRight: 10,
             flexDirection: 'row',
             marginRight: 10,
-            marginBottom: '2%',
+            marginBottom: '3%',
             borderRadius: 30,
-            backgroundColor: colors.light_btn,
+            backgroundColor: colors.light,
             justifyContent: 'center',
             alignItems: 'center',
         }
     ],
     countingBox: [
         {
-            width:24,
-            height:24,
+            width: 24,
+            height: 24,
             alignItems: 'center',
             justifyContent: 'center',
-            borderWidth:1,
-            borderColor:colors.inActive,
-            borderRadius:50,
-            marginLeft:'2%'
+            borderWidth: 2,
+            borderColor: colors.medium,
+            borderRadius: 50,
+            marginLeft: '2%'
         }
     ],
     countingBoxWrap: [
@@ -824,12 +842,13 @@ const inStyle = StyleSheet.create({
     ],
     //Button
     cameraButton: [
-        template.smallButton,
+        template.roundedButton,
         {
-            width: 90,
-            height: 90,
-            backgroundColor: colors.light_btn,
             marginRight: 5,
+            shadowColor: "black",
+            shadowOpacity: 0.25,
+            shadowRadius: 10,
+            elevation: 5,
         }],
 
 
