@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   home_total_view: {
     flex: 1,
     backgroundColor: '#FFFF',
-    paddingHorizontal: '2%'
+    paddingHorizontal: '2%',
+   
   },
   home_title_view: {
     width: ScreenWidth,
@@ -16,6 +17,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     paddingTop: '6%',
     backgroundColor: '#0066FF',
     position: 'absolute',
+    
   },
   home_searchbar_view: { //home TextInput
     flexDirection: 'column',
@@ -80,7 +82,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
 
   search_input_text: { //Home TextInput 안에 글씨
     flex: 1,
-    backgroundColor: 'white',
+   
     paddingLeft: 5,
     borderRadius: 10,
     fontSize: 14,

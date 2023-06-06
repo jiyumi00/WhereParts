@@ -32,11 +32,18 @@ export const template = StyleSheet.create({
         borderRadius: 10,
         borderColor: colors.medium,
         paddingHorizontal: '3%',
-        height: 45,
+        height: 40,
         marginBottom: '3%',
     },
     textInput2:{
-
+        borderWidth: 1,
+        borderColor: colors.white,
+        borderRadius: 20,
+        height: 45,
+        width:'85%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent:'center'
     },
 
     //Line

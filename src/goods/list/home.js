@@ -1,6 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import {
-    ScrollView, Pressable, TextInput, ImageBackground, View, Text,
+    ScrollView, Pressable, TextInput, ImageBackground, View, Text, StyleSheet, Dimensions,
     Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules, SafeAreaView,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -15,7 +15,7 @@ import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
 import ListItem from './item';
-import { template } from '../../styles/template/page_style';
+import { template, colors } from '../../styles/template/page_style';
 //import { template } from '@babel/core';
 
 class Home extends Component {
@@ -28,12 +28,12 @@ class Home extends Component {
         //안드로이드에서 정의한 모듈 가져옴
         const { ImageModule } = NativeModules;
         this.imageModule = ImageModule;
-        this.sortKind=["최신순","거리순","가나다순"];
+        this.sortKind = ["최신순", "거리순", "가나다순"];
 
         this.state = {
-            searchKeyWord:'',
+            searchKeyWord: '',
             isRefresh: false,
-            emptyListViewVisible:false,
+            emptyListViewVisible: false,
             goodsContent: [],
             indicator: false,
             recentRadioButtonChecked: true,
@@ -41,7 +41,7 @@ class Home extends Component {
 
             goodsQuantity: null,
             quality: 1,
-            sortedKind:0,
+            sortedKind: 0,
         };
     }
 
@@ -57,8 +57,8 @@ class Home extends Component {
     // 부품 검색
     search = (value) => {
         console.log('selected data: ', value);
-        this.setState({searchKeyWord: value});
-        this.setState({ goodsContent: this.dataFiltering(value)});
+        this.setState({ searchKeyWord: value });
+        this.setState({ goodsContent: this.dataFiltering(value) });
     };
 
     // 필터링 (부품번호, 부품명 동시 검색)
@@ -72,12 +72,12 @@ class Home extends Component {
                     return true;
                 if (content.name.toLowerCase().includes(value.toLowerCase()))
                     return true;
-                if(content.hashTag.toLowerCase().includes(value.toLowerCase()))
+                if (content.hashTag.toLowerCase().includes(value.toLowerCase()))
                     return true;
             }
         });
         this.AnimatedHeaderValue.setValue(0);
-        this.setState({goodsQuantity:goodsContent.length});
+        this.setState({ goodsQuantity: goodsContent.length });
         return goodsContent;
     }
 
@@ -115,7 +115,7 @@ class Home extends Component {
             const goodsQuantity = response.length;
             //console.log("상품 총 갯수 :", goodsQuantity);//response는 json자체
             this.setState({ indicator: false, goodsContent: response, goodsQuantity: goodsQuantity });
-            this.setState({emptyListViewVisible:response.length==0 ? true:false})
+            this.setState({ emptyListViewVisible: response.length == 0 ? true : false })
         });
         //console.log('refresh success')
         this.setState({ isRefresh: false })
@@ -123,13 +123,13 @@ class Home extends Component {
 
     // 리스트 정렬, 1:최신순, 2:거리순, 3:가나다순
     dataSorting = (sortedKind) => {
-        console.log('list Sort sortedKind = ',this.state.sortedKind);
-        this.setState({sortedKind:sortedKind});
-        this.setState({indicator:true});
-        setTimeout(()=> {
-            let sortedData=[];
+        console.log('list Sort sortedKind = ', this.state.sortedKind);
+        this.setState({ sortedKind: sortedKind });
+        this.setState({ indicator: true });
+        setTimeout(() => {
+            let sortedData = [];
             if (sortedKind == 0) {
-                sortedData = this.state.goodsContent.sort((a,b) => {
+                sortedData = this.state.goodsContent.sort((a, b) => {
                     return b.id - a.id;
                 })
             }
@@ -143,12 +143,12 @@ class Home extends Component {
                     return a.name.localeCompare(b.name);
                 })
             }
-            this.setState({goodsContent:sortedData});
+            this.setState({ goodsContent: sortedData });
             this.setState({ indicator: false });
-        },0);
+        }, 0);
     }
 
-  
+
     //Web Service 시작
     //사진으로부터 품번 인식 서비스 API
     async callPartsNoAPI(imageURI) {
@@ -191,8 +191,8 @@ class Home extends Component {
 
 
     render() {
-        const Header_Maximum_Height = 160;
-        const Header_Minimum_Height = 120;
+        const Header_Maximum_Height = 130;
+        const Header_Minimum_Height = 110;
 
         const renderHeader = this.AnimatedHeaderValue.interpolate(
             {
@@ -207,93 +207,155 @@ class Home extends Component {
                 extrapolate: 'clamp'
             });
 
-        console.log('sortKind',this.state.sortedKind);
-        console.log('indicator',this.state.indicator);
+        console.log('sortKind', this.state.sortedKind);
+        console.log('indicator', this.state.indicator);
 
         return (
             <SafeAreaView style={template.baseContainer}>
-                {this.state.indicator && <Indicator/>}
-                
-                <View style={styles.home_total_view}>
-                    {this.state.emptyListViewVisible==false && <Animated.FlatList
-                        data={this.state.goodsContent}
-                        numColumns={2}
-                        horizontal={false}
-                        renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
-                        refreshing={this.state.isRefresh} //새로고침
-                        onRefresh={this.goGetGoods}
-                        scrollEventThrottle={16}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 10 }}
-                        onScroll={Animated.event(
-                            [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
-                            { useNativeDriver: true })}
-                        />}
-                    {this.state.emptyListViewVisible==true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation}/>}
+                {this.state.indicator && <Indicator />}
+                {this.state.emptyListViewVisible == false && <Animated.FlatList
+                    data={this.state.goodsContent}
+                    numColumns={2}
+                    horizontal={false}
+                    renderItem={({ item, index }) => <ListItem index={index} item={item} navigation={this.props.navigation} refreshListener={this.goGetGoods} />}
+                    refreshing={this.state.isRefresh} //새로고침
+                    onRefresh={this.goGetGoods}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 10 }}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
+                        { useNativeDriver: true })}
+                />}
+                {this.state.emptyListViewVisible == true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation} />}
 
-                    {/* 화면 상단 제목 부분 */}
-                    <Animated.View style={[styles.home_title_view, { transform: [{ translateY: renderHeader }] }]}>
-                        <View style={styles.title_total_view}>
-                            <View style={[styles.main_title_view]}>
-                                <Text style={styles.main_title_text}>
-                                    <View style={styles.carIcon_view}>
-                                        <CarIcon name="car-wrench" size={50} color="#193067" /> 
-                                    </View>
-                                    내가 찾는 부품
-                                </Text>
-                            </View>
-                            <View style={[styles.sub_title_view]}>
-                                <Text style={styles.sub_title_text}>
-                                    손쉽게 검색하고
-                                </Text>
-                                <Text style={styles.sub_title_text}>
-                                    판매/구매까지 바로!
-                                </Text>
-                            </View>
-                        </View>
-                    </Animated.View>
+                <View>
 
-                    <Animated.View style={[styles.home_searchbar_view, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
-                        <View style={styles.search_section_view}>
-                            <View style={styles.searchbar_view}>
-                                <Icon style={{ paddingLeft: 10 }} name="search" size={25} color="#193067" />
+                </View>
+                {/* 화면 상단 제목 부분 */}
+                <Animated.View style={[inStyle.logoView, { transform: [{ translateY: renderHeader }] }]}>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={
+                                require('../../images/logo/logo.png')
+                            }
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.sub_title_text}>
+                            손쉽게 검색하고 판매/구매까지 바로!
+                        </Text>
+                    </View>
+                </Animated.View>
+
+                <Animated.View style={[inStyle.searchView, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
+                    <View style={inStyle.searchBarView}>
+                        <View style={template.textInput2}>
+                            <View style={{ flex:6,flexDirection:'row', alignItems:'center' }}>
+                                <Icon style={{ paddingLeft: 10 }} name="search" size={25} color={colors.white} />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
                                     placeholder="검색어를 입력해주세요.(카메라 가능)"
-                                    placeholderTextColor="light grey"
-                                    style={styles.search_input_text}
+                                    placeholderTextColor={colors.white}
                                     value={this.state.searchKeyWord}
                                 />
                             </View>
-                            {/* 카메라로 부품번호 검색 */}
-                            <View>
+                            <View style={{ flex:1,justifyContent:'flex-end' }}>
                                 <TouchableOpacity
-                                    style={styles.camera_search_button}
+                                    style={inStyle.cameraButton}
                                     onPress={this.goCameraButtonClicked}>
-                                    <CameraIcon name="camera" size={25} color="#193067" />
+                                    <Image
+                                        style={{ width: 20, height: 14 }}
+                                        source={
+                                            require('../../images/camera/camera_blue.png')
+                                        }
+                                    />
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.sort_section_view}>
-                            <View style={styles.goods_total_quantity_view}>
-                                <Text style={{ color: 'black' }}>총 상품개수 : </Text>
-                                <Text style={{ color: '#113AE2' }}>{this.state.goodsQuantity}</Text><Text style={{ color: 'black' }}>개</Text>
-                            </View>
-                            <View style={styles.sort_dropdown_view}>
-                                <Picker
-                                    style={styles.sort_dropdown_view.dropdown_width}
-                                    selectedValue={this.state.sortedKind}
-                                    onValueChange={(value, index) => this.dataSorting(value)}
-                                    mode={'dropdown'}>
-                                    {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i} />)}
-                                </Picker>
-                            </View>
+                        {/* 카메라로 부품번호 검색 */}
+
+                    </View>
+                    <View style={inStyle.sortView}>
+                        <View style={inStyle.sortDropView}>
+                            <Picker
+                                style={inStyle.sortDropView.dropdown_width}
+                                selectedValue={this.state.sortedKind}
+                                onValueChange={(value, index) => this.dataSorting(value)}
+                                mode={'dropdown'}>
+                                {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i} />)}
+                            </Picker>
                         </View>
-                    </Animated.View>      
-                </View>
+                        <View style={inStyle.goodsQuantityView}>
+                            <Text style={{ color: colors.black }}>총 상품개수 : </Text>
+                            <Text style={{ color:colors.main}}>{this.state.goodsQuantity}</Text><Text style={{ color: colors.black }}>개</Text>
+                        </View>
+                    </View>
+                </Animated.View>
+
             </SafeAreaView>
         );
     }
 }
 
 export default Home;
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
+
+const inStyle = StyleSheet.create({
+    logoView: {
+        width: ScreenWidth,
+        height: 170,
+        paddingTop: '3%',
+        alignItems: 'center',
+        position: 'absolute',
+        backgroundColor: colors.main,
+    },
+    searchView: { //home TextInput
+        flexDirection: 'column',
+        width: ScreenWidth,
+        position: 'absolute',
+        alignItems: 'center',
+        backgroundColor: colors.main,
+    },
+    searchBarView: {
+        flexDirection: 'row',
+        marginTop: '3%',
+        marginBottom: '5%',
+    },
+    cameraButton: {
+        marginLeft: 10,
+        width: 45,
+        height: 45,
+        backgroundColor: colors.white,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+    },
+    sortView:{
+        flexDirection: 'row', 
+        backgroundColor: 'white', 
+        borderBottomColor:colors.line,
+        borderBottomWidth:1,
+        marginTop:'2%',
+        paddingRight:'5%',
+    },
+    sortDropView:{
+        flex: 1,
+        flexDirection: 'row',
+        height:40,
+        justifyContent: 'flex-start',
+        alignItems:'center',
+        dropdown_width:{
+          width:150
+        },
+    },
+    goodsQuantityView:{
+        flex: 1,
+        justifyContent:'flex-end',
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+}); 
