@@ -601,7 +601,7 @@ class AddGoods extends Component {
                             </View>
 
                             {/* 상세내용*/}
-                            <View style={[template.roundedBox]}>
+                            <View style={[template.roundedBox,{backgroundColor:colors.white, borderColor:colors.medium}]}>
                                 <Text style={[template.contentText, { color: colors.dark }]}>글쓰기</Text>
                                 <TextInput
                                     style={[template.inputText, { height: 100 }]}

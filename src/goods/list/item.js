@@ -10,8 +10,6 @@ import FunctionUtil from '../../util/libraries_function';
 
 import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
 
-const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
 
 export default class ListItem extends PureComponent {
     constructor(props) {
@@ -57,7 +55,7 @@ export default class ListItem extends PureComponent {
                 <View style={inStyle.itemView}>
                     <View style={template.layoutBox}>
                         <View style={{ alignItems: 'flex-start' }}>
-                            <Text style={[template.smallText, { fontWeight: 'bold' }]}>{item.name.length > 13 ? `${item.name.slice(0, 11)}...` : item.name}</Text>
+                            <Text style={template.itemNameText}>{item.name.length > 13 ? `${item.name.slice(0, 11)}...` : item.name}</Text>
                         </View>
                     </View>
                     <View style={[template.layoutBox, { flexDirection: 'row' }]}>
@@ -77,6 +75,8 @@ export default class ListItem extends PureComponent {
         );
     }
 }
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 
 const inStyle = StyleSheet.create({
     itemView: [

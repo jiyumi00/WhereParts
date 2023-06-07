@@ -47,8 +47,8 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   imageView:{
-    width:ScreenWidth/5,
-    height:ScreenWidth/5,
+    width:ScreenWidth/6,
+    height:ScreenWidth/6,
   },
   productImage: {
     flex: 1,

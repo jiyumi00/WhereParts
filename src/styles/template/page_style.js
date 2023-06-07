@@ -3,10 +3,10 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 export const colors = {
-    main: '#185FE0', 
+    main: '#185FE0',
     sub: '#00A1FF',
     //회색
-    light: '#F6F6F6', 
+    light: '#F6F6F6',
     medium: '#BCBCBC',
     dark: '#7A7A7A',
     red: '#FF7E70',
@@ -35,15 +35,15 @@ export const template = StyleSheet.create({
         height: 40,
         marginBottom: '3%',
     },
-    textInput2:{
+    textInput2: {
         borderWidth: 1,
         borderColor: colors.white,
         borderRadius: 20,
         height: 45,
-        width:'85%',
+        width: '85%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
 
     //Line
@@ -63,10 +63,10 @@ export const template = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         borderColor: colors.light,
-        backgroundColor:colors.light,
+        backgroundColor: colors.light,
         paddingHorizontal: '2%',
         paddingVertical: '2%',
-        marginBottom: '2%',
+        marginBottom: '3%',
     },
     layoutBox: {
         paddingHorizontal: '2%',
@@ -77,8 +77,8 @@ export const template = StyleSheet.create({
         paddingVertical: '2%',
         borderWidth: 1,
     },
-  
-   
+
+
 
     //Text
     titleText: {
@@ -87,7 +87,7 @@ export const template = StyleSheet.create({
         fontWeight: 'bold'
     },
     largeText: {
-        fontWeight:'500',
+        fontWeight: '500',
         fontSize: 16,
         color: colors.black,
     },
@@ -99,11 +99,16 @@ export const template = StyleSheet.create({
         fontSize: 14,
         color: colors.black,
     },
- 
-    itemPriceText:{
+
+    itemNameText: {
         fontSize: 15,
         color: colors.black,
-        fontWeight:'bold'
+        fontWeight: 'bold'
+    },
+    itemPriceText: {
+        fontSize: 15,
+        color: colors.black,
+        fontWeight: 'bold'
     },
     itemNumberText: {
         fontSize: 13,
@@ -126,13 +131,13 @@ export const template = StyleSheet.create({
 
     //Button
     activeButton: {
-        height: 50,
+        height: 60,
         backgroundColor: colors.main,
         alignItems: 'center',
         justifyContent: 'center'
     },
     inActiveButton: {
-        height: 50,
+        height: 60,
         backgroundColor: colors.light,
         alignItems: 'center',
         justifyContent: 'center'
@@ -145,13 +150,25 @@ export const template = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
     },
-    roundedButton:{
+    roundedButton: {
         width: ScreenWidth / 5,
         height: ScreenWidth / 5,
         backgroundColor: colors.light,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
+    },
+    bottomButton: {
+        height: 60,
+        flexDirection: 'row',
+        shadowColor: "black",
+        shadowOpacity: 0.5,
+        shadowOffset:{
+            height:0,
+            width:0
+        },
+        elevation: 5,
+        
     },
     //Image
     imageView: {
