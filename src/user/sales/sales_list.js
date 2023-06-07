@@ -24,7 +24,7 @@ export default class SalesDetails extends Component {
             goodsConetents: [],     //자신이 등록한 상품 리스트
             salesContents: [],      //판매중이거 완료된 상품 리스트 (saleState값에 따라 filtering)
 
-            saleState: 1,            //1:자신이 등록한 상품, 2: 판매중인 상품 3:판매완료된 상품
+            saleState: 2,            //1:자신이 등록한 상품, 2: 판매중인 상품 3:판매완료된 상품
 
             isRefresh: false,
 
@@ -152,12 +152,7 @@ export default class SalesDetails extends Component {
     render() {
         return (
             <View style={template.baseContainer}>
-
-                {/* <View style={[styles.salesdetailsheader, { flexDirection: 'column', alignItems: 'flex-end', }]}>
-                        <Text><IconMark name="pen" color={'#14127D'} size={15}/> 판매완료건수: <Text style={{color:'black'}}> {this.state.totalCount}건       </Text>
-                        <IconMark name="coins" color={'#14127D'} size={15}/><Text> 총판매금액: <Text style={{color:'black'}}> {FunctionUtil.getPrice(this.state.totalPrice)}원</Text></Text></Text>
-                    </View> */}
-                <View style={{ marginVertical: '5%', flexDirection: 'row', width: "100%" }}>
+                <View style={{ marginTop: '5%', flexDirection: 'row', width: "100%" }}>
                     <View style={this.state.saleState == 1 ? inStyle.selectedBar : inStyle.deSelectedBar}>
                         <TouchableOpacity onPress={this.myGoodsListClicked}><Text style={this.state.saleState == 1 ? inStyle.selectedBarText : inStyle.deSelectedBarText}>나의상품</Text></TouchableOpacity>
                     </View>
@@ -169,7 +164,7 @@ export default class SalesDetails extends Component {
                     </View>
                 </View>
 
-                <View style={{ paddingHorizontal: '4%', flex: 1 }}>
+                <View style={this.state.saleState == 1 ? inStyle.contaniner : [inStyle.contaniner, { backgroundColor: colors.light, paddingHorizontal: '0%' }]}>
                     {/* 나의 상품 보기*/}
                     {this.state.saleState == 1 && this.state.emptyGoodsListViewVisible == false && (
                         <FlatList
@@ -254,7 +249,7 @@ class MyGoodsListItem extends PureComponent {
         const item = this.props.item;
         return (
             <TouchableOpacity onPress={this.goGoodsDetailView}>
-                <View style={template.roundedBox}>
+                <View style={[template.roundedBox, { marginVertical: '3%', marginBottom: '0%' }]}>
                     <View style={{ flexDirection: 'row', }}>
                         <View style={{ flex: 3, alignItems: 'flex-start' }}>
                             <Text style={template.itemNameText}>{item.name.length > 20 ? `${item.name.slice(0, 20)}...` : item.name}</Text>
@@ -332,40 +327,37 @@ class MySaleListItem extends PureComponent {
         const item = this.props.item;
 
         return (
-            <View style={[styles.product, { flexDirection: 'column' }]}>
-                <View style={{ paddingBottom: '2%', borderBottomWidth: 1, borderColor: '#E9E9E9', flexDirection: 'row' }}>
-                    <View style={{ flex: 3, alignItems: 'flex-start' }}>
-                        <Text style={styles.itemNameText}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
-                    </View>
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                        <Text style={{ fontSize: 16, color: 'black' }}>{item.quantity}{"개"}</Text>
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', paddingBottom: '2%', paddingTop: '2%' }}>
-                    {item.status != 3 &&
-                        <View style={styles.productInfo}>
-                            <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey', fontSize: 15 }}>주문번호: </Text>{item.orderNo}</Text>
-                            <TouchableOpacity onPress={this.goGoodsNumberWebView}>
-                                <Text style={[styles.itemNumberText, { color: 'grey', fontSize: 15, }]}>부품번호:
-                                    <Text style={{ color: 'blue' }}>{item.goodsNo}</Text>
-                                </Text>
-                            </TouchableOpacity>
-                            <Text style={styles.itemPriceText}><Text style={{ color: 'grey', fontSize: 15 }}>결제: </Text>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text style={{ fontSize: 15, color: 'black' }}>카드</Text></Text>
-                            <Text style={styles.itemRegisterDateText}><Text style={{ color: 'grey', fontSize: 15 }}>주문일: </Text>{item.orderingDate.slice(0, 10)}</Text>
-                        </View>}
+            <View style={{ flexDirection: 'column', marginBottom: '2%', marginTop: '1%', backgroundColor: colors.white }}>
+                <View style={inStyle.itemInfoView}>
 
-                    <View style={styles.imageView}>
+                    <View style={{ flex: 1.5 }}>
                         <Image
                             source={{ uri: this.state.imageURI }}
-                            style={styles.productImage} />
+                            style={[inStyle.imageView2, { borderRadius: 20 }]} />
                     </View>
+                    {item.status != 3 &&
+                        <>
+                            <View style={{ flex: 1.5, alignItems: 'flex-start' }}>
+                                <Text style={[template.itemNameText, { fontSize: 18 }]}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
+                                <Text style={template.contentText}>카드</Text>
+                                <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원</Text>
+
+                            </View>
+                            <View style={{ flex: 2, alignItems: 'flex-end' }}>
+                                <Text style={[template.contentText, { color: colors.dark }]}>{item.quantity}{"개"}</Text>
+                                <Text style={[template.contentText, { color: colors.medium }]}>주문일 : {item.orderingDate.slice(0, 10)}</Text>
+                            </View>
+                        </>
+                    }
+
+
 
                     {item.status == 3 &&
                         <View style={[styles.productInfo, { flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end' }]}>
                             <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                 <Text style={{ fontSize: 14, fontFamily: 'Pretendard-Medium', color: 'black' }}><Text style={{ color: 'grey' }}>주문번호: </Text> {item.orderNo}</Text>
                                 <Text style={[styles.itemRegisterDateText, { fontSize: 14 }]}><Text style={{ color: 'grey' }}>주문일: </Text> {item.days[0].slice(0, 10)}</Text>
-                                <Text style={[styles.itemPriceText, { fontSize: 14 }]}><Text style={{ color: 'grey' }}>결제:</Text> {FunctionUtil.getPrice(item.price * item.quantity)}원/<Text>{item.payKind}</Text></Text>
+                                <Text style={[styles.itemPriceText, { fontSize: 14 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원/<Text>{item.payKind}</Text></Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 1, alignItems: 'flex-end', borderColor: 'grey', paddingRight: '1%' }}>
@@ -381,14 +373,20 @@ class MySaleListItem extends PureComponent {
 
                 </View>
                 {item.status == 1 &&
-                    <TouchableOpacity style={[styles.productInfoRight]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
-                        <Text style={[styles.itemDistanceText, { color: "blue" }]}>배송등록</Text>
-                    </TouchableOpacity>}
-
+                    <TouchableOpacity style={[inStyle.deliverButton]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
+                        <Text style={[template.largeText, { color: colors.main, fontWeight: 'bold' }]}>배송 등록</Text>
+                    </TouchableOpacity>
+                }
                 {item.status == 2 &&
-                    <TouchableOpacity style={styles.productInfoRight} onPress={this.goDeliveryDetailScreen}>
-                        <Text style={[styles.itemDistanceText, { color: "blue" }]}><Text style={[styles.itemDistanceText]}>운송장번호: </Text>{item.invoiceNo} </Text>
-                    </TouchableOpacity>}
+                    <TouchableOpacity style={[inStyle.deliverButton, { flexDirection: 'row', flex: 1 }]} onPress={this.goDeliveryDetailScreen}>
+                        <View style={{ flex: 1, }}>
+                            <Text style={[template.largeText, { color: colors.dark }]}>운송장번호</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                            <Text style={[template.largeText, { color: colors.main }]}>{item.invoiceNo} </Text>
+                        </View>
+                    </TouchableOpacity>
+                }
             </View>
         );
     }
@@ -400,6 +398,10 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 const inStyle = StyleSheet.create({
+    contaniner: {
+        paddingHorizontal: '4%',
+        flex: 1
+    },
     selectedBar: [
         {
             borderWidth: 0,
@@ -439,5 +441,25 @@ const inStyle = StyleSheet.create({
     imageView: {
         width: ScreenWidth / 7,
         height: ScreenWidth / 7,
+    },
+    imageView2: {
+        width: ScreenWidth / 5,
+        height: ScreenWidth / 5,
+    },
+    itemInfoView: {
+        flex: 5,
+        flexDirection: 'row',
+        paddingVertical: '4%',
+        paddingHorizontal: '4%',
+        borderColor: colors.line,
+        borderBottomWidth: 1.5,
+    },
+
+    deliverButton: {
+        paddingHorizontal: '4%',
+        borderRadius: 10,
+        height: ScreenHeight / 16,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 });
