@@ -22,7 +22,7 @@ export default class SignUpCamera extends Component {
                 zIndex:2, 
                 borderColor:'white',
             };
-            this.text="사업자등록번호, 사업장 소재지, 상호를 \n자동으로 인식하여 전송됩니다"
+            this.text="사업자등록번호를 자동으로 인식합니다"
         }
         //cut image가 명함일 경우
         else {

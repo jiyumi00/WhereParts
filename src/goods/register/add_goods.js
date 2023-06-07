@@ -488,8 +488,6 @@ class AddGoods extends Component {
                                     onSubmitEditing={() => { this.hashTagRef.focus(); }}
                                     keyboardType="number-pad"
                                     onChangeText={(value) => this.onValueChange({ price: value })}
-                                    placeholder='판매 금액(개당)'
-                                    placeholderTextColor={colors.dark}
                                 >{FunctionUtil.getPrice(this.state.price)}</TextInput>
                                 <View>
                                     <Text style={[template.smallText, { color: colors.black, fontWeight: 'bold' }]}>원</Text>

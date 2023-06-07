@@ -205,6 +205,7 @@ class CameraX extends Component {
                         }
                         {this.props.hasOwnProperty("downText")&&this.props.hasOwnProperty("cutImageStyle") && this.props.hasOwnProperty("onCutImageListener") && this.state.capturedViewVisible==true &&<>
                           <View style={this.state.bottomTextView}>
+                            
                             <Text style={{color:'white',textAlign:'center'}} /*ref={this.topTextView}*/>{this.props.downText}</Text>
                           </View>
                           

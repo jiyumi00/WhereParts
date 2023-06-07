@@ -1,6 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import {
-    ScrollView, Pressable, TextInput, ImageBackground, View, Text, StyleSheet, Dimensions,
+    ScrollView, Pressable, TextInput, View, Text, StyleSheet, Dimensions,
     Image, FlatList, TouchableOpacity, Modal, Animated, BackHandler, Alert, NativeModules, SafeAreaView,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -9,7 +9,6 @@ import Constant from "../../util/constatnt_variables";
 import Session from '../../util/session';
 import WebServiceManager from "../../util/webservice_manager";
 import EmptyListView from '../../util/empty_list_view';
-import { styles } from "../../styles/list/home";
 
 import CarIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -191,7 +190,7 @@ class Home extends Component {
 
 
     render() {
-        const Header_Maximum_Height = 130;
+        const Header_Maximum_Height = ScreenHeight / 5;
         const Header_Minimum_Height = 110;
 
         const renderHeader = this.AnimatedHeaderValue.interpolate(
@@ -213,6 +212,8 @@ class Home extends Component {
         return (
             <SafeAreaView style={template.baseContainer}>
                 {this.state.indicator && <Indicator />}
+               
+               
                 {this.state.emptyListViewVisible == false && <Animated.FlatList
                     data={this.state.goodsContent}
                     numColumns={2}
@@ -222,16 +223,14 @@ class Home extends Component {
                     onRefresh={this.goGetGoods}
                     scrollEventThrottle={16}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 10 }}
+                    contentContainerStyle={{ paddingTop: Header_Maximum_Height + Header_Minimum_Height + 20 }}
                     onScroll={Animated.event(
                         [{ nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } }],
                         { useNativeDriver: true })}
                 />}
                 {this.state.emptyListViewVisible == true && <EmptyListView isRefresh={this.state.isRefresh} onRefreshListener={this.goGetGoods} contentContainerStyle={{ paddingTop: Header_Maximum_Height }} navigation={this.props.navigation} />}
 
-                <View>
-
-                </View>
+               
                 {/* 화면 상단 제목 부분 */}
                 <Animated.View style={[inStyle.logoView, { transform: [{ translateY: renderHeader }] }]}>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -243,7 +242,7 @@ class Home extends Component {
                         />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.sub_title_text}>
+                        <Text style={[template.smallText, { color: colors.white }]}>
                             손쉽게 검색하고 판매/구매까지 바로!
                         </Text>
                     </View>
@@ -252,7 +251,7 @@ class Home extends Component {
                 <Animated.View style={[inStyle.searchView, { height: Header_Minimum_Height, transform: [{ translateY: renderSearchBar }] }]}>
                     <View style={inStyle.searchBarView}>
                         <View style={template.textInput2}>
-                            <View style={{ flex:6,flexDirection:'row', alignItems:'center' }}>
+                            <View style={{ width: '80%', flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon style={{ paddingLeft: 10 }} name="search" size={25} color={colors.white} />
                                 <TextInput
                                     onChange={(value) => this.search(value.nativeEvent.text)}
@@ -261,7 +260,7 @@ class Home extends Component {
                                     value={this.state.searchKeyWord}
                                 />
                             </View>
-                            <View style={{ flex:1,justifyContent:'flex-end' }}>
+                            <View style={{ width: '10%', justifyContent: 'flex-end' }}>
                                 <TouchableOpacity
                                     style={inStyle.cameraButton}
                                     onPress={this.goCameraButtonClicked}>
@@ -284,12 +283,12 @@ class Home extends Component {
                                 selectedValue={this.state.sortedKind}
                                 onValueChange={(value, index) => this.dataSorting(value)}
                                 mode={'dropdown'}>
-                                {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i} />)}
+                                {this.sortKind.map((item, i) => <Picker.Item label={item} key={i} value={i} color={colors.dark} style={{ fontSize: 14 }} />)}
                             </Picker>
                         </View>
                         <View style={inStyle.goodsQuantityView}>
-                            <Text style={{ color: colors.black }}>총 상품개수 : </Text>
-                            <Text style={{ color:colors.main}}>{this.state.goodsQuantity}</Text><Text style={{ color: colors.black }}>개</Text>
+                            <Text style={{ color: colors.dark}}>상품수 </Text>
+                            <Text style={{ color: colors.main, }}>{this.state.goodsQuantity}</Text>
                         </View>
                     </View>
                 </Animated.View>
@@ -319,6 +318,8 @@ const inStyle = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         backgroundColor: colors.main,
+        borderBottomEndRadius: 20,
+        borderBottomLeftRadius: 20,
     },
     searchBarView: {
         flexDirection: 'row',
@@ -334,28 +335,29 @@ const inStyle = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 20,
     },
-    sortView:{
-        flexDirection: 'row', 
-        backgroundColor: 'white', 
-        borderBottomColor:colors.line,
-        borderBottomWidth:1,
-        marginTop:'2%',
-        paddingRight:'5%',
+    sortView: {
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        borderBottomColor: colors.line,
+        borderBottomWidth: 1.5,
+        height: 40,
+        marginTop: '2%',
+        paddingRight: '5%',
     },
-    sortDropView:{
+    sortDropView: {
         flex: 1,
         flexDirection: 'row',
-        height:40,
+        height: 40,
         justifyContent: 'flex-start',
-        alignItems:'center',
-        dropdown_width:{
-          width:150
+        alignItems: 'center',
+        dropdown_width: {
+            width: 150
         },
     },
-    goodsQuantityView:{
+    goodsQuantityView: {
         flex: 1,
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         flexDirection: 'row',
         alignItems: 'center'
-      },
+    },
 }); 

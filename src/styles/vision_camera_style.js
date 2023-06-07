@@ -19,11 +19,6 @@ export const styles = StyleSheet.create({
     viewBottomLayout: {
         flexDirection: 'row',
         width:"100%",
-        height:80,
-        //zIndex:1,
-        //borderTopStartRadius: 40,
-        //borderTopEndRadius: 40,
-        backgroundColor: 'white',
     },
 
     // 품번 카메라 디자인

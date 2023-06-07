@@ -62,7 +62,8 @@ export const template = StyleSheet.create({
     roundedBox: {
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: colors.medium,
+        borderColor: colors.light,
+        backgroundColor:colors.light,
         paddingHorizontal: '2%',
         paddingVertical: '2%',
         marginBottom: '2%',
@@ -99,13 +100,18 @@ export const template = StyleSheet.create({
         color: colors.black,
     },
  
+    itemPriceText:{
+        fontSize: 15,
+        color: colors.black,
+        fontWeight:'bold'
+    },
     itemNumberText: {
-        fontSize: 12,
-        color: colors.sub,
+        fontSize: 13,
+        color: colors.main,
     },
     itemDistanceText: {
-        fontSize: 10,
-        color: colors.red
+        fontSize: 11,
+        color: colors.dark
     },
     buttonText: {
         fontSize: 21,
