@@ -4,12 +4,13 @@ const ScreenWidth = Dimensions.get('window').width;
 
 export const colors = {
     main: '#185FE0',
-    sub: '#00A1FF',
+    main_light:'#00A1FF',
+    main_dark: '#081866',
     //회색
     light: '#F6F6F6',
     medium: '#BCBCBC',
     dark: '#7A7A7A',
-    red: '#FF7E70',
+    red: '#FF3D51',
     white: '#FFFFFF',
     black: '#000000',
     line: '#E6E6E6',

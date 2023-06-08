@@ -22,7 +22,7 @@ export default class SalesDetails extends Component {
             goodsConetents: [],     //자신이 등록한 상품 리스트
             salesContents: [],      //판매중이거 완료된 상품 리스트 (saleState값에 따라 filtering)
 
-            saleState: 2,            //1:자신이 등록한 상품, 2: 판매중인 상품 3:판매완료된 상품
+            saleState: 1,            //1:자신이 등록한 상품, 2: 판매중인 상품 3:판매완료된 상품
 
             isRefresh: false,
 
@@ -340,7 +340,7 @@ class MySaleListItem extends PureComponent {
 
                         <View style={{ flex: 1 }}>
                             <Text style={template.contentText}>카드</Text>
-                            <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원</Text>
+                            <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.total)}원</Text>
                         </View>
                     </View>
                     <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
