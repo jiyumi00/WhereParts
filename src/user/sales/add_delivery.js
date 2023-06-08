@@ -6,7 +6,6 @@ import {
 
 import { Picker } from '@react-native-picker/picker';
 import { template, colors } from "../../styles/template/page_style";
-import { styles } from "../../styles/sales/salesdeliver";
 
 import IconCamera from 'react-native-vector-icons/Feather';
 
