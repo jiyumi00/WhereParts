@@ -20,6 +20,7 @@ export const template = StyleSheet.create({
     baseContainer: { //전체 컨테이너
         flex: 1,
         backgroundColor: colors.white,
+     
     },
     container: { //선 없는 페이지 컨테이너
         flex: 1,
@@ -31,7 +32,7 @@ export const template = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         borderColor: colors.medium,
-        paddingHorizontal: '3%',
+        paddingHorizontal: '4%',
         height: 40,
         marginBottom: '3%',
     },

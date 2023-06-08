@@ -327,73 +327,43 @@ class MySaleListItem extends PureComponent {
         return (
             <View style={{ flexDirection: 'column', marginBottom: '2%', backgroundColor: colors.white }}>
                 <View style={inStyle.itemInfoView}>
-
                     <View style={{ flex: 1.5 }}>
                         <Image
                             source={{ uri: this.state.imageURI }}
                             style={[inStyle.imageView2, { borderRadius: 20 }]} />
                     </View>
-                    {item.status != 3 &&
-                        <>
-                            <View style={{ flex: 1.5, alignItems: 'flex-start', justifyContent: 'center' }}>
-                                <View style={{ flex: 2 }}>
-                                    <Text style={[template.itemNameText, { fontSize: 18 }]}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
-                                </View>
 
-                                <View style={{ flex: 1 }}>
-                                    <Text style={template.contentText}>카드</Text>
-                                    <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원</Text>
-                                </View>
-                            </View>
-                            <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
-                                <View style={{ flex: 2 }}>
-                                    <Text style={[template.contentText, { color: colors.dark }]}>{item.quantity}{"개"}</Text>
-                                </View>
+                    <View style={{ flex: 1.5, alignItems: 'flex-start', justifyContent: 'center' }}>
+                        <View style={{ flex: 2 }}>
+                            <Text style={[template.itemNameText, { fontSize: 18 }]}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
+                        </View>
 
-                                <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={[template.contentText, { color: colors.medium }]}>주문일 : {item.orderingDate.slice(0, 10)}</Text>
-                                </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={template.contentText}>카드</Text>
+                            <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원</Text>
+                        </View>
+                    </View>
+                    <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
+                        <View style={{ flex: 2 }}>
+                            <Text style={[template.contentText, { color: colors.dark }]}>{item.quantity}{"개"}</Text>
+                        </View>
 
-                            </View>
-                        </>
-                    }
-
-
-
-                    {item.status == 3 &&
-                        <>
-                            <View style={{ flex: 1.5, alignItems: 'flex-start', justifyContent: 'center' }}>
-                                <View style={{ flex: 2 }}>
-                                    <Text style={[template.itemNameText, { fontSize: 18 }]}>{item.goodsName.length > 20 ? `${item.goodsName.slice(0, 20)}...` : item.goodsName}</Text>
-                                </View>
-
-                                <View style={{ flex: 1 }}>
-                                    <Text style={template.contentText}>카드</Text>
-                                    <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(item.price * item.quantity)}원</Text>
-                                </View>
-                            </View>
-                            <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
-                                <View style={{ flex: 2 }}>
-                                    <Text style={[template.contentText, { color: colors.dark }]}>{item.quantity}{"개"}</Text>
-                                </View>
-
-                                <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={[template.contentText, { color: colors.medium }]}>배송일 : {item.days[1].slice(0, 10)}</Text>
-                                    <Text style={[template.contentText, { color: colors.medium }]}>완료일 : {item.days[2].slice(0, 10)}</Text>
-                                </View>
-
-                            </View>
-                        </>
-          
-                        }
-
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            {item.status == 3 ? <><Text style={[template.contentText, { color: colors.medium }]}>배송일 : {item.days[1].slice(0, 10)}</Text>
+                                <Text style={[template.contentText, { color: colors.medium }]}>완료일 : {item.days[2].slice(0, 10)}</Text></> :
+                                <Text style={[template.contentText, { color: colors.medium }]}>주문일 : {item.orderingDate.slice(0, 10)}</Text>
+                            }
+                        </View>
+                    </View>
                 </View>
-                {item.status == 1 &&
+                {
+                    item.status == 1 &&
                     <TouchableOpacity style={[inStyle.deliverButton]} onPress={() => this.props.navigation.navigate('AddDelivery', { id: item.id, navigation: this.props.navigation, refresh: this.props.refreshListener })}>
                         <Text style={[template.largeText, { color: colors.main, fontWeight: 'bold' }]}>배송 등록</Text>
                     </TouchableOpacity>
                 }
-                {item.status == 2 &&
+                {
+                    item.status == 2 &&
                     <TouchableOpacity style={[inStyle.deliverButton, { flexDirection: 'row', flex: 1 }]} onPress={this.goDeliveryDetailScreen}>
                         <View style={{ flex: 1, }}>
                             <Text style={[template.largeText, { color: colors.dark }]}>운송장번호</Text>
@@ -403,7 +373,7 @@ class MySaleListItem extends PureComponent {
                         </View>
                     </TouchableOpacity>
                 }
-            </View>
+            </View >
         );
     }
 }
