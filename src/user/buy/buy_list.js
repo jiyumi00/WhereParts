@@ -115,8 +115,8 @@ class ListItem extends Component {
         this.props.navigation.navigate('OrderDetail', { orderID: this.orderID, goodsID:this.goodsID })
     }
     //부품번호에 대한 Goodle 검색창 보이기(Web View)
-    goGoodsNumberWebView = () => {
-        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + this.props.item.goodsNo });
+    goGoodsNumberWebView = (goodsNo) => {
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' +goodsNo });
     }
 
 
@@ -171,7 +171,7 @@ class ListItem extends Component {
                                 <Text style={[template.itemNameText, { fontSize: 18 }]}>{goodsName.length > 9 ? `${goodsName.slice(0, 9)}...` : goodsName}</Text>
                             </View>
                             <View style={{ flex: 1 }}>
-                                <TouchableOpacity onPress={this.goGoodsNumberWebView}>
+                                <TouchableOpacity onPress={()=>this.goGoodsNumberWebView(goodsNo)}>
                                     <Text style={template.itemNumberText}>{goodsNo}</Text>
                                 </TouchableOpacity>
                                 <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(total)}원</Text>

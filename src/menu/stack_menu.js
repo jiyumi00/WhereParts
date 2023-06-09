@@ -78,7 +78,7 @@ class Stack extends Component {
                 <NativeStack.Screen name="Login" component={Login}
                     options={{ headerShown: false }} />
                 <NativeStack.Screen name="SignUp" component={SignUp} 
-                     initialParams={{ companyNoImageURL: [],cardImageURL:[],companyNo:"" }} options={{ title: " " }} />
+                     initialParams={{ companyNoImageURL: [],cardImageURL:[],companyNo:"" }} options={{ title: "회원가입" }} />
                 <NativeStack.Screen name="SignUpGallery" component={SignUpGallery} options={{ title: "사진선택" }}/>
                 <NativeStack.Screen name="SignUpCamera" component={SignUpCamera} options={{ title: "사진촬영" }} />
                 <NativeStack.Screen name="PartsNoCamera" component={PartsNoCamera}

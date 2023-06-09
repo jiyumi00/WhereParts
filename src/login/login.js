@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid } from 'react-native';
+import {
+    Text, View, TouchableOpacity, TextInput, Alert, ScrollView, PermissionsAndroid,
+    StyleSheet, Dimensions, Image
+} from 'react-native';
 
-import { styles } from "../styles/login/login";
+import { template, colors } from "../styles/template/page_style";
 import Constant from "../util/constatnt_variables";
 import WebServiceManager from "../util/webservice_manager";
 import SplashScreen from 'react-native-splash-screen';
@@ -11,6 +14,7 @@ import FunctionUtil from '../util/libraries_function';
 import Session from '../util/session';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { color } from 'react-native-reanimated';
 
 class Login extends Component {
 
@@ -30,16 +34,16 @@ class Login extends Component {
             autoLoginChecked: false,
             rememberIdChecked: false,
             loginValid: false
-        }     
+        }
     }
 
     //자동로그인
     componentDidMount() {
         SplashScreen.hide();
-        
+
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onValueChange();
-            this.setState({companyNo:"",passwd:"",autoLoginChecked: false,rememberIdChecked: false}) 
+            this.setState({ companyNo: "", passwd: "", autoLoginChecked: false, rememberIdChecked: false })
         });
         //AsyncStorage.clear();
         //퍼미션 설정되었는지 확인
@@ -50,7 +54,7 @@ class Login extends Component {
         this.handleFCMMessage();
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this.focusListener();
     }
 
@@ -94,9 +98,9 @@ class Login extends Component {
 
     //AsyncStorage에 저장된 정보를 기반으로 어떻게 로그인할지 정하고 로그인 실행
     autoLogin() {
-        FunctionUtil.getLoginType().then((response) => {  
+        FunctionUtil.getLoginType().then((response) => {
             console.log('login info ', response);
-            const {companyNo,passwd,detailLogin} = response;
+            const { companyNo, passwd, detailLogin } = response;
             //자동로그인으로 설정된 경우
             if (detailLogin == 1) {
                 this.setState({ autoLoginChecked: true });
@@ -104,8 +108,8 @@ class Login extends Component {
                     companyNo: companyNo,
                     passwd: passwd,
                     deviceToken: "",
-                    detailLogin:1,
-                    isAutoLogin:true
+                    detailLogin: 1,
+                    isAutoLogin: true
                 }
                 this.login(loginInfo);
             }
@@ -122,13 +126,13 @@ class Login extends Component {
             companyNo: this.state.companyNo.replace(/-/g, ''),
             passwd: this.state.passwd,
             deviceToken: this.deviceToken,
-            detailLogin:this.getDetailLogin(),
-            isAutoLogin:false
+            detailLogin: this.getDetailLogin(),
+            isAutoLogin: false
         }
         this.login(loginInfo);
     }
 
-    login(loginInfo){
+    login(loginInfo) {
         //console.log('로그인 정보 =',loginInfo);
         FunctionUtil.goLogin(loginInfo).then((success) => {
             //console.log("로그인 성공 여부 = ", success);
@@ -139,7 +143,7 @@ class Login extends Component {
                 return;
             }
             else if (Session.getPageInfoItem() != null) {
-                this.props.navigation.navigate(Session.getNextPage(),{ saleState: 2 });
+                this.props.navigation.navigate(Session.getNextPage(), { saleState: 2 });
             }
             else {
                 this.props.navigation.navigate('TabHome');
@@ -266,67 +270,82 @@ class Login extends Component {
     render() {
         return (
             <>
-                <View style={styles.total_container}>
-                    <ScrollView>
-                        <View style={styles.container}>
-                            <View style={styles.itemLayout_view}>
-                                <View style={styles.header_textLayout_view}>
-                                    <Text style={[styles.default_title_text, styles.where_title_text]}>WHERE</Text>
-                                    <Text style={[styles.default_title_text, styles.parts_title_text]}>PARTS</Text>
-                                </View>
-                                <View style={styles.textInput_view}>
-                                    <Text>사업자번호</Text>
-                                    <TextInput
-                                        ref={(c) => { this.idRef = c; }}
-                                        returnKeyType="next"
-                                        keyboardType="number-pad"
-                                        onSubmitEditing={() => { this.passwordRef.focus(); }}
-                                        onChangeText={(value) => { this.onValueChange({ companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3") })}}
-                                        value={this.state.companyNo}
-                                    />
-                                </View>
-                                <View style={styles.textInput_view}>
-                                    <Text>비밀번호</Text>
-                                    <TextInput
-                                        ref={(c) => { this.passwordRef = c; }}
-                                        returnKeyType="next"
-                                        onChangeText={(value) => this.onValueChange({ passwd: value })}
-                                        secureTextEntry={true}
-                                        value={this.state.passwd}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: 'row', marginTop: "-5%" }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
-                                        <IconRadio name={this.state.autoLoginChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
-                                        <Text style={[styles.default_text, styles.radio_btn_text]}> 자동로그인  </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
-                                        <IconRadio name={this.state.rememberIdChecked ? "check-circle" : "panorama-fish-eye"} size={20} color={'lightgrey'} style={{ paddingTop: 5 }} />
-                                        <Text style={[styles.default_text, styles.radio_btn_text]}> id기억  </Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={[styles.default_text, styles.login_guide_text]}>자동로그인 체크 이후에는 보안을 위하여 7일간만 자동으로 로그인 됩니다.</Text>
+                <View style={[template.baseContainer]}>
+                 
+                    <View style={inStyle.headerView}>
+                        <Image
+                            style={{ width: 138, height: 143 }}
+                            source={
+                                require('../images/logo/titleLogo.png')
+                            }
+                        />
+                    </View>
+                    <View style={inStyle.bodyView}>
+                        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <View style={inStyle.textInput2}>
+                            <TextInput
+                                ref={(c) => { this.idRef = c; }}
+                                returnKeyType="next"
+                                keyboardType="number-pad"
+                                onSubmitEditing={() => { this.passwordRef.focus(); }}
+                                onChangeText={(value) => { this.onValueChange({ companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3") }) }}
+                                value={this.state.companyNo}
+                                placeholder="사업자번호"
+                                placeholderTextColor={colors.white}
+                                style={{ color: colors.white }}
+                            />
+                        </View>
+                        <View style={inStyle.textInput2}>
+                            <TextInput
+                                ref={(c) => { this.passwordRef = c; }}
+                                returnKeyType="next"
+                                onChangeText={(value) => this.onValueChange({ passwd: value })}
+                                secureTextEntry={true}
+                                value={this.state.passwd}
+                                placeholder="비밀번호"
+                                placeholderTextColor={colors.white}
+                                style={{ color: colors.white }}
+                            />
+                        </View>
 
+                        <View style={inStyle.radioButtonView}>
+                            <View style={{ flex: 1, }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
+                                    <IconRadio name={this.state.autoLoginChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
+                                    <Text style={{ fontSize: 11, color: colors.white }}> 자동 로그인  </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
+                                    <IconRadio name={this.state.rememberIdChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
+                                    <Text style={{ fontSize: 11, color: colors.white, }}> 사업자번호 저장  </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.row_view}>
-                            <TouchableOpacity activeOpacity={0.8} style={styles.default_btn}>
-                                <Text style={[styles.default_text, styles.pw_signup_text]}>비밀번호 찾기   </Text>
+                        </View>
+                      
+                        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                            <TouchableOpacity activeOpacity={0.8} style={{height:50,alignItems: 'center',justifyContent: 'center',}}>
+                                <Text style={[template.contentText,{color:colors.white}]}>비밀번호 찾기    </Text>
                             </TouchableOpacity>
-                            <Text style={[styles.default_text, styles.pw_signup_text]}>|</Text>
-                            <TouchableOpacity activeOpacity={0.8} style={styles.default_btn} onPress={this.registerUserButtonClicked}>
-                                <Text style={[styles.default_text, styles.pw_signup_text]}>   회원가입</Text>
+                            <Text style={[template.contentText,{color:colors.white}]}>|</Text>
+                            <TouchableOpacity activeOpacity={0.8} style={{ height:50,alignItems: 'center',justifyContent: 'center',}} onPress={this.registerUserButtonClicked}>
+                                <Text style={[template.contentText,{color:colors.white}]}>     회원가입</Text>
                             </TouchableOpacity>
                         </View>
-                    </ScrollView>
+
+                    </View>
+
+                   
                     {/* 상품 등록하기 버튼 부분*/}
                     {this.state.validForm ?
-                        (<TouchableOpacity activeOpacity={0.8} style={[styles.default_btn, styles.enable_login_btn]} onPress={this.loginButtonClicked}>
-                            <Text style={[styles.default_text, styles.login_btn_text]}>로그인</Text>
+                        (<TouchableOpacity activeOpacity={0.8} style={template.activeButton} onPress={this.loginButtonClicked}>
+                            <Text style={template.buttonText}>로그인</Text>
                         </TouchableOpacity>)
-                        : (<TouchableOpacity activeOpacity={0.8} style={[styles.default_btn, styles.disable_login_btn]}>
-                            <Text style={[styles.default_text, styles.login_btn_text]}>로그인</Text>
+                        : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
+                            <Text style={[template.buttonText, { color: colors.main }]}>로그인</Text>
                         </TouchableOpacity>)}
+                       
                 </View>
             </>
         )
@@ -334,3 +353,34 @@ class Login extends Component {
 }
 
 export default Login;
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
+const inStyle = StyleSheet.create({
+
+    headerView: {
+        flex:5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    bodyView: {
+        flex:5,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        backgroundColor: colors.main,
+    },
+    textInput2: [
+        template.textInput2,
+        {
+            marginBottom: '4%',
+            justifyContent: 'flex-start',
+            paddingHorizontal: '4%',
+            width: '75%'
+        }
+    ],
+    radioButtonView: {
+        flexDirection: 'row',
+        width: '70%',
+        justifyContent: 'center',
+    }
+})
