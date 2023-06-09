@@ -4,7 +4,7 @@ const ScreenWidth = Dimensions.get('window').width;
 
 export const colors = {
     main: '#185FE0',
-    main_light:'#00A1FF',
+    main_light: '#00A1FF',
     main_dark: '#081866',
     //회색
     light: '#F6F6F6',
@@ -21,7 +21,7 @@ export const template = StyleSheet.create({
     baseContainer: { //전체 컨테이너
         flex: 1,
         backgroundColor: colors.white,
-     
+
     },
     container: { //선 없는 페이지 컨테이너
         flex: 1,
@@ -165,13 +165,25 @@ export const template = StyleSheet.create({
         flexDirection: 'row',
         shadowColor: "black",
         shadowOpacity: 0.5,
-        shadowOffset:{
-            height:0,
-            width:0
+        shadowOffset: {
+            height: 0,
+            width: 0
         },
         elevation: 5,
-        
+
     },
+
+    countingBox:{
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 2,
+        borderColor: colors.medium,
+        borderRadius: 50,
+        marginLeft: '2%'
+    }
+    ,
     //Image
     imageView: {
         borderRadius: 10,

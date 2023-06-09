@@ -224,6 +224,21 @@ class Payment extends Component {
                             <View style={{ flex: 2 }}>
                                 <Text style={[template.contentText, { color: colors.dark }]}>{"구매가능 수량 : "}{this.item.quantity}{"개"}</Text>
                             </View>
+                            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
+                                    <View style={template.countingBox}>
+                                        <TouchableOpacity activeOpacity={0.8}  onPress={() => this.countMinus(this.state.quantity)} >
+                                            <QuantityEditIcon name='minus' color={colors.medium} size={15}></QuantityEditIcon>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={[template.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
+                                        <Text style={template.contentText}>{this.state.quantity}</Text>
+                                    </View>
+                                    <View style={template.countingBox}>
+                                        <TouchableOpacity activeOpacity={0.8} onPress={() => this.countPlus(this.state.quantity)}>
+                                            <QuantityEditIcon name='plus' color={colors.medium} size={15}></QuantityEditIcon>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                         </View>
                     </View>
                     <View style={inStyle.itemOrderNoView}>
@@ -242,12 +257,14 @@ class Payment extends Component {
                                 returnKeyType="next"
                                 onSubmitEditing={() => { this.buyerTel.focus(); }}
                                 placeholder="주문자 이름을 입력하세요"
+                                placeholderTextColor={colors.dark}
                                 onChangeText={(value) => this.onValueChange({ buyerName: value })}
                                 value={this.state.buyerName} />
                             <TextInput style={template.textInput}
                                 ref={(c) => { this.buyerTel = c; }}
                                 returnKeyType="next"
                                 placeholder="연락처를 입력하세요"
+                                placeholderTextColor={colors.dark}
                                 onChangeText={(value) => this.onValueChange({ buyerTel: value })}
                                 value={this.state.buyerTel} />
 
@@ -270,12 +287,14 @@ class Payment extends Component {
 
                             <TextInput style={template.textInput}
                                 placeholder="상세 주소를 입력하세요"
+                                placeholderTextColor={colors.dark}
                                 onChangeText={(value) => this.onValueChange({ detailAddress: value })}
                                 //onEndEditing={(event)=> this.onValueChange()}
                                 value={this.state.detailAddress} />
 
                             <TextInput style={template.textInput}
                                 placeholder="배송요청사항"
+                                placeholderTextColor={colors.dark}
                                 onChangeText={(value) => this.setState({ bigo: value })}
                                 value={this.state.bigo} />
                         </View>

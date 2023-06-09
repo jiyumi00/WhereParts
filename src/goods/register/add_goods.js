@@ -501,15 +501,15 @@ class AddGoods extends Component {
                                     <Text style={template.contentText}>판매 수량</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
-                                    <View style={inStyle.countingBox}>
+                                    <View style={template.countingBox}>
                                         <TouchableOpacity activeOpacity={0.8} onPress={this.minusNum} >
                                             <QuantityEditIcon name='minus' color={colors.medium} size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[inStyle.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
+                                    <View style={[template.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
                                         <Text style={template.contentText}>{this.state.quantity}</Text>
                                     </View>
-                                    <View style={inStyle.countingBox}>
+                                    <View style={template.countingBox}>
                                         <TouchableOpacity activeOpacity={0.8} onPress={() => { this.setState({ quantity: this.state.quantity + 1 }) }}>
                                             <QuantityEditIcon name='plus' color={colors.medium} size={15}></QuantityEditIcon>
                                         </TouchableOpacity>
