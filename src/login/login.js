@@ -271,7 +271,7 @@ class Login extends Component {
         return (
             <>
                 <View style={[template.baseContainer]}>
-                 
+
                     <View style={inStyle.headerView}>
                         <Image
                             style={{ width: 138, height: 143 }}
@@ -281,62 +281,65 @@ class Login extends Component {
                         />
                     </View>
                     <View style={inStyle.bodyView}>
-                        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                        <View style={inStyle.textInput2}>
-                            <TextInput
-                                ref={(c) => { this.idRef = c; }}
-                                returnKeyType="next"
-                                keyboardType="number-pad"
-                                onSubmitEditing={() => { this.passwordRef.focus(); }}
-                                onChangeText={(value) => { this.onValueChange({ companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3") }) }}
-                                value={this.state.companyNo}
-                                placeholder="사업자번호"
-                                placeholderTextColor={colors.white}
-                                style={{ color: colors.white }}
-                            />
-                        </View>
-                        <View style={inStyle.textInput2}>
-                            <TextInput
-                                ref={(c) => { this.passwordRef = c; }}
-                                returnKeyType="next"
-                                onChangeText={(value) => this.onValueChange({ passwd: value })}
-                                secureTextEntry={true}
-                                value={this.state.passwd}
-                                placeholder="비밀번호"
-                                placeholderTextColor={colors.white}
-                                style={{ color: colors.white }}
-                            />
-                        </View>
+                    <ScrollView>
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop:'5%' }}>
+                            
+                                <View style={inStyle.textInput2}>
+                                    <TextInput
+                                        ref={(c) => { this.idRef = c; }}
+                                        returnKeyType="next"
+                                        keyboardType="number-pad"
+                                        onSubmitEditing={() => { this.passwordRef.focus(); }}
+                                        onChangeText={(value) => { this.onValueChange({ companyNo: value.replace(/(\d{3})(\d{2})(\d)/, "$1-$2-$3") }) }}
+                                        value={this.state.companyNo}
+                                        placeholder="사업자번호"
+                                        placeholderTextColor={colors.white}
+                                        style={{ color: colors.white }}
+                                    />
+                                </View>
+                                <View style={inStyle.textInput2}>
+                                    <TextInput
+                                        ref={(c) => { this.passwordRef = c; }}
+                                        returnKeyType="next"
+                                        onChangeText={(value) => this.onValueChange({ passwd: value })}
+                                        secureTextEntry={true}
+                                        value={this.state.passwd}
+                                        placeholder="비밀번호"
+                                        placeholderTextColor={colors.white}
+                                        style={{ color: colors.white }}
+                                    />
+                                </View>
 
-                        <View style={inStyle.radioButtonView}>
-                            <View style={{ flex: 1, }}>
-                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
-                                    <IconRadio name={this.state.autoLoginChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
-                                    <Text style={{ fontSize: 11, color: colors.white }}> 자동 로그인  </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
-                                    <IconRadio name={this.state.rememberIdChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
-                                    <Text style={{ fontSize: 11, color: colors.white, }}> 사업자번호 저장  </Text>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={inStyle.radioButtonView}>
+                                    <View style={{ flex: 1, }}>
+                                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.autoLoginCheckButtonChecked}>
+                                            <IconRadio name={this.state.autoLoginChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
+                                            <Text style={{ fontSize: 11, color: colors.white }}> 자동 로그인  </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ flex: 1 }}>
+                                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={0.8} onPress={this.rememberIdCheckButtonChecked}>
+                                            <IconRadio name={this.state.rememberIdChecked ? "radio-button-checked" : "radio-button-off"} size={20} color={colors.white} />
+                                            <Text style={{ fontSize: 11, color: colors.white, }}> 사업자번호 저장  </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                               
                         </View>
-                        </View>
-                      
-                        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-                            <TouchableOpacity activeOpacity={0.8} style={{height:50,alignItems: 'center',justifyContent: 'center',}}>
-                                <Text style={[template.contentText,{color:colors.white}]}>비밀번호 찾기    </Text>
+                        </ScrollView>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity activeOpacity={0.8} style={{ height: 50, alignItems: 'center', justifyContent: 'center', }}>
+                                <Text style={[template.contentText, { color: colors.white }]}>비밀번호 찾기    </Text>
                             </TouchableOpacity>
-                            <Text style={[template.contentText,{color:colors.white}]}>|</Text>
-                            <TouchableOpacity activeOpacity={0.8} style={{ height:50,alignItems: 'center',justifyContent: 'center',}} onPress={this.registerUserButtonClicked}>
-                                <Text style={[template.contentText,{color:colors.white}]}>     회원가입</Text>
+                            <Text style={[template.contentText, { color: colors.white }]}>|</Text>
+                            <TouchableOpacity activeOpacity={0.8} style={{ height: 50, alignItems: 'center', justifyContent: 'center', }} onPress={this.registerUserButtonClicked}>
+                                <Text style={[template.contentText, { color: colors.white }]}>     회원가입</Text>
                             </TouchableOpacity>
                         </View>
 
                     </View>
 
-                   
+
                     {/* 상품 등록하기 버튼 부분*/}
                     {this.state.validForm ?
                         (<TouchableOpacity activeOpacity={0.8} style={template.activeButton} onPress={this.loginButtonClicked}>
@@ -345,7 +348,7 @@ class Login extends Component {
                         : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
                             <Text style={[template.buttonText, { color: colors.main }]}>로그인</Text>
                         </TouchableOpacity>)}
-                       
+
                 </View>
             </>
         )
@@ -359,12 +362,12 @@ const ScreenWidth = Dimensions.get('window').width;
 const inStyle = StyleSheet.create({
 
     headerView: {
-        flex:5,
+        flex: 5,
         justifyContent: 'center',
         alignItems: 'center'
     },
     bodyView: {
-        flex:5,
+        flex: 5,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         backgroundColor: colors.main,
