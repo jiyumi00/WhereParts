@@ -68,7 +68,7 @@ class OrderDetail extends Component {
 
         return (
             <View style={template.baseContainer}>
-                <ScrollView >
+                <ScrollView>
                     <View style={inStyle.itemInfoView}>
                         <View style={{ flex: 1 }}>
                             <Image

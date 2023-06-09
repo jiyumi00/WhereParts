@@ -10,7 +10,7 @@ export default class ImageSelectorPopup extends Component {
     }
 
     render() {
-        const layout = { flex: 1, left: this.props.x, top: this.props.y };
+        const layout = { flex: 1, left: this.props.x-10, top: this.props.y-40 };
         return (
             <Modal
                 animationType='fade'

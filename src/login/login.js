@@ -342,11 +342,11 @@ class Login extends Component {
 
                     {/* 상품 등록하기 버튼 부분*/}
                     {this.state.validForm ?
-                        (<TouchableOpacity activeOpacity={0.8} style={template.activeButton} onPress={this.loginButtonClicked}>
-                            <Text style={template.buttonText}>로그인</Text>
+                        (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton} onPress={this.loginButtonClicked}>
+                            <Text style={[template.buttonText,{color:colors.main}]}>로그인</Text>
                         </TouchableOpacity>)
                         : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
-                            <Text style={[template.buttonText, { color: colors.main }]}>로그인</Text>
+                            <Text style={[template.buttonText, { color: colors.medium }]}>로그인</Text>
                         </TouchableOpacity>)}
 
                 </View>
