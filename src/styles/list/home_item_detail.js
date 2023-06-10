@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import { template, colors } from '../../styles/template/page_style';
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
@@ -10,11 +11,8 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
   },
   // 상품 상세보기
   itemDetail_view: {
-    width: "100%",
-    height: "100%",
+    flex:1,
     backgroundColor: 'white',
-    shadowColor: '#000',
-    borderRadius: 6,
   },
   //tabBar
   tabBar_view: {
@@ -164,7 +162,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     alignItems: 'center',
     borderColor: '#E4E4E4',
     borderWidth: 1,
-    height: 50,
+    height: 60,
   },
   pick_view: {
     flex: 2
@@ -188,7 +186,7 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     alignItems: 'center',
     height: '100%',
     width: "100%",
-    backgroundColor: '#0066FF',
+    backgroundColor: colors.black,
   },
   buyButton_text: {
     fontFamily: 'Pretendard-SemiBold',

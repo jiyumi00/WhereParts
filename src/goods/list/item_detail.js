@@ -7,6 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
+import { template, colors } from '../../styles/template/page_style';
 import { styles } from "../../styles/list/home_item_detail";
 import IconRadio from 'react-native-vector-icons/MaterialIcons';
 import IconPopup from 'react-native-vector-icons/EvilIcons';
@@ -436,7 +437,7 @@ export default class DetailItemView extends Component {
 
         return (
             <View style={styles.itemDetail_view}>
-                <View style={styles.tabBar_view}>
+              {/*   <View style={styles.tabBar_view}>
                     {this.state.editVisible &&
                         <>
                             {this.state.editGoodsViewVisible ?
@@ -463,7 +464,7 @@ export default class DetailItemView extends Component {
                                     <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>숨김해제    </Text>
                                 </TouchableOpacity>}
                         </>}
-                </View>
+                </View> */}
 
                 <View style={styles.itemInfo_view}>
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -760,15 +761,27 @@ export default class DetailItemView extends Component {
                             <View style={{ width: "100%", flexDirection: 'row', }}>
                                 <View style={styles.pick_view}>
                                     <TouchableOpacity style={[styles.pick_button, { width: "100%", height: "100%" }]} onPress={this.dipsButtonClicked}>
-                                        <Icon name="favorite" color={this.state.dipsbuttonclicked ? "#EE636A" : "lightgrey"} size={35}></Icon>
+                                        {this.state.dipsbuttonclicked?  <Image
+                                            style={{ width: 20, height:18 }}
+                                            source={
+                                                require('../../images/icon/heart-icon/heart_full.png')
+                                            }
+                                        />: <Image
+                                        style={{ width: 20, height:18}}
+                                        source={
+                                            require('../../images/icon/heart-icon/heart_empty.png')
+                                        }
+                                        
+                                    />}
+                                      
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.price_view}>
-                                    <Text style={[styles.text, { fontSize: 22, color: 'blue' }]}>{renderPrice}<Text style={[styles.detailUnit_text, { color: 'blue' }]}>원</Text></Text>
+                                    <Text style={{fontSize:23,fontWeight:'bold',color:colors.main}}>{renderPrice}<Text style={[styles.detailUnit_text, { color: 'blue' }]}>원</Text></Text>
                                 </View>
                                 <View style={styles.buy_view}>
                                     <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
-                                        <Text style={styles.buyButton_text}>구매하기</Text>
+                                        <Text style={template.buttonText}>구매하기</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
