@@ -3,17 +3,61 @@ import { template, colors } from '../../styles/template/page_style';
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
+ //상품 상세보기
+ itemView: {
+  flex: 1,
+  backgroundColor: 'white',
+},
 
+// 상품 상세보기
+itemDetail_view: {
+  flex:1,
+  backgroundColor: 'white',
+},
+slideImage_view: {
+  width: ScreenWidth,
+  height: ScreenWidth / 1.3,
+},
+imageDetailView: {
+  borderRadius: 10,
+  height: "100%",
+  width: "100%",
+  marginVertical: "3%",
+},
+textRightView:{
+  flex: 1, 
+  alignItems: 'flex-end' ,
+  justifyContent:'center',
+ 
+},
+roundedBox:{
+  paddingHorizontal:'7%',
+  paddingVertical:'1%',
+  backgroundColor:colors.line,
+  borderRadius:5,
+  marginRight:'5%'
+},
+
+goodsInfoTopView: {
+  flexDirection:'row',
+  paddingHorizontal: '5%',
+  paddingVertical:'4%',
+  borderColor: colors.line,
+  borderBottomWidth: 1.5,
+},
+goodsInfoBodyView: {
+  flexDirection:'row',
+  marginHorizontal:'5%',
+  paddingVertical:'4%',
+  borderColor: colors.line,
+  borderBottomWidth: 1.5,
+},
   text: { //공통
     //fontFamily: 'Pretendard-SemiBold',
     fontSize: 12,
     color: '#000'
   },
-  // 상품 상세보기
-  itemDetail_view: {
-    flex:1,
-    backgroundColor: 'white',
-  },
+  
   //tabBar
   tabBar_view: {
     height: '5%',
@@ -34,21 +78,9 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     marginRight: 10,
     backgroundColor: 'white',
   },
-  //상품 상세보기
-  itemInfo_view: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  //이미지 
-  goodsImage_view: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: "5%",
-  },
-  slideImage_view: {
-    width: ScreenWidth,
-    height: ScreenWidth / 1.3,
-  },
+ 
+
+ 
   goods_image: {
     width: ScreenWidth,
     height: ScreenWidth / 1.3,
@@ -58,21 +90,9 @@ export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에
     height: 360,
     borderRadius: 10,
   },
-  goods_modal_view: {
-    borderRadius: 10,
-    height: "100%",
-    width: "100%",
-    marginVertical: "3%",
-  },
+
   //상품 설명 부분
-  productInfo_view: {
-    borderTopWidth: 1,
-    marginHorizontal: '5%',
-    paddingBottom: 20,
-    paddingTop: 15,
-    borderColor: '#E6E6E6',
-    borderBottomWidth: 1,
-  },
+
   //인증업체
   certificationMark_view: {
     height:15,

@@ -373,8 +373,8 @@ class AddGoods extends Component {
     //카메라,앨범선택 버튼 위치
     getViewSize = () => {
         this.cameraIcon.current.measure((fx, fy, width, height, px, py) => {
-            this.cameraModalX = px + width - (width / 3);
-            this.cameraModalY = py + height - (height / 2);
+            this.cameraModalX = px + width - (width / 2);
+            this.cameraModalY = py + height ;
             //console.log('location:', fx, fy, width, height, px, py)
         })
     }
