@@ -3,75 +3,75 @@ import { template, colors } from '../../styles/template/page_style';
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({ //export를 해주어야 다른 곳에서 사용할 수 있음
- //상품 상세보기
- itemView: {
-  flex: 1,
-  backgroundColor: 'white',
-},
+  //상품 상세보기
+  itemView: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
 
-// 상품 상세보기
-itemDetail_view: {
-  flex:1,
-  backgroundColor: 'white',
-},
-slideImage_view: {
-  width: ScreenWidth,
-  height: ScreenWidth / 1.3,
-},
-imageDetailView: {
-  borderRadius: 10,
-  height: "100%",
-  width: "100%",
-  marginVertical: "3%",
-},
-textRightView:{
-  flex: 1, 
-  alignItems: 'flex-end' ,
-  justifyContent:'center',
- 
-},
-roundedBox:{
-  paddingHorizontal:'7%',
-  paddingVertical:'1%',
-  backgroundColor:colors.line,
-  borderRadius:5,
-  marginRight:'5%'
-},
+  // 상품 상세보기
+  itemDetail_view: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  slideImage_view: {
+    width: ScreenWidth,
+    height: ScreenWidth / 1.3,
+  },
+  imageDetailView: {
+    borderRadius: 10,
+    height: "100%",
+    width: "100%",
+    marginVertical: "3%",
+  },
+  textRightView: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
 
-goodsInfoTopView: {
-  flexDirection:'row',
-  paddingHorizontal: '5%',
-  paddingVertical:'4%',
-  borderColor: colors.line,
-  borderBottomWidth: 1.5,
-},
-goodsInfoBodyView: {
-  flexDirection:'row',
-  marginHorizontal:'5%',
-  paddingVertical:'4%',
-  borderColor: colors.line,
-  borderBottomWidth: 1.5,
-},
-editButton:{
-  height:60,
-  justifyContent:'center',
-  alignItems:'center',
-  flexDirection:'row',
-  backgroundColor:colors.black
-},
+  },
+  roundedBox: {
+    paddingHorizontal: '7%',
+    paddingVertical: '1%',
+    backgroundColor: colors.line,
+    borderRadius: 5,
+    marginRight: '5%'
+  },
 
-BottomView: {
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: 60,
-},
+  goodsInfoTopView: {
+    flexDirection: 'row',
+    paddingHorizontal: '5%',
+    paddingVertical: '4%',
+    borderColor: colors.line,
+    borderBottomWidth: 1.5,
+  },
+  goodsInfoBodyView: {
+    flexDirection: 'row',
+    marginHorizontal: '5%',
+    paddingVertical: '4%',
+    borderColor: colors.line,
+    borderBottomWidth: 1.5,
+  },
+  editButton: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: colors.black
+  },
+
+  BottomView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+  },
   text: { //공통
     //fontFamily: 'Pretendard-SemiBold',
     fontSize: 12,
     color: '#000'
   },
-  
+
   //tabBar
   tabBar_view: {
     height: '5%',
@@ -92,9 +92,25 @@ BottomView: {
     marginRight: 10,
     backgroundColor: 'white',
   },
- 
 
- 
+  hashTagView:
+    [
+      template.roundedBox,
+      {
+        paddingVertical: '1%',
+        paddingLeft: 10,
+        paddingRight: 10,
+        flexDirection: 'row',
+        marginRight: 10,
+        marginBottom: '3%',
+        borderRadius: 30,
+        backgroundColor: colors.line,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }
+    ]
+  ,
+
   goods_image: {
     width: ScreenWidth,
     height: ScreenWidth / 1.3,
@@ -109,7 +125,7 @@ BottomView: {
 
   //인증업체
   certificationMark_view: {
-    height:15,
+    height: 15,
     marginBottom: 10,
   },
   certificationMark_text: {
@@ -139,7 +155,7 @@ BottomView: {
   },
   selectQuantity_view: {
     height: 45,
-    width:36*3,
+    width: 36 * 3,
     borderRadius: 6,
     borderColor: '#D4D4D4',
     borderWidth: 2,
@@ -231,14 +247,14 @@ BottomView: {
   },
   // Detail 안에서의 수정한 View style//////////////////////////////////////
   editGoodsPrice_input: {  //가격 수정 view style
-    fontSize:18,
+    fontSize: 18,
     backgroundColor: 'white',
     height: 45,
     width: "60%",
     borderRadius: 10,
     borderColor: '#D1D1D1',
     borderWidth: 2,
-    textAlign:'right',
+    textAlign: 'right',
   },
   editGoodsQuality: {
     justifyContent: 'center',
@@ -255,7 +271,7 @@ BottomView: {
     marginBottom: 10
   },
   status_item: {
-    width:100,
+    width: 100,
     alignItems: 'center',
   },
   genuine_row: {
