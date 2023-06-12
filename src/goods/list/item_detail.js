@@ -499,7 +499,7 @@ export default class DetailItemView extends Component {
 
 
                         {/*  상품 디테일 */}
-                        {this.state.buyVisible && <>
+
                         <View style={styles.goodsInfoTopView}>
                             <View style={{ flex: 1 }}>
                                 {/* 상품명 */}
@@ -561,7 +561,7 @@ export default class DetailItemView extends Component {
                                     <Text style={[template.contentText, { color: colors.dark }]}>#{tag}</Text>
                                 </View>
                             ))}
-                        </View></>}
+                        </View>
                         {/* 
                             <View style={{ flexDirection: 'column' }}>
                                 <View style={{ flexDirection: 'row' }}>
@@ -804,8 +804,66 @@ export default class DetailItemView extends Component {
                         </View>
                     </ScrollView>
 
-                    <View style={styles.tabBarBottom_view}>
-                        {/*찜하기 버튼*/}
+
+                    {/*판매자 가격 표시*/}
+                    <View style={[styles.BottomView, { backgroundColor: colors.light }]}>
+                        {!this.state.editGoodsViewVisible && !this.state.buyVisible &&
+                            <Text style={[template.titleText, { fontSize: 23 }]}>{renderPrice}원</Text>
+                        }
+                    </View>
+
+                    <View style={styles.BottomView}>
+                        {/*판매자 버튼*/}
+                        {this.state.editVisible &&
+                            <View style={{ width: "100%", flexDirection: 'row', }}>
+                                <View style={{ flex: 1 }}>
+
+                                    <TouchableOpacity style={styles.editButton} onPress={this.editButtonClicked} >
+                                        <Image
+                                            style={{ width: 18, height: 18 }}
+                                            source={
+                                                require('../../images/icon/edit-icon/edit.png')
+                                            }
+                                        />
+                                        <Text style={[template.contentText, { color: colors.white }]}>  수정</Text>
+                                    </TouchableOpacity >
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <TouchableOpacity style={[styles.editButton, { backgroundColor: colors.red }]} onPress={this.removeButtonClicked}>
+                                        <Image
+                                            style={{ width: 18, height: 18 }}
+                                            source={
+                                                require('../../images/icon/edit-icon/delete.png')
+                                            }
+                                        />
+                                        <Text style={[template.contentText, { color: colors.white }]}>   삭제</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    {this.state.item.valid == 1 &&
+                                        <TouchableOpacity style={[styles.editButton, { backgroundColor: colors.dark }]} onPress={this.goodsDisableButtonClicked}>
+                                            <Image
+                                                style={{ width: 18, height: 18 }}
+                                                source={
+                                                    require('../../images/icon/edit-icon/hide.png')
+                                                }
+                                            />
+                                            <Text style={[template.contentText, { color: colors.white }]}>   숨김</Text>
+                                        </TouchableOpacity>}
+                                    {this.state.item.valid == 0 &&
+                                        <TouchableOpacity style={[styles.editButton, { backgroundColor: colors.dark }]} onPress={this.goodsEnableButtonClicked}>
+                                            <Image
+                                                style={{ width: 18, height: 18 }}
+                                                source={
+                                                    require('../../images/icon/edit-icon/hide.png')
+                                                }
+                                            />
+                                            <Text style={[template.contentText, { color: colors.white }]}>  숨김해제</Text>
+                                        </TouchableOpacity>}
+                                </View>
+                            </View>
+                        }
+                        {/*구매자 버튼*/}
                         {(this.state.buyVisible && this.state.quantity != 0 && this.state.item.removeFlag == 0 && this.state.item.valid == 1) &&
                             <View style={{ width: "100%", flexDirection: 'row', }}>
                                 <View style={styles.pick_view}>
@@ -835,9 +893,7 @@ export default class DetailItemView extends Component {
                                 </View>
                             </View>
                         }
-                        {!this.state.editGoodsViewVisible && !this.state.buyVisible &&
-                            <Text style={[styles.text, { fontSize: 22, color: 'blue' }]}>{renderPrice}<Text style={[styles.detailUnit_text, { color: 'blue' }]}>원</Text></Text>
-                        }
+
                         {/* 수정완료 버튼 */}
                         {this.state.editGoodsViewVisible &&
                             <View style={styles.edit_button_view}>

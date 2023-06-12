@@ -81,7 +81,6 @@ export const template = StyleSheet.create({
     },
 
 
-
     //Text
     titleText: {
         fontSize: 25,

@@ -52,6 +52,20 @@ goodsInfoBodyView: {
   borderColor: colors.line,
   borderBottomWidth: 1.5,
 },
+editButton:{
+  height:60,
+  justifyContent:'center',
+  alignItems:'center',
+  flexDirection:'row',
+  backgroundColor:colors.black
+},
+
+BottomView: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: 60,
+},
   text: { //공통
     //fontFamily: 'Pretendard-SemiBold',
     fontSize: 12,
@@ -176,14 +190,7 @@ goodsInfoBodyView: {
     flexDirection: 'column',
     flexWrap: 'wrap',
   },
-  tabBarBottom_view: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#E4E4E4',
-    borderWidth: 1,
-    height: 60,
-  },
+
   pick_view: {
     flex: 2
   },
