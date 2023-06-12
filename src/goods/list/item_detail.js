@@ -176,7 +176,7 @@ export default class DetailItemView extends Component {
                     text: '확인', onPress: () => this.callRemoveGoodsAPI().then((response) => {
                         console.log("삭제완료", response);
                         this.props.navigation.pop();
-                       // this.refresh();
+                        // this.refresh();
                     })
                 },
             ],);
@@ -320,9 +320,9 @@ export default class DetailItemView extends Component {
         this.setState({ quality: index, })
         console.log('quality', index)
     }
-   /*  refresh = () => {
-        this.props.route.params.refresh();
-    } */
+    /*    refresh = () => {
+           this.props.route.params.refresh();
+       } */
 
     backPressed = () => {
         if (this.state.editGoodsViewVisible == true) {
@@ -445,34 +445,6 @@ export default class DetailItemView extends Component {
 
         return (
             <View style={styles.itemDetail_view}>
-                {/*   <View style={styles.tabBar_view}>
-                    {this.state.editVisible &&
-                        <>
-                            {this.state.editGoodsViewVisible ?
-                                <>
-                                    <TouchableOpacity onPress={this.editCancelButtonClicked} >
-                                        <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>수정취소     </Text>
-                                    </TouchableOpacity >
-                                </> :
-                                <>
-                                    <TouchableOpacity onPress={this.editButtonClicked} >
-                                        <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>수정       </Text>
-                                    </TouchableOpacity >
-                                </>}
-                            <TouchableOpacity onPress={this.removeButtonClicked}>
-                                <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>삭제      </Text>
-                            </TouchableOpacity>
-
-                            {this.state.item.valid == 1 &&
-                                <TouchableOpacity onPress={this.goodsDisableButtonClicked}>
-                                    <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>숨김      </Text>
-                                </TouchableOpacity>}
-                            {this.state.item.valid == 0 &&
-                                <TouchableOpacity onPress={this.goodsEnableButtonClicked}>
-                                    <Text style={[styles.text, { fontSize: 15, color: 'blue' }]}>숨김해제    </Text>
-                                </TouchableOpacity>}
-                        </>}
-                </View> */}
 
                 <View style={styles.itemView}>
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -547,7 +519,12 @@ export default class DetailItemView extends Component {
                                     </View>
                                     {/* 수량 */}
                                     <View style={[styles.textRightView]}>
-                                        <Text style={[template.largeText, { fontSize: 18 }]}><Text style={[template.largeText, { fontSize: 18, color: colors.dark }]}>남은개수 </Text>{this.state.quantity}개</Text>
+                                        {(this.state.quantity == 0 || this.state.item.removeFlag == 1 || this.state.item.valid == 0)&&this.state.buyVisible ?
+                                            <Text style={[template.largeText, { fontSize: 18, color: colors.red }]}>구매 불가</Text> :
+                                            <Text style={[template.largeText, { fontSize: 18 }]}>
+                                                <Text style={[template.largeText, { fontSize: 18, color: colors.dark }]}>남은개수 </Text>
+                                                {this.state.quantity}개
+                                            </Text>}
                                     </View>
                                     <View style={[styles.textRightView, { flexDirection: 'row' }]}>
                                         <MapIcon2 name='map-marker' color={colors.dark} size={13}></MapIcon2>
@@ -605,173 +582,143 @@ export default class DetailItemView extends Component {
                                 ))}
                             </View>
                         </>}
-
-                        {/* 
-                            
-                                <View style={{ flexDirection: 'row' }}>
-                                    
-                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                      
-                                        {this.state.buyVisible ? <>
-                                            {this.state.quantity == 0 || this.state.item.removeFlag == 1 || this.state.item.valid == 0 ?
-                                                <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
-                                                <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>}
-                                        </> : <>
-                                            <Text style={[styles.text, { fontSize: 14, color: 'black', }]}>{this.state.quantity}개 남음</Text>
-                                        </>}
-
-                                    </View>
-                                </View>
-                             */}
-                        {/* 
-                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                
-                                  
-                              
-                                {this.state.quantity <= 0 ?
-                                    <Text style={[styles.text, { fontSize: 14, color: '#EE636A', }]}>구매할 수 없습니다</Text> :
-                                    <Text style={[styles.text, { fontSize: 14 }]}>{this.state.quantity}개 남음</Text>}
-                            </View> */}
-
-
-
                         {/* 토글 디테일 */}
-{this.state.editGoodsViewVisible &&
-                        <View style={styles.toggleDetail_view}>
+                        {this.state.editGoodsViewVisible &&
+                            <View style={styles.toggleDetail_view}>
 
-                            {/* 수정 모아보기 */}
-                            {/* 상품정보 부분 */}
-                            <View style={template.lineBox}>
-                                {/* 금액, 수량 수정 */}
-                                <Text style={[template.largeText, { marginBottom: '3%' }]}>상품 정보</Text>
+                                {/* 수정 모아보기 */}
+                                {/* 상품정보 부분 */}
+                                <View style={template.lineBox}>
+                                    {/* 금액, 수량 수정 */}
+                                    <Text style={[template.largeText, { marginBottom: '3%' }]}>상품 정보</Text>
 
-                                {/* 판매금액 */}
-                                <View style={[template.textInput, { paddingVertical: '0%', flexDirection: 'row', alignItems: 'center' }]}>
-                                    <Text style={{ flex: 1, }}>판매 금액(개당)</Text>
-                                    <TextInput
-                                        style={[template.inputText, { flex: 1, textAlign: 'right', paddingRight: '2%' }]}
-                                        ref={(c) => { this.priceRef = c; }}
-                                        onSubmitEditing={() => { this.hashTagRef.focus(); }}
-                                        keyboardType="number-pad"
-                                        onChangeText={(value) => this.onValueChange({ price: value })}
-                                    >{renderPrice}</TextInput>
-                                    <View>
-                                        <Text style={[template.smallText, { color: colors.black, fontWeight: 'bold' }]}>원</Text>
-                                    </View>
-
-                                </View>
-
-                                {/* 판매수량 */}
-                                <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-                                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                                        <Text style={template.contentText}>판매 수량</Text>
-                                    </View>
-                                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
-                                        <View style={template.countingBox}>
-                                            <TouchableOpacity activeOpacity={0.8} onPress={() => this.editMinus(this.state.quantity)}>
-                                                <QuantityEditIcon name='minus' color={colors.medium} size={15}></QuantityEditIcon>
-                                            </TouchableOpacity>
+                                    {/* 판매금액 */}
+                                    <View style={[template.textInput, { paddingVertical: '0%', flexDirection: 'row', alignItems: 'center' }]}>
+                                        <Text style={{ flex: 1, }}>판매 금액(개당)</Text>
+                                        <TextInput
+                                            style={[template.inputText, { flex: 1, textAlign: 'right', paddingRight: '2%' }]}
+                                            ref={(c) => { this.priceRef = c; }}
+                                            onSubmitEditing={() => { this.hashTagRef.focus(); }}
+                                            keyboardType="number-pad"
+                                            onChangeText={(value) => this.onValueChange({ price: value })}
+                                        >{renderPrice}</TextInput>
+                                        <View>
+                                            <Text style={[template.smallText, { color: colors.black, fontWeight: 'bold' }]}>원</Text>
                                         </View>
-                                        <View style={[template.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
-                                            <Text style={template.contentText}>{this.state.quantity}</Text>
-                                        </View>
-                                        <View style={template.countingBox}>
-                                            <TouchableOpacity activeOpacity={0.8} onPress={() => this.editPlus(this.state.quantity)}>
-                                                <QuantityEditIcon name='plus' color={colors.medium} size={15}></QuantityEditIcon>
-                                            </TouchableOpacity>
-                                        </View>
+
                                     </View>
 
-                                </View>
-                            </View>
-
-                            <View style={template.lineBox}>
-                                <Text style={[template.largeText, { marginBottom: '3%' }]}>기타 정보</Text>
-                                {/*정품/비정품*/}
-                                <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
-                                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                                        <Text style={template.contentText}>정품 유무</Text>
-                                    </View>
-                                    <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
-                                        <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck} style={{ flexDirection: 'row' }}>
-                                            <IconRadio name={this.state.genuine == 1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
-                                            <View style={{ justifyContent: 'center' }}>
-                                                <Text style={[template.contentText]}>{this.getGenuineValueText[0]}</Text>
+                                    {/* 판매수량 */}
+                                    <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+                                        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                            <Text style={template.contentText}>판매 수량</Text>
+                                        </View>
+                                        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
+                                            <View style={template.countingBox}>
+                                                <TouchableOpacity activeOpacity={0.8} onPress={() => this.editMinus(this.state.quantity)}>
+                                                    <QuantityEditIcon name='minus' color={colors.medium} size={15}></QuantityEditIcon>
+                                                </TouchableOpacity>
                                             </View>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck} style={{ flexDirection: 'row', marginLeft: '5%' }}>
-                                            <IconRadio name={this.state.genuine == 2 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
-                                            <View style={{ justifyContent: 'center' }}>
-                                                <Text style={[template.contentText]}> {this.getGenuineValueText[1]}</Text>
+                                            <View style={[template.countingBox, { width: 34, height: 34, borderColor: colors.black }]}>
+                                                <Text style={template.contentText}>{this.state.quantity}</Text>
                                             </View>
-                                        </TouchableOpacity>
-                                    </View>
+                                            <View style={template.countingBox}>
+                                                <TouchableOpacity activeOpacity={0.8} onPress={() => this.editPlus(this.state.quantity)}>
+                                                    <QuantityEditIcon name='plus' color={colors.medium} size={15}></QuantityEditIcon>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
 
-                                </View>
-                                {/*상품상태*/}
-                                <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
-                                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                                        <Text style={template.contentText}>상품 상태</Text>
                                     </View>
-                                    <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
-                                        {this.getQualityValueText.map((item, i) =>
-                                            <TouchableOpacity key={i} activeOpacity={0.8} onPress={() => this.qualityCheck(i + 1)} style={{ flexDirection: 'row', marginLeft: '5%' }}>
-                                                <IconRadio name={this.state.quality == i + 1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
+                                </View>
+
+                                <View style={template.lineBox}>
+                                    <Text style={[template.largeText, { marginBottom: '3%' }]}>기타 정보</Text>
+                                    {/*정품/비정품*/}
+                                    <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
+                                        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                            <Text style={template.contentText}>정품 유무</Text>
+                                        </View>
+                                        <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
+                                            <TouchableOpacity activeOpacity={0.8} onPress={this.genuineCheck} style={{ flexDirection: 'row' }}>
+                                                <IconRadio name={this.state.genuine == 1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
                                                 <View style={{ justifyContent: 'center' }}>
-                                                    <Text style={[template.contentText]}>{item}</Text>
+                                                    <Text style={[template.contentText]}>{this.getGenuineValueText[0]}</Text>
                                                 </View>
                                             </TouchableOpacity>
-
-                                        )}
-                                    </View>
-                                </View>
-
-
-
-                                {/* 검색어 */}
-                                <View style={[template.textInput, { flexDirection: 'row', alignItems: 'center' }]}>
-                                    <View style={{ flex: 7 }}>
-                                        <TextInput
-                                            style={template.inputText}
-                                            ref={(c) => { this.hashTagRef = c; }}
-                                            returnKeyType="next"
-                                            onSubmitEditing={() => this.addTag()}
-                                            onChangeText={(value) => this.hashTagOnChangeText(value)}
-                                            value={this.state.tagName}
-                                            placeholder='검색어(최대 7개)'
-                                            placeholderTextColor={colors.dark}
-                                        />
-                                    </View>
-                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                        <TouchableOpacity onPress={() => this.addTag()}>
-                                            <IconRadio name={"add-circle"} size={30} color={colors.dark} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-
-                                {/* 키워드 뿌려주기 */}
-                                <View style={{ flexWrap: 'wrap', flexDirection: 'row', }}>
-                                    {this.state.hashTag.map((item, i) =>
-                                        <View style={styles.hashTagView} key={i}>
-                                            <Text style={template.contentText}>#{item}</Text>
-                                            <TouchableOpacity onPress={() => this.hashTagRemove(i)}>
-                                                <IconPopup name="close" size={15} color="black" />
+                                            <TouchableOpacity activeOpacity={0.8} onPress={this.non_genuineCheck} style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                                                <IconRadio name={this.state.genuine == 2 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
+                                                <View style={{ justifyContent: 'center' }}>
+                                                    <Text style={[template.contentText]}> {this.getGenuineValueText[1]}</Text>
+                                                </View>
                                             </TouchableOpacity>
                                         </View>
-                                    )}
+
+                                    </View>
+                                    {/*상품상태*/}
+                                    <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', marginBottom: '3%' }}>
+                                        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                                            <Text style={template.contentText}>상품 상태</Text>
+                                        </View>
+                                        <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
+                                            {this.getQualityValueText.map((item, i) =>
+                                                <TouchableOpacity key={i} activeOpacity={0.8} onPress={() => this.qualityCheck(i + 1)} style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                                                    <IconRadio name={this.state.quality == i + 1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
+                                                    <View style={{ justifyContent: 'center' }}>
+                                                        <Text style={[template.contentText]}>{item}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+
+                                            )}
+                                        </View>
+                                    </View>
+
+
+
+                                    {/* 검색어 */}
+                                    <View style={[template.textInput, { flexDirection: 'row', alignItems: 'center' }]}>
+                                        <View style={{ flex: 7 }}>
+                                            <TextInput
+                                                style={template.inputText}
+                                                ref={(c) => { this.hashTagRef = c; }}
+                                                returnKeyType="next"
+                                                onSubmitEditing={() => this.addTag()}
+                                                onChangeText={(value) => this.hashTagOnChangeText(value)}
+                                                value={this.state.tagName}
+                                                placeholder='검색어(최대 7개)'
+                                                placeholderTextColor={colors.dark}
+                                            />
+                                        </View>
+                                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                            <TouchableOpacity onPress={() => this.addTag()}>
+                                                <IconRadio name={"add-circle"} size={30} color={colors.dark} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+
+                                    {/* 키워드 뿌려주기 */}
+                                    <View style={{ flexWrap: 'wrap', flexDirection: 'row', }}>
+                                        {this.state.hashTag.map((item, i) =>
+                                            <View style={styles.hashTagView} key={i}>
+                                                <Text style={template.contentText}>#{item}</Text>
+                                                <TouchableOpacity onPress={() => this.hashTagRemove(i)}>
+                                                    <IconPopup name="close" size={15} color="black" />
+                                                </TouchableOpacity>
+                                            </View>
+                                        )}
+                                    </View>
+
+                                    {/* 상세내용*/}
+                                    <View style={[template.roundedBox, { backgroundColor: colors.white, borderColor: colors.medium }]}>
+                                        <TextInput
+                                            style={[template.inputText, { height: 100 }]}
+                                            multiline={true}
+                                            onChangeText={(value) => this.setState({ editSpec: value })}
+                                        >  {this.state.editSpec}</TextInput>
+                                    </View>
                                 </View>
 
-                                {/* 상세내용*/}
-                                <View style={[template.roundedBox, { backgroundColor: colors.white, borderColor: colors.medium }]}>
-                                    <TextInput
-                                        style={[template.inputText, { height: 100 }]}
-                                        multiline={true}
-                                        onChangeText={(value) => this.setState({ editSpec: value })}
-                                    >  {this.state.editSpec}</TextInput>
-                                </View>
-                            </View>
-
-                        </View>}
+                            </View>}
                     </ScrollView>
 
 
@@ -856,6 +803,7 @@ export default class DetailItemView extends Component {
                                     <Text style={{ fontSize: 23, fontWeight: 'bold', color: colors.main }}>{renderPrice}<Text style={[styles.detailUnit_text, { color: 'blue' }]}>원</Text></Text>
                                 </View>
                                 <View style={styles.buy_view}>
+
                                     <TouchableOpacity style={styles.buy_button} onPress={this.buyButtonClicked} activeOpacity={0.8}>
                                         <Text style={template.buttonText}>구매하기</Text>
                                     </TouchableOpacity>

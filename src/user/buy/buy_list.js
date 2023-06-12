@@ -112,11 +112,11 @@ class ListItem extends Component {
     }
 
     goOrderDetailScreen = () => {
-        this.props.navigation.navigate('OrderDetail', { orderID: this.orderID, goodsID:this.goodsID })
+        this.props.navigation.navigate('OrderDetail', { orderID: this.orderID, goodsID: this.goodsID })
     }
     //부품번호에 대한 Goodle 검색창 보이기(Web View)
     goGoodsNumberWebView = (goodsNo) => {
-        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' +goodsNo });
+        this.props.navigation.navigate('GoogleWebView', { url: 'http://www.google.com/search?q=' + goodsNo });
     }
 
 
@@ -147,7 +147,7 @@ class ListItem extends Component {
             Promise.reject(response);
     }
 
-    handleDetailViewModal = () => {
+    goGoodsDetailView = () => {
         this.props.navigation.navigate('GoodsDetail', { goodsID: this.goodsID });
     }
 
@@ -159,70 +159,74 @@ class ListItem extends Component {
         const { orderingDate, goodsName, total, goodsNo, quantity, status } = this.props.item;
         return (
             <>
-                <View style={{ flexDirection: 'column', marginBottom: '2%', backgroundColor: colors.white }}>
-                    <View style={inStyle.itemInfoView}>
-                        <View style={{ flex: 1 }}>
-                            <Image
-                                source={{ uri: this.state.imageURI }}
-                                style={[inStyle.imageView2, { borderRadius: 20 }]} />
-                        </View>
-                        <View style={{ flex: 1.5, alignItems: 'flex-start', justifyContent: 'center' }}>
-                            <View style={{ flex: 2 }}>
-                                <Text style={[template.itemNameText, { fontSize: 18 }]}>{goodsName.length > 9 ? `${goodsName.slice(0, 9)}...` : goodsName}</Text>
-                            </View>
+             
+                    <View style={{ flexDirection: 'column', marginBottom: '2%', backgroundColor: colors.white }}>
+                    <TouchableOpacity onPress={this.goGoodsDetailView}>
+                        <View style={inStyle.itemInfoView}>
                             <View style={{ flex: 1 }}>
-                                <TouchableOpacity onPress={()=>this.goGoodsNumberWebView(goodsNo)}>
-                                    <Text style={template.itemNumberText}>{goodsNo}</Text>
-                                </TouchableOpacity>
-                                <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(total)}원</Text>
+                                <Image
+                                    source={{ uri: this.state.imageURI }}
+                                    style={[inStyle.imageView2, { borderRadius: 20 }]} />
+                            </View>
+                            <View style={{ flex: 1.5, alignItems: 'flex-start', justifyContent: 'center' }}>
+                                <View style={{ flex: 2 }}>
+                                    <Text style={[template.itemNameText, { fontSize: 18 }]}>{goodsName.length > 9 ? `${goodsName.slice(0, 9)}...` : goodsName}</Text>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <TouchableOpacity onPress={() => this.goGoodsNumberWebView(goodsNo)}>
+                                        <Text style={template.itemNumberText}>{goodsNo}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={[template.itemPriceText, { fontSize: 18 }]}>{FunctionUtil.getPrice(total)}원</Text>
+                                </View>
+                            </View>
+                            <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
+                                <View style={{ flex: 2 }}>
+                                    <Text style={[template.contentText, { color: colors.dark }]}>{quantity}{"개"}</Text>
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}>
+                                    <Text style={[template.contentText, { color: colors.medium }]}>주문일 : {orderingDate.slice(0, 10)}</Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={{ flex: 1.5, alignItems: 'flex-end', justifyContent: 'center' }}>
-                            <View style={{ flex: 2 }}>
-                                <Text style={[template.contentText, { color: colors.dark }]}>{quantity}{"개"}</Text>
+                        </TouchableOpacity>
+                        <View style={inStyle.itemButtonView}>
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={[template.largeText, { fontWeight: 'bold' }]}>{this.goodsStatusText(status)}</Text>
                             </View>
-                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                <Text style={[template.contentText, { color: colors.medium }]}>주문일 : {orderingDate.slice(0, 10)}</Text>
+                            <View style={{ flex: 3, flexDirection: 'row' }}>
+                                <View style={[inStyle.orderDetailButton, { marginRight: '2%' }]}>
+                                    <TouchableOpacity onPress={this.goOrderDetailScreen}>
+                                        <Text style={[inStyle.buttonText, { color: colors.main }]}>주문상세</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {status != 1 &&
+                                    <View style={[inStyle.button, { marginRight: '2%' }]}>
+                                        <TouchableOpacity onPress={this.goDeliveryDetailScreen}>
+                                            <Text style={inStyle.buttonText}>배송조회</Text>
+                                        </TouchableOpacity>
+                                    </View>}
+                                {status == 1 &&
+                                    <View style={[inStyle.button, { marginRight: '2%', backgroundColor: colors.medium }]}>
+                                        <TouchableOpacity>
+                                            <Text style={inStyle.buttonText}>배송조회</Text>
+                                        </TouchableOpacity>
+                                    </View>}
+                                {status == 2 &&
+                                    <View style={[inStyle.button]}>
+                                        <TouchableOpacity onPress={this.orderCompleteButtonClick}>
+                                            <Text style={inStyle.buttonText}>구매확정</Text>
+                                        </TouchableOpacity>
+                                    </View>}
+                                {status != 2 &&
+                                    <View style={[inStyle.button, { backgroundColor: colors.medium }]}>
+                                        <TouchableOpacity >
+                                            <Text style={inStyle.buttonText}>구매확정</Text>
+                                        </TouchableOpacity>
+                                    </View>}
                             </View>
                         </View>
-                    </View>
-                    <View style={inStyle.itemButtonView}>
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={[template.largeText, { fontWeight: 'bold' }]}>{this.goodsStatusText(status)}</Text>
-                        </View>
-                        <View style={{ flex: 3, flexDirection: 'row' }}>
-                            <View style={[inStyle.orderDetailButton, { marginRight: '2%' }]}>
-                                <TouchableOpacity onPress={this.goOrderDetailScreen}>
-                                    <Text style={[inStyle.buttonText, { color: colors.main }]}>주문상세</Text>
-                                </TouchableOpacity>
-                            </View>
-                            {status != 1 &&
-                                <View style={[inStyle.button, { marginRight: '2%' }]}>
-                                    <TouchableOpacity onPress={this.goDeliveryDetailScreen}>
-                                        <Text style={inStyle.buttonText}>배송조회</Text>
-                                    </TouchableOpacity>
-                                </View>}
-                            {status == 1 &&
-                                <View style={[inStyle.button, { marginRight: '2%', backgroundColor: colors.medium }]}>
-                                    <TouchableOpacity>
-                                        <Text style={inStyle.buttonText}>배송조회</Text>
-                                    </TouchableOpacity>
-                                </View>}
-                            {status == 2 &&
-                                <View style={[inStyle.button]}>
-                                    <TouchableOpacity onPress={this.orderCompleteButtonClick}>
-                                        <Text style={inStyle.buttonText}>구매확정</Text>
-                                    </TouchableOpacity>
-                                </View>}
-                            {status != 2 &&
-                                <View style={[inStyle.button, { backgroundColor: colors.medium }]}>
-                                    <TouchableOpacity >
-                                        <Text style={inStyle.buttonText}>구매확정</Text>
-                                    </TouchableOpacity>
-                                </View>}
-                        </View>
-                    </View>
-                </View >
+                    </View >
+             
             </>
         );
     }
