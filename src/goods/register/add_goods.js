@@ -70,7 +70,7 @@ class AddGoods extends Component {
 
             check_genuine: true,
             check_non_genuine: false,
-            
+
             allhashTag: "",
 
             addGoodsButtonVisible: false,  //상품등록 버튼 on/off 
@@ -233,7 +233,7 @@ class AddGoods extends Component {
         if (tagNames.slice(-1)[0] == '') {
             tagNames.splice(tagNames.length - 1)
         }
-        if (this.state.hashTag.length < this.#hashTagLength && tagNames.length < this.#hashTagLength && this.state.hashTag.length + tagNames.length < 8) {
+        if (this.state.hashTag.length <= this.#hashTagLength && tagNames.length <= this.#hashTagLength && this.state.hashTag.length + tagNames.length <=  this.#hashTagLength ) {
             /*this.addHashTag(tagNames).then(()=>{
                 this.onValueChange();
             });*/
@@ -280,9 +280,9 @@ class AddGoods extends Component {
     non_genuineCheck = () => {
         this.setState({ check_non_genuine: true, check_genuine: false, genuine: 2 });
     }
-    qualityCheck=(index)=>{
-        this.setState({quality:index, })
-        console.log('quality',index)
+    qualityCheck = (index) => {
+        this.setState({ quality: index, })
+        console.log('quality', index)
     }
     //상품 등록 확인 모달 보임/숨김
     setConfirmModal = (value) => {
@@ -374,7 +374,7 @@ class AddGoods extends Component {
     getViewSize = () => {
         this.cameraIcon.current.measure((fx, fy, width, height, px, py) => {
             this.cameraModalX = px + width - (width / 2);
-            this.cameraModalY = py + height ;
+            this.cameraModalY = py + height;
             //console.log('location:', fx, fy, width, height, px, py)
         })
     }
@@ -549,8 +549,8 @@ class AddGoods extends Component {
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
                                     {this.qualityValueText.map((item, i) =>
-                                        <TouchableOpacity key={i} activeOpacity={0.8} onPress={()=>this.qualityCheck(i+1)} style={{ flexDirection: 'row', marginLeft: '5%' }}>
-                                            <IconRadio name={this.state.quality==i+1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
+                                        <TouchableOpacity key={i} activeOpacity={0.8} onPress={() => this.qualityCheck(i + 1)} style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                                            <IconRadio name={this.state.quality == i + 1 ? "checkmark-circle" : "ellipse-outline"} size={20} color={colors.main} />
                                             <View style={{ justifyContent: 'center' }}>
                                                 <Text style={[template.contentText]}>{item}</Text>
                                             </View>
@@ -558,7 +558,7 @@ class AddGoods extends Component {
 
                                     )}
                                 </View>
-                                  {/*   <Picker
+                                {/*   <Picker
                                     selectedValue={this.state.quality}
                                     onValueChange={(value, index) => { this.setState({ quality: value }) }}>
                                     {this.qualityValueText.map((item, i) => <Picker.Item label={item} key={i} value={i + 1} />)}
@@ -568,6 +568,7 @@ class AddGoods extends Component {
 
 
                             {/* 검색어 */}
+                          
                             <View style={[template.textInput, { flexDirection: 'row', alignItems: 'center' }]}>
                                 <View style={{ flex: 7 }}>
                                     <TextInput
@@ -587,7 +588,13 @@ class AddGoods extends Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-
+                            
+                            {this.state.hashTagError == false ? (
+                                <Text style={{ color: colors.red,fontSize:12,marginBottom:'2%' }}>
+                                    * 1 - 7개 입력
+                                </Text>
+                            ) : null}
+                                    
                             {/* 키워드 뿌려주기 */}
                             <View style={{ flexWrap: 'wrap', flexDirection: 'row', }}>
                                 {this.state.hashTag.map((item, i) =>
@@ -601,7 +608,7 @@ class AddGoods extends Component {
                             </View>
 
                             {/* 상세내용*/}
-                            <View style={[template.roundedBox,{backgroundColor:colors.white, borderColor:colors.medium}]}>
+                            <View style={[template.roundedBox, { backgroundColor: colors.white, borderColor: colors.medium }]}>
                                 <Text style={[template.contentText, { color: colors.dark }]}>글쓰기</Text>
                                 <TextInput
                                     style={[template.inputText, { height: 100 }]}

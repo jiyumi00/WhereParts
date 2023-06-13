@@ -9,7 +9,6 @@ import WebServiceManager from '../../util/webservice_manager';
 import FunctionUtil from '../../util/libraries_function';
 
 import { template, colors } from "../../styles/template/page_style";
-import { styles } from "../../styles/pay/payment";
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
 
@@ -303,7 +302,7 @@ class Payment extends Component {
                 </ScrollView>
                 {
                     this.state.validForm ?
-                        (<TouchableOpacity style={template.activeButton} onPress={this.paymentButtonClicked}><Text style={styles.text.buyButtonText}>결제하기</Text></TouchableOpacity>)
+                        (<TouchableOpacity style={template.activeButton} onPress={this.paymentButtonClicked}><Text style={template.buttonText}>결제하기</Text></TouchableOpacity>)
                         : (<TouchableOpacity style={template.inActiveButton} ><Text style={[template.buttonText, { color: colors.medium }]}>결제하기</Text></TouchableOpacity>)
                 }
             </View>

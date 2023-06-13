@@ -124,10 +124,8 @@ class CameraX extends Component {
         //console.log("sourceHeight", sourceHeight);// sourceHeight 0
         if (this.props.hasOwnProperty("onCutImageListener") && this.props.hasOwnProperty("cutImageStyle")) {
             this.capturedView.current.measure((fx, fy, width, height, px, py) => {
-            
                 this.target = { top: py - topMargin, left: px - leftMargin, width: width, height: height };
                 //console.log("sourceHeight",sourceHeight); // sourceHeight 645
-                
                 // 사진 안내문구 위치 설정(capturedView 위에 위치하도록)
                 this.setState({
                     //topTextView height:20, width:140 

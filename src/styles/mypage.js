@@ -9,14 +9,15 @@ export const styles = StyleSheet.create({
     viewHeaderLayout: {
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
-
+        backgroundColor: colors.main,
+        
     },//
     container: {
         margin: 15,
     },
-    item1: {
-        flexDirection: 'column',
-        alignItems: 'center'
+    sub_background:{
+        backgroundColor: colors.white,
+         height: '100%' 
     },
     item2: {
         flexDirection: 'row',
@@ -28,9 +29,16 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
-
+    sub_text: {
+        color:colors.black,
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    content:{
+        color:colors.dark,
+        fontWeight:'bold',
+    },
     btn: {
-        justifyContent: 'center',
         backgroundColor:colors.white,
         borderRadius: 20,
         shadowColor: colors.black,
@@ -40,9 +48,7 @@ export const styles = StyleSheet.create({
     },//
 
     btn_text: {
-        fontFamily: 'pretendard',
         fontWeight:'bold',
-        textAlign: 'center',
         color:colors.black,
         marginTop: 10,
     },//
@@ -54,13 +60,15 @@ export const styles = StyleSheet.create({
     },
     search_btn: {
         position: 'absolute',
-        top: 5,
-        right: 15,
+        top: 12.5,
+        right: 30,
     },
     page_view: {
         position: 'absolute',
         width: '100%',
-        top: ScreenHeight * 0.83
+        backgroundColor:colors.white,
+        padding:10,
+        bottom:0
         //borderWidth:1,
     },
     outputStyle: {
@@ -71,6 +79,7 @@ export const styles = StyleSheet.create({
         padding: 15
     },
     outputStyle_sub:{
+        width: '80%' ,
         borderRightWidth:0.5,
         borderRightColor:colors.medium
     },
@@ -82,15 +91,10 @@ export const styles = StyleSheet.create({
     viewBodyLayout: {
         //borderWidth:1,
     },//
-    
 
-    btn_logout_text: {
-        fontFamily: "normal medium 14px/16px Pretendard",
-        color: "white",
-
-    },//
     modal_background: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+       
+        backgroundColor:'rgba(0,0,0,0.5)',//불투명도 40%
         height: '100%',
     },
     modal1: {
@@ -104,12 +108,10 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.main,
         width: '70%',
         padding: 20,
-        borderBottomLeftRadius: 20,
     },
     modal3: {
         backgroundColor: colors.medium,
         width: '30%',
         padding: 20,
-        borderBottomRightRadius: 20
     }
 })

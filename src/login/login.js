@@ -271,7 +271,7 @@ class Login extends Component {
         return (
             <>
                 <View style={[template.baseContainer]}>
-
+             
                     <View style={inStyle.headerView}>
                         <Image
                             style={{ width: 138, height: 143 }}
@@ -280,10 +280,11 @@ class Login extends Component {
                             }
                         />
                     </View>
-                    <View style={inStyle.bodyView}>
-                    <ScrollView>
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop:'5%' }}>
-                            
+                  
+                        <View style={inStyle.bodyView}>
+                       
+                            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: '15%' }}>
+                       
                                 <View style={inStyle.textInput2}>
                                     <TextInput
                                         ref={(c) => { this.idRef = c; }}
@@ -324,31 +325,32 @@ class Login extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                               
+
+                            </View>
+                          
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',backgroundColor:colors.main,top:150}}>
+                                <TouchableOpacity activeOpacity={0.8} style={{ alignItems: 'center', justifyContent: 'center', }}>
+                                    <Text style={[template.contentText, { color: colors.white }]}>비밀번호 찾기    </Text>
+                                </TouchableOpacity>
+                                <Text style={[template.contentText, { color: colors.white }]}>|</Text>
+                                <TouchableOpacity activeOpacity={0.8} style={{ alignItems: 'center', justifyContent: 'center', }} onPress={this.registerUserButtonClicked}>
+                                    <Text style={[template.contentText, { color: colors.white }]}>     회원가입</Text>
+                                </TouchableOpacity>
+                            </View>
+                          
                         </View>
-                        </ScrollView>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                            <TouchableOpacity activeOpacity={0.8} style={{ height: 50, alignItems: 'center', justifyContent: 'center', }}>
-                                <Text style={[template.contentText, { color: colors.white }]}>비밀번호 찾기    </Text>
-                            </TouchableOpacity>
-                            <Text style={[template.contentText, { color: colors.white }]}>|</Text>
-                            <TouchableOpacity activeOpacity={0.8} style={{ height: 50, alignItems: 'center', justifyContent: 'center', }} onPress={this.registerUserButtonClicked}>
-                                <Text style={[template.contentText, { color: colors.white }]}>     회원가입</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
-
-
-                    {/* 상품 등록하기 버튼 부분*/}
-                    {this.state.validForm ?
-                        (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton} onPress={this.loginButtonClicked}>
-                            <Text style={[template.buttonText,{color:colors.main}]}>로그인</Text>
-                        </TouchableOpacity>)
-                        : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
-                            <Text style={[template.buttonText, { color: colors.medium }]}>로그인</Text>
-                        </TouchableOpacity>)}
-
+                        
+                     
+                      
+                        {/* 상품 등록하기 버튼 부분*/}
+                        {this.state.validForm ?
+                            (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton} onPress={this.loginButtonClicked}>
+                                <Text style={[template.buttonText, { color: colors.main }]}>로그인</Text>
+                            </TouchableOpacity>)
+                            : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
+                                <Text style={[template.buttonText, { color: colors.medium }]}>로그인</Text>
+                            </TouchableOpacity>)}
+                        
                 </View>
             </>
         )
@@ -362,12 +364,12 @@ const ScreenWidth = Dimensions.get('window').width;
 const inStyle = StyleSheet.create({
 
     headerView: {
-        flex: 5,
+        flex:2,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     bodyView: {
-        flex: 5,
+        flex:3,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         backgroundColor: colors.main,

@@ -258,6 +258,7 @@ class Home extends Component {
                                     placeholder="검색어를 입력해주세요.(카메라 가능)"
                                     placeholderTextColor={colors.white}
                                     value={this.state.searchKeyWord}
+                                    style={{ color: colors.white }}
                                 />
                             </View>
                             <View style={{ width: '10%', justifyContent: 'flex-end' }}>
@@ -319,7 +320,7 @@ const inStyle = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.main,
         borderBottomEndRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderBottomLeftRadius: 20,    
     },
     searchBarView: {
         flexDirection: 'row',
@@ -343,6 +344,7 @@ const inStyle = StyleSheet.create({
         height: 40,
         marginTop: '2%',
         paddingRight: '5%',
+       
     },
     sortDropView: {
         flex: 1,
@@ -353,6 +355,7 @@ const inStyle = StyleSheet.create({
         dropdown_width: {
             width: 150
         },
+      
     },
     goodsQuantityView: {
         flex: 1,

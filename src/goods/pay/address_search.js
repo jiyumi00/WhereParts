@@ -1,13 +1,12 @@
 import React, { Component, PureComponent } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, Keyboard, Modal } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, FlatList, StyleSheet, Keyboard, Modal } from 'react-native';
 
-import { styles } from "../../styles/pay/address_search";
+import { styles } from "../../styles/mypage";
+import { template, colors } from "../../styles/template/page_style";
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import EmptyIcon from 'react-native-vector-icons/SimpleLineIcons';
 import PageIcon from 'react-native-vector-icons/AntDesign'
 import WebServiceManager from '../../util/webservice_manager';
-
 import Indicator from '../../util/indicator';
 import Constant from '../../util/constatnt_variables';
 
@@ -71,7 +70,7 @@ class SearchAddress extends Component {
             this.setState({ page: this.state.page + 1 }, () => this.goGetAddress())
     }
     async callGetAddressAPI(page) {
-        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey="+Constant.addressSearchApiKey+"&currentPage=" + this.state.page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
+        let manager = new WebServiceManager("https://business.juso.go.kr/addrlink/addrLinkApi.do?confmKey=" + Constant.addressSearchApiKey + "&currentPage=" + this.state.page + "&countPerPage=" + this.countPerPage + "&keyword=" + this.state.searchText + "&resultType=json");
         let response = await manager.start();
         if (response.ok)
             return response.json();
@@ -80,69 +79,72 @@ class SearchAddress extends Component {
     }
     render() {
         return (
-            <View style={styles.total_container}>
-                <View style={styles.search_view}>
-                    <View style={styles.search_input}>
-                        <View style={styles.row_layout}>
-                            <TextInput style={styles.input}
-                                onChangeText={(text) => this.setState({ searchText: text })}
-                                onEndEditing={this.searchAddress}
-                                placeholder="도로명 또는 지번을 입력하세요"
-                                placeholderTextColor="light grey" />
-                            <TouchableOpacity style={styles.search_btn} onPress={this.searchAddress}>
-                                <Icon name="search" size={30} color="light grey" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+            <View style={styles.sub_background}>
+
+                <View style={[styles.container, styles.center]}>
+                    <TextInput
+                        onChangeText={(text) => this.setState({ searchText: text })}
+                        onEndEditing={this.searchAddress}
+                        placeholder="도로명 또는 지번을 입력하세요."
+                        style={inStyle.searchInput}
+                        placeholderTextColor="light grey" />
+                    <TouchableOpacity style={styles.search_btn} onPress={this.searchAddress}>
+                        <Image
+                            source={
+                                require('../../images/icon/mypage/search.png')
+                            }
+                        />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.content_view}>
+                <View>
                     <Modal transparent={true} visible={this.state.indicator}>
                         <Indicator />
                     </Modal>
                     {/*    초기화면 */}
                     {this.state.searchViewVisible == false &&
-                        <>
-                            <Text style={styles.title}>TIP</Text>
-                            <Text style={styles.text}>도로명, 건물명, 지번 중 선택하여</Text>
-                            <Text style={styles.text2}>입력하세요 </Text>
-                            <Text style={styles.content}> 도로명 + 건물번호 <Text style={styles.content2}> 예) 테헤란로 152</Text></Text>
-                            <Text style={styles.content}> 동/읍/면/리 + 번지 <Text style={styles.content2}> 예) 역삼동 737</Text> </Text>
-                            <Text style={styles.content}> 건물명, 아파트명  <Text style={styles.content2}> 예) 삼성동 힐스테이트</Text></Text>
-                        </>}
-                    
+                        <View style={inStyle.firstbackground}>
+                            <Text style={inStyle.largeText}>우편번호 통합검색 TIP</Text>
+                            <View style={{ marginTop: 5 }}>
+                                <Text style={[inStyle.content]}>도로명 + 건물번호 (예: 테헤란로 152)</Text>
+                                <Text style={[inStyle.content]}>동/읍/면/리 + 번지 (예: 역삼동 737)</Text>
+                                <Text style={[inStyle.content]}>건물명, 아파트명 (예: 삼성동 힐스테이트)</Text>
+                            </View>
+                        </View>}
+
                     {/* 검색결과가 없을 때 */}
                     {this.state.emptyListViewVisible &&
-                        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: '5%' }}>
+                        <View style={styles.center}>
                             <EmptyIcon name="exclamation" size={40} color="#D1D1D1" />
-                            <Text style={{ marginTop: '5%' }}>검색 결과가 없습니다</Text>
+                            <Text style={{ marginTop: 5 }}>검색 결과가 없습니다</Text>
                         </View>}
 
 
                     {/* 검색결과 리스트 */}
+
                     {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
                         <FlatList
                             showsVerticalScrollIndicator={false}
-                            style={{ borderColor: '#909098', }}
                             data={this.state.addressContents}
                             renderItem={({ item, index }) => <AddressItem item={item} navigation={this.props.navigation} addressListener={this.props.route.params.addressListener} />} />
                     }
+
                 </View>
 
                 {/* 페이지 부분 */}
                 {this.state.searchViewVisible && this.state.emptyListViewVisible == false &&
-                    <>
                     <View style={styles.page_view}>
-                        <View style={styles.row_layout}>
+                        <View style={styles.item2}>
                             <TouchableOpacity onPress={this.pageDownClicked} activeOpacity={0.8} >
                                 <PageIcon name="leftsquareo" size={30} color="light grey" />
                             </TouchableOpacity>
 
-                            <Text style={styles.text}>   <Text style={[styles.text, { color: 'blue' }]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount / this.countPerPage)}   </Text>
+                            <Text >
+                                <Text style={[{ color: 'blue' }]}>{this.state.page} </Text> / {Math.ceil(this.state.totalCount / this.countPerPage)}   </Text>
                             <TouchableOpacity onPress={this.pageUpClicked} activeOpacity={0.8}>
                                 <PageIcon name="rightsquareo" size={30} color="light grey" />
                             </TouchableOpacity>
                         </View>
-                    </View></>}
+                    </View>}
             </View>
         );
     }
@@ -160,31 +162,36 @@ class AddressItem extends PureComponent {
         const { zipNo, roadAddr, jibunAddr } = this.props.item;
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={() => this.addressItemClicked(zipNo, roadAddr)}>
-                <View style={styles.outputStyle}>
-                    <View style={styles.address_view}>
-                        <View style={[styles.roadAddr_view]}>
-                            <View style={{ flex: 1, }}>
-                                <Text>도로명</Text>
-                            </View>
-                            <View style={{ flex: 5, paddingRight: '2%' }}>
-                                <Text style={{ color: "black" }}>{roadAddr} </Text>
-                            </View>
+                <View style={[styles.outputStyle]}>
+                    <View style={[styles.outputStyle_sub]}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={inStyle.namecontent}>도로명</Text>
+                            <Text style={[inStyle.content, { color: colors.black }]}>{roadAddr}</Text>
                         </View>
-                        <View style={[styles.roadAddr_view, { paddingTop: '2%' }]}>
-                            <View style={{ flex: 1 }}>
-                                <Text>지번</Text>
-                            </View>
-                            <View style={{ flex: 5, paddingRight: '2%' }}>
-                                <Text style={{ color: "black" }}>{jibunAddr}</Text>
-                            </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={inStyle.namecontent}>지번</Text>
+                            <Text style={[inStyle.content, { color: colors.black }]}>{jibunAddr}</Text>
                         </View>
                     </View>
-                    <View style={styles.zipNo_view}>
-                        <Text style={[styles.text, { fontWeight: '600' }]}>{zipNo}</Text>
+
+                    <View style={[styles.center, inStyle.namecontent]}>
+                        <Text style={inStyle.zipNo}>{zipNo}</Text>
                     </View>
                 </View>
+
             </TouchableOpacity>
         );
     }
 }
 export default SearchAddress;
+
+const inStyle = StyleSheet.create({
+
+    namecontent: [styles.content, { width: '20%' }],
+    content: [styles.content, { width: '70%' }],
+    searchInput: [template.roundedBox, styles.input, styles.content, { width: '90%', paddingLeft: 15 }],
+    zipNo: [styles.name_text, { marginLeft: 10 }],
+    firstbackground: [styles.container, { width: '100%', marginLeft: 45, marginTop: 5 }],
+    largeText: [template.largeText, { fontWeight: 'bold' }],
+
+}); 

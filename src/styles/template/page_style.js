@@ -141,7 +141,16 @@ export const template = StyleSheet.create({
         height: 60,
         backgroundColor: colors.light,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowOpacity: 0.5,
+        shadowColor: "black",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     smallButton: {
         width: 40,

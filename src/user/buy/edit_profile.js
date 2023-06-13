@@ -212,38 +212,40 @@ class EditProfile extends Component {
                     onRequestClose={() => this.props.navigation.pop()}
                 >
 
-                    <View style={{ height: '100%' }}>
+                    <View style={styles.sub_background}>
                         <View style={[styles.container, { flex: 1 }]}>
                             <View style={styles.center}>
-                                <Text style={[template.largeText]}>비밀번호 확인</Text>
-                                <Text style={[template.contentText, styles.container, { color: colors.dark }]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
+                                <Text style={[styles.sub_text]}>비밀번호 확인</Text>
+                                <Text style={[styles.content, styles.container]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
                             </View>
 
 
                             <View >
-                                <View>
-                                    <Text style={[template.contentText, { color: colors.dark }]}>비밀번호</Text>
+                                <View style={styles.container}>
+                                    <Text style={[styles.content]}>비밀번호</Text>
+
                                     <TextInput
                                         returnKeyType="done"
                                         onSubmitEditing={this.passwdOkButtonClicked}
                                         secureTextEntry={true}
-                                        style={[template.roundedBox, styles.input]}
+                                        style={[template.roundedBox, styles.input, styles.content, { marginTop: 5, marginBottom: 5 }]}
                                         onChangeText={(value) => this.setState({ confirmPasswd: value })}
                                         value={this.state.confirmPasswd}
                                     />
+                                    {this.state.passwdError ? (
+                                        <Text style={[template.contentText, { color: colors.red }]}>
+                                            * 비밀번호가 틀렸습니다.
+                                        </Text>
+                                    ) : null}
                                 </View>
-                                {this.state.passwdError ? (
-                                    <Text style={[template.contentText, { marginBottom: 5, color: colors.red }]}>
-                                        * 비밀번호가 틀렸습니다.
-                                    </Text>
-                                ) : null}
+
 
                             </View>
                         </View>
                         <View style={[styles.item2]}>
-                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal2, { width: '80%', borderBottomLeftRadius: 0, }]} onPress={this.passwdOkButtonClicked}>
+                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal2, styles.center, { width: '80%' }]} onPress={this.passwdOkButtonClicked}>
                                 <IconMark name={"check"} size={30} color={colors.white} /></TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal3, { width: '20%', borderBottomRightRadius: 0, }]} onPress={() => this.props.navigation.pop()}>
+                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal3, styles.center, { width: '20%' }]} onPress={() => this.props.navigation.pop()}>
                                 <IconMark name={"close"} size={30} color={colors.white} /></TouchableOpacity>
 
                         </View>
@@ -297,9 +299,9 @@ class EditProfile extends Component {
 
                                 <View style={inStyle.textInputView}>
                                     <Text style={[template.contentText, { color: colors.dark, marginBottom: '2%' }]}>사업자 등록번호</Text>
-                                    <View style={template.textInput}>
-                                        <Text style={[template.contentText]}>{this.loginInfo.companyNo.slice(0, 3)}-{this.loginInfo.companyNo.slice(3, 5)}-{this.loginInfo.companyNo.slice(5, 10)}</Text>
-                                    </View>
+                                    
+                                        <Text style={[template.contentText,{ marginBottom: '6%'}]}>{this.loginInfo.companyNo.slice(0, 3)}-{this.loginInfo.companyNo.slice(3, 5)}-{this.loginInfo.companyNo.slice(5, 10)}</Text>
+                                    
 
                                     <Text style={[template.contentText, { color: colors.dark, marginBottom: '2%' }]}>비밀번호</Text>
                                     <View style={template.textInput}>

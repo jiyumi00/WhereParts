@@ -16,8 +16,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapIcon2 from 'react-native-vector-icons/FontAwesome5';
 import QuantityEditIcon from 'react-native-vector-icons/Feather';
 
-import Certified from '../../images/icon/certified-icon/certified_4-removebg-preview_resize.png';
-
 import Constant from '../../util/constatnt_variables';
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
@@ -140,7 +138,7 @@ export default class DetailItemView extends Component {
                         console.log("숨김완료", response);
                         if (response.success == 1) {
                             this.props.navigation.pop();
-                            //this.refresh();
+                            this.refresh();
                         }
                     })
                 },
@@ -159,7 +157,7 @@ export default class DetailItemView extends Component {
                         console.log("숨김해제완료", response);
                         if (response.success == 1) {
                             this.props.navigation.pop();
-                            //this.refresh();
+                            this.refresh();
                         }
                     })
                 },
@@ -176,7 +174,7 @@ export default class DetailItemView extends Component {
                     text: '확인', onPress: () => this.callRemoveGoodsAPI().then((response) => {
                         console.log("삭제완료", response);
                         this.props.navigation.pop();
-                        // this.refresh();
+                        this.refresh();
                     })
                 },
             ],);
@@ -271,7 +269,7 @@ export default class DetailItemView extends Component {
         if (tagNames.slice(-1)[0] == '') {
             tagNames.splice(tagNames.length - 1)
         }
-        if (this.state.hashTag.length < 7 && tagNames.length < 7 && this.state.hashTag.length + tagNames.length < 8) {
+        if (this.state.hashTag.length <= 7 && tagNames.length <= 7 && this.state.hashTag.length + tagNames.length <= 7) {
             this.onValueChange({ hashTag: this.state.hashTag.concat(tagNames) });
         }
         else {
@@ -320,9 +318,9 @@ export default class DetailItemView extends Component {
         this.setState({ quality: index, })
         console.log('quality', index)
     }
-    /*    refresh = () => {
-           this.props.route.params.refresh();
-       } */
+    refresh = () => {
+        this.props.route.params.refresh();
+    }
 
     backPressed = () => {
         if (this.state.editGoodsViewVisible == true) {
@@ -519,7 +517,7 @@ export default class DetailItemView extends Component {
                                     </View>
                                     {/* 수량 */}
                                     <View style={[styles.textRightView]}>
-                                        {(this.state.quantity == 0 || this.state.item.removeFlag == 1 || this.state.item.valid == 0)&&this.state.buyVisible ?
+                                        {(this.state.quantity == 0 || this.state.item.removeFlag == 1 || this.state.item.valid == 0) && this.state.buyVisible ?
                                             <Text style={[template.largeText, { fontSize: 18, color: colors.red }]}>구매 불가</Text> :
                                             <Text style={[template.largeText, { fontSize: 18 }]}>
                                                 <Text style={[template.largeText, { fontSize: 18, color: colors.dark }]}>남은개수 </Text>
@@ -695,7 +693,11 @@ export default class DetailItemView extends Component {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-
+                                    {this.state.hashTagError == false ? (
+                                        <Text style={{ color: colors.red, fontSize: 12, marginBottom: '2%' }}>
+                                            * 1 - 7개 입력
+                                        </Text>
+                                    ) : null}
                                     {/* 키워드 뿌려주기 */}
                                     <View style={{ flexWrap: 'wrap', flexDirection: 'row', }}>
                                         {this.state.hashTag.map((item, i) =>
@@ -711,9 +713,10 @@ export default class DetailItemView extends Component {
                                     {/* 상세내용*/}
                                     <View style={[template.roundedBox, { backgroundColor: colors.white, borderColor: colors.medium }]}>
                                         <TextInput
+                                            style={[template.inputText, { height: 100 }]}
                                             multiline={true}
                                             onChangeText={(value) => this.setState({ editSpec: value })}
-                                        >  {this.state.editSpec}</TextInput>
+                                        >{this.state.editSpec}</TextInput>
                                     </View>
                                 </View>
 
