@@ -711,7 +711,6 @@ export default class DetailItemView extends Component {
                                     {/* 상세내용*/}
                                     <View style={[template.roundedBox, { backgroundColor: colors.white, borderColor: colors.medium }]}>
                                         <TextInput
-                                            style={[template.inputText, { height: 100 }]}
                                             multiline={true}
                                             onChangeText={(value) => this.setState({ editSpec: value })}
                                         >  {this.state.editSpec}</TextInput>
@@ -723,7 +722,7 @@ export default class DetailItemView extends Component {
 
 
                     {/*판매자 가격 표시*/}
-                    {!this.state.editGoodsViewVisible && !this.state.buyVisible &&
+                    {!this.state.editGoodsViewVisible && this.state.editVisible &&
                         <View style={[styles.BottomView, { backgroundColor: colors.light }]}>
                             <Text style={[template.titleText, { fontSize: 23 }]}>{renderPrice}원</Text>
                         </View>}

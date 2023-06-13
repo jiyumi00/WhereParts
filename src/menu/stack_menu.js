@@ -87,7 +87,7 @@ class Stack extends Component {
                 <NativeStack.Screen name="MyPage" component={MyPage}
                     options={{ title: "" , headerShown:false}}/>
                 <NativeStack.Screen name="EditProfile" component={EditProfile}
-                    options={{ title: "" }}/>
+                    options={{ title: "내 정보 수정" }}/>
                 <NativeStack.Screen name="SalesList" component={SalesList}
                     options={{ title: "판매 내역",headerBackVisible:false }}/>
                 <NativeStack.Screen name="BuyList" component={BuyList}

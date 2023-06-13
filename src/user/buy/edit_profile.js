@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
     Text, View, TouchableOpacity, TextInput, ScrollView, Image, Modal, Alert,
-    StyleSheet
+    StyleSheet, Dimensions
 } from 'react-native';
 
-import { styles } from "../../styles/login/edit_profile";
-import { template } from '../../styles/template/page_style';
+import { styles } from "../../styles/mypage";
+import { template, colors } from '../../styles/template/page_style';
 
 import ImageSelectorPopup from '../../util/popup_image_selector';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Session from '../../util/session';
 import FunctionUtil from '../../util/libraries_function';
 
+import IconMark from 'react-native-vector-icons/AntDesign';
 import IconCamera from 'react-native-vector-icons/Entypo';
 import IconDelete from 'react-native-vector-icons/Ionicons';
 
@@ -29,7 +30,7 @@ class EditProfile extends Component {
         this.modalPhotoCameraX = null;
         this.modalPhotoCameraY = null;
 
-        this.loginInfo = { }
+        this.loginInfo = {}
 
         this.state = {
             validForm: false, //유효성
@@ -129,7 +130,7 @@ class EditProfile extends Component {
 
     //명함사진과 비밀번호를 수정하는 API
     async callModifyUserAPI() {
-        let manager = new WebServiceManager(Constant.serviceURL+"/ModifyUser", "post");
+        let manager = new WebServiceManager(Constant.serviceURL + "/ModifyUser", "post");
         const formData = { userID: this.loginInfo.userID, passwd: this.state.passwd };
         manager.addFormData("data", formData);
         manager.addBinaryData("file1", { uri: this.state.cardImageURI, type: "image/jpeg", name: "file1" });
@@ -194,11 +195,11 @@ class EditProfile extends Component {
 
     //명함 자세히보기
     cardImageModal = () => {
-        this.setState({cardImageDetailVisible: !this.state.cardImageDetailVisible});
+        this.setState({ cardImageDetailVisible: !this.state.cardImageDetailVisible });
     }
     //사업자등록증 사진 자세히보기 
     companyImageModal = () => {
-        this.setState({companyImageDetailVisible: !this.state.companyImageDetailVisible});
+        this.setState({ companyImageDetailVisible: !this.state.companyImageDetailVisible });
     }
 
     render() {
@@ -210,38 +211,43 @@ class EditProfile extends Component {
                     visible={this.state.passwdConfirmModal}
                     onRequestClose={() => this.props.navigation.pop()}
                 >
-                    <ScrollView>
-                        <View style={[inStyle.roundedBoxWrap,{paddingVertical:'6%'}]}>
-                            <Text style={[template.titleText,{ color: '#4B89DC'}]}>비밀번호 확인</Text>
-                            <Text style={[template.contentText,{color:'#888888'}]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
 
-                            <View style={[inStyle.roundedBoxWrap,{ paddingHorizontal: '0%'}]}>
-                                <View style={[template.roundedBox, { paddingVertical: '0%', borderWidth: 2 }]}>
-                                    <Text>비밀번호</Text>
+                    <View style={{ height: '100%' }}>
+                        <View style={[styles.container, { flex: 1 }]}>
+                            <View style={styles.center}>
+                                <Text style={[template.largeText]}>비밀번호 확인</Text>
+                                <Text style={[template.contentText, styles.container, { color: colors.dark }]}>정보 수정을 위해 현재 비밀번호를 입력해주세요.</Text>
+                            </View>
+
+
+                            <View >
+                                <View>
+                                    <Text style={[template.contentText, { color: colors.dark }]}>비밀번호</Text>
                                     <TextInput
                                         returnKeyType="done"
                                         onSubmitEditing={this.passwdOkButtonClicked}
                                         secureTextEntry={true}
+                                        style={[template.roundedBox, styles.input]}
                                         onChangeText={(value) => this.setState({ confirmPasswd: value })}
                                         value={this.state.confirmPasswd}
                                     />
                                 </View>
                                 {this.state.passwdError ? (
-                                    <Text style={[template.contentText, { marginBottom: '-5%', color: "#FD9C91" }]}>
+                                    <Text style={[template.contentText, { marginBottom: 5, color: colors.red }]}>
                                         * 비밀번호가 틀렸습니다.
                                     </Text>
                                 ) : null}
-                                <View style={{ flexDirection: 'row', marginTop: "7%" }}>
-                                    <TouchableOpacity activeOpacity={0.8} style={inStyle.passwdConfirmButton} onPress={() => this.props.navigation.pop()}>
-                                        <Text style={template.buttonText}>취소</Text></TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.8} style={[inStyle.passwdConfirmButton, { marginLeft: "2%" }]} onPress={this.passwdOkButtonClicked}>
-                                        <Text style={template.buttonText}>확인</Text></TouchableOpacity>
-                                </View>
-                            </View>
-                            <Text></Text><Text></Text><Text></Text>
-                        </View>
 
-                    </ScrollView>
+                            </View>
+                        </View>
+                        <View style={[styles.item2]}>
+                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal2, { width: '80%', borderBottomLeftRadius: 0, }]} onPress={this.passwdOkButtonClicked}>
+                                <IconMark name={"check"} size={30} color={colors.white} /></TouchableOpacity>
+                            <TouchableOpacity activeOpacity={0.8} style={[styles.modal3, { width: '20%', borderBottomRightRadius: 0, }]} onPress={() => this.props.navigation.pop()}>
+                                <IconMark name={"close"} size={30} color={colors.white} /></TouchableOpacity>
+
+                        </View>
+                    </View>
                 </Modal>
 
                 {/*비밀번호 확인이 완료 되었으면 내정보 수정*/}
@@ -252,103 +258,110 @@ class EditProfile extends Component {
                                 this.getViewSize(event.nativeEvent.contentOffset.y)
                             }}
                         >
-
-                            <View style={inStyle.roundedBoxWrap}>
-                                <Text style={{fontSize:25,color:'black',fontWeight:'bold'}}>내정보 수정</Text>
-                                <Text style={[template.contentText,{color:'#888888'}]}>수정을 위해 아래의 항목을 첨부해주세요.</Text>
-                            </View>
-                            <View style={[inStyle.roundedBoxWrap,{flexDirection:'row',justifyContent:'center'}]}>
-                                {/*사업자 등록증 사진*/}
-                                <View style={{alignItems:'center',marginRight:30}}>
-                                    <Text style={[template.titleText,{fontSize:15}]}>사업자 등록증</Text>
-                                    <TouchableOpacity onPress={this.companyImageModal}>
-                                        <Image source={{ uri: this.state.companyNoImageURI }} style={inStyle.imageButton} />
-                                    </TouchableOpacity>
+                            <View style={inStyle.container}>
+                                <View style={inStyle.headerVew}>
+                                    <Text style={[template.contentText, { color: colors.dark }]}>수정을 위해 아래의 항목을 첨부해주세요.</Text>
                                 </View>
-                                {/*명함 사진*/}
-                                <View style={{alignItems:'center'}}>
-                                    <Text style={[template.titleText,{fontSize:15}]}>명함</Text>
-                                    <View onLayout={(event) => { this.getViewSize(event) }} ref={this.photoCameraIcon}>
-                                        {this.state.cardImageURI == "" ?
-                                            (<TouchableOpacity style={inStyle.imageButton} onPress={() => this.setState({ cardPopupMenuVisible: true })}>
-                                                <IconCamera name="image-inverted" size={60}></IconCamera>
-                                            </TouchableOpacity>) :
-                                            (<TouchableOpacity onPress={this.cardImageModal}>
-                                                <Image source={{ uri: this.state.cardImageURI }} style={inStyle.imageButton} />
-                                                <TouchableOpacity style={{top:-15,right:-15,position:'absolute'}} onPress={this.removeCardImageClicked}>
-                                                    <IconDelete name="close-circle" color="black" size={27}></IconDelete>
-                                                </TouchableOpacity>
-                                            </TouchableOpacity>)}
+
+
+                                <View style={inStyle.buttonView}>
+                                    {/*사업자 등록증 사진*/}
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                                        <Text style={[template.contentText, { marginBottom: '3%' }]}>사업자 등록증</Text>
+                                        <TouchableOpacity style={inStyle.roundedButton} onPress={this.companyImageModal}>
+                                            <Image source={{ uri: this.state.companyNoImageURI }} style={inStyle.roundedButton} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/*명함 사진*/}
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                                        <Text style={[template.contentText, { marginBottom: '3%' }]}>명함</Text>
+                                        <View onLayout={(event) => { this.getViewSize(event) }} ref={this.photoCameraIcon}>
+                                            {this.state.cardImageURI == "" ?
+                                                (<TouchableOpacity style={inStyle.roundedButton} onPress={() => this.setState({ cardPopupMenuVisible: true })}>
+                                                    <Image
+                                                        style={{ width: 42, height: 26 }}
+                                                        source={
+                                                            require('../../images/icon/register-icon/nameCard.png')
+                                                        }
+                                                    />
+                                                </TouchableOpacity>) :
+                                                (<TouchableOpacity style={inStyle.roundedButton} onPress={this.cardImageModal}>
+                                                    <Image source={{ uri: this.state.cardImageURI }} style={inStyle.roundedButton} />
+                                                    <TouchableOpacity style={inStyle.deleteButtonView} onPress={this.removeCardImageClicked}>
+                                                        <IconDelete name="close-circle" color="black" size={27}></IconDelete>
+                                                    </TouchableOpacity>
+                                                </TouchableOpacity>)}
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
-                            {/*명함 사진 자세히보기*/}
-                            <Modal
-                                visible={this.state.cardImageDetailVisible}
-                                onRequestClose={this.cardImageModal}>
-                                <View style={[template.baseContainer,{alignItems: 'center', justifyContent: 'center' }]}>
-                                    <Image source={{ uri: this.state.cardImageURI }} style={{ width: "80%", height: "80%" }} />
+                                <View style={inStyle.textInputView}>
+                                    <Text style={[template.contentText, { color: colors.dark, marginBottom: '2%' }]}>사업자 등록번호</Text>
+                                    <View style={template.textInput}>
+                                        <Text style={[template.contentText]}>{this.loginInfo.companyNo.slice(0, 3)}-{this.loginInfo.companyNo.slice(3, 5)}-{this.loginInfo.companyNo.slice(5, 10)}</Text>
+                                    </View>
+
+                                    <Text style={[template.contentText, { color: colors.dark, marginBottom: '2%' }]}>비밀번호</Text>
+                                    <View style={template.textInput}>
+                                        
+                                        <TextInput
+                                            ref={(c) => { this.passwordRef = c; }}
+                                            returnKeyType="next"
+                                            onSubmitEditing={() => { this.passwordokRef.focus(); }}
+                                            onChangeText={(value) => this.onValueChange({ passwd: value })}
+                                            //onEndEditing={(event) => this.onValueChange()}
+                                            secureTextEntry={true}
+                                        />
+                                    </View>
+                                    <Text style={[template.contentText, { color: colors.dark, marginBottom: '2%' }]}>비밀번호 확인</Text>
+                                    <View style={template.textInput}>
+                                        
+                                        <TextInput
+                                            ref={(c) => { this.passwordokRef = c; }}
+                                            onChangeText={(value) => this.onValueChange({ passwordok: value })}
+                                            //onEndEditing={(event) => this.onValueChange()}
+                                            secureTextEntry={true}
+                                        />
+                                    </View>
+                                    {this.state.passwdError == true ? (
+                                        <Text style={[template.contentText, { color:colors.red }]}>
+                                            * 비밀번호를 정확하게 입력해주세요.
+                                        </Text>
+                                    ) : null}
                                 </View>
-                            </Modal>
-
-                            {/*사업자등록증 사진 자세히보기*/}
-                            <Modal
-                                visible={this.state.companyImageDetailVisible}
-                                onRequestClose={this.companyImageModal}>
-                                <View style={[template.baseContainer,{alignItems: 'center', justifyContent: 'center' }]}>
-                                    <Image source={{ uri: this.state.companyNoImageURI }} style={{ width: "80%", height: "80%" }} />
-                                </View>
-                            </Modal>
-
-                            <View style={[template.roundedBox,{paddingHorizontal:'5%',borderWidth:0,paddingVertical:'8%'}]}>
-                                <View style={inStyle.textInput}>
-                                    <Text>사업자 등록번호</Text>
-                                    <Text style={[template.smallText,{marginTop:'2%'}]}>{this.loginInfo.companyNo.slice(0, 3)}-{this.loginInfo.companyNo.slice(3, 5)}-{this.loginInfo.companyNo.slice(5, 10)}</Text>
-                                </View>
-
-                                <View style={inStyle.textInput}>
-                                    <Text>비밀번호</Text>
-                                    <TextInput
-                                        ref={(c) => { this.passwordRef = c; }}
-                                        returnKeyType="next"
-                                        onSubmitEditing={() => { this.passwordokRef.focus(); }}
-                                        onChangeText={(value) => this.onValueChange({ passwd: value })}
-                                        //onEndEditing={(event) => this.onValueChange()}
-                                        secureTextEntry={true}
+                                {/*명함모달*/}
+                                {this.state.cardPopupMenuVisible &&
+                                    <ImageSelectorPopup x={this.modalPhotoCameraX} y={this.modalPhotoCameraY}
+                                        closeCameraPopupMenu={() => this.setState({ cardPopupMenuVisible: false })}
+                                        goCameraScreen={this.goNamecardCameraScreen}
+                                        goGalleryScreen={this.goNamecardGalleryScreen}
                                     />
-                                </View>
+                                }
+                                {/*명함 사진 자세히보기*/}
+                                <Modal
+                                    visible={this.state.cardImageDetailVisible}
+                                    onRequestClose={this.cardImageModal}>
+                                    <View style={[template.baseContainer, { alignItems: 'center', justifyContent: 'center' }]}>
+                                        <Image source={{ uri: this.state.cardImageURI }} style={{ width: "80%", height: "80%" }} />
+                                    </View>
+                                </Modal>
 
-                                <View style={inStyle.textInput}>
-                                    <Text>비밀번호 확인</Text>
-                                    <TextInput
-                                        ref={(c) => { this.passwordokRef = c; }}
-                                        onChangeText={(value) => this.onValueChange({ passwordok: value })}
-                                        //onEndEditing={(event) => this.onValueChange()}
-                                        secureTextEntry={true}
-                                    />
-                                </View>
-                                {this.state.passwdError == true ? (
-                                    <Text style={[template.contentText, { color: "#FD9C91" }]}>
-                                        * 비밀번호를 정확하게 입력해주세요.
-                                    </Text>
-                                ) : null}
+                                {/*사업자등록증 사진 자세히보기*/}
+                                <Modal
+                                    visible={this.state.companyImageDetailVisible}
+                                    onRequestClose={this.companyImageModal}>
+                                    <View style={[template.baseContainer, { alignItems: 'center', justifyContent: 'center' }]}>
+                                        <Image source={{ uri: this.state.companyNoImageURI }} style={{ width: "80%", height: "80%" }} />
+                                    </View>
+                                </Modal>
+
                             </View>
-                            {/*명함모달*/}
-                            {this.state.cardPopupMenuVisible &&
-                                <ImageSelectorPopup x={this.modalPhotoCameraX} y={this.modalPhotoCameraY}
-                                    closeCameraPopupMenu={() => this.setState({ cardPopupMenuVisible: false })}
-                                    goCameraScreen={this.goNamecardCameraScreen}
-                                    goGalleryScreen={this.goNamecardGalleryScreen}
-                                />
-                            }
-
                         </ScrollView>
                         {this.state.validForm ?
-                            (<TouchableOpacity onPress={this.goModifyUser} activeOpacity={0.8} style={template.activeButton}>
+                            (<TouchableOpacity onPress={this.goModifyUser} activeOpacity={0.8}  style={template.activeButton}>
                                 <Text style={template.buttonText}>수정완료</Text></TouchableOpacity>)
-                            : (<TouchableOpacity activeOpacity={0.8} style={ template.inActiveButton}>
-                                <Text style={template.buttonText}>수정완료</Text>
+                            : (<TouchableOpacity activeOpacity={0.8} style={template.inActiveButton}>
+                                <Text  style={[template.buttonText,{color:colors.medium}]}>수정완료</Text>
                             </TouchableOpacity>)}
                     </View>
                 }
@@ -358,41 +371,47 @@ class EditProfile extends Component {
 }
 export default EditProfile;
 
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 const inStyle = StyleSheet.create({
-    roundedBoxWrap:[template.roundedBox, { borderWidth: 0, paddingHorizontal: '5%',paddingVertical:'3%' }],
-    passwdConfirmButton: [
-        template.roundedBox,
-        {
-            flex: 1,
-            height: '100%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: "#4B89DC",
-            borderRadius: 5,
-            flexDirection: 'row',
-            paddingHorizontal: '0%',
-            paddingVertical: '0.5%',
-            borderWidth: 0
+   
+    roundedButton: [
+        template.roundedButton, {
+            width: ScreenWidth / 4,
+            height: ScreenWidth / 4,
+            backgroundColor: colors.white,
+            borderRadius: 20,
+            marginHorizontal: '10%',
+            shadowColor: "black",
+            shadowOpacity: 0.5,
+            shadowRadius: 20,
+            elevation: 5,
         }
     ],
-    textInput: [
-        template.roundedBox,
-        {
-            marginTop:'0%',
-            marginBottom: 15,
-            height: 75,
-            borderRadius: 10,
-            borderColor: '#D1D1D1',
-            borderWidth: 2,
-            
-        }
-    ],
-    imageButton: {
-        width: 140,
-        height: 120,
-        backgroundColor: "#F1F1F3",
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
+    container: {
+        flex: 1,
+        paddingTop: '5%',
+        paddingHorizontal: '7%',
     },
+    headerVew: {
+        flex: 1,
+        paddingBottom: '5%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    deleteButtonView: {
+        top: -13,
+        right: -13,
+        position: 'absolute',
+    },
+    buttonView: {
+        height: ScreenHeight / 3,
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    textInputView: {
+        height: ScreenHeight / 3,
+    }
 }); 

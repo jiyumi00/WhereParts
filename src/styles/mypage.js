@@ -1,126 +1,115 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet, Dimensions } from 'react-native';
+import { colors } from "../styles/template/page_style";
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({
-   
-   
+
+
     //내정보 부분
-    viewHeaderLayout:{
-        flex:5,
-        backgroundColor:"#EDEDED",
-        //borderWidth:1,
-       
+    viewHeaderLayout: {
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+
+    },//
+    container: {
+        margin: 15,
     },
-    container:{
-        flex:1,
-       // borderWidth:1,
-        marginTop:60,
-        marginLeft:30,
-        marginRight:30,
-        marginBottom:10,
+    item1: {
+        flexDirection: 'column',
+        alignItems: 'center'
     },
-    rowLayout:{
+    item2: {
         flexDirection: 'row',
-        flex:1,
-    },
-    item1:{
-        flex:1,
-        alignItems: 'center',
-    },
-    name_text:{
+        justifyContent: 'space-around',
+    },//
+
+    name_text: {
+        color:colors.black,
         fontWeight: 'bold',
-        fontFamily: "Cochin",
-        fontSize: 25,
-        color:"black",
-        marginBottom:5,
-    },
-    number_text:{
-        fontWeight: 'bold',
-        fontFamily: "Cochin",
         fontSize: 20,
-        color: "#325AFB",
-        marginBottom:5,
-       
-    },
-    item2:{
-        flexDirection: 'row',
-        flex:1,
-        justifyContent: 'center',
-        marginTop:10,
-    },
-    btn:{
-        width:90,
-        height: 90,
-        backgroundColor: "white",
-        borderColor:"#D1D1D1",
-        borderWidth:2,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        marginRight:20,
-        
-    },
-    btn_text:{
-        fontFamily: "Cochin",
-        fontSize: 15,
-        color: "black",
-        marginTop:10,
-    },
-    btn_pay:{
-        width:90,
-        height: 90,
-        backgroundColor: "white",
-        borderColor:"#D1D1D1",
-        borderWidth:2,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        marginRight:10,
-    },
-   
- 
-    //설정 부분
-    viewBodyLayout:{
-        flex:5,
-        //borderWidth:1,
-    },
-    btn_select:{
-        height:55,
-        borderBottomWidth:1,
-        paddingHorizontal:30,
-        alignItems:'center',
-        borderColor:"#D1D1D1",
-        flexDirection: 'row',
-    },
-    btn_select_text:{
-        fontFamily: "Cochin",
-        fontSize: 15,
-        color: "black",
-    },
-    textView:{
-        flex:9,
-        flexDirection: 'row',
-    },
-    iconView:{
-        flex:1,
-        alignItems:'flex-end',
-    },
-    //로그아웃 버튼
-    viewBottomLayout:{
-        flex:1,
     },
 
-    btn_logout: {
-        height: 45,
-        backgroundColor: "#1E90FF",
-        alignItems: 'center',
+    btn: {
         justifyContent: 'center',
-        borderRadius: 30,
-        marginLeft:30,
-        marginRight:30,
+        backgroundColor:colors.white,
+        borderRadius: 20,
+        shadowColor: colors.black,
+        shadowOpacity: 0.5,
+        shadowRadius: 20,
+        elevation: 5,
+    },//
+
+    btn_text: {
+        fontFamily: 'pretendard',
+        fontWeight:'bold',
+        textAlign: 'center',
+        color:colors.black,
+        marginTop: 10,
+    },//
+   
+    input: {
+        borderColor: colors.medium,
+        backgroundColor: colors.white,
+        position: 'relative'
     },
+    search_btn: {
+        position: 'absolute',
+        top: 5,
+        right: 15,
+    },
+    page_view: {
+        position: 'absolute',
+        width: '100%',
+        top: ScreenHeight * 0.83
+        //borderWidth:1,
+    },
+    outputStyle: {
+        borderColor: colors.light,
+        borderWidth: 3,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 15
+    },
+    outputStyle_sub:{
+        borderRightWidth:0.5,
+        borderRightColor:colors.medium
+    },
+    center:{
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    //설정 부분
+    viewBodyLayout: {
+        //borderWidth:1,
+    },//
+    
+
     btn_logout_text: {
-        fontFamily: "Cochin",
-        fontSize: 18,
+        fontFamily: "normal medium 14px/16px Pretendard",
         color: "white",
+
+    },//
+    modal_background: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        height: '100%',
     },
+    modal1: {
+        paddingTop: 50,
+        paddingBottom: 25,
+        backgroundColor: colors.white,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20
+    },
+    modal2: {
+        backgroundColor: colors.main,
+        width: '70%',
+        padding: 20,
+        borderBottomLeftRadius: 20,
+    },
+    modal3: {
+        backgroundColor: colors.medium,
+        width: '30%',
+        padding: 20,
+        borderBottomRightRadius: 20
+    }
 })
