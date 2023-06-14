@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, Image, BackHandler, StyleSheet,Modal } from 'react-native';
+import { Text, View, TouchableOpacity, Image, BackHandler, StyleSheet, Modal } from 'react-native';
 import { template, colors } from "../styles/template/page_style";
 import { styles } from "../styles/mypage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -62,13 +62,11 @@ class MyPage extends Component {
           <View style={styles.container}>
 
             <TouchableOpacity style={{ alignItems: 'flex-end' }} activeOpacity={0.8} onPress={() => { this.setState({ modalVisible: true }) }/*this.goExitApp*/}>
-              <Text style={{color:colors.white}}>로그아웃</Text>
+              <Text style={{ color: colors.white }}>로그아웃</Text>
             </TouchableOpacity>
             <View style={[styles.center, { margin: 30 }]}>
               <Text style={styles.name_text}>{companyName}</Text>
-              <TouchableOpacity onPress={this.goEditProfileScreen}>
-                <Text style={[inStyle.content_text, styles.container]}>{displayCompanyNo}</Text>
-              </TouchableOpacity>
+              <Text style={[inStyle.content_text, styles.container]}>{displayCompanyNo}</Text>
               <Text style={inStyle.content_text}>{companyAddress}</Text>
             </View>
 
@@ -79,7 +77,7 @@ class MyPage extends Component {
         <View style={[styles.container]}>
 
           <View style={styles.item2}>
-            <TouchableOpacity style={inStyle.btn_top} activeOpacity={0.8}>
+            <TouchableOpacity style={inStyle.btn_top} activeOpacity={0.8} onPress={this.goEditProfileScreen}>
               <Image
                 source={
                   require('../images/icon/mypage/myinfo.png')
@@ -179,24 +177,24 @@ class GoExitApp extends Component {
     return (
       <Modal transparent={true} >
         <View style={[inStyle.modal]}>
-      <View style={{width:'50%'}}>
-      <View style={inStyle.modal1}>
-            <Text style={styles.name_text}>로그아웃</Text>
-            <Text style={inStyle.content_text_modal}>앱을 종료합니다.</Text>
-          </View>
+          <View style={{ width: '50%' }}>
+            <View style={inStyle.modal1}>
+              <Text style={styles.name_text}>로그아웃</Text>
+              <Text style={inStyle.content_text_modal}>앱을 종료합니다.</Text>
+            </View>
 
-          <View style={styles.item2}>
-            <TouchableOpacity style={inStyle.modal2} onPress={() => { this.goExitApp(true) }}>
-              <IconMark name={"check"} size={20} color={colors.white} />
-            </TouchableOpacity>
+            <View style={styles.item2}>
+              <TouchableOpacity style={inStyle.modal2} onPress={() => { this.goExitApp(true) }}>
+                <IconMark name={"check"} size={20} color={colors.white} />
+              </TouchableOpacity>
 
-            <TouchableOpacity style={inStyle.modal3} onPress={() => { this.goExitApp(false) }}>
-              <IconMark name={"close"} size={20} color={colors.white} />
-            </TouchableOpacity>
+              <TouchableOpacity style={inStyle.modal3} onPress={() => { this.goExitApp(false) }}>
+                <IconMark name={"close"} size={20} color={colors.white} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-        
+
 
       </Modal>
 
@@ -210,7 +208,7 @@ const inStyle = StyleSheet.create({
   name_text: [styles.name_text, { color: colors.white }],
   content_text: [template.contentText, { color: colors.white }],
   btn_top: [styles.btn, styles.center, { width: 90, height: 90 }],
-  btn_bottom: [styles.btn , styles.center, { height: 60, flexDirection: 'row', justifyContent: 'flex-start',padding:15 }],
+  btn_bottom: [styles.btn, styles.center, { height: 60, flexDirection: 'row', justifyContent: 'flex-start', padding: 15 }],
   modal: [styles.modal_background, styles.center],
   modal1: [styles.modal1, styles.center],
   modal2: [styles.modal2, styles.center, { borderBottomLeftRadius: 20 }],

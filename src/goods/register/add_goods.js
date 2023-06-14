@@ -412,7 +412,7 @@ class AddGoods extends Component {
 
                         {/*상품 이미지 등록을 위한 버튼 */}
                         <View style={[template.lineBox]}>
-                            <View style={{ marginBottom: '3%', flexDirection: 'row' }}>
+                            <View style={{ marginBottom: '5%',paddingTop:'5%',flexDirection: 'row',}}>
                                 <View onLayout={(event) => { this.getViewSize(event) }} ref={this.cameraIcon}>
                                     <TouchableOpacity style={inStyle.cameraButton} onPress={this.cameraButtonClicked}>
                                         <Image
@@ -670,14 +670,17 @@ class SmallImageViewer extends Component {
 
     renderItem = (item) => {
         return (
+            <>
             <TouchableOpacity onPress={() => this.props.largeImageModal(item.index)} >
                 <Image source={{ uri: item.item }} style={inStyle.cameraButton} />
-                <View style={inStyle.imageDeleteView}>
-                    <TouchableOpacity onPress={() => this.props.removeImage(item.index)}>
-                        <IconDelete name="close-circle" color="black" size={23}></IconDelete>
-                    </TouchableOpacity>
-                </View>
+               
             </TouchableOpacity>
+             <View style={inStyle.imageDeleteView}>
+             <TouchableOpacity onPress={() => this.props.removeImage(item.index)}>
+                 <IconDelete name="close-circle" color="black" size={20}></IconDelete>
+             </TouchableOpacity>
+         </View>
+         </>
         )
     }
 
@@ -854,6 +857,7 @@ const inStyle = StyleSheet.create({
             shadowOpacity: 0.25,
             shadowRadius: 10,
             elevation: 5,
+            
         }],
 
 
