@@ -6,8 +6,12 @@
 카메라 인식으로 손쉽게 부품을 조회하고 등록하며<br />
 차량 정비소간 부품을 빠르고 쉽게 거래할 수 있어요🔧
 </p>
+</div>
 <br/>
-<br /><br />
 
 <br /><br />
 ## 💡 프로젝트 소개
+⚙️ <b>주 요 기 능</b>
+<br /><br />
+<img src='https://github.com/jiyumi00/WhereParts/assets/101707266/1c562f4b-5c7e-4cb9-b1e3-185a679c0ac6'  width="700" height="370">
+![image](https://github.com/jiyumi00/WhereParts/assets/101707266/1c562f4b-5c7e-4cb9-b1e3-185a679c0ac6)
